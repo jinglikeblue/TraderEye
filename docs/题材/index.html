@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>题材导航</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+        h1 { text-align: center; font-size: 28px; font-weight: 700; margin-bottom: 8px; color: #f1f5f9; }
+        .subtitle { text-align: center; color: #64748b; font-size: 14px; margin-bottom: 36px; }
+
+        .date-section { margin-bottom: 32px; }
+        .date-header {
+            display: flex; align-items: center; gap: 12px;
+            font-size: 18px; font-weight: 600; color: #94a3b8;
+            padding: 12px 0; margin-bottom: 12px;
+            border-bottom: 1px solid #1e293b;
+        }
+        .date-header .badge {
+            font-size: 12px; font-weight: 500;
+            background: #1e293b; color: #64748b;
+            padding: 2px 10px; border-radius: 10px;
+        }
+        .date-header .line { flex: 1; height: 1px; background: #1e293b; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+        .card { display: flex; align-items: center; gap: 14px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 14px 18px; text-decoration: none; color: #e2e8f0; transition: all 0.2s; }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+
+        .card .icon {
+            width: 40px; height: 40px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 18px; flex-shrink: 0;
+        }
+        .card .info { flex: 1; min-width: 0; }
+        .card .info .name { font-size: 15px; font-weight: 600; margin-bottom: 3px; }
+        .card .info .desc { font-size: 12px; color: #94a3b8; line-height: 1.4; }
+        .card .arrow { font-size: 22px; color: #475569; transition: color 0.2s; flex-shrink: 0; }
+        .card:hover .arrow { color: #60a5fa; }
+
+        .card-ai-storage:hover { border-color: #60a5fa; background: #1e3a5f; }
+        .card-hbm:hover { border-color: #34d399; background: #1a3a2a; }
+        .card-robot:hover { border-color: #f472b6; background: #3a1a2a; }
+        .card-mlcc:hover { border-color: #f59e0b; background: #3a2a1a; }
+        .card-glass:hover { border-color: #22d3ee; background: #0a2a2a; }
+        .card-semi:hover { border-color: #a78bfa; background: #2a1a3a; }
+        .card-domestic:hover { border-color: #ef4444; background: #3a1a1a; }
+
+        footer { text-align: center; color: #475569; font-size: 12px; margin-top: 40px; padding-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>题材导航</h1>
+        <p class="subtitle">概念股产业链全景分析报告</p>
+
+        <!-- 2026-06-27 -->
+        <div class="date-section">
+            <div class="date-header">
+                <span>2026-06-27</span>
+                <span class="badge">2篇</span>
+                <span class="line"></span>
+            </div>
+            <div class="grid">
+                <a class="card card-domestic" href="20260627_国产AI算力概念股.html" style="border-color:#ef4444;background:linear-gradient(135deg,#3a1a1a,#3a2a1a);">
+                    <div class="icon" style="background:#3a1a1a;color:#ef4444;font-size:16px;">国产</div>
+                    <div class="info"><div class="name">国产AI算力概念股</div><div class="desc">AI芯片/昇腾生态/算力服务器/算力租赁/智算中心 · 9只标的</div></div>
+                    <div class="arrow">›</div>
+                </a>
+                <a class="card card-hbm" href="20260627_HBM封测概念股.html" style="border-color:#34d399;background:linear-gradient(135deg,#1a3a2a,#1e3a5f);">
+                    <div class="icon" style="background:#1a3a2a;color:#34d399;font-size:16px;">封测</div>
+                    <div class="info"><div class="name">HBM封测概念股</div><div class="desc">前驱体/EMC/TSV刻蚀/CMP/先进封装/ABF载板 · 15只标的</div></div>
+                    <div class="arrow">›</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- 2026-06-25 -->
+        <div class="date-section">
+            <div class="date-header">
+                <span>2026-06-25</span>
+                <span class="badge">6篇</span>
+                <span class="line"></span>
+            </div>
+            <div class="grid">
+                <a class="card card-ai-storage" href="20260625_AI算力核心生态概念股.html" style="border-color:#60a5fa;background:linear-gradient(135deg,#1e3a5f,#1a3a2a);">
+                    <div class="icon" style="background:#1e3a5f;color:#60a5fa;font-size:16px;">算力</div>
+                    <div class="info"><div class="name">AI算力核心生态概念股</div><div class="desc">算力芯片/光模块/液冷/电源/服务器/光纤 · 38只标的</div></div>
+                    <div class="arrow">›</div>
+                </a>
+                <a class="card card-hbm" href="20260625_存储核心生态概念股.html" style="border-color:#34d399;background:linear-gradient(135deg,#1a3a2a,#3a1a2a);">
+                    <div class="icon" style="background:#1a3a2a;color:#34d399;font-size:16px;">存储</div>
+                    <div class="info"><div class="name">存储核心生态概念股</div><div class="desc">HBM/DRAM/NAND/封测/设备/材料 · 42只标的</div></div>
+                    <div class="arrow">›</div>
+                </a>
+                <a class="card card-robot" href="20260625_AI人形机器人概念股.html">
+                    <div class="icon" style="background:#3a1a2a;color:#f472b6;font-size:16px;">形</div>
+                    <div class="info"><div class="name">AI人形机器人概念股</div><div class="desc">执行器/减速器/丝杠/电机/传感器 · 8只标的</div></div>
+                    <div class="arrow">›</div>
+                </a>
+                <a class="card card-semi" href="20260625_半导体封测概念股.html" style="border-color:#a78bfa;background:linear-gradient(135deg,#2a1a3a,#1a3a2a);">
+                    <div class="icon" style="background:#2a1a3a;color:#a78bfa;font-size:16px;">封</div>
+                    <div class="info"><div class="name">半导体封测概念股</div><div class="desc">OSAT代工/先进封装/第三方测试 · 6只AI算力封测核心标的</div></div>
+                    <div class="arrow">›</div>
+                </a>
+                <a class="card card-mlcc" href="20260625_MLCC概念股.html">
+                    <div class="icon" style="background:#3a2a1a;color:#f59e0b;font-size:16px;">容</div>
+                    <div class="info"><div class="name">MLCC概念股</div><div class="desc">陶瓷粉体/镍粉/离型膜/MLCC制造 · 5只AI服务器核心MLCC标的</div></div>
+                    <div class="arrow">›</div>
+                </a>
+                <a class="card card-glass" href="20260625_玻璃基板概念股.html">
+                    <div class="icon" style="background:#0a2a2a;color:#22d3ee;font-size:16px;">玻</div>
+                    <div class="info"><div class="name">玻璃基板概念股</div><div class="desc">TGV通孔/玻璃材料/激光设备/基板制造 · 12只标的</div></div>
+                    <div class="arrow">›</div>
+                </a>
+            </div>
+        </div>
+
+        <footer>共 8 个题材分析报告</footer>
+    </div>
+</body>
+</html>
