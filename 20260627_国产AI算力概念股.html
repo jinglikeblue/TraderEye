@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>国产AI算力概念股 - A股产业链全景</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #0a0e17; color: #e0e6f0; line-height: 1.6; min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+        .header { text-align: center; margin-bottom: 48px; }
+        .header h1 { font-size: 36px; font-weight: 700;
+            background: linear-gradient(135deg, #ef4444, #f97316, #eab308, #ef4444);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 12px; }
+        .header .subtitle { font-size: 16px; color: #8892a8; }
+        .header .topic-tags { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+        .header .topic-tag { font-size: 13px; padding: 5px 14px; border-radius: 20px; font-weight: 500; }
+        .topic-tag.ai { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.25); }
+        .topic-tag.chip { background: rgba(249,115,22,0.15); color: #f97316; border: 1px solid rgba(249,115,22,0.25); }
+        .topic-tag.server { background: rgba(234,179,8,0.15); color: #eab308; border: 1px solid rgba(234,179,8,0.25); }
+        .topic-tag.infra { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.25); }
+        .topic-tag.ascend { background: rgba(139,92,246,0.15); color: #8b5cf6; border: 1px solid rgba(139,92,246,0.25); }
+        .header .update-time { font-size: 13px; color: #5a6478; margin-top: 12px; }
+
+        .section-title { font-size: 22px; font-weight: 600; color: #c8d0e0;
+            margin-bottom: 24px; padding-left: 14px; border-left: 3px solid #ef4444; }
+        .section-subtitle { font-size: 14px; color: #5a6478; margin-top: -18px; margin-bottom: 24px; padding-left: 17px; }
+
+        /* 统计卡片 */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 16px; margin-bottom: 56px; }
+        .stat-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 12px; padding: 20px; }
+        .stat-card .stat-label { font-size: 13px; color: #5a6478; margin-bottom: 6px; }
+        .stat-card .stat-value { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+        .stat-card .stat-note { font-size: 12px; color: #5a6478; }
+        .stat-red .stat-value { color: #ef4444; }
+        .stat-orange .stat-value { color: #f97316; }
+        .stat-yellow .stat-value { color: #eab308; }
+        .stat-green .stat-value { color: #22c55e; }
+        .stat-purple .stat-value { color: #8b5cf6; }
+        .stat-cyan .stat-value { color: #06b6d4; }
+
+        /* 产业链流程图 */
+        .flow-section { margin-bottom: 56px; }
+        .flow-diagram { display: flex; align-items: stretch; gap: 0;
+            background: #111827; border-radius: 16px; border: 1px solid #1e293b; overflow: hidden; }
+        .flow-stage { flex: 1; padding: 28px 20px; position: relative; }
+        .flow-stage:not(:last-child)::after {
+            content: '→'; position: absolute; right: -14px; top: 50%;
+            transform: translateY(-50%); font-size: 28px; color: #4b5563; z-index: 2; }
+        .flow-stage:not(:last-child) { border-right: 1px solid #1e293b; }
+        .flow-stage .stage-label { font-size: 13px; font-weight: 600; letter-spacing: 1px;
+            margin-bottom: 12px; padding: 4px 12px; border-radius: 20px; display: inline-block; }
+        .flow-stage:nth-child(1) .stage-label { background: rgba(239,68,68,0.15); color: #ef4444; }
+        .flow-stage:nth-child(2) .stage-label { background: rgba(249,115,22,0.15); color: #f97316; }
+        .flow-stage:nth-child(3) .stage-label { background: rgba(234,179,8,0.15); color: #eab308; }
+        .flow-stage:nth-child(4) .stage-label { background: rgba(34,197,94,0.15); color: #22c55e; }
+        .flow-stage .stage-title { font-size: 18px; font-weight: 600; color: #e0e6f0; margin-bottom: 8px; }
+        .flow-stage .stage-desc { font-size: 13px; color: #8892a8; }
+        .flow-stage .stage-products { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+        .flow-stage .product-tag { font-size: 12px; padding: 3px 10px; border-radius: 12px;
+            background: rgba(255,255,255,0.06); color: #a0aec0;
+            border: 1px solid rgba(255,255,255,0.08); }
+
+        /* 公司卡片 */
+        .companies-section { margin-bottom: 48px; }
+        .company-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; }
+        .company-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; transition: border-color 0.2s, transform 0.2s; }
+        .company-card:hover { border-color: #374151; transform: translateY(-2px); }
+        .company-card .card-header { display: flex; justify-content: space-between;
+            align-items: flex-start; margin-bottom: 14px; }
+        .company-card .card-name { font-size: 18px; font-weight: 600; color: #e0e6f0; }
+        .company-card .card-code { font-size: 13px; font-weight: 500; padding: 3px 10px;
+            border-radius: 8px; background: rgba(239,68,68,0.12); color: #ef4444; white-space: nowrap; }
+        .company-card .card-position { font-size: 13px; padding: 3px 10px;
+            border-radius: 8px; display: inline-block; margin-bottom: 10px; }
+        .position-chip { background: rgba(239,68,68,0.12); color: #ef4444; }
+        .position-server { background: rgba(249,115,22,0.12); color: #f97316; }
+        .position-ascend { background: rgba(139,92,246,0.12); color: #8b5cf6; }
+        .position-rent { background: rgba(34,197,94,0.12); color: #22c55e; }
+        .position-idc { background: rgba(6,182,212,0.12); color: #06b6d4; }
+        .company-card .card-desc { font-size: 14px; color: #8892a8; line-height: 1.7; margin-bottom: 12px; }
+        .company-card .card-binding { font-size: 13px; color: #c8d0e0; padding: 10px 14px;
+            background: rgba(239,68,68,0.06); border-radius: 8px; border-left: 3px solid #ef4444;
+            margin-bottom: 10px; line-height: 1.6; }
+        .company-card .card-binding strong { color: #ef4444; }
+        .company-card .card-data-row { display: flex; flex-wrap: wrap; gap: 8px 18px;
+            font-size: 13px; color: #c8d0e0; padding: 10px 14px;
+            background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 3px solid #374151; }
+        .company-card .card-data-row strong { color: #e0e6f0; margin-left: 2px; }
+
+        /* 评级 */
+        .rating-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+        .rating-card { border-radius: 10px; padding: 10px 12px; border: 1px solid; background: rgba(255,255,255,0.03); }
+        .rating-title { font-size: 12px; color: #8892a8; margin-bottom: 4px; }
+        .rating-level { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .rating-reason { font-size: 12px; color: #8892a8; line-height: 1.5; }
+        .rating-strong { border-color: rgba(239,68,68,0.35); background: rgba(239,68,68,0.08); }
+        .rating-strong .rating-level { color: #ef4444; }
+        .rating-mid { border-color: rgba(249,115,22,0.35); background: rgba(249,115,22,0.08); }
+        .rating-mid .rating-level { color: #f97316; }
+        .rating-watch { border-color: rgba(234,179,8,0.35); background: rgba(234,179,8,0.08); }
+        .rating-watch .rating-level { color: #eab308; }
+
+        /* 核心关注卡片 */
+        .focus-section { margin-bottom: 40px; }
+        .focus-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .focus-card { background: linear-gradient(135deg, #111827, #1a1a1a);
+            border: 1px solid #1e293b; border-radius: 14px; padding: 24px;
+            position: relative; overflow: hidden; }
+        .focus-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .focus-card:nth-child(1)::before { background: linear-gradient(90deg, #ef4444, #dc2626); }
+        .focus-card:nth-child(2)::before { background: linear-gradient(90deg, #f97316, #ea580c); }
+        .focus-card:nth-child(3)::before { background: linear-gradient(90deg, #eab308, #ca8a04); }
+        .focus-card:nth-child(4)::before { background: linear-gradient(90deg, #22c55e, #16a34a); }
+        .focus-card:nth-child(5)::before { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
+        .focus-card:nth-child(6)::before { background: linear-gradient(90deg, #06b6d4, #0891b2); }
+        .focus-card .focus-rank { font-size: 48px; font-weight: 800;
+            color: rgba(255,255,255,0.04); position: absolute; top: 8px; right: 16px; }
+        .focus-card .focus-name { font-size: 16px; font-weight: 600; color: #e0e6f0; margin-bottom: 4px; }
+        .focus-card .focus-tag { font-size: 12px; color: #8892a8; margin-bottom: 10px; }
+        .focus-card .focus-reason { font-size: 13px; color: #8892a8; line-height: 1.7; }
+
+        /* 关系图 */
+        .relation-section { margin-bottom: 56px; }
+        .relation-diagram { background: #111827; border: 1px solid #1e293b;
+            border-radius: 16px; padding: 32px; overflow-x: auto; }
+        .relation-group { margin-bottom: 20px; padding: 16px; border-radius: 12px; border: 1px solid; }
+        .relation-group:last-child { margin-bottom: 0; }
+        .relation-group.upstream { border-color: rgba(239,68,68,0.2); background: rgba(239,68,68,0.04); }
+        .relation-group.midstream { border-color: rgba(249,115,22,0.2); background: rgba(249,115,22,0.04); }
+        .relation-group.downstream { border-color: rgba(234,179,8,0.2); background: rgba(234,179,8,0.04); }
+        .relation-group.terminal { border-color: rgba(34,197,94,0.2); background: rgba(34,197,94,0.04); }
+        .relation-group-title { font-size: 13px; font-weight: 700; letter-spacing: 2px;
+            margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid; }
+        .relation-group.upstream .relation-group-title { color: #ef4444; border-color: rgba(239,68,68,0.2); }
+        .relation-group.midstream .relation-group-title { color: #f97316; border-color: rgba(249,115,22,0.2); }
+        .relation-group.downstream .relation-group-title { color: #eab308; border-color: rgba(234,179,8,0.2); }
+        .relation-group.terminal .relation-group-title { color: #22c55e; border-color: rgba(34,197,94,0.2); }
+        .relation-row { display: flex; align-items: center; margin-bottom: 12px; }
+        .relation-row:last-child { margin-bottom: 0; }
+        .relation-label { min-width: 100px; font-size: 14px; font-weight: 600;
+            color: #8892a8; flex-shrink: 0; }
+        .relation-items { display: flex; flex-wrap: wrap; gap: 10px; }
+        .relation-node { padding: 8px 16px; border-radius: 10px; font-size: 14px;
+            font-weight: 500; border: 1px solid; }
+        .relation-node.chip { background: rgba(239,68,68,0.08);
+            border-color: rgba(239,68,68,0.25); color: #ef4444; }
+        .relation-node.ascend { background: rgba(139,92,246,0.08);
+            border-color: rgba(139,92,246,0.25); color: #8b5cf6; }
+        .relation-node.server { background: rgba(249,115,22,0.08);
+            border-color: rgba(249,115,22,0.25); color: #f97316; }
+        .relation-node.rent { background: rgba(34,197,94,0.08);
+            border-color: rgba(34,197,94,0.25); color: #22c55e; }
+        .relation-node.idc { background: rgba(6,182,212,0.08);
+            border-color: rgba(6,182,212,0.25); color: #06b6d4; }
+        .relation-node .node-code { font-size: 11px; opacity: 0.7; margin-left: 6px; }
+        .relation-arrow { text-align: center; color: #4b5563; font-size: 20px; padding: 4px 0; }
+
+        /* 对比表 */
+        .compare-section { margin-bottom: 56px; }
+        .compare-table { width: 100%; border-collapse: collapse; background: #111827;
+            border: 1px solid #1e293b; border-radius: 12px; overflow: hidden; }
+        .compare-table th { background: rgba(239,68,68,0.1); color: #ef4444; font-size: 13px;
+            font-weight: 600; padding: 14px 16px; text-align: left; border-bottom: 1px solid #1e293b; }
+        .compare-table td { padding: 14px 16px; font-size: 13px; color: #8892a8;
+            border-bottom: 1px solid rgba(30,41,59,0.5); line-height: 1.5; }
+        .compare-table tr:last-child td { border-bottom: none; }
+        .compare-table .col-name { color: #e0e6f0; font-weight: 600; white-space: nowrap; }
+        .compare-table .col-code { color: #ef4444; font-size: 12px; font-weight: 500; }
+
+        /* 风险提示 */
+        .risk-section { margin-bottom: 56px; }
+        .risk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+        .risk-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; border-left: 3px solid #f87171; }
+        .risk-card .risk-title { font-size: 16px; font-weight: 600; color: #f87171; margin-bottom: 8px; }
+        .risk-card .risk-desc { font-size: 14px; color: #8892a8; line-height: 1.7; }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            .header h1 { font-size: 26px; }
+            .flow-diagram { flex-direction: column; }
+            .flow-stage:not(:last-child)::after { content: '↓'; right: auto; bottom: -16px; top: auto;
+                left: 50%; transform: translateX(-50%); }
+            .flow-stage:not(:last-child) { border-right: none; border-bottom: 1px solid #1e293b; }
+            .company-grid { grid-template-columns: 1fr; }
+            .rating-row { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .focus-cards { grid-template-columns: 1fr; }
+            .risk-grid { grid-template-columns: 1fr; }
+            .compare-table { font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>国产AI算力概念股</h1>
+            <div class="subtitle">聚焦国产AI芯片/昇腾生态/算力服务器/智算中心/算力租赁全产业链</div>
+            <div class="topic-tags">
+                <span class="topic-tag ai">国产替代</span>
+                <span class="topic-tag chip">AI芯片</span>
+                <span class="topic-tag ascend">华为昇腾</span>
+                <span class="topic-tag server">算力服务器</span>
+                <span class="topic-tag infra">智算中心</span>
+            </div>
+            <div class="update-time">数据来源：东方财富、同花顺、公开报道、券商研报 | 整理时间：2026-06-27</div>
+        </div>
+
+        <!-- 核心概览 -->
+        <div class="overview-section">
+            <div class="section-title">国产AI算力市场概览</div>
+            <div class="stats-grid">
+                <div class="stat-card stat-red">
+                    <div class="stat-label">中国AI芯片市场规模（2026E）</div>
+                    <div class="stat-value">¥1,200亿</div>
+                    <div class="stat-note">国产化率约25-30%，3年内有望突破50%</div>
+                </div>
+                <div class="stat-card stat-orange">
+                    <div class="stat-label">国产AI芯片出货量增速</div>
+                    <div class="stat-value">>100%</div>
+                    <div class="stat-note">2026年国产GPU/DCU出货量同比翻倍以上增长</div>
+                </div>
+                <div class="stat-card stat-yellow">
+                    <div class="stat-label">国内智算中心规划</div>
+                    <div class="stat-value">>100座</div>
+                    <div class="stat-note">2025-2027年新建大型智算中心，国产算力占比要求>50%</div>
+                </div>
+                <div class="stat-card stat-green">
+                    <div class="stat-label">算力租赁市场规模</div>
+                    <div class="stat-value">¥500亿+</div>
+                    <div class="stat-note">2026年国内AI算力租赁市场爆发，中小模型企业首选</div>
+                </div>
+                <div class="stat-card stat-purple">
+                    <div class="stat-label">昇腾910C性能对标</div>
+                    <div class="stat-value">≈H100 80%</div>
+                    <div class="stat-note">推理场景接近H100，训练场景达H100 60-80%</div>
+                </div>
+                <div class="stat-card stat-cyan">
+                    <div class="stat-label">A股国产算力标的</div>
+                    <div class="stat-value">30+</div>
+                    <div class="stat-note">覆盖芯片设计/服务器制造/算力租赁/智算中心运营</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 产业链全景流程图 -->
+        <div class="flow-section">
+            <div class="section-title">产业链全景</div>
+            <div class="flow-diagram">
+                <div class="flow-stage">
+                    <span class="stage-label">上游</span>
+                    <div class="stage-title">AI芯片设计</div>
+                    <div class="stage-desc">GPU/DCU/ASIC芯片设计、AI加速卡研发、芯片IP授权和生态建设</div>
+                    <div class="stage-products">
+                        <span class="product-tag">GPU</span>
+                        <span class="product-tag">DCU加速卡</span>
+                        <span class="product-tag">ASIC</span>
+                        <span class="product-tag">芯片IP</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <span class="stage-label">中游-1</span>
+                    <div class="stage-title">算力整机制造</div>
+                    <div class="stage-desc">AI服务器设计/组装、昇腾OEM伙伴、国产整机品牌、液冷散热方案</div>
+                    <div class="stage-products">
+                        <span class="product-tag">AI服务器</span>
+                        <span class="product-tag">昇腾一体机</span>
+                        <span class="product-tag">液冷整机柜</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <span class="stage-label">中游-2</span>
+                    <div class="stage-title">算力租赁/云服务</div>
+                    <div class="stage-desc">GPU算力租赁、AI云服务、算力调度平台、模型训练推理服务</div>
+                    <div class="stage-products">
+                        <span class="product-tag">GPU租赁</span>
+                        <span class="product-tag">算力平台</span>
+                        <span class="product-tag">MaaS</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <span class="stage-label">下游</span>
+                    <div class="stage-title">智算中心/AIDC</div>
+                    <div class="stage-desc">智算中心建设运营、AIDC基础设施、算力网络、大模型训练集群</div>
+                    <div class="stage-products">
+                        <span class="product-tag">智算中心</span>
+                        <span class="product-tag">AIDC</span>
+                        <span class="product-tag">算网融合</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 核心催化：出口管制 -->
+        <div style="background:linear-gradient(135deg,rgba(239,68,68,0.08),rgba(249,115,22,0.06));border:1px solid rgba(239,68,68,0.2);border-radius:14px;padding:28px 32px;margin-bottom:48px;">
+            <div style="font-size:18px;font-weight:700;color:#ef4444;margin-bottom:14px;">🔥 核心催化剂：美国AI芯片出口管制持续升级</div>
+            <div style="font-size:14px;color:#c8d0e0;line-height:2;">
+                <p><strong style="color:#ef4444;">▸ 2025年1月：</strong>拜登政府离任前发布"AI扩散规则"，将全球分为三级管控，中国被列入最严格Tier 3，高端GPU进口几乎全面受限。</p>
+                <p><strong style="color:#ef4444;">▸ 2026年5月：</strong>美国商务部进一步收紧"外国直接产品规则"(FDPR)，限制使用美国技术的海外晶圆厂为中国生产AI芯片，台积电/三星对华先进制程代工全面受限。</p>
+                <p><strong style="color:#ef4444;">▸ 核心影响：</strong>国产AI算力从"可选项"变为"必选项"。国内智算中心建设政策明确要求国产算力占比>50%，三大运营商集采优先采购国产AI服务器。</p>
+                <p><strong style="color:#22c55e;">▸ 替代空间：</strong>国内AI芯片市场约1200亿，当前国产化率仅25-30%，年替代空间超800亿元。政策刚需+出口管制双驱动下，国产算力是确定性最强的AI赛道。</p>
+            </div>
+        </div>
+
+        <!-- ============ 公司卡片 ============ -->
+
+        <!-- 一、国产AI芯片 -->
+        <div class="companies-section">
+            <div class="section-title">一、国产AI芯片（上游核心 · 国产替代主战场）</div>
+            <div class="section-subtitle">GPU出口管制背景下，国产AI芯片是算力自主可控的"咽喉"环节，A股稀缺标的溢价显著</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">寒武纪</div>
+                        <div class="card-code">688256</div>
+                    </div>
+                    <span class="card-position position-chip">国产AI训练/推理芯片龙头</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>A股最纯正的AI算力芯片标的，思元系列AI芯片覆盖训练和推理全场景。思元590性能对标A100，已批量进入国内智算中心。在美国GPU出口管制持续收紧背景下，国产算力替代刚性需求最强，是A股"国产AI芯片第一股"。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>思元590/370</strong></span>
+                        <span>场景 <strong>训练+推理</strong></span>
+                        <span>生态 <strong>自研Cambricon Neuware</strong></span>
+                        <span>下游 <strong>智算中心+运营商</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">国产AI芯片第一股，智算中心刚需采购</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">出口管制+政策刚需双驱动，年替代空间巨大</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">海光信息</div>
+                        <div class="card-code">688041</div>
+                    </div>
+                    <span class="card-position position-chip">DCU加速卡+CPU双龙头</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>国产x86 CPU+DCU深算AI加速卡双赛道龙头。深算DCU兼容CUDA生态，是国产AI芯片中迁移成本最低的选择，生态壁垒最强。深算二号已批量供货，三号研发推进中。在信创+AI双赛道受益，国产GPU中生态最完善。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>深算DCU加速卡</strong></span>
+                        <span>生态 <strong>兼容CUDA</strong></span>
+                        <span>定位 <strong>信创+AI双受益</strong></span>
+                        <span>下游 <strong>金融+运营商+政府</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">生态最完善的国产GPU，信创+AI双赛道</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">深算三号研发推进，性能持续逼近H100</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 二、华为昇腾生态 -->
+        <div class="companies-section">
+            <div class="section-title">二、华为昇腾生态（核心主线 · 国产算力最大公约数）</div>
+            <div class="section-subtitle">昇腾是国内AI算力事实标准，910C已大规模部署，云厂商/运营商/政府智算中心首选昇腾方案。昇腾OEM伙伴受益于华为产能扩张</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">拓维信息</div>
+                        <div class="card-code">002261</div>
+                    </div>
+                    <span class="card-position position-ascend">昇腾核心整机伙伴</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>华为昇腾AI服务器核心OEM伙伴之一，"兆瀚"系列AI服务器基于昇腾910C芯片，已批量供货三大运营商和多个省级智算中心。与华为在智慧城市/教育/交通等领域深度绑定，是昇腾出货量增长最直接的受益标的。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>兆瀚AI服务器</strong></span>
+                        <span>芯片 <strong>昇腾910C</strong></span>
+                        <span>客户 <strong>运营商/政府</strong></span>
+                        <span>优势 <strong>华为深度绑定</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">昇腾核心OEM，华为AI服务器出货量直接受益</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">昇腾产能扩张+智算中心订单持续落地</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">神州数码</div>
+                        <div class="card-code">000034</div>
+                    </div>
+                    <span class="card-position position-ascend">昇腾最大分销+整机</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>华为昇腾AI服务器最大分销商和OEM伙伴，"神州鲲泰"系列AI服务器出货量在昇腾生态中领先。同时推出自有品牌AI服务器，覆盖推理和训练场景。渠道优势+品牌效应+昇腾产能扩张三重驱动，是昇腾生态中份额最大的受益方。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>神州鲲泰AI服务器</strong></span>
+                        <span>角色 <strong>最大分销+整机</strong></span>
+                        <span>客户 <strong>互联网+金融+政府</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">昇腾生态最大份额合作伙伴</div>
+                        </div>
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">分销+整机双驱动，自有品牌放量</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">高新发展</div>
+                        <div class="card-code">000628</div>
+                    </div>
+                    <span class="card-position position-ascend">华鲲振宇借壳标的</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>旗下华鲲振宇是华为昇腾AI服务器核心供应商，基于昇腾芯片的"华鲲"系列AI服务器在运营商和政企市场渗透率快速提升。借壳高新发展后资本实力增强，产能扩张加速，是昇腾AI服务器出货量增长最确定的弹性标的之一。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>华鲲AI服务器</strong></span>
+                        <span>芯片 <strong>昇腾910C</strong></span>
+                        <span>优势 <strong>运营商集采入围</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">华鲲是昇腾核心供应商，借壳后产能扩张</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">低基数+高增长，昇腾放量弹性最大</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">四川长虹</div>
+                        <div class="card-code">600839</div>
+                    </div>
+                    <span class="card-position position-ascend">昇腾算力整机</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>旗下长虹佳华是华为昇腾AI服务器重要合作伙伴，同时布局边缘AI算力终端。依托长虹品牌渠道优势，在智慧城市/工业互联网等场景推广昇腾算力解决方案。传统家电业务+算力新业务双轮驱动。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>昇腾AI服务器/边缘算力</strong></span>
+                        <span>角色 <strong>昇腾生态伙伴</strong></span>
+                        <span>场景 <strong>智慧城市/工业AI</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★☆ 中高</div>
+                            <div class="rating-reason">昇腾合作伙伴，但体量占比待观察</div>
+                        </div>
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">边缘算力+昇腾生态双预期</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 三、国产算力服务器 -->
+        <div class="companies-section">
+            <div class="section-title">三、国产算力服务器（算力硬件载体）</div>
+            <div class="section-subtitle">国产AI服务器龙头，同时承接英伟达（受限前）和昇腾算力订单，国央企和运营商集采核心供应商</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">浪潮信息</div>
+                        <div class="card-code">000977</div>
+                    </div>
+                    <span class="card-position position-server">国内AI服务器龙头</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>国内AI服务器市占率第一（约30%+），全球AI服务器出货量前三。英伟达GPU可获受限后加速转向昇腾CPU+国产替代方案。运营商/互联网大厂AI服务器集采份额领先，拥有最完整的AI服务器产品矩阵。但需关注美国制裁对英伟达GPU采购的实际影响。</div>
+                    <div class="card-data-row">
+                        <span>市占率 <strong>国内~30%</strong></span>
+                        <span>客户 <strong>阿里/字节/运营商</strong></span>
+                        <span>产品 <strong>英伟达+昇腾全线</strong></span>
+                        <span>产能 <strong>全球前三</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">AI服务器绝对龙头，昇腾+英伟达双线覆盖</div>
+                        </div>
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★☆ 中高</div>
+                            <div class="rating-reason">受制裁GPU可获性约束，弹性受限</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">中科曙光</div>
+                        <div class="card-code">603019</div>
+                    </div>
+                    <span class="card-position position-server">国产高端算力龙头</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>国内高性能计算(HPC)龙头，自主品牌AI服务器+分布式存储+液冷方案一体化布局。背靠中科院，在国产超算和智算中心建设中有天然优势。已中标多个国家级智算中心项目（总规模超百亿），旗下海光信息(688041)持有股权提供协同效应。</div>
+                    <div class="card-data-row">
+                        <span>定位 <strong>高端HPC+智算</strong></span>
+                        <span>项目 <strong>国家级智算中心</strong></span>
+                        <span>协同 <strong>海光信息DCU</strong></span>
+                        <span>壁垒 <strong>中科院体系</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">国家级智算中心核心供应商，订单确定性强</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">海光DCU+服务器一体化，生态闭环优势</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">紫光股份</div>
+                        <div class="card-code">000938</div>
+                    </div>
+                    <span class="card-position position-server">ICT全栈算力</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>旗下新华三是国内领先的服务器/交换机/网络全栈ICT厂商，AI服务器市场份额前三。H3C UniServer系列AI服务器覆盖训练和推理场景，同时受益于运营商和互联网大厂AI算力投入。交换机+服务器一体化方案在智算中心建设中具备协同优势。</div>
+                    <div class="card-data-row">
+                        <span>品牌 <strong>H3C新华三</strong></span>
+                        <span>产品 <strong>AI服务器+交换机</strong></span>
+                        <span>市占率 <strong>服务器TOP3</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">全栈ICT龙头，AI服务器份额领先</div>
+                        </div>
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★☆ 中高</div>
+                            <div class="rating-reason">交换机+服务器协同，但服务器业务弹性有限</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 四、算力租赁 -->
+        <div class="companies-section">
+            <div class="section-title">四、算力租赁/AI云服务（轻资产算力变现）</div>
+            <div class="section-subtitle">中小模型企业无力自建GPU集群，算力租赁成为最优选择。手握GPU卡资源的租赁商受益于供需错配</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">润泽科技</div>
+                        <div class="card-code">300442</div>
+                    </div>
+                    <span class="card-position position-rent">AIDC+算力租赁双龙头</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>国内AIDC龙头，液冷智算中心布局行业领先。AIDC机柜+算力租赁一体化服务，廊坊/长三角/大湾区三大算力集群布局。现有运行机柜5万+，在建8万+，AI算力占比持续提升。字节跳动/阿里等头部客户AIDC主力供应商。</div>
+                    <div class="card-data-row">
+                        <span>定位 <strong>AIDC+算力租赁</strong></span>
+                        <span>机柜 <strong>运行5万+在建8万+</strong></span>
+                        <span>客户 <strong>字节/阿里/京东</strong></span>
+                        <span>技术 <strong>液冷智算中心</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">AIDC龙头，客户集中字节等头部云厂</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">在建机柜翻倍扩张，算力租赁业务放量</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">光环新网</div>
+                        <div class="card-code">300383</div>
+                    </div>
+                    <span class="card-position position-rent">北京AIDC龙头</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>北京地区最大的第三方数据中心运营商，在核心一线城市拥有稀缺IDC资源。AI算力租赁业务快速增长，与海光DCU/昇腾GPU均有合作。一线城市AIDC供不应求，核心区位IDC资源是长期壁垒。</div>
+                    <div class="card-data-row">
+                        <span>定位 <strong>一线城市AIDC</strong></span>
+                        <span>优势 <strong>地段稀缺性</strong></span>
+                        <span>客户 <strong>互联网/金融</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">一线城市IDC资源稀缺，算力租赁高增长</div>
+                        </div>
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">AI算力租赁业务增速快，利润弹性大</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">奥飞数据</div>
+                        <div class="card-code">300738</div>
+                    </div>
+                    <span class="card-position position-rent">华南算力租赁新锐</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>华南地区领先的IDC运营商，近年来加速向AI算力租赁转型。广州/深圳/海南等核心节点布局AI算力中心，与百度等头部AI客户合作深入。体量相对较小但AI算力租赁业务增速快，弹性更大。</div>
+                    <div class="card-data-row">
+                        <span>定位 <strong>华南IDC+算力租赁</strong></span>
+                        <span>客户 <strong>百度/互联网</strong></span>
+                        <span>优势 <strong>低基数高弹性</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★☆ 中高</div>
+                            <div class="rating-reason">华南IDC核心玩家，算力租赁加速转型</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">低基数+AI算力租赁高增长弹性</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 五、智算中心建设运营 -->
+        <div class="companies-section">
+            <div class="section-title">五、智算中心建设与运营（基础设施底座）</div>
+            <div class="section-subtitle">全国规划>100座智算中心，国央企和地方政府是投资主体，建设运营方持续受益</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">数据港</div>
+                        <div class="card-code">603881</div>
+                    </div>
+                    <span class="card-position position-idc">阿里AIDC核心伙伴</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>阿里云数据中心核心运营商，为阿里AI业务提供定制化AIDC服务。阿里AI投入持续加大（Qwen大模型系列），数据港直接受益于阿里AI算力基础设施扩容。上海/杭州/张北等核心节点布局，运营经验壁垒深厚。</div>
+                    <div class="card-data-row">
+                        <span>客户 <strong>阿里云（深度绑定）</strong></span>
+                        <span>定位 <strong>定制化AIDC运营</strong></span>
+                        <span>节点 <strong>上海/杭州/张北</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">阿里AI扩张的直接受益方</div>
+                        </div>
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">阿里AI CAPEX持续加大，上架率提升</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">宝信软件</div>
+                        <div class="card-code">600845</div>
+                    </div>
+                    <span class="card-position position-idc">工业智算+IDC龙头</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>背靠中国宝武，在工业AI和智算中心领域具有独特优势。宝之云IDC是华东地区最大单体数据中心之一，同时布局工业大模型训练平台。钢铁行业AI+IDC双轮驱动，现金流稳定+AI算力新增量。</div>
+                    <div class="card-data-row">
+                        <span>品牌 <strong>宝之云IDC</strong></span>
+                        <span>定位 <strong>工业AI+智算中心</strong></span>
+                        <span>股东 <strong>中国宝武</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★☆ 中高</div>
+                            <div class="rating-reason">IDC龙头+工业AI场景独特</div>
+                        </div>
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★☆ 中高</div>
+                            <div class="rating-reason">宝之云扩容+工业AI增量</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 国产AI芯片对比表 -->
+        <div class="compare-section">
+            <div class="section-title">国产AI芯片核心参数对比</div>
+            <div class="section-subtitle">主要国产AI训练/推理芯片性能参数、生态、下游应用场景横向比较</div>
+            <div style="overflow-x:auto;">
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>公司</th>
+                        <th>产品</th>
+                        <th>制程</th>
+                        <th>算力(FP16)</th>
+                        <th>显存</th>
+                        <th>对标</th>
+                        <th>生态</th>
+                        <th>量产状态</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="col-name">寒武纪</td>
+                        <td class="col-code">思元590</td>
+                        <td>7nm</td>
+                        <td>~200 TFLOPS</td>
+                        <td>64GB HBM2E</td>
+                        <td>≈A100 80%</td>
+                        <td>自研Cambricon Neuware</td>
+                        <td>批量供货</td>
+                    </tr>
+                    <tr>
+                        <td class="col-name">海光信息</td>
+                        <td class="col-code">深算二号</td>
+                        <td>7nm</td>
+                        <td>~180 TFLOPS</td>
+                        <td>48GB HBM2E</td>
+                        <td>≈A100 70%</td>
+                        <td>兼容CUDA (ROCm)</td>
+                        <td>批量供货</td>
+                    </tr>
+                    <tr>
+                        <td class="col-name">华为</td>
+                        <td class="col-code">昇腾910C</td>
+                        <td>7nm+</td>
+                        <td>~280 TFLOPS</td>
+                        <td>80GB HBM2E</td>
+                        <td>≈H100 60-80%</td>
+                        <td>自研CANN/MindSpore</td>
+                        <td>批量供货(受限)</td>
+                    </tr>
+                    <tr>
+                        <td class="col-name">景嘉微</td>
+                        <td class="col-code">JM9系列</td>
+                        <td>14nm</td>
+                        <td>~12 TFLOPS</td>
+                        <td>16GB GDDR6</td>
+                        <td>推理为主</td>
+                        <td>兼容OpenGL/ES</td>
+                        <td>信创供货</td>
+                    </tr>
+                    <tr>
+                        <td class="col-name">壁仞科技</td>
+                        <td class="col-code">BR100</td>
+                        <td>7nm</td>
+                        <td>~256 TFLOPS</td>
+                        <td>64GB HBM2E</td>
+                        <td>≈A100</td>
+                        <td>自研BIRENSUPA</td>
+                        <td>未上市/受限</td>
+                    </tr>
+                    <tr>
+                        <td class="col-name">摩尔线程</td>
+                        <td class="col-code">MTT S4000</td>
+                        <td>12nm</td>
+                        <td>~100 TFLOPS</td>
+                        <td>32GB GDDR6</td>
+                        <td>推理为主</td>
+                        <td>兼容CUDA(MUSA)</td>
+                        <td>未上市/受限</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+
+        <!-- 产业链关系图 -->
+        <div class="relation-section">
+            <div class="section-title">国产AI算力产业链 A股标的映射</div>
+            <div class="relation-diagram">
+                <!-- 上游：AI芯片 -->
+                <div class="relation-group upstream">
+                    <div class="relation-group-title">⬆ 上游 — 国产AI芯片设计</div>
+                    <div class="relation-row">
+                        <div class="relation-label">GPU/DCU</div>
+                        <div class="relation-items">
+                            <div class="relation-node chip">寒武纪<span class="node-code">688256</span></div>
+                            <div class="relation-node chip">海光信息<span class="node-code">688041</span></div>
+                            <div class="relation-node chip">景嘉微<span class="node-code">300474</span></div>
+                            <div class="relation-node chip">龙芯中科<span class="node-code">688047</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 中游1：昇腾生态+整机 -->
+                <div class="relation-group midstream">
+                    <div class="relation-group-title">⬇ 中游一 — 昇腾生态伙伴 + 算力整机制造</div>
+                    <div class="relation-row">
+                        <div class="relation-label">昇腾OEM</div>
+                        <div class="relation-items">
+                            <div class="relation-node ascend">拓维信息<span class="node-code">002261</span></div>
+                            <div class="relation-node ascend">神州数码<span class="node-code">000034</span></div>
+                            <div class="relation-node ascend">高新发展<span class="node-code">000628</span></div>
+                            <div class="relation-node ascend">四川长虹<span class="node-code">600839</span></div>
+                        </div>
+                    </div>
+                    <div class="relation-arrow">→ 算力整机品牌 →</div>
+                    <div class="relation-row">
+                        <div class="relation-label">服务器整机</div>
+                        <div class="relation-items">
+                            <div class="relation-node server">浪潮信息<span class="node-code">000977</span></div>
+                            <div class="relation-node server">中科曙光<span class="node-code">603019</span></div>
+                            <div class="relation-node server">紫光股份<span class="node-code">000938</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 中游2：算力租赁 -->
+                <div class="relation-group downstream">
+                    <div class="relation-group-title">⬇ 中游二 — 算力租赁 / AI云服务</div>
+                    <div class="relation-row">
+                        <div class="relation-label">算力租赁</div>
+                        <div class="relation-items">
+                            <div class="relation-node rent">润泽科技<span class="node-code">300442</span></div>
+                            <div class="relation-node rent">光环新网<span class="node-code">300383</span></div>
+                            <div class="relation-node rent">奥飞数据<span class="node-code">300738</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 下游：智算中心 -->
+                <div class="relation-group terminal">
+                    <div class="relation-group-title">⬇ 下游 — 智算中心建设与运营</div>
+                    <div class="relation-row">
+                        <div class="relation-label">智算中心</div>
+                        <div class="relation-items">
+                            <div class="relation-node idc">数据港<span class="node-code">603881</span></div>
+                            <div class="relation-node idc">宝信软件<span class="node-code">600845</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 核心关注维度 -->
+        <div class="focus-section">
+            <div class="section-title">核心关注维度</div>
+            <div class="focus-cards">
+                <div class="focus-card">
+                    <div class="focus-rank">01</div>
+                    <div class="focus-name">美国对华芯片出口管制升级</div>
+                    <div class="focus-tag">最大催化变量</div>
+                    <div class="focus-reason">出口管制每一次升级都是国产算力的催化剂。2026年5月FDPR新规进一步收紧AI芯片代工限制，加速国产替代。需持续关注美国商务部/国会新增实体清单和出口限制细节，每次制裁加码都是国产算力板块的股价催化节点。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">02</div>
+                    <div class="focus-name">昇腾910C产能与良率</div>
+                    <div class="focus-tag">国产算力供给核心</div>
+                    <div class="focus-reason">昇腾910C是国内AI算力的"事实标准"，但7nm+制程产能受外部约束。若产能扩张超预期，昇腾OEM伙伴（拓维/神码/高新）弹性最大。产能瓶颈若不能突破，则国产替代进展受限，需持续跟踪华为芯片产能和出货量数据。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">03</div>
+                    <div class="focus-name">三大运营商AI服务器集采</div>
+                    <div class="focus-tag">订单验证关键</div>
+                    <div class="focus-reason">三大运营商2026年AI服务器集采规模预计超千亿，国产化率要求>50%。集采中标结果是各厂商订单验证的关键信号。移动/电信/联通的集采规模和份额分配直接影响寒武纪/浪潮/曙光/昇腾系业绩兑现。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">04</div>
+                    <div class="focus-name">国产AI芯片生态建设</div>
+                    <div class="focus-tag">中长期竞争力核心</div>
+                    <div class="focus-reason">芯片算力重要，但生态更重要。CUDA生态是英伟达最大壁垒，国产芯片能否建立开发者生态决定长期天花板。海光兼容CUDA生态壁垒最强，寒武纪自研Cambricon Neuware生态建设是关键。昇腾CANN/MindSpore生态成熟度是昇腾产业链持续扩张的基础。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">05</div>
+                    <div class="focus-name">智算中心政策与财政支持</div>
+                    <div class="focus-tag">需求端保障</div>
+                    <div class="focus-reason">国内智算中心建设依赖政策驱动和财政支持。"东数西算"工程、"人工智能+"行动是顶层政策保障。若地方政府财政紧张导致智算中心建设放缓，将影响整条产业链需求。需关注中央和地方智算中心专项补贴和建设进度。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">06</div>
+                    <div class="focus-name">互联网大厂自研AI芯片</div>
+                    <div class="focus-tag">中长期格局变量</div>
+                    <div class="focus-reason">百度昆仑芯、阿里平头哥含光、字节AI芯片自研等互联网大厂自研AI芯片趋势可能改变竞争格局。大厂自研芯片如果成熟，将减少对外采购，对第三方AI芯片厂商构成压力。需关注大厂芯片自研进展和量产时间表。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 风险提示 -->
+        <div class="risk-section">
+            <div class="section-title">核心风险提示</div>
+            <div class="risk-grid">
+                <div class="risk-card">
+                    <div class="risk-title">技术代差风险</div>
+                    <div class="risk-desc">国产AI芯片在制程、算力密度、生态成熟度方面与国际领先水平存在1-2代差距。英伟达Rubin（2026H2）可能在算力上继续拉开差距。如果国产芯片性能提升不及预期，可能影响替代进程和客户接受度，导致国产替代节奏慢于预期。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">制程产能受限风险</div>
+                    <div class="risk-desc">国产AI芯片高度依赖台积电(现已受限)或中芯国际代工，先进制程产能严重不足。中芯国际7nm产能有限且良率偏低，可能制约国产AI芯片放量。美国FDPR规则进一步限制了海外代工渠道，制程瓶颈是国产算力最大供给约束。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">生态迁移成本风险</div>
+                    <div class="risk-desc">CUDA生态统治AI开发十余年，迁移到国产芯片平台（昇腾CANN/寒武纪Neuware）需要大量代码重写和调优。中小企业和初创公司可能无力承担迁移成本，导致国产芯片在长尾市场渗透缓慢。生态建设是比硬件更难的长期挑战。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">政策不确定性风险</div>
+                    <div class="risk-desc">国产算力高度依赖政策驱动（国产化率要求、智算中心补贴），一旦政策导向发生变化或补贴退坡，可能影响下游采购需求。政策执行的力度和节奏存在不确定性，过度依赖政策驱动的板块容易受到政策波动冲击。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">估值透支风险</div>
+                    <div class="risk-desc">国产AI算力是当前最热门题材，多数标的估值已处于历史高位，寒武纪/拓维/高新等标的PS倍数远超行业均值。极高的估值隐含了对国产替代最乐观的预期，一旦业绩兑现不及预期或产业节奏放缓，可能面临大幅回调。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">竞争格局恶化风险</div>
+                    <div class="risk-desc">国产AI芯片"百芯大战"，除寒武纪/海光/昇腾外，壁仞/摩尔线程/燧原/天数智芯等数十家创业公司涌入。AI服务器整机也有浪潮/曙光/新华三/联想/中兴等激烈竞争。过度竞争可能导致价格战和利润率压缩。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p style="text-align:center;color:#8892a8;font-size:0.8em;padding:30px 0 10px;border-top:1px solid #1e293b;margin-top:40px">
+                数据来源：东方财富、同花顺、公开报道、券商研报、各公司公告 | 整理时间：2026-06-27
+            </p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em;margin-top:6px">
+                本报告聚焦国产AI算力产业链A股上市公司，覆盖AI芯片设计/昇腾生态/算力服务器/算力租赁/智算中心建设运营等环节，仅为产业链公开资料整理与梳理，不构成任何投资建议。
+            </p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em;margin-top:6px">
+                股市有风险，投资需谨慎。
+            </p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLCC概念股 - A股全产业链全景</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #0a0e17; color: #e0e6f0; line-height: 1.6; min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+        .header { text-align: center; margin-bottom: 48px; }
+        .header h1 { font-size: 36px; font-weight: 700;
+            background: linear-gradient(135deg, #f59e0b, #f97316, #60a5fa, #a78bfa);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 12px; }
+        .header .subtitle { font-size: 16px; color: #8892a8; }
+        .header .topic-tags { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+        .header .topic-tag { font-size: 13px; padding: 5px 14px; border-radius: 20px; font-weight: 500; }
+        .topic-tag.ai { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.25); }
+        .topic-tag.car { background: rgba(96,165,250,0.15); color: #60a5fa; border: 1px solid rgba(96,165,250,0.25); }
+        .topic-tag.mil { background: rgba(167,139,250,0.15); color: #a78bfa; border: 1px solid rgba(167,139,250,0.25); }
+        .topic-tag.sub { background: rgba(52,211,153,0.15); color: #34d399; border: 1px solid rgba(52,211,153,0.25); }
+        .topic-tag.mat { background: rgba(244,114,182,0.15); color: #f472b6; border: 1px solid rgba(244,114,182,0.25); }
+        .topic-tag.highcap { background: rgba(248,113,113,0.15); color: #f87171; border: 1px solid rgba(248,113,113,0.25); }
+        .header .update-time { font-size: 13px; color: #5a6478; margin-top: 12px; }
+
+        .section-title { font-size: 22px; font-weight: 600; color: #c8d0e0;
+            margin-bottom: 24px; padding-left: 14px; border-left: 3px solid #f59e0b; }
+        .section-subtitle { font-size: 14px; color: #5a6478; margin-top: -18px; margin-bottom: 24px; padding-left: 17px; }
+
+        /* 统计卡片 */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 16px; margin-bottom: 56px; }
+        .stat-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 12px; padding: 20px; }
+        .stat-card .stat-label { font-size: 13px; color: #5a6478; margin-bottom: 6px; }
+        .stat-card .stat-value { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+        .stat-card .stat-note { font-size: 12px; color: #5a6478; }
+        .stat-green .stat-value { color: #34d399; }
+        .stat-blue .stat-value { color: #60a5fa; }
+        .stat-purple .stat-value { color: #a78bfa; }
+        .stat-pink .stat-value { color: #f472b6; }
+        .stat-yellow .stat-value { color: #fbbf24; }
+        .stat-red .stat-value { color: #f87171; }
+
+        /* 产业链流程图 */
+        .flow-section { margin-bottom: 56px; }
+        .flow-diagram { display: flex; align-items: stretch; gap: 0;
+            background: #111827; border-radius: 16px; border: 1px solid #1e293b; overflow: hidden; }
+        .flow-stage { flex: 1; padding: 28px 20px; position: relative; }
+        .flow-stage:not(:last-child)::after {
+            content: '→'; position: absolute; right: -14px; top: 50%;
+            transform: translateY(-50%); font-size: 28px; color: #4b5563; z-index: 2; }
+        .flow-stage:not(:last-child) { border-right: 1px solid #1e293b; }
+        .flow-stage .stage-label { font-size: 13px; font-weight: 600; letter-spacing: 1px;
+            margin-bottom: 12px; padding: 4px 12px; border-radius: 20px; display: inline-block; }
+        .flow-stage:nth-child(1) .stage-label { background: rgba(245,158,11,0.15); color: #f59e0b; }
+        .flow-stage:nth-child(2) .stage-label { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .flow-stage:nth-child(3) .stage-label { background: rgba(167,139,250,0.15); color: #a78bfa; }
+        .flow-stage:nth-child(4) .stage-label { background: rgba(244,114,182,0.15); color: #f472b6; }
+        .flow-stage .stage-title { font-size: 18px; font-weight: 600; color: #e0e6f0; margin-bottom: 8px; }
+        .flow-stage .stage-desc { font-size: 13px; color: #8892a8; }
+        .flow-stage .stage-products { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+        .flow-stage .product-tag { font-size: 12px; padding: 3px 10px; border-radius: 12px;
+            background: rgba(255,255,255,0.06); color: #a0aec0;
+            border: 1px solid rgba(255,255,255,0.08); }
+
+        /* 公司卡片 */
+        .companies-section { margin-bottom: 48px; }
+        .company-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; }
+        .company-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; transition: border-color 0.2s, transform 0.2s; }
+        .company-card:hover { border-color: #374151; transform: translateY(-2px); }
+        .company-card .card-header { display: flex; justify-content: space-between;
+            align-items: flex-start; margin-bottom: 14px; }
+        .company-card .card-name { font-size: 18px; font-weight: 600; color: #e0e6f0; }
+        .company-card .card-code { font-size: 13px; font-weight: 500; padding: 3px 10px;
+            border-radius: 8px; background: rgba(52,211,153,0.12); color: #34d399; white-space: nowrap; }
+        .company-card .card-position { font-size: 13px; padding: 3px 10px;
+            border-radius: 8px; display: inline-block; margin-bottom: 10px; }
+        .position-material { background: rgba(245,158,11,0.12); color: #f59e0b; }
+        .position-powder { background: rgba(52,211,153,0.12); color: #34d399; }
+        .position-film { background: rgba(96,165,250,0.12); color: #60a5fa; }
+        .position-mfg { background: rgba(167,139,250,0.12); color: #a78bfa; }
+        .position-military { background: rgba(244,114,182,0.12); color: #f472b6; }
+        .position-rf { background: rgba(248,113,113,0.12); color: #f87171; }
+        .position-dist { background: rgba(251,191,36,0.12); color: #fbbf24; }
+        .company-card .card-desc { font-size: 14px; color: #8892a8; line-height: 1.7; margin-bottom: 12px; }
+        .company-card .card-binding { font-size: 13px; color: #c8d0e0; padding: 10px 14px;
+            background: rgba(245,158,11,0.06); border-radius: 8px; border-left: 3px solid #f59e0b;
+            margin-bottom: 10px; line-height: 1.6; }
+        .company-card .card-binding strong { color: #f59e0b; }
+        .company-card .card-data-row { display: flex; flex-wrap: wrap; gap: 8px 18px;
+            font-size: 13px; color: #c8d0e0; padding: 10px 14px;
+            background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 3px solid #374151; }
+        .company-card .card-data-row strong { color: #e0e6f0; margin-left: 2px; }
+        .card-shortage-reason { font-size: 13px; color: #fb7185; padding: 8px 14px;
+            background: rgba(248,113,113,0.06); border-radius: 8px; border-left: 3px solid #fb7185;
+            margin-bottom: 10px; line-height: 1.6; }
+        .card-shortage-reason strong { color: #fb7185; }
+
+        /* 供应紧缺标记 */
+        .shortage-badge { display: inline-block; font-size: 11px; font-weight: 700;
+            padding: 2px 8px; border-radius: 10px; margin-left: 8px;
+            background: rgba(248,113,113,0.15); color: #fb7185;
+            border: 1px solid rgba(248,113,113,0.3); }
+
+        /* 评级 */
+        .rating-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+        .rating-card { border-radius: 10px; padding: 10px 12px; border: 1px solid; background: rgba(255,255,255,0.03); }
+        .rating-title { font-size: 12px; color: #8892a8; margin-bottom: 4px; }
+        .rating-level { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .rating-reason { font-size: 12px; color: #8892a8; line-height: 1.5; }
+        .rating-strong { border-color: rgba(52,211,153,0.35); background: rgba(16,185,129,0.08); }
+        .rating-strong .rating-level { color: #34d399; }
+        .rating-mid { border-color: rgba(96,165,250,0.35); background: rgba(96,165,250,0.08); }
+        .rating-mid .rating-level { color: #60a5fa; }
+        .rating-watch { border-color: rgba(251,191,36,0.35); background: rgba(251,191,36,0.08); }
+        .rating-watch .rating-level { color: #fbbf24; }
+        .rating-weak { border-color: rgba(248,113,113,0.35); background: rgba(248,113,113,0.06); }
+        .rating-weak .rating-level { color: #f87171; }
+
+        /* 核心关注卡片 */
+        .focus-section { margin-bottom: 40px; }
+        .focus-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .focus-card { background: linear-gradient(135deg, #111827, #1a2332);
+            border: 1px solid #1e293b; border-radius: 14px; padding: 24px;
+            position: relative; overflow: hidden; }
+        .focus-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .focus-card:nth-child(1)::before { background: linear-gradient(90deg, #f59e0b, #f97316); }
+        .focus-card:nth-child(2)::before { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+        .focus-card:nth-child(3)::before { background: linear-gradient(90deg, #a78bfa, #8b5cf6); }
+        .focus-card:nth-child(4)::before { background: linear-gradient(90deg, #34d399, #10b981); }
+        .focus-card:nth-child(5)::before { background: linear-gradient(90deg, #f472b6, #ec4899); }
+        .focus-card:nth-child(6)::before { background: linear-gradient(90deg, #f87171, #ef4444); }
+        .focus-card .focus-rank { font-size: 48px; font-weight: 800;
+            color: rgba(255,255,255,0.04); position: absolute; top: 8px; right: 16px; }
+        .focus-card .focus-name { font-size: 16px; font-weight: 600; color: #e0e6f0; margin-bottom: 4px; }
+        .focus-card .focus-tag { font-size: 12px; color: #8892a8; margin-bottom: 10px; }
+        .focus-card .focus-reason { font-size: 13px; color: #8892a8; line-height: 1.7; }
+
+        /* 关系图 */
+        .relation-section { margin-bottom: 56px; }
+        .relation-diagram { background: #111827; border: 1px solid #1e293b;
+            border-radius: 16px; padding: 32px; overflow-x: auto; }
+        .relation-group { margin-bottom: 20px; padding: 16px; border-radius: 12px; border: 1px solid; }
+        .relation-group:last-child { margin-bottom: 0; }
+        .relation-group.upstream { border-color: rgba(245,158,11,0.2); background: rgba(245,158,11,0.04); }
+        .relation-group.midstream { border-color: rgba(96,165,250,0.2); background: rgba(96,165,250,0.04); }
+        .relation-group.downstream { border-color: rgba(167,139,250,0.2); background: rgba(167,139,250,0.04); }
+        .relation-group-title { font-size: 13px; font-weight: 700; letter-spacing: 2px;
+            margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid; }
+        .relation-group.upstream .relation-group-title { color: #f59e0b; border-color: rgba(245,158,11,0.2); }
+        .relation-group.midstream .relation-group-title { color: #60a5fa; border-color: rgba(96,165,250,0.2); }
+        .relation-group.downstream .relation-group-title { color: #a78bfa; border-color: rgba(167,139,250,0.2); }
+        .relation-row { display: flex; align-items: center; margin-bottom: 12px; }
+        .relation-row:last-child { margin-bottom: 0; }
+        .relation-label { min-width: 100px; font-size: 14px; font-weight: 600;
+            color: #8892a8; flex-shrink: 0; }
+        .relation-items { display: flex; flex-wrap: wrap; gap: 10px; }
+        .relation-node { padding: 8px 16px; border-radius: 10px; font-size: 14px;
+            font-weight: 500; border: 1px solid; }
+        .relation-node.mat { background: rgba(245,158,11,0.08);
+            border-color: rgba(245,158,11,0.25); color: #f59e0b; }
+        .relation-node.powder { background: rgba(52,211,153,0.08);
+            border-color: rgba(52,211,153,0.25); color: #34d399; }
+        .relation-node.film { background: rgba(96,165,250,0.08);
+            border-color: rgba(96,165,250,0.25); color: #60a5fa; }
+        .relation-node.mfg { background: rgba(167,139,250,0.08);
+            border-color: rgba(167,139,250,0.25); color: #a78bfa; }
+        .relation-node.military { background: rgba(244,114,182,0.08);
+            border-color: rgba(244,114,182,0.25); color: #f472b6; }
+        .relation-node.dist { background: rgba(248,113,113,0.08);
+            border-color: rgba(248,113,113,0.25); color: #f87171; }
+        .relation-node .node-code { font-size: 11px; opacity: 0.7; margin-left: 6px; }
+        .relation-arrow { text-align: center; color: #4b5563; font-size: 20px; padding: 4px 0; }
+        .relation-node.shortage { border-color: rgba(248,113,113,0.4);
+            background: rgba(248,113,113,0.1); position: relative; }
+        .relation-node.shortage::after { content: '紧缺'; font-size: 9px;
+            position: absolute; top: -6px; right: -6px;
+            background: #fb7185; color: #fff; padding: 1px 5px;
+            border-radius: 6px; font-weight: 700; }
+
+        /* 风险提示 */
+        .risk-section { margin-bottom: 56px; }
+        .risk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+        .risk-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; border-left: 3px solid #f87171; }
+        .risk-card .risk-title { font-size: 16px; font-weight: 600; color: #f87171; margin-bottom: 8px; }
+        .risk-card .risk-desc { font-size: 14px; color: #8892a8; line-height: 1.7; }
+
+        /* 高亮 */
+        .mlcc-highlight { background: linear-gradient(120deg, rgba(245,158,11,0.2) 0%, rgba(245,158,11,0.08) 100%);
+            padding: 0 3px; border-radius: 3px; color: #f59e0b; font-weight: 700; }
+
+        /* 精选筛选 */
+        .pick-list { margin-top: 24px; }
+        .pick-item { display: flex; align-items: center; padding: 12px 16px;
+            border-bottom: 1px solid #1e293b; font-size: 14px; }
+        .pick-item:last-child { border-bottom: none; }
+        .pick-item .pick-code { color: #60a5fa; font-family: 'SF Mono', monospace; width: 85px; }
+        .pick-item .pick-name { color: #e0e6f0; font-weight: 600; width: 120px; }
+        .pick-item .pick-type { font-size: 12px; padding: 2px 8px; border-radius: 6px; width: 70px; text-align: center; }
+        .pick-type.mat { background: rgba(245,158,11,0.12); color: #f59e0b; }
+        .pick-type.mfg { background: rgba(167,139,250,0.12); color: #a78bfa; }
+        .pick-type.military { background: rgba(244,114,182,0.12); color: #f472b6; }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            .header h1 { font-size: 26px; }
+            .flow-diagram { flex-direction: column; }
+            .flow-stage:not(:last-child)::after { content: '↓'; right: auto; bottom: -16px; top: auto;
+                left: 50%; transform: translateX(-50%); }
+            .flow-stage:not(:last-child) { border-right: none; border-bottom: 1px solid #1e293b; }
+            .company-grid { grid-template-columns: 1fr; }
+            .rating-row { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .focus-cards { grid-template-columns: 1fr; }
+            .risk-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>MLCC概念股</h1>
+            <div class="subtitle">多层陶瓷电容 · 覆盖陶瓷粉体/镍粉/离型膜/MLCC制造的AI服务器核心被动元件标的</div>
+            <div class="topic-tags">
+                <span class="topic-tag ai">AI服务器MLCC</span>
+                <span class="topic-tag sub">国产替代</span>
+                <span class="topic-tag mat">上游材料</span>
+                <span class="topic-tag highcap">高容MLCC突破</span>
+                <span class="topic-tag car">GB300/NVL72</span>
+            </div>
+            <div class="update-time">数据来源：东方财富、同花顺、公开报道、券商研报、各公司公告、村田/三星电机/TrendForce | 整理时间：2026-06-25</div>
+        </div>
+
+        <!-- 核心概览 -->
+        <div class="overview-section">
+            <div class="section-title">MLCC产业核心概览</div>
+            <div class="stats-grid">
+                <div class="stat-card stat-green">
+                    <div class="stat-label">全球MLCC市场规模（2026E）</div>
+                    <div class="stat-value">~$180亿</div>
+                    <div class="stat-note">AI+汽车电子驱动增长，2025-2028年CAGR约10%，高端MLCC供不应求</div>
+                </div>
+                <div class="stat-card stat-blue">
+                    <div class="stat-label">AI服务器MLCC单机用量</div>
+                    <div class="stat-value">20,000+颗</div>
+                    <div class="stat-note">GB300/NVL72 MLCC用量暴增至2万+颗，是传统服务器的8-10倍</div>
+                </div>
+                <div class="stat-card stat-purple">
+                    <div class="stat-label">车规MLCC单车用量</div>
+                    <div class="stat-value">8,000-10,000颗</div>
+                    <div class="stat-note">电动车MLCC用量是燃油车3倍，ADAS+电驱系统拉动高容/高可靠MLCC需求</div>
+                </div>
+                <div class="stat-card stat-pink">
+                    <div class="stat-label">国产化率（高端MLCC）</div>
+                    <div class="stat-value">~10-15%</div>
+                    <div class="stat-note">日系村田/TDK/太阳诱电+韩系三星电机占全球85%+，高端替代空间巨大</div>
+                </div>
+                <div class="stat-card stat-yellow">
+                    <div class="stat-label">日系退出中低端产能</div>
+                    <div class="stat-value">>30%份额</div>
+                    <div class="stat-note">村田/太阳诱电持续退出0603以下中低容MLCC，国产承接空白产能</div>
+                </div>
+                <div class="stat-card stat-red">
+                    <div class="stat-label">A股核心映射标的</div>
+                    <div class="stat-value">5</div>
+                    <div class="stat-note">覆盖材料/制造全产业链，风华高科/三环集团为核心制造龙头</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 产业链全景流程图 -->
+        <div class="flow-section">
+            <div class="section-title">产业链全景</div>
+            <div class="flow-diagram">
+                <div class="flow-stage">
+                    <span class="stage-label">材料层</span>
+                    <div class="stage-title">陶瓷粉体/镍粉/离型膜</div>
+                    <div class="stage-desc">钛酸钡陶瓷粉体是MLCC核心介质材料，超细镍粉为内电极材料，离型膜是流延工艺关键耗材。材料成本占MLCC制造成本50%+</div>
+                    <div class="stage-products">
+                        <span class="product-tag">钛酸钡粉体</span>
+                        <span class="product-tag">超细镍粉</span>
+                        <span class="product-tag">PET离型膜</span>
+                        <span class="product-tag">电子浆料</span>
+                        <span class="product-tag">载带</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <span class="stage-label">制造层</span>
+                    <div class="stage-title">流延→叠层→烧结→封端</div>
+                    <div class="stage-desc">核心工艺：陶瓷浆料流延成膜→交替叠层数百至上千层→高温烧结→端电极涂覆→电镀→测试分选。层数越多、厚度越薄，技术壁垒越高</div>
+                    <div class="stage-products">
+                        <span class="product-tag">流延成膜</span>
+                        <span class="product-tag">多层叠压</span>
+                        <span class="product-tag">高温共烧</span>
+                        <span class="product-tag">端电极涂覆</span>
+                        <span class="product-tag">自动分选</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <span class="stage-label">产品层</span>
+                    <div class="stage-title">民用/车规/军用/射频MLCC</div>
+                    <div class="stage-desc">01005-2225全尺寸覆盖，容值0.1pF-100μF+。民用→高容MLCC、车规→高可靠、军用→高温高压、射频→低ESR/高Q值</div>
+                    <div class="stage-products">
+                        <span class="product-tag">高容MLCC</span>
+                        <span class="product-tag">车规MLCC</span>
+                        <span class="product-tag">军用MLCC</span>
+                        <span class="product-tag">射频MLCC</span>
+                        <span class="product-tag">软端子MLCC</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <span class="stage-label">终端层</span>
+                    <div class="stage-title">AI/汽车/5G/军工/消费电子</div>
+                    <div class="stage-desc">AI服务器MLCC需求爆发、电动车800V平台拉动高压MLCC、5G基站高频MLCC、军工宇航高可靠MLCC、消费电子存量替换</div>
+                    <div class="stage-products">
+                        <span class="product-tag">AI服务器</span>
+                        <span class="product-tag">智能汽车</span>
+                        <span class="product-tag">5G基站</span>
+                        <span class="product-tag">军工航天</span>
+                        <span class="product-tag">消费电子</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ 公司卡片 ============ -->
+
+        <!-- 一、上游核心材料 -->
+        <div class="companies-section">
+            <div class="section-title">一、上游核心材料（核心壁垒环节）</div>
+            <div class="section-subtitle">陶瓷粉体/超细镍粉/离型膜 — MLCC制造的三大核心材料，国产替代先行者</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">国瓷材料</div>
+                        <div class="card-code">300285</div>
+                    </div>
+                    <span class="card-position position-material">核心材料 · 钛酸钡陶瓷粉体</span>
+                    <div class="card-binding"><strong>全球MLCC陶瓷粉体核心供应商</strong> — 全球MLCC陶瓷粉体市占率约25%，仅次于日本堺化学。钛酸钡粉体是MLCC介质层核心材料，粒径已做到50nm级（全球领先）。供应村田/三星电机/风华高科/三环集团等全球主流MLCC厂商。水热法合成技术壁垒极高，全球仅3-4家掌握纳米级钛酸钡量产能力。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>纳米钛酸钡粉体</strong></span>
+                        <span>客户 <strong>村田/三星/风华/三环</strong></span>
+                        <span>壁垒 <strong>50nm级水热法合成</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">全球陶瓷粉体核心供应商，深度绑定全球MLCC产业链</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">MLCC整体扩产拉动粉体用量增长，耗材属性持续放量</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">博迁新材</div>
+                        <div class="card-code">605376</div>
+                        <span class="shortage-badge">供应紧缺</span>
+                    </div>
+                    <span class="card-position position-powder">核心材料 · 超细镍粉</span>
+                    <div class="card-binding"><strong>全球超细镍粉龙头，80nm以下唯一国产供应商</strong> — 等离子体物理气相合成法（PVD）制备超细镍粉，全球仅少数企业掌握。80nm以下镍粉是MLCC内电极关键材料，已批量供应三星电机/国巨/华新科/风华高科等。大粒径→小粒径趋势下，80nm/50nm镍粉ASP大幅提升。</div>
+                    <div class="card-shortage-reason"><strong>紧缺原因：</strong>80nm以下超细镍粉全球仅博迁/昭荣化学/住友金属3家能量产，MLCC小尺寸化推动细镍粉需求暴增，产能紧缺</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>80nm/50nm超细镍粉</strong></span>
+                        <span>客户 <strong>三星电机/国巨/风华</strong></span>
+                        <span>壁垒 <strong>PVD法物理气相合成</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">全球顶级MLCC客户已验证，细镍粉耗材持续放量</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">小尺寸MLCC趋势+镍粉规格升级，ASP+用量双击</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">洁美科技</div>
+                        <div class="card-code">002859</div>
+                    </div>
+                    <span class="card-position position-film">核心耗材 · 离型膜/载带</span>
+                    <div class="card-binding"><strong>MLCC离型膜+载带龙头，耗材全品类布局</strong> — 纸质载带全球龙头（市占率60%+），MLCC离型膜国内第一。离型膜是MLCC流延工艺关键耗材，MLCC层数增加直接拉动离型膜用量。已实现MLCC离型膜从原膜到涂布全产业链自主可控，客户覆盖风华高科/三环集团等国内主流MLCC厂。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>MLCC离型膜/纸质载带</strong></span>
+                        <span>客户 <strong>风华/三环/国巨/村田</strong></span>
+                        <span>壁垒 <strong>原膜+涂布全链自研</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">载带全球龙头，离型膜国产替代明确受益</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">MLCC层数增加直接放大耗材用量，ASP提升逻辑清晰</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 二、中游MLCC制造 -->
+        <div class="companies-section">
+            <div class="section-title">二、中游MLCC制造 — AI服务器核心受益</div>
+            <div class="section-subtitle">GB300/NVL72单机MLCC用量超20,000颗，高容MLCC是关键瓶颈，国内两大龙头最先受益</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">风华高科</div>
+                        <div class="card-code">000636</div>
+                    </div>
+                    <span class="card-position position-mfg">国内MLCC龙头</span>
+                    <div class="card-binding"><strong>国内最大MLCC制造商，全尺寸覆盖</strong> — 国内MLCC产能第一，产品覆盖01005-2225全尺寸系列，容值覆盖0.1pF-100μF。月产能约300亿只，持续推进高容MLCC扩产（0603/0402 10μF以上）。受益日系退出中低端+AI服务器/车规/5G需求共振。祥和工业园高端MLCC产能达产后将跻身全球前五。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>全系列MLCC(01005-2225)</strong></span>
+                        <span>产能 <strong>月产~300亿只</strong></span>
+                        <span>壁垒 <strong>高容/小尺寸MLCC工艺</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">国内MLCC龙头，日系退出+国产替代双主线最直接受益</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">高容MLCC突破打开10倍ASP空间，周期上行弹性最大</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">三环集团</div>
+                        <div class="card-code">300408</div>
+                    </div>
+                    <span class="card-position position-mfg">MLCC+陶瓷材料平台</span>
+                    <div class="card-binding"><strong>国内第二大MLCC厂商，陶瓷材料一体化</strong> — 从陶瓷粉体→MLCC制造→PKG基座全链布局，材料自研自产是核心优势。MLCC产能快速扩张（月产能约200亿只），高容MLCC突破进度领先（0603 10μF/22μF已量产）。PKG基座、陶瓷插芯等业务提供稳定利润安全垫，MLCC弹性更纯粹。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>MLCC+PKG基座</strong></span>
+                        <span>产能 <strong>月产~200亿只</strong></span>
+                        <span>壁垒 <strong>陶瓷材料全链自研</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">材料自研优势显著，高容突破速度快于同行</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">MLCC产能快速扩张+粉体自供降本，盈利弹性大</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 产业链关系图 -->
+        <div class="relation-section">
+            <div class="section-title">MLCC A股标的映射关系</div>
+            <div class="relation-diagram">
+                <!-- 上游 -->
+                <div class="relation-group upstream">
+                    <div class="relation-group-title">⬆ 上游 — 核心材料</div>
+                    <div class="relation-row">
+                        <div class="relation-label">陶瓷粉体</div>
+                        <div class="relation-items">
+                            <div class="relation-node mat">国瓷材料<span class="node-code">300285</span></div>
+                        </div>
+                    </div>
+                    <div class="relation-arrow">→</div>
+                    <div class="relation-row">
+                        <div class="relation-label">内电极材料</div>
+                        <div class="relation-items">
+                            <div class="relation-node powder shortage">博迁新材<span class="node-code">605376</span></div>
+                        </div>
+                    </div>
+                    <div class="relation-arrow">→</div>
+                    <div class="relation-row">
+                        <div class="relation-label">耗材</div>
+                        <div class="relation-items">
+                            <div class="relation-node film">洁美科技<span class="node-code">002859</span></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 中游 -->
+                <div class="relation-group midstream">
+                    <div class="relation-group-title">⬇ 中游 — MLCC制造</div>
+                    <div class="relation-row">
+                        <div class="relation-label">AI服务器MLCC</div>
+                        <div class="relation-items">
+                            <div class="relation-node mfg">风华高科<span class="node-code">000636</span></div>
+                            <div class="relation-node mfg">三环集团<span class="node-code">300408</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 核心关注维度 -->
+        <div class="focus-section">
+            <div class="section-title">核心关注维度</div>
+            <div class="focus-cards">
+                <div class="focus-card">
+                    <div class="focus-rank">01</div>
+                    <div class="focus-name">AI服务器MLCC用量暴增</div>
+                    <div class="focus-tag">最大增量驱动</div>
+                    <div class="focus-reason">GB300/NVL72单机MLCC用量突破20,000颗，是传统服务器的8-10倍。GPU供电需大量大容量MLCC做滤波/去耦，AI服务器出货量爆发直接驱动MLCC结构性需求增长。高容MLCC（0603 10μF+）ASP是普通MLCC的5-10倍，龙头MLCC厂最受益。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">02</div>
+                    <div class="focus-name">车规MLCC渗透率提升</div>
+                    <div class="focus-tag">中长期主线</div>
+                    <div class="focus-reason">电动车MLCC用量8,000-10,000颗（燃油车~3,000颗），800V高压平台+ADAS感知系统拉动高压/高容/高频MLCC需求。2026年全球电动车渗透率突破25%，车规MLCC需求增速持续高于行业平均。车规MLCC认证门槛高、供应格局好、毛利率优。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">03</div>
+                    <div class="focus-name">高容MLCC国产替代突破</div>
+                    <div class="focus-tag">核心催化剂</div>
+                    <div class="focus-reason">高容MLCC（0603 10μF+）是国产替代最关键的战场，ASP是中低容MLCC的5-10倍。三环集团0603 10μF/22μF已量产，风华高科高容产能加速扩张。高容MLCC国产化率每提升1个百分点，对应数十亿增量市场。关注各厂高容产品出货量爬坡节奏。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">04</div>
+                    <div class="focus-name">日系退出中低端产能</div>
+                    <div class="focus-tag">确定性最强</div>
+                    <div class="focus-reason">村田/太阳诱电/三星电机持续削减中低容MLCC产能，将资源集中到高利润的车规/高容产品。日系退出份额超过30%（约合300-400亿元市场），风华/三环直接承接。这是确定性最强的国产替代逻辑，不依赖技术突破，产能扩张即可兑现业绩。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">05</div>
+                    <div class="focus-name">MLCC行业周期拐点</div>
+                    <div class="focus-tag">择时关键</div>
+                    <div class="focus-reason">MLCC具有强周期属性（3-5年一轮），价格波动剧烈。2023-2024年行业经历下行周期（去库存+价格下滑），2025年企稳，2026年AI+汽车拉动回升。需跟踪村田/三星电机季度出货量和价格指引，判断周期所处位置和拐点信号。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">06</div>
+                    <div class="focus-name">上游材料国产化进展</div>
+                    <div class="focus-tag">耗材属性+LTV高</div>
+                    <div class="focus-reason">上游材料（陶瓷粉体/镍粉/离型膜）具有耗材属性，收入持续性优于MLCC制造。国瓷材料陶瓷粉体全球市占率25%、博迁新材80nm镍粉国产唯一、洁美科技载带全球龙头，均具备全球竞争力。材料环节壁垒更高、格局更优、估值中枢更高。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 精选筛选：AI服务器MLCC全标的受益确定性+弹性空间均满星 ★★★ -->
+        <div class="companies-section">
+            <div class="section-title">🔍 精选筛选：AI服务器MLCC核心标的（全部满星 ★★★）</div>
+            <div class="section-subtitle">全部5只标的均为AI服务器MLCC直接受益，受益确定性+弹性空间双满星</div>
+            <div style="background: #111827; border: 1px solid #1e293b; border-radius: 16px; padding: 24px;">
+                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px; flex-wrap: wrap;">
+                    <span style="font-size: 32px; font-weight: 800; background: linear-gradient(135deg, #f59e0b, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">5 只</span>
+                    <span style="font-size: 14px; color: #8892a8;">全满星 · 上游材料3只 + MLCC制造2只</span>
+                </div>
+                <div style="font-size: 14px; color: #c8d0e0; line-height: 1.8; margin-bottom: 20px;">
+                    <p><strong>筛选条件：</strong>AI服务器MLCC直接受益 + 受益确定性 = <span style="color: #34d399;">★★★（满星）</span> + 弹性空间 = <span style="color: #34d399;">★★★（满星）</span></p>
+                    <p><strong>上游材料（3只）：</strong>国瓷材料（陶瓷粉体）、博迁新材（超细镍粉）、洁美科技（离型膜/载带）</p>
+                    <p><strong>MLCC制造（2只）：</strong>风华高科（国内MLCC龙头）、三环集团（陶瓷材料一体化平台）</p>
+                </div>
+                <div class="pick-list" style="background:rgba(255,255,255,0.02); border-radius:12px; overflow:hidden;">
+                    <div class="pick-item" style="border-bottom:1px solid #1e293b; background:linear-gradient(90deg,rgba(245,158,11,0.06),transparent);">
+                        <span class="pick-code">300285</span>
+                        <span class="pick-name">国瓷材料</span>
+                        <span class="pick-type mat">陶瓷粉体</span>
+                        <span style="color:#8892a8;">全球MLCC陶瓷粉体市占率25%，50nm钛酸钡核心供应商，供应村田/三星/风华/三环</span>
+                    </div>
+                    <div class="pick-item">
+                        <span class="pick-code">605376</span>
+                        <span class="pick-name">博迁新材</span>
+                        <span class="pick-type mat">镍粉</span>
+                        <span style="color:#8892a8;">80nm以下超细镍粉国产唯一，PVD法全球仅3家，三星电机/国巨/风华核心供应商</span>
+                    </div>
+                    <div class="pick-item">
+                        <span class="pick-code">002859</span>
+                        <span class="pick-name">洁美科技</span>
+                        <span class="pick-type mat">离型膜</span>
+                        <span style="color:#8892a8;">纸质载带全球龙头（60%+），MLCC离型膜国产第一，全产业链自主可控</span>
+                    </div>
+                    <div class="pick-item">
+                        <span class="pick-code">000636</span>
+                        <span class="pick-name">风华高科</span>
+                        <span class="pick-type mfg">MLCC制造</span>
+                        <span style="color:#8892a8;">国内最大MLCC制造商，月产能300亿只，AI服务器MLCC用量暴增最直接受益</span>
+                    </div>
+                    <div class="pick-item" style="border-bottom:none;">
+                        <span class="pick-code">300408</span>
+                        <span class="pick-name">三环集团</span>
+                        <span class="pick-type mfg">MLCC制造</span>
+                        <span style="color:#8892a8;">陶瓷材料一体化平台，高容MLCC突破领先，0603 10μF/22μF已量产</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 风险提示 -->
+        <div class="risk-section">
+            <div class="section-title">核心风险提示</div>
+            <div class="risk-grid">
+                <div class="risk-card">
+                    <div class="risk-title">MLCC强周期波动风险</div>
+                    <div class="risk-desc">MLCC行业具有强周期属性（3-5年一轮）。全球产能扩张可能导致供过于求，产品价格大幅下滑将影响MLCC制造企业的盈利弹性。2023-2024年下行周期中华高科/三环集团毛利率承压，周期底部利润波动剧烈。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">日系厂商竞争加剧风险</div>
+                    <div class="risk-desc">村田/TDK/太阳诱电虽退出中低端但持续强化高容/车规MLCC布局，国产在高容MLCC领域仍面临技术差距和客户认证壁垒。若日系重新加码中低端产能，国产替代节奏将受冲击。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">原材料价格大幅波动</div>
+                    <div class="risk-desc">MLCC核心材料钛酸钡、氧化钛、镍粉的价格受上游矿产和化工原料价格影响。贵金属（钯/银）是端电极材料重要成本构成，钯价剧烈波动直接影响MLCC制造成本和毛利率。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">高容MLCC技术突破不及预期</div>
+                    <div class="risk-desc">高容MLCC（0603 10μF+）要求纳米级粉体、超薄介质层（<1μm）和高精度叠层工艺，技术壁垒极高。若国产厂家在高容产品上良率不达预期或客户认证周期过长，将影响国产替代进度和市场信心。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">下游需求结构性走弱</div>
+                    <div class="risk-desc">消费电子（手机/PC）仍是MLCC最大需求来源（~40%），若全球经济走弱导致消费电子需求下滑，将抵消AI/汽车增量的拉动效应。需关注全球宏观和终端需求变化。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">估值透支与业绩兑现风险</div>
+                    <div class="risk-desc">AI服务器MLCC用量暴增和国产替代是中长期逻辑，实际业绩体现需要1-3年。当前部分标的已price in较多预期（如风华高科远期PS较高），若产能释放或订单兑现节奏不及预期，将面临估值回调压力。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p style="text-align:center;color:#8892a8;font-size:0.8em;padding:30px 0 10px;border-top:1px solid #1e293b;margin-top:40px">
+                数据来源：东方财富、同花顺、公开报道、券商研报、各公司公告、村田/三星电机/太阳诱电公开资料、TrendForce | 整理时间：2026-06-25
+            </p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em;margin-top:6px">
+                本报告覆盖AI服务器MLCC产业链上游材料（陶瓷粉体/镍粉/离型膜）及中游MLCC制造，涵盖5只AI服务器核心MLCC标的。
+            </p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em;margin-top:6px">
+                仅为公开资料整理与产业链梳理，不构成任何投资建议。股市有风险，投资需谨慎。
+            </p>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function walkText(node) {
+                if (node.nodeType === 3) {
+                    var text = node.textContent;
+                    if (text.indexOf('MLCC') !== -1) {
+                        var span = document.createElement('span');
+                        span.innerHTML = text.replace(/MLCC/g, '<span class="mlcc-highlight">MLCC</span>');
+                        node.parentNode.replaceChild(span, node);
+                    }
+                } else if (node.nodeType === 1 && !/^(script|style|textarea)$/i.test(node.tagName)) {
+                    for (var i = 0; i < node.childNodes.length; i++) {
+                        walkText(node.childNodes[i]);
+                    }
+                }
+            }
+            walkText(document.body);
+        });
+    </script>
+</body>
+</html>

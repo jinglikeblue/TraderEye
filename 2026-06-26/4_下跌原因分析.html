@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026年06月26日 A股下跌原因分析</title>
+<style>
+:root {
+    --bg-primary: #0a0e17;
+    --bg-card: #111827;
+    --bg-card-alt: #0f172a;
+    --border-color: #1e293b;
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent-red: #ef4444;
+    --accent-green: #22c55e;
+    --accent-blue: #3b82f6;
+    --accent-yellow: #eab308;
+    --accent-purple: #a855f7;
+    --accent-pink: #ec4899;
+    --accent-orange: #f97316;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.8;
+    padding: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.header {
+    text-align: center;
+    padding: 30px 0 20px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 24px;
+}
+
+.header h1 {
+    font-size: 28px;
+    background: linear-gradient(135deg, #ef4444, #f97316, #eab308);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+}
+
+.header .subtitle {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.section {
+    margin-bottom: 32px;
+}
+
+.section h2 {
+    font-size: 20px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.text-red { color: var(--accent-red); }
+.text-green { color: var(--accent-green); }
+.text-yellow { color: var(--accent-yellow); }
+.text-orange { color: var(--accent-orange); }
+
+.highlight-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--accent-red);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-bottom: 16px;
+}
+
+.highlight-box.orange { border-left-color: var(--accent-orange); }
+.highlight-box.yellow { border-left-color: var(--accent-yellow); }
+.highlight-box.blue { border-left-color: var(--accent-blue); }
+
+.highlight-box h3 {
+    color: var(--accent-orange);
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.highlight-box.orange h3 { color: var(--accent-orange); }
+.highlight-box.yellow h3 { color: var(--accent-yellow); }
+.highlight-box.blue h3 { color: var(--accent-blue); }
+
+.cause-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px 22px;
+    margin-bottom: 16px;
+}
+
+.cause-section h3 {
+    font-size: 17px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cause-section h3 .cause-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.cause-num.primary { background: var(--accent-red); color: #fff; }
+.cause-num.secondary { background: var(--accent-orange); color: #fff; }
+.cause-num.tertiary { background: var(--accent-yellow); color: #111; }
+
+.cause-body {
+    padding-left: 34px;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.cause-body p {
+    margin-bottom: 10px;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 12px 0;
+}
+
+.data-table th {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.data-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid rgba(30, 41, 59, 0.4);
+    white-space: nowrap;
+}
+
+.tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    margin-right: 4px;
+}
+
+.tag-red { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+.tag-green { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+.tag-orange { background: rgba(249, 115, 22, 0.15); color: #fb923c; }
+
+.summary-card {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(249, 115, 22, 0.06));
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+}
+
+.summary-card h3 {
+    font-size: 18px;
+    color: var(--accent-red);
+    margin-bottom: 12px;
+}
+
+.summary-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.summary-card ul li {
+    padding: 5px 0;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.summary-card ul li::before {
+    content: "▸ ";
+    color: var(--accent-red);
+}
+
+.conclusion-box {
+    background: var(--bg-card);
+    border: 1px solid var(--accent-yellow);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-top: 16px;
+}
+
+.conclusion-box h3 {
+    color: var(--accent-yellow);
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.conclusion-box p {
+    font-size: 14px;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.arrow-down {
+    color: var(--accent-green);
+    font-weight: 700;
+}
+
+.footer {
+    margin-top: 40px;
+    padding: 20px 0;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.footer .disclaimer {
+    color: var(--accent-yellow);
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    body { padding: 12px; }
+    .header h1 { font-size: 22px; }
+    .cause-body { padding-left: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>2026年06月26日 A股大跌原因分析</h1>
+    <div class="subtitle">基于盘面数据、资金流向、板块结构的多维度分析 · 生成于 2026-06-26 17:30</div>
+</div>
+
+<!-- ====== 核心数据快照 ====== -->
+<div class="section">
+    <h2>📊 今日盘面核心数据</h2>
+    <div class="highlight-box">
+        <table class="data-table">
+            <thead>
+                <tr><th>指数</th><th>收盘价</th><th>涨跌幅</th><th>成交额</th><th>昨日涨跌</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>上证指数</td>
+                    <td>4027.26</td>
+                    <td class="text-green">-2.26%</td>
+                    <td>1.62万亿</td>
+                    <td class="text-red">昨日 +0.23%</td>
+                </tr>
+                <tr>
+                    <td>深证成指</td>
+                    <td>15782.22</td>
+                    <td class="text-green"><b>-3.44%</b></td>
+                    <td>1.93万亿</td>
+                    <td class="text-red">昨日 +1.82%</td>
+                </tr>
+                <tr>
+                    <td>创业板指</td>
+                    <td>4194.21</td>
+                    <td class="text-green"><b>-4.07%</b></td>
+                    <td>9325亿</td>
+                    <td class="text-red">昨日 +2.84%</td>
+                </tr>
+                <tr>
+                    <td>科创50</td>
+                    <td>2032.28</td>
+                    <td class="text-green">-1.65%</td>
+                    <td>2017亿</td>
+                    <td class="text-red">昨日 +3.87%</td>
+                </tr>
+                <tr>
+                    <td>北证50</td>
+                    <td>1266.90</td>
+                    <td class="text-green">-0.84%</td>
+                    <td>233亿</td>
+                    <td class="text-green">昨日 -1.41%</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="highlight-box orange">
+        <table class="data-table">
+            <thead>
+                <tr><th>指标</th><th>数值</th><th>解读</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>涨跌比</td><td class="text-green">1022 <b style="color:#e2e8f0;">/</b> 5957</td><td>仅 14.6% 个股上涨，全市场普跌</td></tr>
+                <tr><td>主力资金</td><td class="text-green">-1735.26 亿</td><td>主力大幅净流出，创近期峰值</td></tr>
+                <tr><td>两市场成交</td><td>3.55 万亿</td><td>放量下跌，资金出逃迹象明显</td></tr>
+                <tr><td>恒生指数</td><td class="text-green">跌 -1.87%</td><td>港股同步走弱，恒生科技 -3.31%</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ====== 主因分析 ====== -->
+<div class="section">
+    <h2>🔍 五大下跌核心原因</h2>
+
+    <!-- 原因一 -->
+    <div class="cause-section">
+        <h3><span class="cause-num primary">1</span> 通信板块雪崩：本轮行情核心赛道大幅杀跌</h3>
+        <div class="cause-body">
+            <p>通信设备板块今日主力净流出 <span class="text-green"><b>-281.03 亿</b></span>，板块整体跌幅 <span class="text-green"><b>-5.07%</b></span>，为全市场跌幅最深、流出最猛的细分方向。</p>
+            <table class="data-table">
+                <thead><tr><th>个股</th><th>代码</th><th>跌幅</th><th>成交额</th><th>昨日表现</th></tr></thead>
+                <tbody>
+                    <tr><td>中天科技</td><td>600522</td><td class="text-green"><b>跌停 -10.00%</b></td><td>249亿</td><td class="text-red">昨日 涨停 +10%</td></tr>
+                    <tr><td>亨通光电</td><td>600487</td><td class="text-green"><b>-9.91%</b></td><td>227亿</td><td class="text-red">昨日 +3.34%</td></tr>
+                    <tr><td>烽火通信</td><td>600498</td><td class="text-green"><b>跌停 -10.00%</b></td><td>76亿</td><td class="text-red">昨日连板股</td></tr>
+                    <tr><td>永鼎股份</td><td>600105</td><td class="text-green"><b>-9.94%</b></td><td>103亿</td><td class="text-red">昨日 +6.14%</td></tr>
+                    <tr><td>光迅科技</td><td>002281</td><td class="text-green">-8.21%</td><td>100亿</td><td class="text-green">昨日 -1.84%</td></tr>
+                    <tr><td>华工科技</td><td>000988</td><td class="text-green">-7.28%</td><td>110亿</td><td class="text-red">昨日 +3.39%</td></tr>
+                </tbody>
+            </table>
+            <p><span class="tag tag-orange">关键信号</span>通信板块是本轮 AI 算力行情的核心载体，前期累积了巨大涨幅。中天科技昨日涨停→今日跌停，典型的 "涨停次日天地板"，且<span class="text-yellow">成交量从昨日 209 亿放大到今日 249 亿</span>，说明有大量筹码在高位完成换手出货。</p>
+        </div>
+    </div>
+
+    <!-- 原因二 -->
+    <div class="cause-section">
+        <h3><span class="cause-num primary">2</span> 前期获利盘大规模兑现：6/25 强反弹后的集中抛压</h3>
+        <div class="cause-body">
+            <p>昨日（6月25日）A股经历放量暴涨：<span class="text-red">创业板 +2.84%、科创50 +3.87%、深成指 +1.82%</span>，两市成交突破 3.5 万亿。半导体、元件、存储芯片、MLCC 等科技板块全面爆发，多只个股涨停。</p>
+            <p>今日开盘后，<span class="text-yellow">昨日涌入的短线资金集体兑现利润</span>，形成了典型的 "放量上攻→次日获利回吐" 走势。从资金结构看：</p>
+            <ul style="padding-left:20px; font-size:14px; color:var(--text-secondary);">
+                <li style="margin-bottom:6px;">电子·元件板块 净流出 <span class="text-green">-136.03 亿</span>（昨日 MLCC/被动元件曾暴涨 +5%）</li>
+                <li style="margin-bottom:6px;">消费电子板块 净流出 <span class="text-green">-85.43 亿</span></li>
+                <li style="margin-bottom:6px;">半导体板块 净流出 <span class="text-green">-71.23 亿</span>（昨日存储芯片 +3.78%，中芯概念 +3.02%）</li>
+                <li style="margin-bottom:6px;">证券板块 净流出 <span class="text-green">-72.79 亿</span>（昨日券商概念 +3.02%，今日券商领跌 -3.89%）</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 原因三 -->
+    <div class="cause-section">
+        <h3><span class="cause-num secondary">3</span> 多板块共振下杀：锂电、医药、有色集体补刀</h3>
+        <div class="cause-body">
+            <p>今日不只是科技股在跌，多个权重板块同步大幅下挫，形成了 "多杀多" 的共振格局：</p>
+            <table class="data-table">
+                <thead><tr><th>板块</th><th>跌幅</th><th>主力净流出</th><th>说明</th></tr></thead>
+                <tbody>
+                    <tr><td>电力设备·电池</td><td class="text-green">-5.26%</td><td class="text-green">-124.89 亿</td><td>锂电产业链全面杀跌</td></tr>
+                    <tr><td>医药生物·化学制药</td><td class="text-green">-4.86%</td><td class="text-green">-39.04 亿</td><td>医药板块无差别抛售</td></tr>
+                    <tr><td>有色金属·工业金属</td><td class="text-green">-4.59%</td><td class="text-green">-55.47 亿</td><td>铜铝等大宗回调拖累</td></tr>
+                    <tr><td>证券</td><td class="text-green">-3.89%</td><td class="text-green">-72.79 亿</td><td>券商领跌打击市场信心</td></tr>
+                    <tr><td>计算机·软件开发</td><td class="text-green">-3.62%</td><td class="text-green">-37.21 亿</td><td>科技软件跟跌</td></tr>
+                </tbody>
+            </table>
+            <p>尤其值得注意的是<span class="text-yellow">宁德时代 -3.06%（成交 102 亿）</span>和<span class="text-yellow">紫金矿业 -6.26%（昨日）</span>等权重龙头的走弱，对创业板指和上证指数形成了双向拖累。</p>
+        </div>
+    </div>
+
+    <!-- 原因四 -->
+    <div class="cause-section">
+        <h3><span class="cause-num tertiary">4</span> 港股联动走弱：恒生科技 -3.31%，跨境风险偏好收缩</h3>
+        <div class="cause-body">
+            <p>港股今日同样表现低迷：恒生指数午盘跌 <span class="text-green">-1.87%</span>，恒生科技指数跌 <span class="text-green">-3.31%</span>。A/H 股联动下跌，说明此轮调整并非 A 股孤立事件，而是<span class="text-yellow">中国资产整体的风险偏好收缩</span>。</p>
+            <p>外部背景方面：铁矿石价格连续第七周下跌（创 2022 年以来最长连跌），全球大宗商品走弱与对中国需求预期的担忧共振。</p>
+        </div>
+    </div>
+
+    <!-- 原因五 -->
+    <div class="cause-section">
+        <h3><span class="cause-num tertiary">5</span> 新股"吸血效应"：惠科首日暴涨 315%，虹吸短线资金</h3>
+        <div class="cause-body">
+            <p>今日 N 惠科（001399）上市首日暴涨 <span class="text-red">+315.02%</span>，成交额达 <span class="text-red">130 亿</span>，主力净流入 <span class="text-red">+31 亿</span>。</p>
+            <p>在大盘调整的背景下，新股暴涨吸引了大量活跃的短线资金，对光学光电子板块形成局部支撑（板块 +0.10%，净流入 +45 亿），但同时也<span class="text-yellow">从其他科技板块抽走了流动性</span>，加剧了通信、半导体等板块的资金流出压力。</p>
+        </div>
+    </div>
+</div>
+
+<!-- ====== 结构对比 ====== -->
+<div class="section">
+    <h2>📉 资金流出重灾区 TOP10</h2>
+    <div class="highlight-box orange">
+        <table class="data-table">
+            <thead><tr><th>#</th><th>板块</th><th>涨跌幅</th><th>主力净流出</th><th>领跌代表股</th></tr></thead>
+            <tbody>
+                <tr><td>1</td><td>通信·通信设备</td><td class="text-green">-5.07%</td><td class="text-green"><b>-281.03 亿</b></td><td>中天科技、亨通光电跌停</td></tr>
+                <tr><td>2</td><td>电子·元件</td><td class="text-green">-2.65%</td><td class="text-green">-136.03 亿</td><td>沪电 -5%、东山精密 -6%</td></tr>
+                <tr><td>3</td><td>电力设备·电池</td><td class="text-green">-5.26%</td><td class="text-green">-124.89 亿</td><td>宁德时代 -3%</td></tr>
+                <tr><td>4</td><td>电子·消费电子</td><td class="text-green">-3.34%</td><td class="text-green">-85.43 亿</td><td>立讯精密 -8.6%、工业富联 -8.6%</td></tr>
+                <tr><td>5</td><td>机械设备·自动化设备</td><td class="text-green">-3.19%</td><td class="text-green">-80.40 亿</td><td>大族激光跟跌</td></tr>
+                <tr><td>6</td><td>证券</td><td class="text-green">-3.89%</td><td class="text-green">-72.79 亿</td><td>东方财富 -5%</td></tr>
+                <tr><td>7</td><td>电子·半导体</td><td class="text-green">-0.88%</td><td class="text-green">-71.23 亿</td><td>寒武纪 -5%、中芯国际 -5.7%</td></tr>
+                <tr><td>8</td><td>有色金属·小金属</td><td class="text-green">-2.51%</td><td class="text-green">-56.34 亿</td><td>云南锗业 -7%</td></tr>
+                <tr><td>9</td><td>有色金属·工业金属</td><td class="text-green">-4.59%</td><td class="text-green">-55.47 亿</td><td>紫金矿业 -6%</td></tr>
+                <tr><td>10</td><td>医药生物·化学制药</td><td class="text-green">-4.86%</td><td class="text-green">-39.04 亿</td><td>板块普跌</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ====== 逆势抗跌板块 ====== -->
+<div class="section">
+    <h2>🛡️ 逆势抗跌的方向</h2>
+    <div class="cause-section">
+        <h3><span class="cause-num secondary" style="background:var(--accent-green);">✓</span> 市场仅存的防御性亮点</h3>
+        <div class="cause-body">
+            <table class="data-table">
+                <thead><tr><th>板块</th><th>涨跌幅</th><th>主力净流入</th><th>逻辑</th></tr></thead>
+                <tbody>
+                    <tr><td>电子·光学光电子</td><td class="text-red">+0.10%</td><td class="text-red">+45.20 亿</td><td>惠科首日暴涨 + 京东方 +3.6% 带动</td></tr>
+                    <tr><td>军工装备</td><td class="text-green">-1.01%</td><td class="text-red">+21.45 亿</td><td>国防军工相对独立于科技周期</td></tr>
+                    <tr><td>中芯国际概念</td><td class="text-red">+1.12%</td><td class="text-green">-7.57 亿</td><td>半导体设备国产替代逻辑仍受认可</td></tr>
+                    <tr><td>光刻机/光刻胶</td><td class="text-red">+0.85%</td><td class="text-green">-28.19 亿</td><td>国产替代线相对抗跌</td></tr>
+                    <tr><td>猪肉/养鸡</td><td class="text-red">+0.61%</td><td class="text-red">+4.13 亿</td><td>防御性消费 + 猪周期</td></tr>
+                </tbody>
+            </table>
+            <p>整体来看，<span class="text-yellow">仅光学光电子和军工装备有真正的主力资金流入</span>，其余所谓"抗跌"板块更多是跌幅小于大盘，而非真正有资金承接。</p>
+        </div>
+    </div>
+</div>
+
+<!-- ====== 核心结论 ====== -->
+<div class="section">
+    <h2>🎯 核心结论</h2>
+    <div class="summary-card">
+        <h3>今日大跌的本质</h3>
+        <ul>
+            <li><b>定性：</b>这是一次典型的 <span class="text-yellow">"暴涨次日获利回吐"</span> 行情，叠加通信板块核心标的从涨停到跌停的极端反转，触发了市场恐慌性抛售。</li>
+            <li><b>导火索：</b>通信设备板块的集体崩塌——中天科技、亨通光电、烽火通信等前期强势股近乎全线跌停。该板块单日净流出 -281 亿，是本次下跌的<span class="text-red">直接引爆点</span>。</li>
+            <li><b>放大器：</b>锂电（-5.26%）、医药（-4.86%）、工业金属（-4.59%）、券商（-3.89%）等多个权重板块同时杀跌，形成 <span class="text-yellow">"多杀多" 共振</span>，使得跌幅远超单一板块调整应有的幅度。</li>
+            <li><b>深层原因：</b>连续数日的 AI 算力/半导体行情积累了大量浮盈筹码，6/25 放量暴涨突破新高后，短线资金兑现意愿极强。今日放量下跌（成交 3.55 万亿）说明多空分歧激烈，高位换手充分。</li>
+            <li><b>外部因素：</b>港股恒生科技同步大跌 -3.31%，全球大宗商品持续走弱，人民币资产风险偏好整体收缩。</li>
+        </ul>
+    </div>
+
+    <div class="conclusion-box">
+        <h3>⚠️ 后市关注</h3>
+        <p>1. <b>通信板块能否企稳：</b>中天科技、亨通光电等龙头明天是否继续跌停，决定了恐慌情绪是否延续。</p>
+        <p>2. <b>两市成交额变化：</b>若明日缩量止跌，说明抛压释放完毕；若继续放量下跌，则调整级别可能升级。</p>
+        <p>3. <b>北向资金动向：</b>今日主力资金内部分项（超大单/大单/中单/小单）数据缺失，但 -1735 亿的主力净流出规模已表明机构资金在主动减仓。</p>
+        <p>4. <b>关键支撑位：</b>上证指数 4000 点整数关口，创业板指 4100 点附近的前期平台支撑。</p>
+    </div>
+</div>
+
+<div class="footer">
+    <p>生成时间：2026-06-26 17:30</p>
+    <p>数据来源：东方财富、新浪财经 | 基于收盘复盘报告数据分析</p>
+    <p class="disclaimer">⚠️ 仅为数据整理与分析，不构成任何投资建议。股市有风险，投资需谨慎。</p>
+</div>
+
+</body>
+</html>

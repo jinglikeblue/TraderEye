@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美股盘前 | 2026年6月24日 芯片股反弹修复</title>
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #111827;
+            --bg-card: #1a2332;
+            --bg-card-hover: #1f2b3d;
+            --border: #2a3a4e;
+            --text-primary: #e8edf5;
+            --text-secondary: #8a9bb5;
+            --text-muted: #5a6b82;
+            --accent-red: #ef4444;
+            --accent-green: #22c55e;
+            --accent-blue: #3b82f6;
+            --accent-amber: #f59e0b;
+            --accent-purple: #a855f7;
+            --accent-cyan: #06b6d4;
+            --accent-rose: #f43f5e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a1a3a 0%, #1a2a4a 50%, #0d1a2a 100%);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px 36px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at 30% 50%, rgba(59,130,246,0.08) 0%, transparent 60%),
+                        radial-gradient(ellipse at 70% 40%, rgba(239,68,68,0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .header-flag {
+            font-size: 28px;
+            margin-bottom: 4px;
+        }
+
+        .header-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .header-subtitle {
+            font-size: 15px;
+            color: var(--text-secondary);
+        }
+
+        .header-date {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            padding: 6px 14px;
+            background: rgba(59,130,246,0.10);
+            border: 1px solid rgba(59,130,246,0.25);
+            border-radius: 8px;
+            font-size: 13px;
+            color: #93c5fd;
+        }
+
+        .index-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .index-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .index-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+
+        .index-card.up { border-left: 4px solid var(--accent-green); }
+        .index-card.down { border-left: 4px solid var(--accent-red); }
+        .index-card.mixed { border-left: 4px solid var(--accent-amber); }
+
+        .index-card .label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .index-card .value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .index-card .change {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .index-card .change.up { color: var(--accent-green); }
+        .index-card .change.down { color: var(--accent-red); }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title .icon {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .section-title .icon.tech { background: rgba(59,130,246,0.2); color: #60a5fa; }
+        .section-title .icon.stock { background: rgba(34,197,94,0.2); color: #4ade80; }
+        .section-title .icon.reason { background: rgba(6,182,212,0.2); color: #22d3ee; }
+        .section-title .icon.warn { background: rgba(245,158,11,0.2); color: #fbbf24; }
+        .section-title .icon.macro { background: rgba(168,85,247,0.2); color: #c084fc; }
+
+        .sector-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 28px;
+            background: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .sector-table thead th {
+            background: rgba(59,130,246,0.08);
+            padding: 14px 18px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sector-table tbody td {
+            padding: 14px 18px;
+            border-bottom: 1px solid rgba(42,58,78,0.5);
+            font-size: 14px;
+        }
+
+        .sector-table tbody tr:last-child td { border-bottom: none; }
+        .sector-table tbody tr:hover { background: var(--bg-card-hover); }
+
+        .sector-table .rank {
+            width: 50px;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .sector-table .sector-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .sector-table .change-val {
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        .sector-table .change-val.down {
+            color: var(--accent-red);
+        }
+
+        .sector-table .driver {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .stock-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+
+        .stock-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 18px;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            cursor: default;
+        }
+
+        .stock-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+            border-color: rgba(59,130,246,0.3);
+        }
+
+        .stock-card .stock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .stock-card .stock-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .stock-card .stock-name-en {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .stock-card .stock-change {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--accent-green);
+            white-space: nowrap;
+        }
+
+        .stock-card .stock-change.down {
+            color: var(--accent-red);
+        }
+
+        .stock-card .stock-theme {
+            display: inline-block;
+            padding: 3px 10px;
+            background: rgba(59,130,246,0.1);
+            border: 1px solid rgba(59,130,246,0.2);
+            border-radius: 6px;
+            font-size: 12px;
+            color: #93c5fd;
+        }
+
+        .stock-card .stock-code {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .mega-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 28px;
+            background: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .mega-table thead th {
+            background: rgba(59,130,246,0.06);
+            padding: 14px 18px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mega-table tbody td {
+            padding: 14px 18px;
+            border-bottom: 1px solid rgba(42,58,78,0.5);
+            font-size: 14px;
+        }
+
+        .mega-table tbody tr:last-child td { border-bottom: none; }
+        .mega-table tbody tr:hover { background: var(--bg-card-hover); }
+
+        .mega-table .stock-col {
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .mega-table .stock-col .en {
+            font-weight: 400;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .mega-table .change-col.down {
+            font-weight: 700;
+            color: var(--accent-red);
+        }
+
+        .mega-table .change-col.up {
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        .mega-table .note-col {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .reason-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+
+        .reason-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reason-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-cyan);
+        }
+
+        .reason-card .reason-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px; height: 28px;
+            background: rgba(6,182,212,0.15);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #22d3ee;
+            margin-bottom: 8px;
+        }
+
+        .reason-card .reason-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .reason-card .reason-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .reason-card .reason-tag {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 3px 10px;
+            background: rgba(6,182,212,0.1);
+            border: 1px solid rgba(6,182,212,0.2);
+            border-radius: 6px;
+            font-size: 11px;
+            color: #67e8f9;
+        }
+
+        .macro-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .macro-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .macro-item .macro-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .macro-item .macro-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .macro-item .macro-change {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .macro-item .macro-change.up { color: var(--accent-green); }
+        .macro-item .macro-change.down { color: var(--accent-red); }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        @media (max-width: 768px) {
+            .two-col { grid-template-columns: 1fr; }
+        }
+
+        .insight-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 28px;
+            border-left: 4px solid var(--accent-purple);
+        }
+
+        .insight-box .insight-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #c084fc;
+            margin-bottom: 8px;
+        }
+
+        .insight-box .insight-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 12px;
+            border-top: 1px solid var(--border);
+            margin-top: 12px;
+        }
+
+        .footer a { color: var(--accent-blue); text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 28px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 10px 0 10px 24px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 16px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            border: 2px solid var(--bg-primary);
+        }
+
+        .timeline-item .time {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+
+        .timeline-item .event {
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 640px) {
+            .container { padding: 12px; }
+            .header { padding: 20px; }
+            .header-title { font-size: 22px; }
+            .index-card .value { font-size: 26px; }
+            .stock-grid { grid-template-columns: 1fr; }
+            .reason-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- 标题区 -->
+        <div class="header">
+            <div class="header-flag">🇺🇸</div>
+            <div class="header-title">美股盘前分析 · 芯片股超跌反弹</div>
+            <div class="header-subtitle">昨日纳指重挫 -2.21% 后，盘前芯片股集体修复，纳指期货领涨</div>
+            <div class="header-date">
+                📅 2026年6月24日（周三）盘前
+            </div>
+        </div>
+
+        <!-- 指数概览 -->
+        <div class="index-grid">
+            <div class="index-card mixed">
+                <div class="label">道琼斯期货</div>
+                <div class="value">--</div>
+                <div class="change down">▼ -0.11% ~ -0.18%</div>
+                <div style="margin-top:4px;font-size:13px;color:var(--text-secondary);">昨日收报 51,666.84，微跌 -0.09%</div>
+            </div>
+            <div class="index-card up">
+                <div class="label">纳斯达克100期货</div>
+                <div class="value">--</div>
+                <div class="change up">▲ +0.48% ~ +0.64%</div>
+                <div style="margin-top:4px;font-size:13px;color:var(--text-secondary);">昨日纳指 -2.21% 报 25,587.04，芯片超卖后反弹</div>
+            </div>
+            <div class="index-card up">
+                <div class="label">标普500期货</div>
+                <div class="value">--</div>
+                <div class="change up">▲ +0.13% ~ +0.19%</div>
+                <div style="margin-top:4px;font-size:13px;color:var(--text-secondary);">昨日收报 7,365.46，跌 -1.44%</div>
+            </div>
+        </div>
+
+        <!-- 隔夜收盘速览 -->
+        <div class="section-title">
+            <span class="icon macro">📉</span>
+            隔夜收盘回顾（6月23日）
+        </div>
+        <table class="sector-table">
+            <thead>
+                <tr>
+                    <th>指数</th>
+                    <th>收盘价</th>
+                    <th>涨跌幅</th>
+                    <th>要点</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="sector-name">道琼斯工业</td>
+                    <td>51,666.84</td>
+                    <td class="change-val down">-0.09%</td>
+                    <td class="driver">相对抗跌，IBM +5% 提供支撑</td>
+                </tr>
+                <tr>
+                    <td class="sector-name">标普500</td>
+                    <td>7,365.46</td>
+                    <td class="change-val down">-1.44%</td>
+                    <td class="driver">创近两周新低，芯片板块拖累明显</td>
+                </tr>
+                <tr>
+                    <td class="sector-name">纳斯达克综合</td>
+                    <td>25,587.04</td>
+                    <td class="change-val down">-2.21%</td>
+                    <td class="driver">费半指数暴跌 -8%，为最大拖累</td>
+                </tr>
+                <tr>
+                    <td class="sector-name">费城半导体 SOX</td>
+                    <td>--</td>
+                    <td class="change-val down">约 -8%</td>
+                    <td class="driver">美光 -10%+、闪迪 -10%+、Marvell -9%+，韩媒报道英伟达 Rubin 预期产量下修、SK 海力士 HBM4 放缓扩产触发恐慌</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 盘前领涨板块 -->
+        <div class="section-title">
+            <span class="icon tech">📊</span>
+            盘前板块表现
+        </div>
+        <table class="sector-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>板块</th>
+                    <th>盘前表现</th>
+                    <th>核心驱动</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="rank">1</td>
+                    <td class="sector-name">🔵 半导体 / 芯片</td>
+                    <td class="change-val">+2% ~ +5%</td>
+                    <td class="driver">昨日暴跌 -8% 后技术性超跌反弹，美光 +5%、闪迪 +3%、英特尔 +2.7%、高通 +2.6%、AMD +2%+</td>
+                </tr>
+                <tr>
+                    <td class="rank">2</td>
+                    <td class="sector-name">🤖 AI / 大型科技</td>
+                    <td class="change-val">涨跌互现</td>
+                    <td class="driver">特斯拉盘前 +2%（Optimus 3 量产倒计时），苹果 +1%+，亚马逊 +1%+；英伟达昨日 -4% 后盘前小幅修复</td>
+                </tr>
+                <tr>
+                    <td class="rank">3</td>
+                    <td class="sector-name">☁️ 软件 / 云计算</td>
+                    <td class="change-val">微涨</td>
+                    <td class="driver">微软昨日逆势 +2% 提供支撑，IBM +5% 财报前走强</td>
+                </tr>
+                <tr>
+                    <td class="rank">4</td>
+                    <td class="sector-name">⛽ 能源</td>
+                    <td class="change-val down">-1% ~ -2%</td>
+                    <td class="driver">油价连续下跌，WTI -1.4% 报 $72.6，布油 -1.34% 报 $75.59，美伊谈判恢复压制油价</td>
+                </tr>
+                <tr>
+                    <td class="rank">5</td>
+                    <td class="sector-name">🇨🇳 中概股</td>
+                    <td class="change-val down">多数下跌</td>
+                    <td class="driver">蔚来 -3%，京东 -1%+，阿里、小鹏、理想小幅下跌；B站 +2.4%（宣布 3 亿美元回购计划）</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 盘前热门个股 -->
+        <div class="section-title">
+            <span class="icon stock">🔥</span>
+            盘前热门个股
+        </div>
+        <div class="stock-grid">
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">美光科技</div>
+                        <div class="stock-name-en">Micron Technology</div>
+                    </div>
+                    <div class="stock-change">+4% ~ +5%</div>
+                </div>
+                <span class="stock-theme">💎 存储芯片龙头</span>
+                <div class="stock-code">MU</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">英特尔</div>
+                        <div class="stock-name-en">Intel</div>
+                    </div>
+                    <div class="stock-change">+2.7%</div>
+                </div>
+                <span class="stock-theme">🔵 芯片制造</span>
+                <div class="stock-code">INTC</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">AMD</div>
+                        <div class="stock-name-en">Advanced Micro Devices</div>
+                    </div>
+                    <div class="stock-change">+2%+</div>
+                </div>
+                <span class="stock-theme">🔵 CPU/GPU</span>
+                <div class="stock-code">AMD</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">高通</div>
+                        <div class="stock-name-en">Qualcomm</div>
+                    </div>
+                    <div class="stock-change">+2.58%</div>
+                </div>
+                <span class="stock-theme">📱 移动芯片</span>
+                <div class="stock-code">QCOM</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">闪迪</div>
+                        <div class="stock-name-en">SanDisk</div>
+                    </div>
+                    <div class="stock-change">+3%+</div>
+                </div>
+                <span class="stock-theme">💾 存储</span>
+                <div class="stock-code">SNDK</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">特斯拉</div>
+                        <div class="stock-name-en">Tesla</div>
+                    </div>
+                    <div class="stock-change">+2%</div>
+                </div>
+                <span class="stock-theme">🤖 Optimus 3 量产</span>
+                <div class="stock-code">TSLA</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">英伟达</div>
+                        <div class="stock-name-en">NVIDIA</div>
+                    </div>
+                    <div class="stock-change">小幅修复</div>
+                </div>
+                <span class="stock-theme">🤖 AI 算力龙头</span>
+                <div class="stock-code">NVDA</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">台积电</div>
+                        <div class="stock-name-en">TSMC</div>
+                    </div>
+                    <div class="stock-change">+1%+</div>
+                </div>
+                <span class="stock-theme">🏭 晶圆代工</span>
+                <div class="stock-code">TSM</div>
+            </div>
+        </div>
+
+        <!-- 隔夜重挫回顾 -->
+        <div class="section-title">
+            <span class="icon warn">⚠️</span>
+            隔夜重挫个股（6月23日收盘）
+        </div>
+        <table class="mega-table">
+            <thead>
+                <tr>
+                    <th>股票</th>
+                    <th>昨日跌幅</th>
+                    <th>暴跌原因</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="stock-col">美光科技<span class="en"> / Micron</span></td>
+                    <td class="change-col down">-10%+</td>
+                    <td class="note-col">韩媒报道英伟达 Rubin 预期产量下修，存储需求预期下调</td>
+                </tr>
+                <tr>
+                    <td class="stock-col">闪迪<span class="en"> / SanDisk</span></td>
+                    <td class="change-col down">-10%+</td>
+                    <td class="note-col">存储板块集体抛售，连带西部数据同步大跌</td>
+                </tr>
+                <tr>
+                    <td class="stock-col">Marvell Technology</td>
+                    <td class="change-col down">-9%+</td>
+                    <td class="note-col">数据中心芯片需求担忧蔓延，AI 算力链情绪恶化</td>
+                </tr>
+                <tr>
+                    <td class="stock-col">特斯拉<span class="en"> / Tesla</span></td>
+                    <td class="change-col down">-5%+</td>
+                    <td class="note-col">科技股普跌拖累，但 Optimus 3 量产预期支撑盘前反弹</td>
+                </tr>
+                <tr>
+                    <td class="stock-col">英伟达<span class="en"> / NVIDIA</span></td>
+                    <td class="change-col down">-4%+</td>
+                    <td class="note-col">Rubin 产量预期下修 + 韩国 HBM4 扩产放缓双重打击</td>
+                </tr>
+                <tr>
+                    <td class="stock-col">微软<span class="en"> / Microsoft</span></td>
+                    <td class="change-col up">+2%</td>
+                    <td class="note-col">逆势走强，资金从芯片股轮动至软件/AI 应用层</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 中概股盘前 -->
+        <div class="section-title">
+            <span class="icon stock">🇨🇳</span>
+            中概股盘前表现
+        </div>
+        <div class="stock-grid">
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">哔哩哔哩</div>
+                        <div class="stock-name-en">Bilibili</div>
+                    </div>
+                    <div class="stock-change">+2.4%</div>
+                </div>
+                <span class="stock-theme">📢 3亿美元回购</span>
+                <div class="stock-code">BILI</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">蔚来</div>
+                        <div class="stock-name-en">NIO</div>
+                    </div>
+                    <div class="stock-change down">-3%</div>
+                </div>
+                <span class="stock-theme">🚗 新能源车</span>
+                <div class="stock-code">NIO</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">京东</div>
+                        <div class="stock-name-en">JD.com</div>
+                    </div>
+                    <div class="stock-change down">-1%+</div>
+                </div>
+                <span class="stock-theme">🛒 电商</span>
+                <div class="stock-code">JD</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">阿里巴巴</div>
+                        <div class="stock-name-en">Alibaba</div>
+                    </div>
+                    <div class="stock-change">微跌</div>
+                </div>
+                <span class="stock-theme">☁️ 云计算+电商</span>
+                <div class="stock-code">BABA</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">小鹏汽车</div>
+                        <div class="stock-name-en">XPeng</div>
+                    </div>
+                    <div class="stock-change">微跌</div>
+                </div>
+                <span class="stock-theme">🚗 新能源车</span>
+                <div class="stock-code">XPEV</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">拼多多</div>
+                        <div class="stock-name-en">PDD Holdings</div>
+                    </div>
+                    <div class="stock-change">微跌</div>
+                </div>
+                <span class="stock-theme">🛒 电商</span>
+                <div class="stock-code">PDD</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">理想汽车</div>
+                        <div class="stock-name-en">Li Auto</div>
+                    </div>
+                    <div class="stock-change">微跌</div>
+                </div>
+                <span class="stock-theme">🚗 新能源车</span>
+                <div class="stock-code">LI</div>
+            </div>
+        </div>
+
+        <!-- 大宗商品与宏观 -->
+        <div class="section-title">
+            <span class="icon macro">🛢️</span>
+            大宗商品与宏观数据
+        </div>
+        <div class="macro-grid">
+            <div class="macro-item">
+                <div class="macro-label">WTI 原油</div>
+                <div class="macro-value">$72.60</div>
+                <div class="macro-change down">▼ -1.40%</div>
+            </div>
+            <div class="macro-item">
+                <div class="macro-label">布伦特原油</div>
+                <div class="macro-value">$75.59</div>
+                <div class="macro-change down">▼ -1.34%</div>
+            </div>
+            <div class="macro-item">
+                <div class="macro-label">COMEX 黄金</div>
+                <div class="macro-value">$4,095</div>
+                <div class="macro-change down">▼ -1.51%</div>
+            </div>
+            <div class="macro-item">
+                <div class="macro-label">美元指数</div>
+                <div class="macro-value">101.37</div>
+                <div class="macro-change up">▲ +0.37%</div>
+            </div>
+            <div class="macro-item">
+                <div class="macro-label">10年期美债</div>
+                <div class="macro-value">4.497%</div>
+                <div class="macro-change down">▼ -1.98bp</div>
+            </div>
+            <div class="macro-item">
+                <div class="macro-label">离岸人民币</div>
+                <div class="macro-value">6.7948</div>
+                <div class="macro-change down">跌 170bp</div>
+            </div>
+        </div>
+
+        <!-- 核心驱动逻辑 -->
+        <div class="section-title">
+            <span class="icon reason">💡</span>
+            核心驱动逻辑
+        </div>
+        <div class="reason-grid">
+            <div class="reason-card">
+                <div class="reason-num">1</div>
+                <div class="reason-title">芯片股超跌技术性反弹 — 昨日费半 -8% 后空头回补</div>
+                <div class="reason-desc">韩媒报道英伟达 Rubin 预期产量下修 + SK 海力士 HBM4 放缓扩产，引发昨日存储/芯片板块恐慌性抛售。费半单日 -8% 为近期罕见，今日盘前空头获利了结 + 抄底资金入场，推动美光、闪迪、英特尔等集体反弹。</div>
+                <span class="reason-tag">技术反弹</span>
+            </div>
+            <div class="reason-card">
+                <div class="reason-num">2</div>
+                <div class="reason-title">美财长贝森特安抚市场 — 通胀回归目标 + AI 提振经济</div>
+                <div class="reason-desc">美国财长贝森特表态称通胀将回归目标、人工智能带来经济增长，明显提振市场情绪。标普和纳指期货在亚太时段走出小型深 V 反弹，市场恐慌情绪得到缓解。</div>
+                <span class="reason-tag">政策安抚</span>
+            </div>
+            <div class="reason-card">
+                <div class="reason-num">3</div>
+                <div class="reason-title">美伊谈判恢复 — 地缘风险溢价回吐，油价大跌</div>
+                <div class="reason-desc">美伊技术性谈判将于 6 月 30 日恢复，中东局势趋于缓和。布油从昨日高点 $81 跌至 $75.59，两天波幅约 $14。油价下跌利好消费和运输板块，但拖累能源股。</div>
+                <span class="reason-tag">地缘缓和</span>
+            </div>
+            <div class="reason-card">
+                <div class="reason-num">4</div>
+                <div class="reason-title">美国 6 月 PMI 全线超预期 — 制造业创四年新高</div>
+                <div class="reason-desc">美国 6 月 PMI 初值全线超预期，制造业 PMI 创逾四年新高。但就业指标跌至六年低点，显示经济韧性中隐含劳动力市场疲软隐忧。市场重新定价美联储加息路径。</div>
+                <span class="reason-tag">宏观数据</span>
+            </div>
+            <div class="reason-card">
+                <div class="reason-num">5</div>
+                <div class="reason-title">美银预测美联储年内三次加息 — 利率或升至 4.50%</div>
+                <div class="reason-desc">美国银行预测美联储 2026 年 9、10、12 月连续三次加息，联邦基金利率推至 4.25%-4.50% 区间。市场关注今晚美联储主席鲍威尔国会听证会证词，寻找利率路径线索。</div>
+                <span class="reason-tag">货币政策</span>
+            </div>
+            <div class="reason-card">
+                <div class="reason-num">6</div>
+                <div class="reason-title">Tesla Optimus 3 量产倒计时 — 供应商开始备货</div>
+                <div class="reason-desc">特斯拉 Optimus 3 人形机器人量产进入倒计时，据称供应商已开始备货。这为特斯拉在昨日 -5% 后提供反弹催化，也带动 AI 机器人主题情绪回暖。</div>
+                <span class="reason-tag">产业催化</span>
+            </div>
+        </div>
+
+        <!-- 今夜关注 -->
+        <div class="section-title">
+            <span class="icon macro">📅</span>
+            今夜重点关注（北京时间）
+        </div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="time">20:55</div>
+                <div class="event">美国至6月21日当周红皮书商业零售销售年率</div>
+            </div>
+            <div class="timeline-item">
+                <div class="time">21:00</div>
+                <div class="event">美国4月FHFA房价指数月率</div>
+            </div>
+            <div class="timeline-item">
+                <div class="time">21:15</div>
+                <div class="event">克利夫兰联储主席哈玛克发表讲话</div>
+            </div>
+            <div class="timeline-item">
+                <div class="time" style="color:#fbbf24;font-weight:700;">22:00 ⭐</div>
+                <div class="event" style="color:#fbbf24;"><strong>美联储主席鲍威尔众议院半年度货币政策证词</strong> + 美国6月谘商会消费者信心指数 + 里奇蒙德联储制造业指数</div>
+            </div>
+            <div class="timeline-item">
+                <div class="time">00:30 (次日)</div>
+                <div class="event">纽约联储主席威廉姆斯发表讲话</div>
+            </div>
+        </div>
+
+        <!-- 机构观点 -->
+        <div class="insight-box">
+            <div class="insight-title">🔮 华尔街观点</div>
+            <div class="insight-text">
+                <strong>摩根大通交易员：</strong>随着地缘政治风险缓和，美股恢复向历史高点迈进的势头，市场正在重新关注宏观形势，为企业盈利做准备。<br><br>
+                <strong>顶级宏观投资人警告：</strong>AI 驱动的上行周期正走向终点，美股最快 Q3 见顶，随后可能爆发 30%-50% 的大熊市。两位顶级宏观投资人同时发出"空头末日预言"。<br><br>
+                <strong>谷歌 A 纳入道指：</strong>标普道琼斯指数公司宣布 Google A 将被纳入道琼斯工业平均指数，取代 Verizon，科技股权重在道指中进一步提升。
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <div class="footer">
+            数据来源：东方财富、华尔街见闻、第一财经、Investopedia · 数据截至 2026年6月24日盘前<br>
+            仅供参考，不构成投资建议。股市有风险，投资需谨慎。
+        </div>
+
+    </div>
+</body>
+</html>

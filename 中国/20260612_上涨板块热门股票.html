@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A股市场 | 2026年6月12日 上涨板块与热门股票</title>
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #111827;
+            --bg-card: #1a2332;
+            --bg-card-hover: #1f2b3d;
+            --border: #2a3a4e;
+            --text-primary: #e8edf5;
+            --text-secondary: #8a9bb5;
+            --text-muted: #5a6b82;
+            --accent-red: #ef4444;
+            --accent-green: #22c55e;
+            --accent-blue: #3b82f6;
+            --accent-amber: #f59e0b;
+            --accent-purple: #a855f7;
+            --accent-cyan: #06b6d4;
+            --accent-rose: #f43f5e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0d1b2a 0%, #8b0000 30%, #1b2a4a 70%, #0a0e17 100%);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px 36px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at 20% 50%, rgba(239,68,68,0.08) 0%, transparent 60%),
+                        radial-gradient(ellipse at 80% 50%, rgba(34,197,94,0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .header-flag { font-size: 28px; margin-bottom: 4px; }
+        .header-title { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+        .header-subtitle { font-size: 15px; color: var(--text-secondary); }
+
+        .header-date {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            padding: 6px 14px;
+            background: rgba(59,130,246,0.12);
+            border: 1px solid rgba(59,130,246,0.25);
+            border-radius: 8px;
+            font-size: 13px;
+            color: #93c5fd;
+        }
+
+        .index-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .index-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .index-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+
+        .index-card.up { border-left: 4px solid var(--accent-green); }
+        .index-card.down { border-left: 4px solid var(--accent-red); }
+        .index-card.flat { border-left: 4px solid var(--accent-amber); }
+
+        .index-card .label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .index-card .value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .index-card .change { font-size: 18px; font-weight: 600; }
+        .index-card .change.up { color: var(--accent-green); }
+        .index-card .change.down { color: var(--accent-red); }
+        .index-card .change.flat { color: var(--accent-amber); }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title .icon {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .section-title .icon.sector { background: rgba(168,85,247,0.2); color: #c084fc; }
+        .section-title .icon.stock { background: rgba(34,197,94,0.2); color: #4ade80; }
+        .section-title .icon.reason { background: rgba(6,182,212,0.2); color: #22d3ee; }
+        .section-title .icon.flow { background: rgba(245,158,11,0.2); color: #fbbf24; }
+
+        .sector-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 28px;
+            background: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .sector-table thead th {
+            background: rgba(59,130,246,0.08);
+            padding: 14px 18px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sector-table tbody td {
+            padding: 14px 18px;
+            border-bottom: 1px solid rgba(42,58,78,0.5);
+            font-size: 14px;
+        }
+
+        .sector-table tbody tr:last-child td { border-bottom: none; }
+        .sector-table tbody tr:hover { background: var(--bg-card-hover); }
+
+        .sector-table .rank { width: 50px; font-weight: 700; color: var(--text-muted); }
+        .sector-table .sector-name { font-weight: 600; color: var(--text-primary); }
+        .sector-table .change-val { font-weight: 700; color: var(--accent-green); }
+        .sector-table .change-val.down { color: var(--accent-red); }
+        .sector-table .driver { color: var(--text-secondary); font-size: 13px; }
+        .sector-table .val-green { color: var(--accent-green); font-weight: 700; }
+
+        .stock-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+
+        .stock-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 18px;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            cursor: default;
+        }
+
+        .stock-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+            border-color: rgba(59,130,246,0.3);
+        }
+
+        .stock-card .stock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .stock-card .stock-name { font-size: 16px; font-weight: 700; color: #fff; }
+        .stock-card .stock-change { font-size: 20px; font-weight: 800; color: var(--accent-green); white-space: nowrap; }
+        .stock-card .stock-theme {
+            display: inline-block;
+            padding: 3px 10px;
+            background: rgba(59,130,246,0.1);
+            border: 1px solid rgba(59,130,246,0.2);
+            border-radius: 6px;
+            font-size: 12px;
+            color: #93c5fd;
+        }
+
+        .stock-card .stock-code { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+        .reason-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+
+        .reason-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reason-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 4px;
+            height: 100%;
+        }
+
+        .reason-card:nth-child(1)::before { background: var(--accent-amber); }
+        .reason-card:nth-child(2)::before { background: var(--accent-purple); }
+        .reason-card:nth-child(3)::before { background: var(--accent-cyan); }
+        .reason-card:nth-child(4)::before { background: var(--accent-green); }
+        .reason-card:nth-child(5)::before { background: var(--accent-rose); }
+
+        .reason-card .reason-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px; height: 28px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .reason-card:nth-child(1) .reason-num { background: rgba(245,158,11,0.15); color: #fbbf24; }
+        .reason-card:nth-child(2) .reason-num { background: rgba(168,85,247,0.15); color: #c084fc; }
+        .reason-card:nth-child(3) .reason-num { background: rgba(6,182,212,0.15); color: #22d3ee; }
+        .reason-card:nth-child(4) .reason-num { background: rgba(34,197,94,0.15); color: #4ade80; }
+        .reason-card:nth-child(5) .reason-num { background: rgba(244,63,94,0.15); color: #fb7185; }
+
+        .reason-card .reason-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+        .reason-card .reason-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+
+        .reason-card .reason-tag {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+        }
+
+        .reason-card:nth-child(1) .reason-tag { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2); color: #fbbf24; }
+        .reason-card:nth-child(2) .reason-tag { background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.2); color: #c084fc; }
+        .reason-card:nth-child(3) .reason-tag { background: rgba(6,182,212,0.1); border: 1px solid rgba(6,182,212,0.2); color: #22d3ee; }
+        .reason-card:nth-child(4) .reason-tag { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); color: #4ade80; }
+        .reason-card:nth-child(5) .reason-tag { background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.2); color: #fb7185; }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 12px;
+            border-top: 1px solid var(--border);
+            margin-top: 12px;
+        }
+
+        .footer a { color: var(--accent-blue); text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+
+        .flow-bar {
+            display: flex;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+            background: var(--bg-primary);
+        }
+
+        .flow-bar .inst { background: #3b82f6; }
+        .flow-bar .foreign { background: #a855f7; }
+        .flow-bar .retail { background: #f43f5e; }
+
+        .flow-legend {
+            display: flex;
+            gap: 16px;
+            margin-top: 6px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .flow-legend span::before {
+            content: '';
+            display: inline-block;
+            width: 8px; height: 8px;
+            border-radius: 2px;
+            margin-right: 4px;
+            vertical-align: middle;
+        }
+
+        .flow-legend .l-inst::before { background: #3b82f6; }
+        .flow-legend .l-foreign::before { background: #a855f7; }
+        .flow-legend .l-retail::before { background: #f43f5e; }
+
+        .limit-up { color: #ef4444 !important; }
+        .badge-hot {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            background: rgba(239,68,68,0.2);
+            color: #ef4444;
+            margin-left: 6px;
+        }
+
+        @media (max-width: 640px) {
+            .container { padding: 12px; }
+            .header { padding: 20px; }
+            .header-title { font-size: 22px; }
+            .index-card .value { font-size: 26px; }
+            .stock-grid { grid-template-columns: 1fr; }
+            .reason-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- 标题区 -->
+        <div class="header">
+            <div class="header-flag">🇨🇳</div>
+            <div class="header-title">A股市场 · 上涨板块与热门股票</div>
+            <div class="header-subtitle">三大指数涨跌不一，机构极致抱团算力/先进封装，商业航天SpaceX上市催化</div>
+            <div class="header-date">
+                📅 2026年6月12日（周五）
+            </div>
+        </div>
+
+        <!-- 指数概览 -->
+        <div class="index-grid">
+            <div class="index-card up">
+                <div class="label">上证指数</div>
+                <div class="value">~3,987</div>
+                <div class="change up">▲ +0.01%</div>
+                <div style="font-size:13px;color:var(--text-muted);margin-top:4px;">微涨，两市成交缩量</div>
+                <div class="flow-bar" style="margin-top:12px;">
+                    <div class="inst" style="width:30%"></div>
+                    <div class="foreign" style="width:20%"></div>
+                    <div class="retail" style="width:50%"></div>
+                </div>
+                <div class="flow-legend">
+                    <span class="l-inst">主力净流出</span>
+                    <span class="l-foreign">北向净流出</span>
+                    <span class="l-retail">散户净流出</span>
+                </div>
+            </div>
+            <div class="index-card down">
+                <div class="label">深证成指</div>
+                <div class="value">~14,852</div>
+                <div class="change down">▼ -0.11%</div>
+                <div style="font-size:13px;color:var(--text-muted);margin-top:4px;">中小盘承压</div>
+            </div>
+            <div class="index-card up">
+                <div class="label">创业板指</div>
+                <div class="value">~3,811</div>
+                <div class="change up">▲ +0.26%</div>
+                <div style="font-size:13px;color:var(--text-muted);margin-top:4px;">成长股分化</div>
+            </div>
+        </div>
+
+        <!-- 上涨板块 -->
+        <div class="section-title">
+            <span class="icon sector">📊</span>
+            上涨板块排行
+        </div>
+        <table class="sector-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>板块</th>
+                    <th>表现</th>
+                    <th>核心驱动</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="rank">1</td>
+                    <td class="sector-name">⚙️ 算力/AI硬件（先进封装/光模块）</td>
+                    <td class="change-val">极致抱团</td>
+                    <td class="driver">机构资金极致抱团，净流入前20中17只来自该赛道，合计超180亿。融发核电涨停(+8.84亿净流入)，长电科技/通富微电净利增超40%</td>
+                </tr>
+                <tr>
+                    <td class="rank">2</td>
+                    <td class="sector-name">🛰️ 商业航天/卫星互联网</td>
+                    <td class="change-val">强势</td>
+                    <td class="driver">SpaceX纳斯达克上市全球最大IPO，中国商业航天产业估值重估，航天科技涨停，航宇微/天银机电大涨</td>
+                </tr>
+                <tr>
+                    <td class="rank">3</td>
+                    <td class="sector-name">⚗️ 基础化工（电子化学品）</td>
+                    <td class="change-val">延续强势</td>
+                    <td class="driver">六氟化钨价格较去年同期暴涨超200%，和远气体6天4板，兴福电子/华特气体20%涨停，涨价逻辑持续</td>
+                </tr>
+                <tr>
+                    <td class="rank">4</td>
+                    <td class="sector-name">⛏️ 有色金属（小金属/稀土）</td>
+                    <td class="change-val">活跃</td>
+                    <td class="driver">钨钼板块联动走强，SK海力士以钼代钨技术路线催化，金钼股份/翔鹭钨业/章源钨业涨停</td>
+                </tr>
+                <tr>
+                    <td class="rank">5</td>
+                    <td class="sector-name">📟 PCB概念</td>
+                    <td class="change-val">持续活跃</td>
+                    <td class="driver">协和电子7连板刷新纪录，英伟达Vera Rubin机架PCB价值量提升，骏亚科技2连板</td>
+                </tr>
+                <tr>
+                    <td class="rank">6</td>
+                    <td class="sector-name">🧪 半导体材料/设备</td>
+                    <td class="change-val">逆势走强</td>
+                    <td class="driver">光刻胶/靶材/电子特气爆发，长鑫存储IPO过会+华为半导体韬定律催化，科创半导体ETF涨5.91%</td>
+                </tr>
+                <tr>
+                    <td class="rank">7</td>
+                    <td class="sector-name">🍎 苹果产业链/消费电子</td>
+                    <td class="change-val">事件驱动</td>
+                    <td class="driver">苹果WWDC+OpenAI合作推出Apple Intelligence，智信精密/杰美特/领益智造涨停</td>
+                </tr>
+                <tr>
+                    <td class="rank">8</td>
+                    <td class="sector-name">🔋 锂电/能源金属</td>
+                    <td class="change-val">反弹</td>
+                    <td class="driver">锂矿触底反弹，能源金属板块获资金净流入24亿，锂电材料需求复苏预期</td>
+                </tr>
+                <tr>
+                    <td class="rank">9</td>
+                    <td class="sector-name">🏦 大金融（银行/保险）</td>
+                    <td class="change-val">护盘</td>
+                    <td class="driver">建设银行盘中创历史新高，避险资金涌入低估值防御品种，银行保险逆势走强</td>
+                </tr>
+                <tr>
+                    <td class="rank">10</td>
+                    <td class="sector-name">⛽ 煤炭/高股息</td>
+                    <td class="change-val">午后走强</td>
+                    <td class="driver">陕西煤业/中国海油创历史新高，红利资产受避险资金追捧，大有能源涨停</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 下跌板块 -->
+        <table class="sector-table" style="margin-top:-16px;">
+            <thead>
+                <tr style="background:rgba(239,68,68,0.06);">
+                    <th colspan="4" style="color:var(--accent-red);">▼ 下跌板块</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="rank">1</td>
+                    <td class="sector-name">🥤 消费/白酒</td>
+                    <td class="change-val down">资金流出</td>
+                    <td class="driver">机构调仓，资金从消费转向硬科技，贵州茅台遭北向净卖出</td>
+                </tr>
+                <tr>
+                    <td class="rank">2</td>
+                    <td class="sector-name">🐔 养殖业（鸡/猪）</td>
+                    <td class="change-val down">走弱</td>
+                    <td class="driver">猪价回落预期，神农种业领跌，板块资金持续流出</td>
+                </tr>
+                <tr>
+                    <td class="rank">3</td>
+                    <td class="sector-name">🚢 航运港口</td>
+                    <td class="change-val down">领跌</td>
+                    <td class="driver">连云港跌超7%，运价回落预期，板块调整</td>
+                </tr>
+                <tr>
+                    <td class="rank">4</td>
+                    <td class="sector-name">🎬 影视院线/传媒</td>
+                    <td class="change-val down">退潮</td>
+                    <td class="driver">前期AI应用炒作退潮，粤传媒/横店影视等跌停，资金大幅出逃</td>
+                </tr>
+                <tr>
+                    <td class="rank">5</td>
+                    <td class="sector-name">🤖 物理AI/人形机器人</td>
+                    <td class="change-val down">大跌</td>
+                    <td class="driver">机器人板块跌超8%，体育概念跌超9%，高位概念股资金大幅撤离</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 资金流向分析 -->
+        <div class="section-title">
+            <span class="icon flow">💰</span>
+            资金流向与核心主线
+        </div>
+        <table class="sector-table">
+            <thead>
+                <tr>
+                    <th style="width:50px;">#</th>
+                    <th>主线方向</th>
+                    <th>资金动向</th>
+                    <th>核心逻辑</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="rank">1</td>
+                    <td class="sector-name">⚙️ 算力/先进封装/光模块</td>
+                    <td class="change-val">极致抱团</td>
+                    <td class="driver">净流入前20中17只来自该赛道合计超180亿。融发核电+8.84亿，东方财富+6.36亿，沃尔核材+5.46亿</td>
+                </tr>
+                <tr>
+                    <td class="rank">2</td>
+                    <td class="sector-name">⛏️ 有色金属（小金属）</td>
+                    <td class="change-val">+95.66亿</td>
+                    <td class="driver">云南锗业净流入21.7亿，钨/锗涨价+半导体战略材料重估，资金延续流入</td>
+                </tr>
+                <tr>
+                    <td class="rank">3</td>
+                    <td class="sector-name">🧪 半导体材料/设备</td>
+                    <td class="change-val">持续流入</td>
+                    <td class="driver">科创半导体ETF+5.91%，长鑫存储IPO+华为半导体韬定律催化，电子特气/光刻胶爆发</td>
+                </tr>
+                <tr>
+                    <td class="rank">4</td>
+                    <td class="sector-name">🛰️ 商业航天</td>
+                    <td class="change-val">事件驱动</td>
+                    <td class="driver">SpaceX纳斯达克上市全球最大IPO，商业航天产业规模料突破3万亿，航天科技涨停</td>
+                </tr>
+                <tr>
+                    <td class="rank">5</td>
+                    <td class="sector-name">🏦 大金融（银行/保险）</td>
+                    <td class="change-val">避险流入</td>
+                    <td class="driver">建设银行创历史新高，低估值高股息受避险资金追捧，与硬科技形成双主线</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 热门股票 -->
+        <div class="section-title">
+            <span class="icon stock">🔥</span>
+            热门涨停 / 涨幅领先个股
+        </div>
+        <div class="stock-grid">
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">协和电子</div>
+                    </div>
+                    <div class="stock-change limit-up" style="color:#ef4444;">涨停 7连板</div>
+                </div>
+                <span class="stock-theme">📶 PCB概念</span>
+                <div class="stock-code">605258.SH</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">翔鹭钨业</div>
+                    </div>
+                    <div class="stock-change limit-up" style="color:#ef4444;">涨停</div>
+                </div>
+                <span class="stock-theme">⛏️ 钨矿</span>
+                <div class="stock-code">002842.SZ</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">章源钨业</div>
+                    </div>
+                    <div class="stock-change limit-up" style="color:#ef4444;">涨停</div>
+                </div>
+                <span class="stock-theme">⛏️ 钨矿</span>
+                <div class="stock-code">002378.SZ</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">贵研铂业</div>
+                    </div>
+                    <div class="stock-change limit-up" style="color:#ef4444;">涨停</div>
+                </div>
+                <span class="stock-theme">⛏️ 贵金属</span>
+                <div class="stock-code">600459.SH</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">云南锗业</div>
+                    </div>
+                    <div class="stock-change limit-up" style="color:#ef4444;">涨停</div>
+                </div>
+                <span class="stock-theme">⛏️ 小金属/半导体</span>
+                <div class="stock-code">002428.SZ</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">六国化工</div>
+                    </div>
+                    <div class="stock-change limit-up" style="color:#ef4444;">涨停</div>
+                </div>
+                <span class="stock-theme">⚗️ 化工</span>
+                <div class="stock-code">600470.SH</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">金牛化工</div>
+                    </div>
+                    <div class="stock-change limit-up" style="color:#ef4444;">涨停</div>
+                </div>
+                <span class="stock-theme">⚗️ 化工</span>
+                <div class="stock-code">600722.SH</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">和远气体</div>
+                    </div>
+                    <div class="stock-change limit-up" style="color:#ef4444;">6天4板</div>
+                </div>
+                <span class="stock-theme">💨 工业气体</span>
+                <div class="stock-code">002971.SZ</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">康强电子</div>
+                    </div>
+                    <div class="stock-change" style="color:#ef4444;">2连板</div>
+                </div>
+                <span class="stock-theme">🧪 半导体材料</span>
+                <div class="stock-code">002119.SZ</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">昊华科技</div>
+                    </div>
+                    <div class="stock-change" style="color:#ef4444;">2连板</div>
+                </div>
+                <span class="stock-theme">🧪 化工/半导体</span>
+                <div class="stock-code">600378.SH</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">北矿科技</div>
+                    </div>
+                    <div class="stock-change limit-up" style="color:#ef4444;">涨停</div>
+                </div>
+                <span class="stock-theme">⛏️ 稀土永磁</span>
+                <div class="stock-code">600980.SH</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">华闻集团</div>
+                    </div>
+                    <div class="stock-change" style="color:#ef4444;">3连板</div>
+                </div>
+                <span class="stock-theme">🎨 文化传媒</span>
+                <div class="stock-code">000793.SZ</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">陕西煤业</div>
+                    </div>
+                    <div class="stock-change" style="color:#ef4444;">历史新高</div>
+                </div>
+                <span class="stock-theme">⛽ 煤炭</span>
+                <div class="stock-code">601225.SH</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">海亮股份</div>
+                    </div>
+                    <div class="stock-change limit-up" style="color:#ef4444;">涨停</div>
+                </div>
+                <span class="stock-theme">⛏️ 有色金属</span>
+                <div class="stock-code">002203.SZ</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">博威合金</div>
+                    </div>
+                    <div class="stock-change limit-up" style="color:#ef4444;">涨停</div>
+                </div>
+                <span class="stock-theme">⛏️ 有色金属</span>
+                <div class="stock-code">601137.SH</div>
+            </div>
+        </div>
+
+        <!-- 主力资金净流入TOP个股 -->
+        <div class="section-title">
+            <span class="icon stock">💎</span>
+            6月11-12日主力资金净流入 TOP 10
+        </div>
+        <table class="sector-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>股票</th>
+                    <th>代码</th>
+                    <th>净流入</th>
+                    <th>主题</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="rank">1</td>
+                    <td class="sector-name">云南锗业</td>
+                    <td style="color:var(--text-muted);">002428.SZ</td>
+                    <td class="change-val">21.81 亿</td>
+                    <td class="driver">小金属+半导体材料</td>
+                </tr>
+                <tr>
+                    <td class="rank">2</td>
+                    <td class="sector-name">烽火通信</td>
+                    <td style="color:var(--text-muted);">600498.SH</td>
+                    <td class="change-val">21.36 亿</td>
+                    <td class="driver">通信设备+算力</td>
+                </tr>
+                <tr>
+                    <td class="rank">3</td>
+                    <td class="sector-name">章源钨业</td>
+                    <td style="color:var(--text-muted);">002378.SZ</td>
+                    <td class="change-val">11.06 亿</td>
+                    <td class="driver">钨矿涨价</td>
+                </tr>
+                <tr>
+                    <td class="rank">4</td>
+                    <td class="sector-name">南大光电</td>
+                    <td style="color:var(--text-muted);">300346.SZ</td>
+                    <td class="change-val">10.14 亿</td>
+                    <td class="driver">半导体材料/光刻胶</td>
+                </tr>
+                <tr>
+                    <td class="rank">5</td>
+                    <td class="sector-name">雅克科技</td>
+                    <td style="color:var(--text-muted);">002409.SZ</td>
+                    <td class="change-val">9.29 亿</td>
+                    <td class="driver">半导体材料+电子特气</td>
+                </tr>
+                <tr>
+                    <td class="rank">6</td>
+                    <td class="sector-name">多氟多</td>
+                    <td style="color:var(--text-muted);">002407.SZ</td>
+                    <td class="change-val">8.49 亿</td>
+                    <td class="driver">氟化工+新能源</td>
+                </tr>
+                <tr>
+                    <td class="rank">7</td>
+                    <td class="sector-name">融发核电</td>
+                    <td style="color:var(--text-muted);">002366.SZ</td>
+                    <td class="change-val">8.84 亿</td>
+                    <td class="driver">算力+核电</td>
+                </tr>
+                <tr>
+                    <td class="rank">8</td>
+                    <td class="sector-name">太辰光</td>
+                    <td style="color:var(--text-muted);">300570.SZ</td>
+                    <td class="change-val">7.59 亿</td>
+                    <td class="driver">光模块+AI算力</td>
+                </tr>
+                <tr>
+                    <td class="rank">9</td>
+                    <td class="sector-name">彤程新材</td>
+                    <td style="color:var(--text-muted);">603650.SH</td>
+                    <td class="change-val">7.90 亿</td>
+                    <td class="driver">光刻胶+半导体材料</td>
+                </tr>
+                <tr>
+                    <td class="rank">10</td>
+                    <td class="sector-name">阳光电源</td>
+                    <td style="color:var(--text-muted);">300274.SZ</td>
+                    <td class="change-val">7.02 亿</td>
+                    <td class="driver">光伏逆变器+储能</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 连板龙头 -->
+        <div class="section-title">
+            <span class="icon stock">🚀</span>
+            连板龙头股
+        </div>
+        <table class="sector-table">
+            <thead>
+                <tr>
+                    <th>连板</th>
+                    <th>股票</th>
+                    <th>主题</th>
+                    <th>备注</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="change-val">7连板</td>
+                    <td class="sector-name">协和电子</td>
+                    <td class="driver">📶 PCB概念</td>
+                    <td class="driver">刷新近一个月最长连板纪录</td>
+                </tr>
+                <tr>
+                    <td class="change-val">3连板</td>
+                    <td class="sector-name">华闻集团</td>
+                    <td class="driver">🎨 文化传媒</td>
+                    <td class="driver">一字涨停晋级</td>
+                </tr>
+                <tr>
+                    <td class="change-val">3连板</td>
+                    <td class="sector-name">国风新材</td>
+                    <td class="driver">🧪 新材料</td>
+                    <td class="driver">一字涨停晋级</td>
+                </tr>
+                <tr>
+                    <td class="change-val">3连板</td>
+                    <td class="sector-name">中化国际</td>
+                    <td class="driver">⚗️ 化工</td>
+                    <td class="driver">磷化工涨价受益</td>
+                </tr>
+                <tr>
+                    <td class="change-val">2连板</td>
+                    <td class="sector-name">东安动力</td>
+                    <td class="driver">🚗 汽车零部件</td>
+                    <td class="driver"></td>
+                </tr>
+                <tr>
+                    <td class="change-val">2连板</td>
+                    <td class="sector-name">康强电子</td>
+                    <td class="driver">🧪 半导体材料</td>
+                    <td class="driver">封装材料龙头</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 核心驱动逻辑 -->
+        <div class="section-title">
+            <span class="icon reason">💡</span>
+            核心驱动逻辑
+        </div>
+        <div class="reason-grid">
+            <div class="reason-card">
+                <div class="reason-num">1</div>
+                <div class="reason-title">机构极致抱团硬科技 — 算力/AI硬件成唯一主线</div>
+                <div class="reason-desc">6月12日全市场主力资金净流入前20只个股中，17只来自算力、先进封装、光模块赛道，合计净流入超180亿元，占全市场净流入总额的72%。融发核电+8.84亿、东方财富+6.36亿、沃尔核材+5.46亿。公募/北向/社保三类资金罕见一致行动。</div>
+                <span class="reason-tag">资金抱团</span>
+            </div>
+            <div class="reason-card">
+                <div class="reason-num">2</div>
+                <div class="reason-title">SpaceX纳斯达克上市 — 商业航天价值重估</div>
+                <div class="reason-desc">SpaceX以全球最大IPO登陆纳斯达克，A股商业航天板块情绪对标拉满。航天科技涨停，航宇微、天银机电大涨。中国商业航天产业规模料突破3万亿，卫星制造/火箭零部件/卫星互联网全链条受益。</div>
+                <span class="reason-tag">事件催化</span>
+            </div>
+            <div class="reason-card">
+                <div class="reason-num">3</div>
+                <div class="reason-title">涨价逻辑延续 — 小金属/化工品价格飙升</div>
+                <div class="reason-desc">六氟化钨价格较去年同期暴涨超200%，SK海力士以钼代钨技术路线催化稀有金属价值重估。和远气体6天4板，兴福电子/华特气体20%涨停。有色金属净流入95.66亿维持强势。</div>
+                <span class="reason-tag">涨价周期</span>
+            </div>
+            <div class="reason-card">
+                <div class="reason-num">4</div>
+                <div class="reason-title">苹果WWDC+华为催化 — PCB/消费电子轮动</div>
+                <div class="reason-desc">苹果宣布与OpenAI合作推出Apple Intelligence，华为发布新一代光通信架构。协和电子7连板刷新纪录，智信精密/杰美特/领益智造涨停。英伟达Vera Rubin机架PCB价值量提升持续催化。</div>
+                <span class="reason-tag">产业趋势</span>
+            </div>
+            <div class="reason-card">
+                <div class="reason-num">5</div>
+                <div class="reason-title">资金高低切换 — 冰火两重天极致分化</div>
+                <div class="reason-desc">超4000只个股资金净流出，消费/白酒/养殖/传媒遭大幅减仓。资金从高位AI应用/人形机器人（板块跌超8%）流向低位硬科技+高股息双主线。建设银行创新高，避险与成长并存。</div>
+                <span class="reason-tag">资金流向</span>
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <div class="footer">
+            数据来源：证券时报·数据宝、东方财富、新浪财经、同花顺 · 2026年6月12日行情数据<br>
+            仅供参考，不构成投资建议
+        </div>
+
+    </div>
+</body>
+</html>
