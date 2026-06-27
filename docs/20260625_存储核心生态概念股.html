@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>存储核心生态概念股 - A股全产业链全景</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #0a0e17; color: #e0e6f0; line-height: 1.6; min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+        .header { text-align: center; margin-bottom: 48px; }
+        .header h1 { font-size: 36px; font-weight: 700;
+            background: linear-gradient(135deg, #34d399, #60a5fa, #a78bfa, #f472b6);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 12px; }
+        .header .subtitle { font-size: 16px; color: #8892a8; }
+        .header .topic-tags { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+        .header .topic-tag { font-size: 13px; padding: 5px 14px; border-radius: 20px; font-weight: 500; }
+        .topic-tag.hbm { background: rgba(52,211,153,0.15); color: #34d399; border: 1px solid rgba(52,211,153,0.25); }
+        .topic-tag.dram { background: rgba(96,165,250,0.15); color: #60a5fa; border: 1px solid rgba(96,165,250,0.25); }
+        .topic-tag.nand { background: rgba(167,139,250,0.15); color: #a78bfa; border: 1px solid rgba(167,139,250,0.25); }
+        .topic-tag.ai { background: rgba(244,114,182,0.15); color: #f472b6; border: 1px solid rgba(244,114,182,0.25); }
+        .topic-tag.sub { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); }
+        .topic-tag.cxmt { background: rgba(96,165,250,0.15); color: #60a5fa; border: 1px solid rgba(96,165,250,0.25); }
+        .topic-tag.ymtc { background: rgba(167,139,250,0.15); color: #a78bfa; border: 1px solid rgba(167,139,250,0.25); }
+        .header .update-time { font-size: 13px; color: #5a6478; margin-top: 12px; }
+
+        .section-title { font-size: 22px; font-weight: 600; color: #c8d0e0;
+            margin-bottom: 24px; padding-left: 14px; border-left: 3px solid #34d399; }
+        .section-subtitle { font-size: 14px; color: #5a6478; margin-top: -18px; margin-bottom: 24px; padding-left: 17px; }
+
+        /* 统计卡片 */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 16px; margin-bottom: 56px; }
+        .stat-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 12px; padding: 20px; }
+        .stat-card .stat-label { font-size: 13px; color: #5a6478; margin-bottom: 6px; }
+        .stat-card .stat-value { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+        .stat-card .stat-note { font-size: 12px; color: #5a6478; }
+        .stat-green .stat-value { color: #34d399; }
+        .stat-blue .stat-value { color: #60a5fa; }
+        .stat-purple .stat-value { color: #a78bfa; }
+        .stat-pink .stat-value { color: #f472b6; }
+        .stat-yellow .stat-value { color: #fbbf24; }
+        .stat-red .stat-value { color: #f87171; }
+
+        /* 产业链流程图 */
+        .flow-section { margin-bottom: 56px; }
+        .flow-diagram { display: flex; align-items: stretch; gap: 0;
+            background: #111827; border-radius: 16px; border: 1px solid #1e293b; overflow: hidden; }
+        .flow-stage { flex: 1; padding: 28px 20px; position: relative; }
+        .flow-stage:not(:last-child)::after {
+            content: '→'; position: absolute; right: -14px; top: 50%;
+            transform: translateY(-50%); font-size: 28px; color: #4b5563; z-index: 2; }
+        .flow-stage:not(:last-child) { border-right: 1px solid #1e293b; }
+        .flow-stage .stage-label { font-size: 13px; font-weight: 600; letter-spacing: 1px;
+            margin-bottom: 12px; padding: 4px 12px; border-radius: 20px; display: inline-block; }
+        .flow-stage:nth-child(1) .stage-label { background: rgba(52,211,153,0.15); color: #34d399; }
+        .flow-stage:nth-child(2) .stage-label { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .flow-stage:nth-child(3) .stage-label { background: rgba(167,139,250,0.15); color: #a78bfa; }
+        .flow-stage:nth-child(4) .stage-label { background: rgba(244,114,182,0.15); color: #f472b6; }
+        .flow-stage .stage-title { font-size: 18px; font-weight: 600; color: #e0e6f0; margin-bottom: 8px; }
+        .flow-stage .stage-desc { font-size: 13px; color: #8892a8; }
+        .flow-stage .stage-products { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+        .flow-stage .product-tag { font-size: 12px; padding: 3px 10px; border-radius: 12px;
+            background: rgba(255,255,255,0.06); color: #a0aec0;
+            border: 1px solid rgba(255,255,255,0.08); }
+
+        /* 公司卡片 */
+        .companies-section { margin-bottom: 48px; }
+        .company-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; }
+        .company-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; transition: border-color 0.2s, transform 0.2s; }
+        .company-card:hover { border-color: #374151; transform: translateY(-2px); }
+        .company-card .card-header { display: flex; justify-content: space-between;
+            align-items: flex-start; margin-bottom: 14px; }
+        .company-card .card-name { font-size: 18px; font-weight: 600; color: #e0e6f0; }
+        .company-card .card-code { font-size: 13px; font-weight: 500; padding: 3px 10px;
+            border-radius: 8px; background: rgba(52,211,153,0.12); color: #34d399; white-space: nowrap; }
+        .company-card .card-position { font-size: 13px; padding: 3px 10px;
+            border-radius: 8px; display: inline-block; margin-bottom: 10px; }
+        .position-material { background: rgba(52,211,153,0.12); color: #34d399; }
+        .position-packaging { background: rgba(96,165,250,0.12); color: #60a5fa; }
+        .position-equipment { background: rgba(167,139,250,0.12); color: #a78bfa; }
+        .position-dist { background: rgba(248,113,113,0.12); color: #f87171; }
+        .position-substrate { background: rgba(244,114,182,0.12); color: #f472b6; }
+        .position-design { background: rgba(251,191,36,0.12); color: #fbbf24; }
+        .position-equity { background: rgba(118,185,0,0.12); color: #76b900; }
+        .position-eda { background: rgba(244,114,182,0.12); color: #f472b6; }
+        .company-card .card-desc { font-size: 14px; color: #8892a8; line-height: 1.7; margin-bottom: 12px; }
+        .company-card .card-binding { font-size: 13px; color: #c8d0e0; padding: 10px 14px;
+            background: rgba(52,211,153,0.06); border-radius: 8px; border-left: 3px solid #34d399;
+            margin-bottom: 10px; line-height: 1.6; }
+        .company-card .card-binding strong { color: #34d399; }
+        .company-card .card-data-row { display: flex; flex-wrap: wrap; gap: 8px 18px;
+            font-size: 13px; color: #c8d0e0; padding: 10px 14px;
+            background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 3px solid #374151; }
+        .company-card .card-data-row strong { color: #e0e6f0; margin-left: 2px; }
+        .card-shortage-reason { font-size: 13px; color: #fb7185; padding: 8px 14px;
+            background: rgba(248,113,113,0.06); border-radius: 8px; border-left: 3px solid #fb7185;
+            margin-bottom: 10px; line-height: 1.6; }
+        .card-shortage-reason strong { color: #fb7185; }
+
+        /* 评级 */
+        .rating-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+        .rating-card { border-radius: 10px; padding: 10px 12px; border: 1px solid; background: rgba(255,255,255,0.03); }
+        .rating-title { font-size: 12px; color: #8892a8; margin-bottom: 4px; }
+        .rating-level { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .rating-reason { font-size: 12px; color: #8892a8; line-height: 1.5; }
+        .rating-strong { border-color: rgba(52,211,153,0.35); background: rgba(16,185,129,0.08); }
+        .rating-strong .rating-level { color: #34d399; }
+        .rating-mid { border-color: rgba(96,165,250,0.35); background: rgba(96,165,250,0.08); }
+        .rating-mid .rating-level { color: #60a5fa; }
+        .rating-watch { border-color: rgba(251,191,36,0.35); background: rgba(251,191,36,0.08); }
+        .rating-watch .rating-level { color: #fbbf24; }
+        .rating-weak { border-color: rgba(248,113,113,0.35); background: rgba(248,113,113,0.06); }
+        .rating-weak .rating-level { color: #f87171; }
+
+        /* 核心关注卡片 */
+        .focus-section { margin-bottom: 40px; }
+        .focus-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .focus-card { background: linear-gradient(135deg, #111827, #1a2332);
+            border: 1px solid #1e293b; border-radius: 14px; padding: 24px;
+            position: relative; overflow: hidden; }
+        .focus-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .focus-card:nth-child(1)::before { background: linear-gradient(90deg, #34d399, #10b981); }
+        .focus-card:nth-child(2)::before { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+        .focus-card:nth-child(3)::before { background: linear-gradient(90deg, #a78bfa, #8b5cf6); }
+        .focus-card:nth-child(4)::before { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+        .focus-card:nth-child(5)::before { background: linear-gradient(90deg, #f472b6, #ec4899); }
+        .focus-card:nth-child(6)::before { background: linear-gradient(90deg, #f87171, #ef4444); }
+        .focus-card .focus-rank { font-size: 48px; font-weight: 800;
+            color: rgba(255,255,255,0.04); position: absolute; top: 8px; right: 16px; }
+        .focus-card .focus-name { font-size: 16px; font-weight: 600; color: #e0e6f0; margin-bottom: 4px; }
+        .focus-card .focus-tag { font-size: 12px; color: #8892a8; margin-bottom: 10px; }
+        .focus-card .focus-reason { font-size: 13px; color: #8892a8; line-height: 1.7; }
+
+        /* 关系图 */
+        .relation-section { margin-bottom: 56px; }
+        .relation-diagram { background: #111827; border: 1px solid #1e293b;
+            border-radius: 16px; padding: 32px; overflow-x: auto; }
+        .relation-group { margin-bottom: 20px; padding: 16px; border-radius: 12px; border: 1px solid; }
+        .relation-group:last-child { margin-bottom: 0; }
+        .relation-group.upstream { border-color: rgba(52,211,153,0.2); background: rgba(52,211,153,0.04); }
+        .relation-group.midstream { border-color: rgba(96,165,250,0.2); background: rgba(96,165,250,0.04); }
+        .relation-group.downstream { border-color: rgba(167,139,250,0.2); background: rgba(167,139,250,0.04); }
+        .relation-group-title { font-size: 13px; font-weight: 700; letter-spacing: 2px;
+            margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid; }
+        .relation-group.upstream .relation-group-title { color: #34d399; border-color: rgba(52,211,153,0.2); }
+        .relation-group.midstream .relation-group-title { color: #60a5fa; border-color: rgba(96,165,250,0.2); }
+        .relation-group.downstream .relation-group-title { color: #a78bfa; border-color: rgba(167,139,250,0.2); }
+        .relation-row { display: flex; align-items: center; margin-bottom: 12px; }
+        .relation-row:last-child { margin-bottom: 0; }
+        .relation-label { min-width: 100px; font-size: 14px; font-weight: 600;
+            color: #8892a8; flex-shrink: 0; }
+        .relation-items { display: flex; flex-wrap: wrap; gap: 10px; }
+
+        /* 供应紧缺标记 */
+        .shortage-badge { display: inline-block; font-size: 11px; font-weight: 700;
+            padding: 2px 8px; border-radius: 10px; margin-left: 8px;
+            background: rgba(248,113,113,0.15); color: #fb7185;
+            border: 1px solid rgba(248,113,113,0.3); }
+        .relation-node.shortage { border-color: rgba(248,113,113,0.4);
+            background: rgba(248,113,113,0.1); position: relative; }
+        .relation-node.shortage::after { content: '紧缺'; font-size: 9px;
+            position: absolute; top: -6px; right: -6px;
+            background: #fb7185; color: #fff; padding: 1px 5px;
+            border-radius: 6px; font-weight: 700; }
+        .relation-node { padding: 8px 16px; border-radius: 10px; font-size: 14px;
+            font-weight: 500; border: 1px solid; }
+        .relation-node.pkg { background: rgba(52,211,153,0.08);
+            border-color: rgba(52,211,153,0.25); color: #34d399; }
+        .relation-node.equip { background: rgba(96,165,250,0.08);
+            border-color: rgba(96,165,250,0.25); color: #60a5fa; }
+        .relation-node.mat { background: rgba(167,139,250,0.08);
+            border-color: rgba(167,139,250,0.25); color: #a78bfa; }
+        .relation-node.dist { background: rgba(248,113,113,0.08);
+            border-color: rgba(248,113,113,0.25); color: #f87171; }
+        .relation-node.sub { background: rgba(244,114,182,0.08);
+            border-color: rgba(244,114,182,0.25); color: #f472b6; }
+        .relation-node.equity { background: rgba(251,191,36,0.08);
+            border-color: rgba(251,191,36,0.25); color: #fbbf24; }
+        .relation-node .node-code { font-size: 11px; opacity: 0.7; margin-left: 6px; }
+        .relation-arrow { text-align: center; color: #4b5563; font-size: 20px; padding: 4px 0; }
+
+        /* 风险提示 */
+        .risk-section { margin-bottom: 56px; }
+        .risk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+        .risk-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; border-left: 3px solid #f87171; }
+        .risk-card .risk-title { font-size: 16px; font-weight: 600; color: #f87171; margin-bottom: 8px; }
+        .risk-card .risk-desc { font-size: 14px; color: #8892a8; line-height: 1.7; }
+
+        /* 高亮 */
+        .nv-highlight { background: linear-gradient(120deg, rgba(52,211,153,0.2) 0%, rgba(52,211,153,0.08) 100%);
+            padding: 0 3px; border-radius: 3px; color: #34d399; font-weight: 700; }
+
+        /* 精选筛选 */
+        .pick-list { margin-top: 24px; }
+        .pick-item { display: flex; align-items: center; padding: 12px 16px;
+            border-bottom: 1px solid #1e293b; font-size: 14px; }
+        .pick-item:last-child { border-bottom: none; }
+        .pick-item .pick-code { color: #60a5fa; font-family: 'SF Mono', monospace; width: 85px; }
+        .pick-item .pick-name { color: #e0e6f0; font-weight: 600; width: 120px; }
+        .pick-item .pick-type { font-size: 12px; padding: 2px 8px; border-radius: 6px; width: 70px; text-align: center; }
+        .pick-type.equip { background: rgba(96,165,250,0.12); color: #60a5fa; }
+        .pick-type.mat { background: rgba(52,211,153,0.12); color: #34d399; }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            .header h1 { font-size: 26px; }
+            .flow-diagram { flex-direction: column; }
+            .flow-stage:not(:last-child)::after { content: '↓'; right: auto; bottom: -16px; top: auto;
+                left: 50%; transform: translateX(-50%); }
+            .flow-stage:not(:last-child) { border-right: none; border-bottom: 1px solid #1e293b; }
+            .company-grid { grid-template-columns: 1fr; }
+            .rating-row { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .focus-cards { grid-template-columns: 1fr; }
+            .risk-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>存储核心生态概念股</h1>
+            <div class="subtitle">覆盖HBM/DRAM/NAND/先进封测/设备/材料/分销的全产业链核心标的</div>
+            <div class="topic-tags">
+                <span class="topic-tag hbm">HBM 高带宽内存</span>
+                <span class="topic-tag dram">DRAM 长鑫科技</span>
+                <span class="topic-tag nand">NAND Flash 长江存储</span>
+                <span class="topic-tag ai">AI 存储</span>
+                <span class="topic-tag sub">国产替代</span>
+                <span class="topic-tag cxmt">先进封装</span>
+            </div>
+            <div class="update-time">数据来源：东方财富、同花顺、公开报道、券商研报 | 整理时间：2026-06-25</div>
+        </div>
+
+        <!-- 核心概览 -->
+        <div class="overview-section">
+            <div class="section-title">存储产业核心概览</div>
+            <div class="stats-grid">
+                <div class="stat-card stat-green">
+                    <div class="stat-label">全球存储市场规模（2026E）</div>
+                    <div class="stat-value">~$1,800亿</div>
+                    <div class="stat-note">DRAM ~$1,000亿 + NAND ~$800亿，AI驱动存储需求结构性增长</div>
+                </div>
+                <div class="stat-card stat-blue">
+                    <div class="stat-label">HBM市场规模（2026E）</div>
+                    <div class="stat-value">~$300亿</div>
+                    <div class="stat-note">2025年约$160亿，同比+87%，AI服务器HBM需求同比+110%</div>
+                </div>
+                <div class="stat-card stat-purple">
+                    <div class="stat-label">国产存储产能</div>
+                    <div class="stat-value">50万片+/月</div>
+                    <div class="stat-note">长鑫DRAM 20万片+长江存储3D NAND 30万片+，国产设备/材料替代空间极大</div>
+                </div>
+                <div class="stat-card stat-pink">
+                    <div class="stat-label">先进封装市场</div>
+                    <div class="stat-value">$600亿+</div>
+                    <div class="stat-note">CoWoS/HBM封装为核心增量，国产封测/材料/设备同步受益</div>
+                </div>
+                <div class="stat-card stat-yellow">
+                    <div class="stat-label">国产替代率</div>
+                    <div class="stat-value">15-25%</div>
+                    <div class="stat-note">半导体设备/材料国产替代率仍低，长鑫/长江存储扩产加速本土配套</div>
+                </div>
+                <div class="stat-card stat-red">
+                    <div class="stat-label">A股映射标的</div>
+                    <div class="stat-value">26+</div>
+                    <div class="stat-note">覆盖设备/材料/封测/分销/模组/EDA/参股全产业链环节</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 产业链全景流程图 -->
+        <div class="flow-section">
+            <div class="section-title">产业链全景</div>
+            <div class="flow-diagram">
+                <div class="flow-stage">
+                    <span class="stage-label">材料层</span>
+                    <div class="stage-title">前驱体/塑封料/CMP</div>
+                    <div class="stage-desc">High-K前驱体、GMC/LMC环氧塑封料、Low-α球硅/球铝填料、CMP抛光液/垫，是HBM/DRAM/NAND制造的核心基础材料</div>
+                    <div class="stage-products">
+                        <span class="product-tag">High-K前驱体</span>
+                        <span class="product-tag">GMC塑封料</span>
+                        <span class="product-tag">Low-α球铝</span>
+                        <span class="product-tag">CMP抛光液</span>
+                        <span class="product-tag">溅射靶材</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <span class="stage-label">制造层</span>
+                    <div class="stage-title">封测 + TSV刻蚀 + 设备</div>
+                    <div class="stage-desc">TSV硅通孔刻蚀、TCB热压键合、Hybrid Bonding混合键合、先进封测</div>
+                    <div class="stage-products">
+                        <span class="product-tag">TSV刻蚀</span>
+                        <span class="product-tag">TCB键合</span>
+                        <span class="product-tag">CoWoS封装</span>
+                        <span class="product-tag">HBM堆叠</span>
+                        <span class="product-tag">DRAM/NAND制造</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <span class="stage-label">基板层</span>
+                    <div class="stage-title">封装载板 + 设计</div>
+                    <div class="stage-desc">ABF载板、FC-BGA封装基板、Chiplet互联设计、硅中介层，实现存储与逻辑芯片高速互联</div>
+                    <div class="stage-products">
+                        <span class="product-tag">ABF载板</span>
+                        <span class="product-tag">FC-BGA</span>
+                        <span class="product-tag">硅中介层</span>
+                        <span class="product-tag">Chiplet IP</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <span class="stage-label">流通层</span>
+                    <div class="stage-title">分销 + 终端</div>
+                    <div class="stage-desc">HBM分销、存储模组、内存品牌，连接晶圆厂到AI服务器/数据中心客户</div>
+                    <div class="stage-products">
+                        <span class="product-tag">HBM分销</span>
+                        <span class="product-tag">存储模组</span>
+                        <span class="product-tag">DRAM模组</span>
+                        <span class="product-tag">企业级SSD</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ 公司卡片 ============ -->
+
+        <!-- 一、HBM核心材料 -->
+        <div class="companies-section">
+            <div class="section-title">一、HBM核心材料（上游核心）</div>
+            <div class="section-subtitle">前驱体/环氧塑封料/硅微粉/Low-α球铝 — HBM/先进封装制造的基础材料</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">雅克科技</div>
+                        <div class="card-code">002409</div>
+                        <span class="shortage-badge">供应紧缺</span>
+                    </div>
+                    <span class="card-position position-material">核心材料 · HBM前驱体</span>
+                    <div class="card-binding"><strong>[NV+CX+YM] 深度绑定：SK海力士/三星/美光</strong> — 收购韩国UP Chemical，成为SK海力士HBM前驱体核心供应商。HBM4堆叠层数翻倍（8→16层）直接驱动前驱体用量倍增。同时供应长鑫DRAM产线。High-K前驱体全球仅3家供应商，产能利用率超95%。</div>
+                    <div class="card-shortage-reason"><strong>紧缺原因：</strong>HBM4前驱体High-K材料全球仅3家供应商（雅克/默克/UP Chemical），产能利用率超95%，扩产周期长达18个月</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>High-K前驱体</strong></span>
+                        <span>客户 <strong>海力士/三星/长鑫</strong></span>
+                        <span>壁垒 <strong>高纯金属有机合成</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">HBM前驱体核心供应商，四大存储客户全覆盖</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">HBM4前驱体用量倍增，国产存储扩产带来新增量</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 二、HBM封测与制造 -->
+        <div class="companies-section">
+            <div class="section-title">二、HBM封测与制造（中游核心）</div>
+            <div class="section-subtitle">HBM先进封装+海力士深度绑定+国产存储封测扩产</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">通富微电</div>
+                        <div class="card-code">002156</div>
+                    </div>
+                    <span class="card-position position-packaging">HBM先进封装</span>
+                    <div class="card-binding"><strong>[NV] 深度绑定：AMD + 国内存储客户</strong> — AMD核心封测合作伙伴，承接MI300/MI400系列先进封装。同时布局HBM封装，合肥基地专为存储客户设立。投资8.88亿元提升存储芯片封测产能，HBM先进封装+国产存储双赛道驱动。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>HBM封装/CoWoS</strong></span>
+                        <span>客户 <strong>AMD/国内存储</strong></span>
+                        <span>投资 <strong>8.88亿扩产</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">AMD深度绑定+先进封装国产化双重逻辑</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">先进封装国产化率极低，一旦突破弹性极大</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">长电科技</div>
+                        <div class="card-code">600584</div>
+                    </div>
+                    <span class="card-position position-packaging">全球封测龙头</span>
+                    <div class="card-binding"><strong>[CX+YM] 深度绑定：全球设计+IDM大厂</strong> — 全球第三、国内第一封测厂。XDFOI先进封装技术可应用于AI芯片和HBM封装。为SK海力士/美光提供存储芯片封测服务，同时为长鑫DRAM和长江存储NAND提供封测配套。2.5D/3D封装技术储备最完整的国内封测厂。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>XDFOI/存储封测</strong></span>
+                        <span>客户 <strong>海力士/美光/长鑫</strong></span>
+                        <span>地位 <strong>全球前三</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">全球封测龙头，多客户深度绑定</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">存储封测+先进封装双驱动</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">香农芯创</div>
+                        <div class="card-code">300475</div>
+                        <span class="shortage-badge">供应紧缺</span>
+                    </div>
+                    <span class="card-position position-dist">HBM分销代理</span>
+                    <div class="card-binding"><strong>深度绑定：SK海力士（独家代理）</strong> — SK海力士HBM核心分销商，国内唯一直接代理SK海力士HBM产品的A股标的。2026Q1业绩爆发，净利11.4-14.8亿（+6715%~8747%）。HBM AS P数倍于传统DRAM，供需缺口最大。</div>
+                    <div class="card-shortage-reason"><strong>紧缺原因：</strong>高盛称HBM为"过去15年最严重存储芯片供应短缺"，SK海力士80-90%先进DRAM产能转向HBM，分销配额极度稀缺</div>
+                    <div class="card-data-row">
+                        <span>核心业务 <strong>HBM分销代理</strong></span>
+                        <span>上游 <strong>SK海力士</strong></span>
+                        <span>弹性 <strong>HBM高溢价</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">独家绑定SK海力士HBM分销，A股唯一</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">HBM量价齐升直接传导至分销环节</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 三、DRAM/NAND制造设备 -->
+        <div class="companies-section">
+            <div class="section-title">三、DRAM/NAND制造设备（上游核心）</div>
+            <div class="section-subtitle">刻蚀/薄膜沉积/CMP/清洗/测试 — 长鑫/长江存储扩产最直接受益</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">北方华创</div>
+                        <div class="card-code">002371</div>
+                    </div>
+                    <span class="card-position position-equipment">全品类设备平台</span>
+                    <div class="card-binding"><strong>[CX+YM] 深度绑定：长鑫/长江存储</strong> — 国内最大半导体设备平台，刻蚀/薄膜/清洗/炉管设备全面覆盖。长鑫科技和长江存储核心设备供应商，设备品类数量领先。国产替代最全品类平台，DRAM+NAND扩产周期中设备订单弹性最大。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>刻蚀/薄膜/清洗</strong></span>
+                        <span>客户 <strong>长鑫/长江存储</strong></span>
+                        <span>品类 <strong>40+种设备</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">国产设备平台龙头，长鑫/长江存储核心供应商</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">设备品类持续扩张，国产替代率提升空间大</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">中微公司</div>
+                        <div class="card-code">688012</div>
+                    </div>
+                    <span class="card-position position-equipment">CCP/ICP刻蚀龙头</span>
+                    <div class="card-binding"><strong>[CX+YM] 深度绑定：长鑫/长江存储/海力士</strong> — CCP/ICP刻蚀设备龙头，90:1高深宽比刻蚀全球领先。已进入长鑫DRAM产线和长江存储3D NAND产线。3D NAND层数提升（200+层）对高深宽比刻蚀需求暴增，DRAM电容刻蚀同样依赖先进刻蚀。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>CCP/ICP刻蚀机</strong></span>
+                        <span>客户 <strong>长鑫/长江存储/海力士</strong></span>
+                        <span>壁垒 <strong>高深宽比刻蚀</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">国产刻蚀龙头，三大存储客户全覆盖</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">3D NAND层数提升+DRAM扩产，刻蚀需求翻倍</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">拓荆科技</div>
+                        <div class="card-code">688072</div>
+                    </div>
+                    <span class="card-position position-equipment">薄膜沉积设备</span>
+                    <div class="card-binding"><strong>[CX+YM] 深度绑定：长鑫/长江存储</strong> — 国内PECVD/ALD/SACVD薄膜沉积设备龙头。DRAM制造中薄膜沉积步骤极多，ALD需求尤为旺盛。3D NAND层数增加使薄膜沉积步骤翻倍增长。长鑫存储和长江存储核心薄膜沉积设备供应商。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>PECVD/ALD/SACVD</strong></span>
+                        <span>客户 <strong>长鑫/长江存储</strong></span>
+                        <span>壁垒 <strong>ALD原子层沉积</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">核心工艺设备供应商，ALD需求爆发增长</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">NAND层数+DRAM制程双驱动，ALD需求倍增</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">华海清科</div>
+                        <div class="card-code">688120</div>
+                    </div>
+                    <span class="card-position position-equipment">CMP设备</span>
+                    <div class="card-binding"><strong>[CX+YM] 深度绑定：长鑫/长江存储</strong> — 国内CMP设备唯一国产供应商，打破应用材料垄断。CMP是DRAM平坦化关键工艺，随着制程微缩和3D NAND层数提升，CMP步骤大幅增加。唯一国产供应商地位意味着扩产订单几乎全部流向华海清科。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>CMP抛光机</strong></span>
+                        <span>客户 <strong>长鑫/长江存储</strong></span>
+                        <span>壁垒 <strong>唯一国产CMP设备</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">唯一国产CMP供应商，绑定程度深</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">制程微缩拉动需求，扩产直接受益</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">芯源微</div>
+                        <div class="card-code">688037</div>
+                    </div>
+                    <span class="card-position position-equipment">涂胶显影设备</span>
+                    <div class="card-binding"><strong>[CX+YM] 深度绑定：长鑫/长江存储</strong> — 国内涂胶显影设备龙头，产品覆盖光刻工序涂胶显影、去胶等。DRAM/NAND光刻工艺中涂胶显影为必需配套设备，国产化率极低，替代空间大。已进入长鑫供应链。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>涂胶显影设备</strong></span>
+                        <span>客户 <strong>长鑫/长江存储</strong></span>
+                        <span>壁垒 <strong>光刻配套设备</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">已进入供应链，国产化率极低</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">国产化率极低，弹性巨大</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 四、DRAM/NAND制造材料 -->
+        <div class="companies-section">
+            <div class="section-title">四、DRAM/NAND制造材料（上游核心）</div>
+            <div class="section-subtitle">耗材属性带来持续且稳定的收入，扩产直接拉动用量增长</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">雅克科技</div>
+                        <div class="card-code">002409</div>
+                        <span class="shortage-badge">供应紧缺</span>
+                    </div>
+                    <span class="card-position position-material">前驱体/光刻胶/特气</span>
+                    <div class="card-binding"><strong>[NV+CX+YM] 深度绑定：长鑫/长江存储/海力士</strong> — 三料供应商地位稀缺，同时供应前驱体、光刻胶和电子特气。前驱体是DRAM/NAND薄膜沉积核心耗材，适配先进制程。已批量供货长鑫和长江存储，同时是SK海力士HBM前驱体核心供应商。国内唯一同时覆盖NAND+DRAM+HBM三大存储产业链的前驱体材料商。</div>
+                    <div class="card-shortage-reason"><strong>紧缺原因：</strong>HBM4前驱体High-K材料全球仅3家供应商，产能利用率超95%，扩产周期长达18个月</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>前驱体/光刻胶/特气</strong></span>
+                        <span>客户 <strong>长鑫/长江/海力士</strong></span>
+                        <span>壁垒 <strong>三料供应商平台</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 最高</div>
+                            <div class="rating-reason">三料供应商，三链贯通，独一无二</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">耗材持续放量，NAND+DRAM+HBM三重驱动</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">安集科技</div>
+                        <div class="card-code">688019</div>
+                    </div>
+                    <span class="card-position position-material">CMP抛光液</span>
+                    <div class="card-binding"><strong>[CX+YM] 深度绑定：长鑫（前五大客户）</strong> — 国内CMP抛光液龙头，年报确认长鑫为前五大客户，已批量使用。DRAM CMP步骤多、抛光液消耗量大，纯耗材弹性突出。同时进入长江存储供应链，NAND+DRAM双链受益。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>CMP抛光液</strong></span>
+                        <span>客户 <strong>长鑫/长江存储</strong></span>
+                        <span>壁垒 <strong>研磨颗粒配方</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">前五大客户，深度绑定</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">纯耗材，扩产持续放量</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">鼎龙股份</div>
+                        <div class="card-code">300054</div>
+                    </div>
+                    <span class="card-position position-material">CMP抛光垫</span>
+                    <div class="card-binding"><strong>[CX+YM] 深度绑定：长鑫/长江存储</strong> — CMP抛光垫国产化先锋，国内份额超70%。DRAM/NAND CMP平坦化工艺核心耗材，扩产直接拉动抛光垫用量增长。同时布局抛光液和PSPI光刻胶，多品类放量。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>CMP抛光垫</strong></span>
+                        <span>客户 <strong>长鑫/长江存储</strong></span>
+                        <span>份额 <strong>国内70%+</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">抛光垫份额70%+，龙头地位稳固</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">耗材+多品类放量，国产替代空间大</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 五、封装测试 -->
+        <div class="companies-section">
+            <div class="section-title">五、封装测试（扩产后最先放量）</div>
+            <div class="section-subtitle">DRAM/NAND晶圆产出增加→封装测试需求同步增长</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">通富微电</div>
+                        <div class="card-code">002156</div>
+                    </div>
+                    <span class="card-position position-packaging">存储封测</span>
+                    <div class="card-binding"><strong>[NV] 深度绑定：长鑫/长江存储</strong> — 国内第二大封测企业，合肥基地专为存储客户设立，深度绑定长鑫存储。同时为长江存储提供NAND封测服务。HBM先进封装布局提升长期天花板，存储+算力双赛道。</div>
+                    <div class="card-data-row">
+                        <span>核心业务 <strong>存储封测/先进封装</strong></span>
+                        <span>客户 <strong>长鑫/长江存储/AMD</strong></span>
+                        <span>基地 <strong>合肥专为存储设立</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">合肥基地深度绑定，扩产→封测直接放量</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">HBM布局打开长期空间</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 六、参股/IPO受益 -->
+        <div class="companies-section">
+            <div class="section-title">六、参股/IPO受益</div>
+            <div class="section-subtitle">股权关联/产业协同，长鑫科技IPO和长江存储IPO预期带动估值重估</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">兆易创新</div>
+                        <div class="card-code">603986</div>
+                    </div>
+                    <span class="card-position position-equity">NOR Flash+参股</span>
+                    <div class="card-binding"><strong>[CX] 深度绑定：长鑫/长江存储</strong> — 国内NOR Flash和MCU龙头，与长鑫签署DRAM代销协议，采购长鑫DRAM晶圆。同时通过投资睿力集成持有长鑫部分股权。DRAM业务协同+股权参股双重受益。</div>
+                    <div class="card-data-row">
+                        <span>核心关联 <strong>DRAM代销+参股</strong></span>
+                        <span>客户 <strong>长鑫（代销）</strong></span>
+                        <span>定位 <strong>产业协同+估值重估</strong></span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">三重逻辑叠加：代销+参股+同行业估值</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">产业协同+参股重估</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 产业链关系图 -->
+        <div class="relation-section">
+            <div class="section-title">存储核心生态 A股标的映射关系</div>
+            <div class="relation-diagram">
+                <!-- 上游 -->
+                <div class="relation-group upstream">
+                    <div class="relation-group-title">⬆ 上游 — 核心材料 + 设备</div>
+                    <div class="relation-row">
+                        <div class="relation-label">核心材料</div>
+                        <div class="relation-items">
+                            <div class="relation-node mat shortage">雅克科技<span class="node-code">002409</span></div>
+                            <div class="relation-node mat">安集科技<span class="node-code">688019</span></div>
+                            <div class="relation-node mat">鼎龙股份<span class="node-code">300054</span></div>
+                        </div>
+                    </div>
+                    <div class="relation-arrow">→ 设备 →</div>
+                    <div class="relation-row">
+                        <div class="relation-label">设备</div>
+                        <div class="relation-items">
+                            <div class="relation-node equip">北方华创<span class="node-code">002371</span></div>
+                            <div class="relation-node equip">中微公司<span class="node-code">688012</span></div>
+                            <div class="relation-node equip">拓荆科技<span class="node-code">688072</span></div>
+                            <div class="relation-node equip">华海清科<span class="node-code">688120</span></div>
+                            <div class="relation-node equip">芯源微<span class="node-code">688037</span></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 中游 -->
+                <div class="relation-group midstream">
+                    <div class="relation-group-title">⬇ 中游 — 封测 + 制造</div>
+                    <div class="relation-row">
+                        <div class="relation-label">封测</div>
+                        <div class="relation-items">
+                            <div class="relation-node pkg">通富微电<span class="node-code">002156</span></div>
+                            <div class="relation-node pkg">长电科技<span class="node-code">600584</span></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 下游 -->
+                <div class="relation-group downstream">
+                    <div class="relation-group-title">⬇ 下游 — 分销 + 参股</div>
+                    <div class="relation-row">
+                        <div class="relation-label">分销</div>
+                        <div class="relation-items">
+                            <div class="relation-node dist shortage">香农芯创<span class="node-code">300475</span></div>
+                        </div>
+                    </div>
+                    <div class="relation-arrow">→ 参股 →</div>
+                    <div class="relation-row">
+                        <div class="relation-label">参股</div>
+                        <div class="relation-items">
+                            <div class="relation-node equity">兆易创新<span class="node-code">603986</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 核心关注维度 -->
+        <div class="focus-section">
+            <div class="section-title">核心关注维度</div>
+            <div class="focus-cards">
+                <div class="focus-card">
+                    <div class="focus-rank">01</div>
+                    <div class="focus-name">HBM4量产时间表</div>
+                    <div class="focus-tag">最大增量驱动</div>
+                    <div class="focus-reason">SK海力士计划2026下半年量产HBM4（16-Hi堆叠），NVIDIA Rubin同步搭载。HBM4量产将全面拉动前驱体、GMC填料、先进封装需求。量产时间点是整个HBM产业链的业绩拐点信号，需跟踪海力士清州M15X新厂投产节奏。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">02</div>
+                    <div class="focus-name">国产存储扩产节奏</div>
+                    <div class="focus-tag">国产替代主线</div>
+                    <div class="focus-reason">长鑫科技（DRAM）和长江存储（3D NAND）的产能扩张计划直接决定国产设备/材料/封测的订单规模。长鑫IPO前后有望加速扩产，长江存储200+层NAND量产进度是设备需求的核心驱动。中微公司/北方华创/精智达最为受益。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">03</div>
+                    <div class="focus-name">先进封装产能瓶颈</div>
+                    <div class="focus-tag">结构性机会</div>
+                    <div class="focus-reason">CoWoS-L/HBM封装产能是AI芯片出货的核心瓶颈。台积电/海力士持续扩产先进封装，带动国产封测（通富/长电）和封装材料需求。国产CoWoS封装能力突破是下一个关键观察点。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">04</div>
+                    <div class="focus-name">美国出口管制变化</div>
+                    <div class="focus-tag">最大不确定性</div>
+                    <div class="focus-reason">美国对华半导体设备/材料出口管制持续升级，一方面压制国产存储厂获取海外设备的能力，另一方面加速国产替代。HBM可能被纳入出口限制清单，设备股受管制影响弹性大。需密切关注BIS实体清单变化。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">05</div>
+                    <div class="focus-name">存储芯片周期拐点</div>
+                    <div class="focus-tag">需求端风险</div>
+                    <div class="focus-reason">存储芯片市场具有强周期性（3-4年一轮）。当前处于AI驱动供需紧张阶段，但若全球DRAM/NAND产能过度扩张导致供过于求，产品价格下滑将影响扩产意愿和供应链订单。需跟踪存储价格走势和资本开支规划。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">06</div>
+                    <div class="focus-name">国产替代进度</div>
+                    <div class="focus-tag">中长期逻辑</div>
+                    <div class="focus-reason">半导体设备/材料国产化率仍低于20%，先进封装/EDA/载板等领域国产化率不足10%。长鑫/长江存储扩产是国产替代加速的核心催化剂。需跟踪各环节国产设备/材料的验证通过率和市场份额变化。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 精选筛选：上游 + 受益确定性满星★★★ -->
+        <div class="companies-section">
+            <div class="section-title">🔍 精选筛选：上游 + 受益确定性满星（★★★）</div>
+            <div class="section-subtitle">从全部标的中筛选"上游环节"且"受益确定性满星★★★"的高确定性标的</div>
+            <div style="background: #111827; border: 1px solid #1e293b; border-radius: 16px; padding: 24px;">
+                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px; flex-wrap: wrap;">
+                    <span style="font-size: 32px; font-weight: 800; background: linear-gradient(135deg, #34d399, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">8 只</span>
+                    <span style="font-size: 14px; color: #8892a8;">上游满星 · 设备5只 + 材料3只</span>
+                </div>
+                <div style="font-size: 14px; color: #c8d0e0; line-height: 1.8; margin-bottom: 20px;">
+                    <p><strong>筛选条件：</strong>产业链位置 = <span style="color: #34d399;">上游</span> 且 受益确定性 = <span style="color: #34d399;">★★★（满星）</span></p>
+                    <p><strong>设备（5只）：</strong>北方华创、中微公司、拓荆科技、华海清科、芯源微</p>
+                    <p><strong>材料（3只）：</strong>雅克科技、安集科技、鼎龙股份</p>
+                </div>
+                <div class="pick-list" style="background:rgba(255,255,255,0.02); border-radius:12px; overflow:hidden;">
+                    <div class="pick-item" style="border-bottom:1px solid #1e293b; background:linear-gradient(90deg,rgba(52,211,153,0.06),transparent);">
+                        <span class="pick-code">002409</span>
+                        <span class="pick-name">雅克科技</span>
+                        <span class="pick-type mat">材料</span>
+                        <span style="color:#8892a8;">前驱体三料供应商，HBM+DRAM+NAND三链贯通，唯一三题材共通标的</span>
+                    </div>
+                    <div class="pick-item">
+                        <span class="pick-code">002371</span>
+                        <span class="pick-name">北方华创</span>
+                        <span class="pick-type equip">设备</span>
+                        <span style="color:#8892a8;">全品类设备平台，长鑫/长江存储核心供应商，双链扩产订单弹性最大</span>
+                    </div>
+                    <div class="pick-item">
+                        <span class="pick-code">688012</span>
+                        <span class="pick-name">中微公司</span>
+                        <span class="pick-type equip">设备</span>
+                        <span style="color:#8892a8;">CCP刻蚀龙头，3D NAND高深宽比+DRAM电容刻蚀双需求</span>
+                    </div>
+                    <div class="pick-item">
+                        <span class="pick-code">688072</span>
+                        <span class="pick-name">拓荆科技</span>
+                        <span class="pick-type equip">设备</span>
+                        <span style="color:#8892a8;">薄膜沉积龙头，ALD需求随NAND层数+DRAM制程爆发增长</span>
+                    </div>
+                    <div class="pick-item">
+                        <span class="pick-code">688120</span>
+                        <span class="pick-name">华海清科</span>
+                        <span class="pick-type equip">设备</span>
+                        <span style="color:#8892a8;">CMP唯一国产供应商，双链CMP需求成倍增长</span>
+                    </div>
+                    <div class="pick-item">
+                        <span class="pick-code">688037</span>
+                        <span class="pick-name">芯源微</span>
+                        <span class="pick-type equip">设备</span>
+                        <span style="color:#8892a8;">涂胶显影设备龙头，国产化率极低、弹性巨大</span>
+                    </div>
+                    <div class="pick-item">
+                        <span class="pick-code">688019</span>
+                        <span class="pick-name">安集科技</span>
+                        <span class="pick-type mat">材料</span>
+                        <span style="color:#8892a8;">CMP抛光液龙头，长鑫前五大客户深度绑定</span>
+                    </div>
+                    <div class="pick-item" style="border-bottom:none;">
+                        <span class="pick-code">300054</span>
+                        <span class="pick-name">鼎龙股份</span>
+                        <span class="pick-type mat">材料</span>
+                        <span style="color:#8892a8;">CMP抛光垫份额70%+，双链核心耗材龙头</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- 风险提示 -->
+        <div class="risk-section">
+            <div class="section-title">核心风险提示</div>
+            <div class="risk-grid">
+                <div class="risk-card">
+                    <div class="risk-title">出口管制升级风险</div>
+                    <div class="risk-desc">美国可能进一步收紧对华半导体设备/材料/EDA的出口管制，长鑫/长江存储获取关键设备受阻将直接影响扩产节奏和设备/材料企业的订单。HBM可能被纳入出口限制清单，影响分销/封测标的。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">HBM产能瓶颈与延期风险</div>
+                    <div class="risk-desc">HBM制造良率极低（尤其16-Hi堆叠），SK海力士/三星的HBM4产能爬坡可能不及预期。TSV刻蚀、TCB键合、Hybrid Bonding等核心工艺良率爬坡是最大不确定性，量产延期将影响全产业链备货节奏。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">DRAM/NAND强周期波动风险</div>
+                    <div class="risk-desc">存储芯片市场存在极强的周期性，价格波动剧烈。全球DRAM/NAND产能扩张可能导致供过于求，产品价格大幅下滑将影响长鑫/长江存储盈利能力和扩产意愿，进而影响供应链企业订单。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">国产替代进度不及预期</div>
+                    <div class="risk-desc">国产半导体设备/材料在技术性能、稳定性和良率方面仍与海外龙头存在差距。若长鑫/长江存储对国产化率提升采取更保守的推进节奏，将影响国产替代产业链的业绩增速。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">技术路线变化风险</div>
+                    <div class="risk-desc">HBM/HBM4技术路线可能发生改变（如混合键合替代微凸点），影响前驱体/塑封料等材料环节的需求结构。玻璃基板、面板级封装等新技术可能部分替代当前先进封装方案。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">估值透支与业绩兑现风险</div>
+                    <div class="risk-desc">部分标的已price in较多预期，实际业绩兑现节奏若不及市场预期将面临估值回调压力。尤其设备/材料类标的，存储扩产贡献真正体现到报表需要1-2年时间。需关注实际订单和业绩兑现与市场预期的差距。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p style="text-align:center;color:#8892a8;font-size:0.8em;padding:30px 0 10px;border-top:1px solid #1e293b;margin-top:40px">
+                数据来源：东方财富、同花顺、公开报道、券商研报、各公司公告、Yole Intelligence、TrendForce | 整理时间：2026-06-25
+            </p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em;margin-top:6px">
+                本报告整合自长江存储IPO、长鑫科技IPO、HBM概念股、三题材共通标的、先进封装题材分析、AI存储与算力核心生态等多份题材报告，覆盖HBM/DRAM/NAND/先进封测/设备/材料的全产业链核心标的。
+            </p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em;margin-top:6px">
+                仅为公开资料整理与产业链梳理，不构成任何投资建议。股市有风险，投资需谨慎。
+            </p>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function walkText(node) {
+                if (node.nodeType === 3) {
+                    var text = node.textContent;
+                    if (text.indexOf('HBM') !== -1) {
+                        var span = document.createElement('span');
+                        span.innerHTML = text.replace(/HBM/g, '<span class="nv-highlight">HBM</span>');
+                        node.parentNode.replaceChild(span, node);
+                    }
+                } else if (node.nodeType === 1 && !/^(script|style|textarea)$/i.test(node.tagName)) {
+                    for (var i = 0; i < node.childNodes.length; i++) {
+                        walkText(node.childNodes[i]);
+                    }
+                }
+            }
+            walkText(document.body);
+        });
+    </script>
+</body>
+</html>

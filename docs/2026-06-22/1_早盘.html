@@ -1,0 +1,2700 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026年06月22日 A股开盘晨报</title>
+<style>
+:root {
+    --bg-primary: #0a0e17;
+    --bg-card: #111827;
+    --bg-card-alt: #0f172a;
+    --border-color: #1e293b;
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent-red: #ef4444;
+    --accent-green: #22c55e;
+    --accent-blue: #3b82f6;
+    --accent-yellow: #eab308;
+    --accent-purple: #a855f7;
+    --accent-pink: #ec4899;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    text-align: center;
+    padding: 30px 0 20px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 24px;
+}
+
+.header h1 {
+    font-size: 28px;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+}
+
+.header .subtitle {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.section {
+    margin-bottom: 28px;
+}
+
+.section h2 {
+    font-size: 20px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.stat-value {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.stat-change {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.stat-sub {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+.text-red { color: var(--accent-red); }
+.text-green { color: var(--accent-green); }
+.text-gray { color: var(--text-muted); }
+
+.breadth-bar {
+    display: flex;
+    border-radius: 6px;
+    overflow: hidden;
+    height: 32px;
+    margin-top: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.breadth-up {
+    background: var(--accent-red);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    padding: 0 8px;
+}
+
+.breadth-flat {
+    background: var(--text-muted);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    padding: 0 4px;
+}
+
+.breadth-down {
+    background: var(--accent-green);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    padding: 0 8px;
+}
+
+.fund-summary {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 14px;
+    font-size: 15px;
+}
+
+.fund-direction {
+    font-weight: 600;
+}
+
+.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.table-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.table-card h3 {
+    font-size: 14px;
+    margin-bottom: 12px;
+    color: var(--text-secondary);
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+th {
+    text-align: left;
+    padding: 8px 6px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+td {
+    padding: 7px 6px;
+    border-bottom: 1px solid rgba(30, 41, 59, 0.5);
+    white-space: nowrap;
+}
+
+.rank-cell {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    width: 30px;
+}
+
+.sub-text {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.badge-industry {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+    margin-right: 4px;
+}
+
+.badge-concept {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    background: rgba(168, 85, 247, 0.15);
+    color: #c084fc;
+    margin-right: 4px;
+}
+
+.stock-link {
+    color: var(--accent-blue);
+    text-decoration: none;
+}
+
+.stock-link:hover {
+    text-decoration: underline;
+}
+
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 10px;
+}
+
+.news-card {
+    display: block;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 14px 16px;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: border-color 0.2s;
+}
+
+.news-card:hover {
+    border-color: var(--accent-blue);
+}
+
+.news-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+.news-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.footer {
+    margin-top: 32px;
+    padding: 20px 0;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.footer .disclaimer {
+    color: var(--accent-yellow);
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .two-col {
+        grid-template-columns: 1fr;
+    }
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .news-grid {
+        grid-template-columns: 1fr;
+    }
+    body {
+        padding: 12px;
+    }
+    .header h1 {
+        font-size: 22px;
+    }
+}
+</style>
+</head>
+<body>
+<div class="header">
+    <h1>2026年06月22日 A股开盘晨报</h1>
+    <div class="subtitle">市场开盘数据一览 · 生成于 2026-06-22 09:53:34</div>
+</div>
+
+    <div class="section">
+        <h2>📈 开盘概览</h2>
+        <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">上证指数</div>
+            <div class="stat-value text-red">4102.57</div>
+            <div class="stat-change text-red">+0.30%</div>
+            <div class="stat-sub">成交额: 4796.53亿</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">深证成指</div>
+            <div class="stat-value text-red">16191.39</div>
+            <div class="stat-change text-red">+1.00%</div>
+            <div class="stat-sub">成交额: 5829.54亿</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">创业板指</div>
+            <div class="stat-value text-red">4318.88</div>
+            <div class="stat-change text-red">+1.56%</div>
+            <div class="stat-sub">成交额: 2869.77亿</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">科创50</div>
+            <div class="stat-value text-red">1957.85</div>
+            <div class="stat-change text-red">+2.42%</div>
+            <div class="stat-sub">成交额: 540.79亿</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">北证50</div>
+            <div class="stat-value text-green">1243.93</div>
+            <div class="stat-change text-green">-1.68%</div>
+            <div class="stat-sub">成交额: 76.43亿</div>
+        </div></div>
+        
+        <div class="breadth-bar">
+            <div class="breadth-up" style="width:23.7%">涨 1653</div>
+            <div class="breadth-flat" style="width:0.0%">平 0</div>
+            <div class="breadth-down" style="width:76.3%">跌 5328</div>
+        </div>
+    </div>
+    <div class="section">
+        <h2>💰 资金流向</h2>
+        <div class="fund-summary">
+            <span class="fund-direction text-red">主力净流入，资金做多意愿较强</span>
+        </div>
+        <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">主力净流入</div>
+            <div class="stat-value text-red">240.01亿</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">超大单净流入</div>
+            <div class="stat-value text-green">-106.33亿</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">大单净流入</div>
+            <div class="stat-value text-red">163.81亿</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">中单净流入</div>
+            <div class="stat-value text-green">-131.34亿</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">小单净流入</div>
+            <div class="stat-value text-red">76.20亿</div>
+        </div></div>
+    </div>
+    <div class="section">
+        <h2>📊 板块资金流向</h2>
+        <div class="two-col">
+        <div class="table-card">
+            <h3>🔥 资金净流入板块 TOP15</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>#</th><th>板块</th><th>涨跌幅</th><th>主力净流入</th><th>领涨股</th></tr></thead>
+                    <tbody>
+            <tr>
+                <td class="rank-cell">1</td>
+                <td>通信·通信设备</td>
+                <td class="text-red">+0.72%</td>
+                <td class="text-red">20.73亿</td>
+                <td class="sub-text">特发信息</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">2</td>
+                <td>通信线缆及配套</td>
+                <td class="text-red">+4.57%</td>
+                <td class="text-red">20.71亿</td>
+                <td class="sub-text">特发信息</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">3</td>
+                <td>通信</td>
+                <td class="text-red">+0.54%</td>
+                <td class="text-red">19.48亿</td>
+                <td class="sub-text">特发信息</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">4</td>
+                <td>有色金属·小金属</td>
+                <td class="text-red">+4.56%</td>
+                <td class="text-red">18.45亿</td>
+                <td class="sub-text">东方锆业</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">5</td>
+                <td>有色金属</td>
+                <td class="text-red">+1.04%</td>
+                <td class="text-red">14.29亿</td>
+                <td class="sub-text">锌业股份</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">6</td>
+                <td>其他小金属</td>
+                <td class="text-red">+3.94%</td>
+                <td class="text-red">13.68亿</td>
+                <td class="sub-text">东方锆业</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">7</td>
+                <td>逆变器</td>
+                <td class="text-red">+2.98%</td>
+                <td class="text-red">10.10亿</td>
+                <td class="sub-text">阳光电源</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">8</td>
+                <td>铅锌</td>
+                <td class="text-red">+5.61%</td>
+                <td class="text-red">8.93亿</td>
+                <td class="sub-text">锌业股份</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">9</td>
+                <td>电力设备·光伏设备</td>
+                <td class="text-green">-0.43%</td>
+                <td class="text-red">8.08亿</td>
+                <td class="sub-text">帝尔激光</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">10</td>
+                <td>有色金属·钨</td>
+                <td class="text-red">+8.06%</td>
+                <td class="text-red">7.69亿</td>
+                <td class="sub-text">中钨高新</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">11</td>
+                <td>磨具磨料</td>
+                <td class="text-red">+5.60%</td>
+                <td class="text-red">7.35亿</td>
+                <td class="sub-text">黄河旋风</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">12</td>
+                <td>电子·光学光电子</td>
+                <td class="text-red">+0.84%</td>
+                <td class="text-red">4.86亿</td>
+                <td class="sub-text">凯盛科技</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">13</td>
+                <td>磷肥及磷化工</td>
+                <td class="text-red">+4.61%</td>
+                <td class="text-red">4.38亿</td>
+                <td class="sub-text">川发龙蟒</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">14</td>
+                <td>有色金属·工业金属</td>
+                <td class="text-red">+0.75%</td>
+                <td class="text-red">3.84亿</td>
+                <td class="sub-text">锌业股份</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">15</td>
+                <td>基础化工·化学原料</td>
+                <td class="text-red">+0.43%</td>
+                <td class="text-red">3.80亿</td>
+                <td class="sub-text">长裕集团</td>
+            </tr></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="table-card">
+            <h3>❄️ 资金净流出板块 TOP15</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>#</th><th>板块</th><th>涨跌幅</th><th>主力净流出</th><th>领涨股</th></tr></thead>
+                    <tbody>
+            <tr>
+                <td class="rank-cell">1</td>
+                <td>电子</td>
+                <td class="text-red">+1.05%</td>
+                <td class="text-green">-37.96亿</td>
+                <td class="sub-text">旭光电子</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">2</td>
+                <td>电力设备·电池</td>
+                <td class="text-green">-1.40%</td>
+                <td class="text-green">-23.57亿</td>
+                <td class="sub-text">安达科技</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">3</td>
+                <td>电子·消费电子</td>
+                <td class="text-green">-0.43%</td>
+                <td class="text-green">-21.10亿</td>
+                <td class="sub-text">共达电声</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">4</td>
+                <td>汽车</td>
+                <td class="text-green">-2.15%</td>
+                <td class="text-green">-21.02亿</td>
+                <td class="sub-text">富特科技</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">5</td>
+                <td>消费电子零部件及组装</td>
+                <td class="text-green">-0.40%</td>
+                <td class="text-green">-20.77亿</td>
+                <td class="sub-text">共达电声</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">6</td>
+                <td>电力设备</td>
+                <td class="text-green">-0.79%</td>
+                <td class="text-green">-19.60亿</td>
+                <td class="sub-text">柘中股份</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">7</td>
+                <td>医药生物</td>
+                <td class="text-green">-2.55%</td>
+                <td class="text-green">-18.37亿</td>
+                <td class="sub-text">爱迪特</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">8</td>
+                <td>国防军工</td>
+                <td class="text-green">-1.35%</td>
+                <td class="text-green">-18.21亿</td>
+                <td class="sub-text">博云新材</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">9</td>
+                <td>电子·元件</td>
+                <td class="text-red">+1.04%</td>
+                <td class="text-green">-16.43亿</td>
+                <td class="sub-text">艾华集团</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">10</td>
+                <td>电子·数字芯片设计</td>
+                <td class="text-red">+0.58%</td>
+                <td class="text-green">-16.40亿</td>
+                <td class="sub-text">中颖电子</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">11</td>
+                <td>电子·印制电路板</td>
+                <td class="text-red">+0.67%</td>
+                <td class="text-green">-13.89亿</td>
+                <td class="sub-text">满坤科技</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">12</td>
+                <td>电力设备·锂电池</td>
+                <td class="text-green">-1.74%</td>
+                <td class="text-green">-13.55亿</td>
+                <td class="sub-text">蔚蓝锂芯</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">13</td>
+                <td>机械设备</td>
+                <td class="text-green">-1.34%</td>
+                <td class="text-green">-12.20亿</td>
+                <td class="sub-text">江钨装备</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">14</td>
+                <td>计算机</td>
+                <td class="text-green">-0.96%</td>
+                <td class="text-green">-10.62亿</td>
+                <td class="sub-text">中青宝</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">15</td>
+                <td>国防军工·军工电子Ⅱ</td>
+                <td class="text-green">-1.46%</td>
+                <td class="text-green">-10.37亿</td>
+                <td class="sub-text">中航光电</td>
+            </tr></tbody>
+                </table>
+            </div>
+        </div></div>
+    </div>
+    <div class="section">
+        <h2>🔥 热门板块</h2>
+        <div class="table-card">
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>#</th><th>板块</th><th>涨跌幅</th><th>主力净流入</th><th>领涨股</th><th>涨跌幅</th></tr></thead>
+                    <tbody>
+        <tr>
+            <td class="rank-cell">1</td>
+            <td><span class="badge-industry">行业</span> 有色金属·钨</td>
+            <td class="text-red">+8.06%</td>
+            <td class="text-red">7.69亿</td>
+            <td class="sub-text">中钨高新</td>
+            <td class="sub-text">+9.76%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">2</td>
+            <td><span class="badge-concept">概念</span> 培育钻石</td>
+            <td class="text-red">+7.96%</td>
+            <td class="text-red">14.73亿</td>
+            <td class="sub-text">黄河旋风</td>
+            <td class="sub-text">+9.99%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">3</td>
+            <td><span class="badge-industry">行业</span> 钛白粉</td>
+            <td class="text-red">+6.06%</td>
+            <td class="text-red">7176.42万</td>
+            <td class="sub-text">金浦钛业</td>
+            <td class="sub-text">+9.96%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">4</td>
+            <td><span class="badge-industry">行业</span> 铅锌</td>
+            <td class="text-red">+5.61%</td>
+            <td class="text-red">8.93亿</td>
+            <td class="sub-text">锌业股份</td>
+            <td class="sub-text">+10.10%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">5</td>
+            <td><span class="badge-industry">行业</span> 磨具磨料</td>
+            <td class="text-red">+5.60%</td>
+            <td class="text-red">7.35亿</td>
+            <td class="sub-text">黄河旋风</td>
+            <td class="sub-text">+9.99%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">6</td>
+            <td><span class="badge-concept">概念</span> 东方财富热股</td>
+            <td class="text-red">+5.05%</td>
+            <td class="text-red">10.56亿</td>
+            <td class="sub-text">东方锆业</td>
+            <td class="sub-text">+9.98%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">7</td>
+            <td><span class="badge-concept">概念</span> 昨日打二板以上表现</td>
+            <td class="text-red">+4.99%</td>
+            <td class="text-red">1.75亿</td>
+            <td class="sub-text">旭光电子</td>
+            <td class="sub-text">+10.00%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">8</td>
+            <td><span class="badge-concept">概念</span> 题材股</td>
+            <td class="text-red">+4.77%</td>
+            <td class="text-green">-15.91亿</td>
+            <td class="sub-text">东方锆业</td>
+            <td class="sub-text">+9.98%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">9</td>
+            <td><span class="badge-industry">行业</span> 磷肥及磷化工</td>
+            <td class="text-red">+4.61%</td>
+            <td class="text-red">4.38亿</td>
+            <td class="sub-text">川发龙蟒</td>
+            <td class="sub-text">+9.98%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">10</td>
+            <td><span class="badge-industry">行业</span> 钼</td>
+            <td class="text-red">+4.60%</td>
+            <td class="text-green">-450.73万</td>
+            <td class="sub-text">金钼股份</td>
+            <td class="sub-text">+5.92%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">11</td>
+            <td><span class="badge-industry">行业</span> 通信线缆及配套</td>
+            <td class="text-red">+4.57%</td>
+            <td class="text-red">20.71亿</td>
+            <td class="sub-text">特发信息</td>
+            <td class="sub-text">+9.99%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">12</td>
+            <td><span class="badge-industry">行业</span> 有色金属·小金属</td>
+            <td class="text-red">+4.56%</td>
+            <td class="text-red">18.45亿</td>
+            <td class="sub-text">东方锆业</td>
+            <td class="sub-text">+9.98%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">13</td>
+            <td><span class="badge-industry">行业</span> 图片媒体</td>
+            <td class="text-red">+4.24%</td>
+            <td class="text-green">-1080.85万</td>
+            <td class="sub-text">视觉中国</td>
+            <td class="sub-text">+4.24%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">14</td>
+            <td><span class="badge-concept">概念</span> 碳化硅</td>
+            <td class="text-red">+4.16%</td>
+            <td class="text-red">20.58亿</td>
+            <td class="sub-text">三孚股份</td>
+            <td class="sub-text">+10.00%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">15</td>
+            <td><span class="badge-industry">行业</span> 非金属材料Ⅲ</td>
+            <td class="text-red">+4.10%</td>
+            <td class="text-red">3.72亿</td>
+            <td class="sub-text">力量钻石</td>
+            <td class="sub-text">+20.00%</td>
+        </tr></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <h2>⭐ 热门股票 TOP50</h2>
+        <div class="table-card">
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>#</th><th>名称</th><th>代码</th><th>板块</th><th>最新价</th><th>涨跌幅</th><th>成交额</th><th>换手率</th><th>主力净流入</th></tr></thead>
+                    <tbody>
+        <tr>
+            <td class="rank-cell">1</td>
+            <td><a href="https://quote.eastmoney.com/0.300308.html" target="_blank" class="stock-link">中际旭创</a></td>
+            <td class="sub-text">300308</td>
+            <td class="sub-text">通信·通信设备</td>
+            <td class="text-red">1398.00</td>
+            <td class="text-red">+2.20%</td>
+            <td>108.63亿</td>
+            <td>0.71%</td>
+            <td class="text-red">4588.35万</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">2</td>
+            <td><a href="https://quote.eastmoney.com/1.603986.html" target="_blank" class="stock-link">兆易创新</a></td>
+            <td class="sub-text">603986</td>
+            <td class="sub-text">电子·半导体</td>
+            <td class="text-red">666.21</td>
+            <td class="text-red">+5.92%</td>
+            <td>108.60亿</td>
+            <td>2.50%</td>
+            <td class="text-green">-3.36亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">3</td>
+            <td><a href="https://quote.eastmoney.com/0.000725.html" target="_blank" class="stock-link">京东方Ａ</a></td>
+            <td class="sub-text">000725</td>
+            <td class="sub-text">电子·光学光电子</td>
+            <td class="text-red">7.06</td>
+            <td class="text-red">+7.79%</td>
+            <td>93.06亿</td>
+            <td>3.79%</td>
+            <td class="text-red">7371.92万</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">4</td>
+            <td><a href="https://quote.eastmoney.com/1.600487.html" target="_blank" class="stock-link">亨通光电</a></td>
+            <td class="sub-text">600487</td>
+            <td class="sub-text">通信·通信设备</td>
+            <td class="text-red">121.13</td>
+            <td class="text-red">+9.12%</td>
+            <td>81.21亿</td>
+            <td>2.80%</td>
+            <td class="text-red">6.93亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">5</td>
+            <td><a href="https://quote.eastmoney.com/1.601138.html" target="_blank" class="stock-link">工业富联</a></td>
+            <td class="sub-text">601138</td>
+            <td class="sub-text">电子·消费电子</td>
+            <td class="text-red">79.00</td>
+            <td class="text-red">+1.18%</td>
+            <td>73.24亿</td>
+            <td>0.47%</td>
+            <td class="text-green">-7.19亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">6</td>
+            <td><a href="https://quote.eastmoney.com/0.300502.html" target="_blank" class="stock-link">新易盛</a></td>
+            <td class="sub-text">300502</td>
+            <td class="sub-text">通信·通信设备</td>
+            <td class="text-red">586.82</td>
+            <td class="text-red">+0.92%</td>
+            <td>71.44亿</td>
+            <td>0.98%</td>
+            <td class="text-green">-3.42亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">7</td>
+            <td><a href="https://quote.eastmoney.com/0.002384.html" target="_blank" class="stock-link">东山精密</a></td>
+            <td class="sub-text">002384</td>
+            <td class="sub-text">电子·元件</td>
+            <td class="text-green">272.96</td>
+            <td class="text-green">-0.01%</td>
+            <td>69.55亿</td>
+            <td>1.84%</td>
+            <td class="text-green">-8.48亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">8</td>
+            <td><a href="https://quote.eastmoney.com/0.300274.html" target="_blank" class="stock-link">阳光电源</a></td>
+            <td class="sub-text">300274</td>
+            <td class="sub-text">电力设备·光伏设备</td>
+            <td class="text-red">162.10</td>
+            <td class="text-red">+10.29%</td>
+            <td>68.97亿</td>
+            <td>2.80%</td>
+            <td class="text-red">8.90亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">9</td>
+            <td><a href="https://quote.eastmoney.com/1.688008.html" target="_blank" class="stock-link">澜起科技</a></td>
+            <td class="sub-text">688008</td>
+            <td class="sub-text">电子·半导体</td>
+            <td class="text-red">283.72</td>
+            <td class="text-red">+5.12%</td>
+            <td>65.99亿</td>
+            <td>2.06%</td>
+            <td class="text-green">-2557.49万</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">10</td>
+            <td><a href="https://quote.eastmoney.com/1.600584.html" target="_blank" class="stock-link">长电科技</a></td>
+            <td class="sub-text">600584</td>
+            <td class="sub-text">电子·半导体</td>
+            <td class="text-red">87.90</td>
+            <td class="text-red">+5.87%</td>
+            <td>60.50亿</td>
+            <td>3.88%</td>
+            <td class="text-red">3.23亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">11</td>
+            <td><a href="https://quote.eastmoney.com/0.300285.html" target="_blank" class="stock-link">国瓷材料</a></td>
+            <td class="sub-text">300285</td>
+            <td class="sub-text">电子·电子化学品Ⅱ</td>
+            <td class="text-red">97.35</td>
+            <td class="text-red">+8.73%</td>
+            <td>59.43亿</td>
+            <td>7.32%</td>
+            <td class="text-green">-3.72亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">12</td>
+            <td><a href="https://quote.eastmoney.com/1.688256.html" target="_blank" class="stock-link">寒武纪</a></td>
+            <td class="sub-text">688256</td>
+            <td class="sub-text">电子·半导体</td>
+            <td class="text-green">1484.89</td>
+            <td class="text-green">-1.50%</td>
+            <td>58.27亿</td>
+            <td>0.63%</td>
+            <td class="text-red">1921.88万</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">13</td>
+            <td><a href="https://quote.eastmoney.com/1.600522.html" target="_blank" class="stock-link">中天科技</a></td>
+            <td class="sub-text">600522</td>
+            <td class="sub-text">通信·通信设备</td>
+            <td class="text-red">60.66</td>
+            <td class="text-red">+7.27%</td>
+            <td>54.48亿</td>
+            <td>2.68%</td>
+            <td class="text-red">2.25亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">14</td>
+            <td><a href="https://quote.eastmoney.com/0.002281.html" target="_blank" class="stock-link">光迅科技</a></td>
+            <td class="sub-text">002281</td>
+            <td class="sub-text">通信·通信设备</td>
+            <td class="text-red">273.80</td>
+            <td class="text-red">+2.85%</td>
+            <td>51.75亿</td>
+            <td>2.42%</td>
+            <td class="text-green">-3.27亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">15</td>
+            <td><a href="https://quote.eastmoney.com/0.300475.html" target="_blank" class="stock-link">香农芯创</a></td>
+            <td class="sub-text">300475</td>
+            <td class="sub-text">电子·其他电子Ⅱ</td>
+            <td class="text-red">281.38</td>
+            <td class="text-red">+10.40%</td>
+            <td>47.57亿</td>
+            <td>3.89%</td>
+            <td class="text-red">3.20亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">16</td>
+            <td><a href="https://quote.eastmoney.com/1.688525.html" target="_blank" class="stock-link">佰维存储</a></td>
+            <td class="sub-text">688525</td>
+            <td class="sub-text">电子·半导体</td>
+            <td class="text-red">403.19</td>
+            <td class="text-red">+4.40%</td>
+            <td>47.07亿</td>
+            <td>2.51%</td>
+            <td class="text-green">-5364.92万</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">17</td>
+            <td><a href="https://quote.eastmoney.com/0.300433.html" target="_blank" class="stock-link">蓝思科技</a></td>
+            <td class="sub-text">300433</td>
+            <td class="sub-text">电子·消费电子</td>
+            <td class="text-green">55.39</td>
+            <td class="text-green">-0.68%</td>
+            <td>46.85亿</td>
+            <td>1.68%</td>
+            <td class="text-green">-5.23亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">18</td>
+            <td><a href="https://quote.eastmoney.com/1.688981.html" target="_blank" class="stock-link">中芯国际</a></td>
+            <td class="sub-text">688981</td>
+            <td class="sub-text">电子·半导体</td>
+            <td class="text-red">145.93</td>
+            <td class="text-red">+3.72%</td>
+            <td>45.11亿</td>
+            <td>1.58%</td>
+            <td class="text-red">1.42亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">19</td>
+            <td><a href="https://quote.eastmoney.com/0.300476.html" target="_blank" class="stock-link">胜宏科技</a></td>
+            <td class="sub-text">300476</td>
+            <td class="sub-text">电子·元件</td>
+            <td class="text-red">372.55</td>
+            <td class="text-red">+0.96%</td>
+            <td>44.11亿</td>
+            <td>1.38%</td>
+            <td class="text-green">-1.74亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">20</td>
+            <td><a href="https://quote.eastmoney.com/1.600183.html" target="_blank" class="stock-link">生益科技</a></td>
+            <td class="sub-text">600183</td>
+            <td class="sub-text">电子·元件</td>
+            <td class="text-red">188.71</td>
+            <td class="text-red">+2.63%</td>
+            <td>44.08亿</td>
+            <td>0.98%</td>
+            <td class="text-red">2413.61万</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">21</td>
+            <td><a href="https://quote.eastmoney.com/0.300394.html" target="_blank" class="stock-link">天孚通信</a></td>
+            <td class="sub-text">300394</td>
+            <td class="sub-text">通信·通信设备</td>
+            <td class="text-red">337.90</td>
+            <td class="text-red">+0.39%</td>
+            <td>43.60亿</td>
+            <td>1.19%</td>
+            <td class="text-green">-5.56亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">22</td>
+            <td><a href="https://quote.eastmoney.com/0.300750.html" target="_blank" class="stock-link">宁德时代</a></td>
+            <td class="sub-text">300750</td>
+            <td class="sub-text">电力设备·电池</td>
+            <td class="text-red">392.54</td>
+            <td class="text-red">+0.25%</td>
+            <td>43.25亿</td>
+            <td>0.26%</td>
+            <td class="text-green">-5.57亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">23</td>
+            <td><a href="https://quote.eastmoney.com/0.000657.html" target="_blank" class="stock-link">中钨高新</a></td>
+            <td class="sub-text">000657</td>
+            <td class="sub-text">有色金属·小金属</td>
+            <td class="text-red">107.82</td>
+            <td class="text-red">+9.48%</td>
+            <td>42.66亿</td>
+            <td>2.76%</td>
+            <td class="text-red">1.79亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">24</td>
+            <td><a href="https://quote.eastmoney.com/0.300179.html" target="_blank" class="stock-link">四方达</a></td>
+            <td class="sub-text">300179</td>
+            <td class="sub-text">机械设备·通用设备</td>
+            <td class="text-red">57.48</td>
+            <td class="text-red">+20.00%</td>
+            <td>40.80亿</td>
+            <td>19.35%</td>
+            <td class="text-red">4.24亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">25</td>
+            <td><a href="https://quote.eastmoney.com/1.600392.html" target="_blank" class="stock-link">盛和资源</a></td>
+            <td class="sub-text">600392</td>
+            <td class="sub-text">有色金属·小金属</td>
+            <td class="text-red">33.81</td>
+            <td class="text-red">+6.79%</td>
+            <td>40.79亿</td>
+            <td>7.01%</td>
+            <td class="text-green">-3.06亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">26</td>
+            <td><a href="https://quote.eastmoney.com/0.301308.html" target="_blank" class="stock-link">江波龙</a></td>
+            <td class="sub-text">301308</td>
+            <td class="sub-text">电子·半导体</td>
+            <td class="text-red">609.38</td>
+            <td class="text-red">+5.47%</td>
+            <td>40.45亿</td>
+            <td>2.41%</td>
+            <td class="text-red">2.04亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">27</td>
+            <td><a href="https://quote.eastmoney.com/1.600549.html" target="_blank" class="stock-link">厦门钨业</a></td>
+            <td class="sub-text">600549</td>
+            <td class="sub-text">有色金属·小金属</td>
+            <td class="text-red">93.36</td>
+            <td class="text-red">+8.67%</td>
+            <td>40.36亿</td>
+            <td>2.82%</td>
+            <td class="text-red">3.85亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">28</td>
+            <td><a href="https://quote.eastmoney.com/1.688041.html" target="_blank" class="stock-link">海光信息</a></td>
+            <td class="sub-text">688041</td>
+            <td class="sub-text">电子·半导体</td>
+            <td class="text-red">333.09</td>
+            <td class="text-red">+1.55%</td>
+            <td>39.25亿</td>
+            <td>0.51%</td>
+            <td class="text-green">-2.32亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">29</td>
+            <td><a href="https://quote.eastmoney.com/0.002436.html" target="_blank" class="stock-link">兴森科技</a></td>
+            <td class="sub-text">002436</td>
+            <td class="sub-text">电子·元件</td>
+            <td class="text-red">54.06</td>
+            <td class="text-red">+3.84%</td>
+            <td>39.10亿</td>
+            <td>4.79%</td>
+            <td class="text-red">327.92万</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">30</td>
+            <td><a href="https://quote.eastmoney.com/0.300408.html" target="_blank" class="stock-link">三环集团</a></td>
+            <td class="sub-text">300408</td>
+            <td class="sub-text">电子·元件</td>
+            <td class="text-red">161.31</td>
+            <td class="text-red">+2.17%</td>
+            <td>38.82亿</td>
+            <td>1.30%</td>
+            <td class="text-green">-3046.16万</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">31</td>
+            <td><a href="https://quote.eastmoney.com/0.300136.html" target="_blank" class="stock-link">信维通信</a></td>
+            <td class="sub-text">300136</td>
+            <td class="sub-text">电子·消费电子</td>
+            <td class="text-green">104.25</td>
+            <td class="text-green">-2.98%</td>
+            <td>38.42亿</td>
+            <td>4.47%</td>
+            <td class="text-green">-6.97亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">32</td>
+            <td><a href="https://quote.eastmoney.com/0.002491.html" target="_blank" class="stock-link">通鼎互联</a></td>
+            <td class="sub-text">002491</td>
+            <td class="sub-text">通信·通信设备</td>
+            <td class="text-red">33.51</td>
+            <td class="text-red">+6.11%</td>
+            <td>38.12亿</td>
+            <td>9.56%</td>
+            <td class="text-green">-1.50亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">33</td>
+            <td><a href="https://quote.eastmoney.com/0.300857.html" target="_blank" class="stock-link">协创数据</a></td>
+            <td class="sub-text">300857</td>
+            <td class="sub-text">电子·消费电子</td>
+            <td class="text-red">308.39</td>
+            <td class="text-red">+11.03%</td>
+            <td>36.92亿</td>
+            <td>2.55%</td>
+            <td class="text-red">4.25亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">34</td>
+            <td><a href="https://quote.eastmoney.com/0.000988.html" target="_blank" class="stock-link">华工科技</a></td>
+            <td class="sub-text">000988</td>
+            <td class="sub-text">机械设备·自动化设备</td>
+            <td class="text-red">180.01</td>
+            <td class="text-red">+1.39%</td>
+            <td>36.42亿</td>
+            <td>2.02%</td>
+            <td class="text-green">-2.93亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">35</td>
+            <td><a href="https://quote.eastmoney.com/0.300548.html" target="_blank" class="stock-link">长芯博创</a></td>
+            <td class="sub-text">300548</td>
+            <td class="sub-text">通信·通信设备</td>
+            <td class="text-red">299.30</td>
+            <td class="text-red">+6.14%</td>
+            <td>35.12亿</td>
+            <td>4.26%</td>
+            <td class="text-red">2.58亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">36</td>
+            <td><a href="https://quote.eastmoney.com/0.002463.html" target="_blank" class="stock-link">沪电股份</a></td>
+            <td class="sub-text">002463</td>
+            <td class="sub-text">电子·元件</td>
+            <td class="text-red">150.03</td>
+            <td class="text-red">+1.44%</td>
+            <td>34.77亿</td>
+            <td>1.21%</td>
+            <td class="text-green">-2.45亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">37</td>
+            <td><a href="https://quote.eastmoney.com/1.600176.html" target="_blank" class="stock-link">中国巨石</a></td>
+            <td class="sub-text">600176</td>
+            <td class="sub-text">建筑材料·玻璃玻纤</td>
+            <td class="text-red">55.35</td>
+            <td class="text-red">+3.46%</td>
+            <td>34.50亿</td>
+            <td>1.57%</td>
+            <td class="text-green">-1.30亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">38</td>
+            <td><a href="https://quote.eastmoney.com/0.300319.html" target="_blank" class="stock-link">麦捷科技</a></td>
+            <td class="sub-text">300319</td>
+            <td class="sub-text">电子·元件</td>
+            <td class="text-red">31.06</td>
+            <td class="text-red">+11.89%</td>
+            <td>34.01亿</td>
+            <td>13.25%</td>
+            <td class="text-green">-1.65亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">39</td>
+            <td><a href="https://quote.eastmoney.com/0.002475.html" target="_blank" class="stock-link">立讯精密</a></td>
+            <td class="sub-text">002475</td>
+            <td class="sub-text">电子·消费电子</td>
+            <td class="text-green">69.46</td>
+            <td class="text-green">-0.67%</td>
+            <td>33.94亿</td>
+            <td>0.67%</td>
+            <td class="text-green">-2.88亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">40</td>
+            <td><a href="https://quote.eastmoney.com/1.601869.html" target="_blank" class="stock-link">长飞光纤</a></td>
+            <td class="sub-text">601869</td>
+            <td class="sub-text">通信·通信设备</td>
+            <td class="text-red">518.71</td>
+            <td class="text-red">+10.00%</td>
+            <td>33.93亿</td>
+            <td>1.64%</td>
+            <td class="text-red">8.41亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">41</td>
+            <td><a href="https://quote.eastmoney.com/0.002185.html" target="_blank" class="stock-link">华天科技</a></td>
+            <td class="sub-text">002185</td>
+            <td class="sub-text">电子·半导体</td>
+            <td class="text-red">20.31</td>
+            <td class="text-red">+3.57%</td>
+            <td>33.88亿</td>
+            <td>5.08%</td>
+            <td class="text-green">-1.12亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">42</td>
+            <td><a href="https://quote.eastmoney.com/1.600667.html" target="_blank" class="stock-link">太极实业</a></td>
+            <td class="sub-text">600667</td>
+            <td class="sub-text">建筑装饰·工程咨询服务Ⅱ</td>
+            <td class="text-red">22.71</td>
+            <td class="text-red">+8.56%</td>
+            <td>33.57亿</td>
+            <td>7.19%</td>
+            <td class="text-green">-1.60亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">43</td>
+            <td><a href="https://quote.eastmoney.com/0.000636.html" target="_blank" class="stock-link">风华高科</a></td>
+            <td class="sub-text">000636</td>
+            <td class="sub-text">电子·元件</td>
+            <td class="text-green">73.53</td>
+            <td class="text-green">-1.43%</td>
+            <td>33.29亿</td>
+            <td>3.90%</td>
+            <td class="text-green">-1.87亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">44</td>
+            <td><a href="https://quote.eastmoney.com/0.002156.html" target="_blank" class="stock-link">通富微电</a></td>
+            <td class="sub-text">002156</td>
+            <td class="sub-text">电子·半导体</td>
+            <td class="text-red">70.47</td>
+            <td class="text-red">+3.22%</td>
+            <td>32.86亿</td>
+            <td>3.09%</td>
+            <td class="text-green">-7148.35万</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">45</td>
+            <td><a href="https://quote.eastmoney.com/1.603993.html" target="_blank" class="stock-link">洛阳钼业</a></td>
+            <td class="sub-text">603993</td>
+            <td class="sub-text">有色金属·工业金属</td>
+            <td class="text-red">20.58</td>
+            <td class="text-red">+2.69%</td>
+            <td>32.79亿</td>
+            <td>0.93%</td>
+            <td class="text-red">1.55亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">46</td>
+            <td><a href="https://quote.eastmoney.com/1.600460.html" target="_blank" class="stock-link">士兰微</a></td>
+            <td class="sub-text">600460</td>
+            <td class="sub-text">电子·半导体</td>
+            <td class="text-red">45.66</td>
+            <td class="text-red">+9.16%</td>
+            <td>32.56亿</td>
+            <td>4.34%</td>
+            <td class="text-red">1.35亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">47</td>
+            <td><a href="https://quote.eastmoney.com/0.002008.html" target="_blank" class="stock-link">大族激光</a></td>
+            <td class="sub-text">002008</td>
+            <td class="sub-text">机械设备·自动化设备</td>
+            <td class="text-red">139.39</td>
+            <td class="text-red">+3.33%</td>
+            <td>32.44亿</td>
+            <td>2.47%</td>
+            <td class="text-red">1.77亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">48</td>
+            <td><a href="https://quote.eastmoney.com/0.000063.html" target="_blank" class="stock-link">中兴通讯</a></td>
+            <td class="sub-text">000063</td>
+            <td class="sub-text">通信·通信设备</td>
+            <td class="text-red">39.30</td>
+            <td class="text-red">+3.72%</td>
+            <td>32.39亿</td>
+            <td>2.08%</td>
+            <td class="text-red">5.80亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">49</td>
+            <td><a href="https://quote.eastmoney.com/1.601991.html" target="_blank" class="stock-link">大唐发电</a></td>
+            <td class="sub-text">601991</td>
+            <td class="sub-text">公用事业·电力</td>
+            <td class="text-red">8.48</td>
+            <td class="text-red">+3.16%</td>
+            <td>31.59亿</td>
+            <td>3.14%</td>
+            <td class="text-red">4.21亿</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">50</td>
+            <td><a href="https://quote.eastmoney.com/0.000960.html" target="_blank" class="stock-link">锡业股份</a></td>
+            <td class="sub-text">000960</td>
+            <td class="sub-text">有色金属·小金属</td>
+            <td class="text-red">45.91</td>
+            <td class="text-red">+9.99%</td>
+            <td>31.45亿</td>
+            <td>4.23%</td>
+            <td class="text-red">5.44亿</td>
+        </tr></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+<div class="stat-value text-red">39.30亿</div>
+        <div class="stat-sub">概念板块 · 主力净流入合计</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">机构主导板块</div>
+        <div class="stat-value text-red">0</div>
+        <div class="stat-sub">超大单占比&gt;50%的板块数</div>
+    </div></div>
+        
+        <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">
+            超大单占比高 → 机构/主力资金主导，行情持续性可能更强；散户单占比高 → 短期情绪驱动，波动风险大。
+        </p>
+    </div>
+    
+</div>
+    </div>
+    
+<div style="display:flex;gap:18px;margin-top:12px;font-size:12px;color:var(--text-muted);flex-wrap:wrap;">
+        <span>📊 评分维度：<b style="color:#f87171;">资金面 35%</b>（主力净流入占比）</span>
+        <span><b style="color:#60a5fa;">估值面 35%</b>（PE+PB 同板块相对排名）</span>
+        <span><b style="color:#fbbf24;">动量面 30%</b>（涨幅合理性，2%~8%区间最优）</span>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:var(--text-secondary);">
+        ⚠️ 评分仅在同板块内相对比较，不构成买入建议。高评分说明该标在同类题材中资金+估值+动量的综合性价比更高。
+    </div>
+        </div>
+    </div>
+    
+<div class="stat-value text-red">35.12亿</div>
+        <div class="stat-sub">概念板块 · 主力净流入合计</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">机构主导板块</div>
+        <div class="stat-value text-red">0</div>
+        <div class="stat-sub">超大单占比&gt;50%的板块数</div>
+    </div></div>
+        
+        <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">
+            超大单占比高 → 机构/主力资金主导，行情持续性可能更强；散户单占比高 → 短期情绪驱动，波动风险大。
+        </p>
+    </div>
+    
+</div>
+    </div>
+    
+<div style="display:flex;gap:18px;margin-top:12px;font-size:12px;color:var(--text-muted);flex-wrap:wrap;">
+        <span>📊 评分维度：<b style="color:#f87171;">资金面 35%</b>（主力净流入占比）</span>
+        <span><b style="color:#60a5fa;">估值面 35%</b>（PE+PB 同板块相对排名）</span>
+        <span><b style="color:#fbbf24;">动量面 30%</b>（涨幅合理性，2%~8%区间最优）</span>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:var(--text-secondary);">
+        ⚠️ 评分仅在同板块内相对比较，不构成买入建议。高评分说明该标在同类题材中资金+估值+动量的综合性价比更高。
+    </div>
+        </div>
+    </div>
+    
+<div class="stat-value text-red">非银金融</div>
+            <div class="stat-change text-red">75.3% 上涨</div>
+            <div class="stat-sub">涨61 / 跌20 · 均涨幅+1.92%</div>
+        </div>
+        <div class="stat-card" style="border-color:#ef4444;">
+            <div class="stat-label">🥈 第2名</div>
+            <div class="stat-value text-red">建筑材料</div>
+            <div class="stat-change text-red">53.6% 上涨</div>
+            <div class="stat-sub">涨15 / 跌13 · 均涨幅+1.79%</div>
+        </div>
+        <div class="stat-card" style="border-color:#eab308;">
+            <div class="stat-label">🥉 第3名</div>
+            <div class="stat-value text-red">有色金属</div>
+            <div class="stat-change text-red">50.0% 上涨</div>
+            <div class="stat-sub">涨76 / 跌76 · 均涨幅+1.26%</div>
+        </div>
+        <div class="stat-card" style="border-color:#eab308;">
+            <div class="stat-label">4️⃣ 第4名</div>
+            <div class="stat-value text-red">煤炭</div>
+            <div class="stat-change text-red">46.9% 上涨</div>
+            <div class="stat-sub">涨15 / 跌17 · 均涨幅-0.29%</div>
+        </div>
+        <div class="stat-card" style="border-color:#eab308;">
+            <div class="stat-label">5️⃣ 第5名</div>
+            <div class="stat-value text-red">基础化工</div>
+            <div class="stat-change text-red">40.3% 上涨</div>
+            <div class="stat-sub">涨128 / 跌190 · 均涨幅+1.87%</div>
+        </div></div>
+        <div class="table-card" style="margin-top:14px;">
+            <h3>📋 全行业红色占比排行</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr>
+                        <th>#</th><th>申万行业</th><th>红绿占比</th><th>上涨</th><th>下跌</th><th>均涨跌幅</th><th>细分板块</th>
+                    </tr></thead>
+                    <tbody>
+            <tr>
+                <td class="rank-cell" style="font-weight:700;">1</td>
+                <td style="font-weight:700;">非银金融</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:75.3%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">75%</div>
+                        <div style="background:var(--accent-green);width:24.700000000000003%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">25%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 61</td>
+                <td class="text-green">🏠 20</td>
+                <td class="text-red">+1.92%</td>
+                <td class="sub-text">3个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="font-weight:700;">2</td>
+                <td style="font-weight:700;">建筑材料</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:53.6%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">54%</div>
+                        <div style="background:var(--accent-green);width:46.4%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">46%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 15</td>
+                <td class="text-green">🏠 13</td>
+                <td class="text-red">+1.79%</td>
+                <td class="sub-text">3个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="font-weight:700;">3</td>
+                <td style="font-weight:700;">有色金属</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:50.0%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">50%</div>
+                        <div style="background:var(--accent-green);width:50.0%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">50%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 76</td>
+                <td class="text-green">🏠 76</td>
+                <td class="text-red">+1.26%</td>
+                <td class="sub-text">7个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="font-weight:700;">4</td>
+                <td style="font-weight:700;">煤炭</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:46.9%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">47%</div>
+                        <div style="background:var(--accent-green);width:53.1%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">53%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 15</td>
+                <td class="text-green">🏠 17</td>
+                <td class="text-red">-0.29%</td>
+                <td class="sub-text">2个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="font-weight:700;">5</td>
+                <td style="font-weight:700;">基础化工</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:40.3%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">40%</div>
+                        <div style="background:var(--accent-green);width:59.7%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">60%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 128</td>
+                <td class="text-green">🏠 190</td>
+                <td class="text-red">+1.87%</td>
+                <td class="sub-text">5个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">6</td>
+                <td style="">通信</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:35.9%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">36%</div>
+                        <div style="background:var(--accent-green);width:64.1%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">64%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 14</td>
+                <td class="text-green">🏠 25</td>
+                <td class="text-red">-0.83%</td>
+                <td class="sub-text">1个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">7</td>
+                <td style="">电子</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:32.4%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">32%</div>
+                        <div style="background:var(--accent-green);width:67.6%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">68%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 153</td>
+                <td class="text-green">🏠 319</td>
+                <td class="text-red">-0.66%</td>
+                <td class="sub-text">10个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">8</td>
+                <td style="">电力设备</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:32.4%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">32%</div>
+                        <div style="background:var(--accent-green);width:67.6%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">68%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 79</td>
+                <td class="text-green">🏠 165</td>
+                <td class="text-red">-0.71%</td>
+                <td class="sub-text">2个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">9</td>
+                <td style="">钢铁</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:27.3%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">27%</div>
+                        <div style="background:var(--accent-green);width:72.7%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">73%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 6</td>
+                <td class="text-green">🏠 16</td>
+                <td class="text-red">-0.91%</td>
+                <td class="sub-text">2个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">10</td>
+                <td style="">石油石化</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:27.3%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">27%</div>
+                        <div style="background:var(--accent-green);width:72.7%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">73%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 12</td>
+                <td class="text-green">🏠 32</td>
+                <td class="text-red">-1.21%</td>
+                <td class="sub-text">2个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">11</td>
+                <td style="">传媒</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:27.2%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">27%</div>
+                        <div style="background:var(--accent-green);width:72.8%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">73%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 22</td>
+                <td class="text-green">🏠 59</td>
+                <td class="text-red">-0.81%</td>
+                <td class="sub-text">4个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">12</td>
+                <td style="">食品饮料</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:26.7%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">27%</div>
+                        <div style="background:var(--accent-green);width:73.3%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">73%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 24</td>
+                <td class="text-green">🏠 66</td>
+                <td class="text-red">-1.02%</td>
+                <td class="sub-text">4个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">13</td>
+                <td style="">公用事业</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:20.0%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">20%</div>
+                        <div style="background:var(--accent-green);width:80.0%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">80%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 22</td>
+                <td class="text-green">🏠 88</td>
+                <td class="text-red">-1.24%</td>
+                <td class="sub-text">1个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">14</td>
+                <td style="">建筑装饰</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:20.0%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">20%</div>
+                        <div style="background:var(--accent-green);width:80.0%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">80%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 4</td>
+                <td class="text-green">🏠 16</td>
+                <td class="text-red">-1.44%</td>
+                <td class="sub-text">1个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">15</td>
+                <td style="">轻工制造</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:20.0%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">20%</div>
+                        <div style="background:var(--accent-green);width:80.0%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">80%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 5</td>
+                <td class="text-green">🏠 20</td>
+                <td class="text-red">-1.49%</td>
+                <td class="sub-text">1个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">16</td>
+                <td style="">机械设备</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:18.8%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">19%</div>
+                        <div style="background:var(--accent-green);width:81.2%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">81%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 6</td>
+                <td class="text-green">🏠 26</td>
+                <td class="text-red">-1.46%</td>
+                <td class="sub-text">1个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">17</td>
+                <td style="">交通运输</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:13.9%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">14%</div>
+                        <div style="background:var(--accent-green);width:86.1%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">86%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 5</td>
+                <td class="text-green">🏠 31</td>
+                <td class="text-red">-1.57%</td>
+                <td class="sub-text">1个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">18</td>
+                <td style="">农林牧渔</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:13.6%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">14%</div>
+                        <div style="background:var(--accent-green);width:86.4%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">86%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 3</td>
+                <td class="text-green">🏠 19</td>
+                <td class="text-red">-1.22%</td>
+                <td class="sub-text">1个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">19</td>
+                <td style="">商贸零售</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:12.1%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">12%</div>
+                        <div style="background:var(--accent-green);width:87.9%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">88%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 4</td>
+                <td class="text-green">🏠 29</td>
+                <td class="text-red">-1.67%</td>
+                <td class="sub-text">2个细分</td>
+            </tr></tbody>
+                </table>
+            </div>
+        </div>
+        <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">
+            📐 数据来源：东方财富行业板块成分股涨跌家数聚合 · 红色占比 = 上涨家数/总家数
+        </p>
+    </div>
+    
+<div class="stat-value text-green">-90.47亿</div>
+        <div class="stat-sub">概念板块 · 主力净流入合计</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">机构主导板块</div>
+        <div class="stat-value text-red">0</div>
+        <div class="stat-sub">超大单占比&gt;50%的板块数</div>
+    </div></div>
+        
+        <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">
+            超大单占比高 → 机构/主力资金主导，行情持续性可能更强；散户单占比高 → 短期情绪驱动，波动风险大。
+        </p>
+    </div>
+    
+</div>
+    </div>
+    
+<div style="display:flex;gap:18px;margin-top:12px;font-size:12px;color:var(--text-muted);flex-wrap:wrap;">
+        <span>📊 评分维度：<b style="color:#f87171;">资金面 35%</b>（主力净流入占比）</span>
+        <span><b style="color:#60a5fa;">估值面 35%</b>（PE+PB 同板块相对排名）</span>
+        <span><b style="color:#fbbf24;">动量面 30%</b>（涨幅合理性，2%~8%区间最优）</span>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:var(--text-secondary);">
+        ⚠️ 评分仅在同板块内相对比较，不构成买入建议。高评分说明该标在同类题材中资金+估值+动量的综合性价比更高。
+    </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>🗺️ 申万一级行业热力排行（仿大盘云图）</h2>
+        <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 14px;">
+            聚合东方财富所有行业细分板块到<b>申万一级行业</b>，以板块内个股上涨/下跌家数计算红色占比。
+            红色占比越高 → 该行业做多氛围越浓，类似大盘云图热力图效果。
+        </p>
+        <div class="stats-grid">
+        <div class="stat-card" style="border-color:#ef4444;">
+            <div class="stat-label">🥇 第1名</div>
+            <div class="stat-value text-red">煤炭</div>
+            <div class="stat-change text-red">81.8% 上涨</div>
+            <div class="stat-sub">涨27 / 跌6 · 均涨幅+0.61%</div>
+        </div>
+        <div class="stat-card" style="border-color:#ef4444;">
+            <div class="stat-label">🥈 第2名</div>
+            <div class="stat-value text-red">非银金融</div>
+            <div class="stat-change text-red">77.5% 上涨</div>
+            <div class="stat-sub">涨62 / 跌18 · 均涨幅+2.08%</div>
+        </div>
+        <div class="stat-card" style="border-color:#ef4444;">
+            <div class="stat-label">🥉 第3名</div>
+            <div class="stat-value text-red">有色金属</div>
+            <div class="stat-change text-red">60.0% 上涨</div>
+            <div class="stat-sub">涨90 / 跌60 · 均涨幅+2.23%</div>
+        </div>
+        <div class="stat-card" style="border-color:#ef4444;">
+            <div class="stat-label">4️⃣ 第4名</div>
+            <div class="stat-value text-red">建筑材料</div>
+            <div class="stat-change text-red">53.8% 上涨</div>
+            <div class="stat-sub">涨14 / 跌12 · 均涨幅+1.48%</div>
+        </div>
+        <div class="stat-card" style="border-color:#eab308;">
+            <div class="stat-label">5️⃣ 第5名</div>
+            <div class="stat-value text-red">基础化工</div>
+            <div class="stat-change text-red">49.2% 上涨</div>
+            <div class="stat-sub">涨157 / 跌162 · 均涨幅+2.48%</div>
+        </div></div>
+        <div class="table-card" style="margin-top:14px;">
+            <h3>📋 全行业红色占比排行</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr>
+                        <th>#</th><th>申万行业</th><th>红绿占比</th><th>上涨</th><th>下跌</th><th>均涨跌幅</th><th>细分板块</th>
+                    </tr></thead>
+                    <tbody>
+            <tr>
+                <td class="rank-cell" style="font-weight:700;">1</td>
+                <td style="font-weight:700;">煤炭</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:81.8%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">82%</div>
+                        <div style="background:var(--accent-green);width:18.200000000000003%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">18%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 27</td>
+                <td class="text-green">🏠 6</td>
+                <td class="text-red">+0.61%</td>
+                <td class="sub-text">2个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="font-weight:700;">2</td>
+                <td style="font-weight:700;">非银金融</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:77.5%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">78%</div>
+                        <div style="background:var(--accent-green);width:22.5%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">22%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 62</td>
+                <td class="text-green">🏠 18</td>
+                <td class="text-red">+2.08%</td>
+                <td class="sub-text">3个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="font-weight:700;">3</td>
+                <td style="font-weight:700;">有色金属</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:60.0%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">60%</div>
+                        <div style="background:var(--accent-green);width:40.0%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">40%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 90</td>
+                <td class="text-green">🏠 60</td>
+                <td class="text-red">+2.23%</td>
+                <td class="sub-text">7个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="font-weight:700;">4</td>
+                <td style="font-weight:700;">建筑材料</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:53.8%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">54%</div>
+                        <div style="background:var(--accent-green);width:46.2%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">46%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 14</td>
+                <td class="text-green">🏠 12</td>
+                <td class="text-red">+1.48%</td>
+                <td class="sub-text">3个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="font-weight:700;">5</td>
+                <td style="font-weight:700;">基础化工</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:49.2%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">49%</div>
+                        <div style="background:var(--accent-green);width:50.8%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">51%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 157</td>
+                <td class="text-green">🏠 162</td>
+                <td class="text-red">+2.48%</td>
+                <td class="sub-text">5个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">6</td>
+                <td style="">电力设备</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:38.2%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">38%</div>
+                        <div style="background:var(--accent-green);width:61.8%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">62%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 104</td>
+                <td class="text-green">🏠 168</td>
+                <td class="text-red">-0.43%</td>
+                <td class="sub-text">3个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">7</td>
+                <td style="">钢铁</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:33.3%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">33%</div>
+                        <div style="background:var(--accent-green);width:66.7%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">67%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 7</td>
+                <td class="text-green">🏠 14</td>
+                <td class="text-red">-0.50%</td>
+                <td class="sub-text">2个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">8</td>
+                <td style="">通信</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:33.3%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">33%</div>
+                        <div style="background:var(--accent-green);width:66.7%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">67%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 13</td>
+                <td class="text-green">🏠 26</td>
+                <td class="text-red">-0.65%</td>
+                <td class="sub-text">1个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">9</td>
+                <td style="">电子</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:33.0%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">33%</div>
+                        <div style="background:var(--accent-green);width:67.0%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">67%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 87</td>
+                <td class="text-green">🏠 177</td>
+                <td class="text-red">-0.65%</td>
+                <td class="sub-text">7个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">10</td>
+                <td style="">轻工制造</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:28.0%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">28%</div>
+                        <div style="background:var(--accent-green);width:72.0%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">72%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 7</td>
+                <td class="text-green">🏠 18</td>
+                <td class="text-red">-1.58%</td>
+                <td class="sub-text">1个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">11</td>
+                <td style="">食品饮料</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:27.0%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">27%</div>
+                        <div style="background:var(--accent-green);width:73.0%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">73%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 24</td>
+                <td class="text-green">🏠 65</td>
+                <td class="text-red">-0.98%</td>
+                <td class="sub-text">4个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">12</td>
+                <td style="">石油石化</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:26.7%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">27%</div>
+                        <div style="background:var(--accent-green);width:73.3%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">73%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 12</td>
+                <td class="text-green">🏠 33</td>
+                <td class="text-red">-1.14%</td>
+                <td class="sub-text">3个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">13</td>
+                <td style="">机械设备</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:25.8%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">26%</div>
+                        <div style="background:var(--accent-green);width:74.2%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">74%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 8</td>
+                <td class="text-green">🏠 23</td>
+                <td class="text-red">-1.11%</td>
+                <td class="sub-text">1个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">14</td>
+                <td style="">传媒</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:25.3%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">25%</div>
+                        <div style="background:var(--accent-green);width:74.7%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">75%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 20</td>
+                <td class="text-green">🏠 59</td>
+                <td class="text-red">-0.90%</td>
+                <td class="sub-text">4个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">15</td>
+                <td style="">社会服务</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:20.6%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">21%</div>
+                        <div style="background:var(--accent-green);width:79.4%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">79%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 7</td>
+                <td class="text-green">🏠 27</td>
+                <td class="text-red">-1.29%</td>
+                <td class="sub-text">1个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">16</td>
+                <td style="">公用事业</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:19.6%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">20%</div>
+                        <div style="background:var(--accent-green);width:80.4%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">80%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 21</td>
+                <td class="text-green">🏠 86</td>
+                <td class="text-red">-1.20%</td>
+                <td class="sub-text">1个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">17</td>
+                <td style="">建筑装饰</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:19.0%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">19%</div>
+                        <div style="background:var(--accent-green);width:81.0%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">81%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 4</td>
+                <td class="text-green">🏠 17</td>
+                <td class="text-red">-1.62%</td>
+                <td class="sub-text">1个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">18</td>
+                <td style="">商贸零售</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:13.3%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">13%</div>
+                        <div style="background:var(--accent-green);width:86.7%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">87%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 2</td>
+                <td class="text-green">🏠 13</td>
+                <td class="text-red">-1.47%</td>
+                <td class="sub-text">1个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">19</td>
+                <td style="">农林牧渔</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:12.8%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">13%</div>
+                        <div style="background:var(--accent-green);width:87.2%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">87%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 5</td>
+                <td class="text-green">🏠 34</td>
+                <td class="text-red">-1.16%</td>
+                <td class="sub-text">2个细分</td>
+            </tr>
+            <tr>
+                <td class="rank-cell" style="">20</td>
+                <td style="">交通运输</td>
+                <td>
+                    <div style="display:flex;height:18px;border-radius:3px;overflow:hidden;width:200px;">
+                        <div style="background:var(--accent-red);width:11.1%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">11%</div>
+                        <div style="background:var(--accent-green);width:88.9%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">89%</div>
+                    </div>
+                </td>
+                <td class="text-red">🏠 4</td>
+                <td class="text-green">🏠 32</td>
+                <td class="text-red">-1.44%</td>
+                <td class="sub-text">1个细分</td>
+            </tr></tbody>
+                </table>
+            </div>
+        </div>
+        <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">
+            📐 数据来源：东方财富行业板块成分股涨跌家数聚合 · 红色占比 = 上涨家数/总家数
+        </p>
+    </div>
+    
+    <div class="section">
+        <h2>🔍 热门题材资金流向概览</h2>
+        <div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-label">热门题材资金总和</div>
+        <div class="stat-value text-red">48.84亿</div>
+        <div class="stat-sub">概念板块 · 主力净流入合计</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">机构主导板块</div>
+        <div class="stat-value text-red">0</div>
+        <div class="stat-sub">超大单占比&gt;50%的板块数</div>
+    </div></div>
+        
+        <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">
+            超大单占比高 → 机构/主力资金主导，行情持续性可能更强；散户单占比高 → 短期情绪驱动，波动风险大。
+        </p>
+    </div>
+    
+    <div class="section">
+        <h2>📊 热门板块资金流向深度拆解</h2>
+        <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 14px;">
+            超大单+大单=主力净流入，拆分各渠道资金可判断资金结构质量。
+            <span style="color: #f87171;">主力流入且超大单占比较高</span> → 机构认可度高；
+            <span style="color: #fb923c;">散户主导流入</span> → 需警惕持续性。
+        </p>
+        <div class="table-card">
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr>
+                        <th>#</th><th>板块</th><th>涨跌幅</th><th>主力净流入</th>
+                        <th>超大单</th><th>大单</th><th>中单</th><th>小单</th>
+                        <th>领涨股</th><th>涨幅</th>
+                    </tr></thead>
+                    <tbody>
+        <tr>
+            <td class="rank-cell">1</td>
+            <td><span class="badge-industry">行业</span> 钼</td>
+            <td class="text-red">+8.14%</td>
+            <td class="text-red"><b>3.31亿</b></td>
+            <td class="text-green">-4.23亿</td>
+            <td class="text-red">329.72万</td>
+            <td class="text-red">9254.46万</td>
+            <td class="text-red">3.27亿</td>
+            <td class="sub-text">金钼股份</td>
+            <td class="sub-text">+10.00%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">2</td>
+            <td><span class="badge-industry">行业</span> 钛白粉</td>
+            <td class="text-red">+8.10%</td>
+            <td class="text-red"><b>2.82亿</b></td>
+            <td class="text-green">-1.85亿</td>
+            <td class="text-red">2.13亿</td>
+            <td class="text-green">-9719.71万</td>
+            <td class="text-red">6870.65万</td>
+            <td class="sub-text">金浦钛业</td>
+            <td class="sub-text">+9.96%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">3</td>
+            <td><span class="badge-industry">行业</span> 磷肥及磷化工</td>
+            <td class="text-red">+7.65%</td>
+            <td class="text-red"><b>7.48亿</b></td>
+            <td class="text-green">-4.22亿</td>
+            <td class="text-red">5.22亿</td>
+            <td class="text-green">-3.26亿</td>
+            <td class="text-red">2.27亿</td>
+            <td class="sub-text">川发龙蟒</td>
+            <td class="sub-text">+9.98%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">4</td>
+            <td><span class="badge-concept">概念</span> 培育钻石</td>
+            <td class="text-red">+7.14%</td>
+            <td class="text-red"><b>18.50亿</b></td>
+            <td class="text-green">-7.24亿</td>
+            <td class="text-red">19.97亿</td>
+            <td class="text-green">-10.09亿</td>
+            <td class="text-green">-1.48亿</td>
+            <td class="sub-text">黄河旋风</td>
+            <td class="sub-text">+9.99%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">5</td>
+            <td><span class="badge-industry">行业</span> 钨</td>
+            <td class="text-red">+6.74%</td>
+            <td class="text-red"><b>4.10亿</b></td>
+            <td class="text-red">6427.65万</td>
+            <td class="text-red">3.71亿</td>
+            <td class="text-green">-4.74亿</td>
+            <td class="text-red">3827.07万</td>
+            <td class="sub-text">中钨高新</td>
+            <td class="sub-text">+8.96%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">6</td>
+            <td><span class="badge-industry">行业</span> 铅锌</td>
+            <td class="text-red">+6.70%</td>
+            <td class="text-red"><b>13.07亿</b></td>
+            <td class="text-green">-7.72亿</td>
+            <td class="text-red">11.53亿</td>
+            <td class="text-green">-5.34亿</td>
+            <td class="text-red">1.54亿</td>
+            <td class="sub-text">锌业股份</td>
+            <td class="sub-text">+10.10%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">7</td>
+            <td><span class="badge-concept">概念</span> 钛白粉概念</td>
+            <td class="text-red">+5.95%</td>
+            <td class="text-red"><b>3.27亿</b></td>
+            <td class="text-green">-2.38亿</td>
+            <td class="text-red">3.56亿</td>
+            <td class="text-green">-8832.56万</td>
+            <td class="text-green">-2948.07万</td>
+            <td class="sub-text">金浦钛业</td>
+            <td class="sub-text">+9.96%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">8</td>
+            <td><span class="badge-industry">行业</span> 橡胶助剂</td>
+            <td class="text-red">+5.53%</td>
+            <td class="text-red"><b>1.08亿</b></td>
+            <td class="text-green">-1.55亿</td>
+            <td class="text-red">3425.38万</td>
+            <td class="text-red">4762.06万</td>
+            <td class="text-red">7336.33万</td>
+            <td class="sub-text">阳谷华泰</td>
+            <td class="sub-text">+8.19%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">9</td>
+            <td><span class="badge-industry">行业</span> 氟化工</td>
+            <td class="text-red">+5.32%</td>
+            <td class="text-red"><b>8.21亿</b></td>
+            <td class="text-green">-3.93亿</td>
+            <td class="text-red">10.68亿</td>
+            <td class="text-green">-4.28亿</td>
+            <td class="text-green">-2.47亿</td>
+            <td class="sub-text">多氟多</td>
+            <td class="sub-text">+10.01%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">10</td>
+            <td><span class="badge-industry">行业</span> 小金属</td>
+            <td class="text-red">+4.82%</td>
+            <td class="text-red"><b>14.50亿</b></td>
+            <td class="text-green">-3.25亿</td>
+            <td class="text-red">15.94亿</td>
+            <td class="text-green">-11.19亿</td>
+            <td class="text-green">-1.44亿</td>
+            <td class="sub-text">东方锆业</td>
+            <td class="sub-text">+9.98%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">11</td>
+            <td><span class="badge-industry">行业</span> 其他小金属</td>
+            <td class="text-red">+4.68%</td>
+            <td class="text-red"><b>16.14亿</b></td>
+            <td class="text-green">-5.56亿</td>
+            <td class="text-red">20.22亿</td>
+            <td class="text-green">-10.52亿</td>
+            <td class="text-green">-4.08亿</td>
+            <td class="sub-text">东方锆业</td>
+            <td class="sub-text">+9.98%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">12</td>
+            <td><span class="badge-concept">概念</span> 磷化工</td>
+            <td class="text-red">+4.49%</td>
+            <td class="text-red"><b>27.08亿</b></td>
+            <td class="text-green">-16.74亿</td>
+            <td class="text-red">19.79亿</td>
+            <td class="text-green">-9.72亿</td>
+            <td class="text-red">7.29亿</td>
+            <td class="sub-text">川发龙蟒</td>
+            <td class="sub-text">+9.98%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">13</td>
+            <td><span class="badge-industry">行业</span> 保险Ⅲ</td>
+            <td class="text-red">+4.47%</td>
+            <td class="text-red"><b>4.53亿</b></td>
+            <td class="text-green">-3.82亿</td>
+            <td class="text-red">4.48亿</td>
+            <td class="text-green">-7180.61万</td>
+            <td class="text-red">544.35万</td>
+            <td class="sub-text">新华保险</td>
+            <td class="sub-text">+6.79%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">14</td>
+            <td><span class="badge-industry">行业</span> 保险Ⅱ</td>
+            <td class="text-red">+4.47%</td>
+            <td class="text-red"><b>4.53亿</b></td>
+            <td class="text-green">-3.82亿</td>
+            <td class="text-red">4.48亿</td>
+            <td class="text-green">-7180.61万</td>
+            <td class="text-red">544.35万</td>
+            <td class="sub-text">新华保险</td>
+            <td class="sub-text">+6.79%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">15</td>
+            <td><span class="badge-industry">行业</span> 防水材料</td>
+            <td class="text-red">+3.92%</td>
+            <td class="text-red"><b>7475.87万</b></td>
+            <td class="text-green">-3979.52万</td>
+            <td class="text-red">5175.25万</td>
+            <td class="text-green">-3496.35万</td>
+            <td class="text-red">2300.62万</td>
+            <td class="sub-text">科顺股份</td>
+            <td class="sub-text">+9.24%</td>
+        </tr></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>🎯 热门题材高性价比标的 TOP30</h2>
+        <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 14px;">
+            从今日涨幅靠前的<b>概念题材</b>板块中，筛选主力资金持续流入、估值相对合理、涨幅不过度透支的标的。
+            <br>筛选条件：PE有效 + 主力净流入为正 + 剔除ST/风险警示。
+        </p>
+        <div class="table-card">
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr>
+                        <th>#</th><th>名称</th><th>代码</th><th>所属题材</th><th>涨跌幅</th>
+                        <th>最新价</th><th>PE</th><th>PB</th><th>主力净流入</th>
+                        <th>综合评分</th>
+                    </tr></thead>
+                    <tbody>
+        <tr>
+            <td class="rank-cell">1</td>
+            <td><a href="https://quote.eastmoney.com/1.603661.html" target="_blank" class="stock-link">恒林股份</a></td>
+            <td class="sub-text">603661</td>
+            <td class="sub-text">培育钻石</td>
+            <td class="text-red">+10.01%</td>
+            <td>35.73</td>
+            <td class="sub-text">21.1%</td>
+            <td class="sub-text">1.34%</td>
+            <td class="text-red">5072.94万</td>
+            <td><span style="color:#22c55e;font-weight:700;">0.939</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">2</td>
+            <td><a href="https://quote.eastmoney.com/0.002386.html" target="_blank" class="stock-link">天原股份</a></td>
+            <td class="sub-text">002386</td>
+            <td class="sub-text">钛白粉概念</td>
+            <td class="text-red">+9.98%</td>
+            <td>6.06</td>
+            <td class="sub-text">25.8%</td>
+            <td class="sub-text">1.03%</td>
+            <td class="text-red">6654.77万</td>
+            <td><span style="color:#22c55e;font-weight:700;">0.923</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">3</td>
+            <td><a href="https://quote.eastmoney.com/0.002312.html" target="_blank" class="stock-link">川发龙蟒</a></td>
+            <td class="sub-text">002312</td>
+            <td class="sub-text">磷化工</td>
+            <td class="text-red">+9.98%</td>
+            <td>9.26</td>
+            <td class="sub-text">48.2%</td>
+            <td class="sub-text">1.83%</td>
+            <td class="text-red">1.03亿</td>
+            <td><span style="color:#22c55e;font-weight:700;">0.864</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">4</td>
+            <td><a href="https://quote.eastmoney.com/1.605580.html" target="_blank" class="stock-link">恒盛能源</a></td>
+            <td class="sub-text">605580</td>
+            <td class="sub-text">培育钻石</td>
+            <td class="text-red">+9.99%</td>
+            <td>26.43</td>
+            <td class="sub-text">38.1%</td>
+            <td class="sub-text">7.48%</td>
+            <td class="text-red">7048.29万</td>
+            <td><span style="color:#22c55e;font-weight:700;">0.853</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">5</td>
+            <td><a href="https://quote.eastmoney.com/0.000519.html" target="_blank" class="stock-link">中兵红箭</a></td>
+            <td class="sub-text">000519</td>
+            <td class="sub-text">培育钻石</td>
+            <td class="text-red">+8.60%</td>
+            <td>22.09</td>
+            <td class="sub-text">140.8%</td>
+            <td class="sub-text">2.97%</td>
+            <td class="text-red">3.14亿</td>
+            <td><span style="color:#22c55e;font-weight:700;">0.769</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">6</td>
+            <td><a href="https://quote.eastmoney.com/0.002538.html" target="_blank" class="stock-link">ST司特</a></td>
+            <td class="sub-text">002538</td>
+            <td class="sub-text">磷化工</td>
+            <td class="text-red">+4.96%</td>
+            <td>5.92</td>
+            <td class="sub-text">18.3%</td>
+            <td class="sub-text">0.97%</td>
+            <td class="text-red">1191.70万</td>
+            <td><span style="color:#22c55e;font-weight:700;">0.762</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">7</td>
+            <td><a href="https://quote.eastmoney.com/1.688028.html" target="_blank" class="stock-link">沃尔德</a></td>
+            <td class="sub-text">688028</td>
+            <td class="sub-text">培育钻石</td>
+            <td class="text-red">+5.00%</td>
+            <td>123.16</td>
+            <td class="sub-text">163.9%</td>
+            <td class="sub-text">9.29%</td>
+            <td class="text-red">6942.40万</td>
+            <td><span style="color:#22c55e;font-weight:700;">0.722</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">8</td>
+            <td><a href="https://quote.eastmoney.com/1.920809.html" target="_blank" class="stock-link">安达科技</a></td>
+            <td class="sub-text">920809</td>
+            <td class="sub-text">磷化工</td>
+            <td class="text-red">+11.52%</td>
+            <td>9.29</td>
+            <td class="sub-text">21.4%</td>
+            <td class="sub-text">3.41%</td>
+            <td class="text-red">5986.20万</td>
+            <td><span style="color:#eab308;font-weight:700;">0.667</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">9</td>
+            <td><a href="https://quote.eastmoney.com/1.603077.html" target="_blank" class="stock-link">和邦生物</a></td>
+            <td class="sub-text">603077</td>
+            <td class="sub-text">磷化工</td>
+            <td class="text-red">+5.17%</td>
+            <td>2.44</td>
+            <td class="sub-text">31.0%</td>
+            <td class="sub-text">1.21%</td>
+            <td class="text-red">2870.66万</td>
+            <td><span style="color:#eab308;font-weight:700;">0.652</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">10</td>
+            <td><a href="https://quote.eastmoney.com/0.002601.html" target="_blank" class="stock-link">龙佰集团</a></td>
+            <td class="sub-text">002601</td>
+            <td class="sub-text">钛白粉概念</td>
+            <td class="text-red">+10.01%</td>
+            <td>17.03</td>
+            <td class="sub-text">54.3%</td>
+            <td class="sub-text">1.78%</td>
+            <td class="text-red">1.70亿</td>
+            <td><span style="color:#eab308;font-weight:700;">0.651</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">11</td>
+            <td><a href="https://quote.eastmoney.com/1.600141.html" target="_blank" class="stock-link">XD兴发集</a></td>
+            <td class="sub-text">600141</td>
+            <td class="sub-text">磷化工</td>
+            <td class="text-red">+10.01%</td>
+            <td>41.97</td>
+            <td class="sub-text">49.1%</td>
+            <td class="sub-text">2.07%</td>
+            <td class="text-red">3.51亿</td>
+            <td><span style="color:#eab308;font-weight:700;">0.635</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">12</td>
+            <td><a href="https://quote.eastmoney.com/0.301071.html" target="_blank" class="stock-link">力量钻石</a></td>
+            <td class="sub-text">301071</td>
+            <td class="sub-text">培育钻石</td>
+            <td class="text-red">+20.00%</td>
+            <td>91.92</td>
+            <td class="sub-text">166.2%</td>
+            <td class="sub-text">4.54%</td>
+            <td class="text-red">4.20亿</td>
+            <td><span style="color:#eab308;font-weight:700;">0.627</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">13</td>
+            <td><a href="https://quote.eastmoney.com/0.002145.html" target="_blank" class="stock-link">钛能化学</a></td>
+            <td class="sub-text">002145</td>
+            <td class="sub-text">磷化工</td>
+            <td class="text-red">+4.91%</td>
+            <td>4.91</td>
+            <td class="sub-text">45.0%</td>
+            <td class="sub-text">1.55%</td>
+            <td class="text-red">1739.98万</td>
+            <td><span style="color:#eab308;font-weight:700;">0.601</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">14</td>
+            <td><a href="https://quote.eastmoney.com/1.601117.html" target="_blank" class="stock-link">中国化学</a></td>
+            <td class="sub-text">601117</td>
+            <td class="sub-text">磷化工</td>
+            <td class="text-red">+3.84%</td>
+            <td>8.39</td>
+            <td class="sub-text">8.2%</td>
+            <td class="sub-text">0.74%</td>
+            <td class="text-red">9030.57万</td>
+            <td><span style="color:#eab308;font-weight:700;">0.586</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">15</td>
+            <td><a href="https://quote.eastmoney.com/0.300316.html" target="_blank" class="stock-link">晶盛机电</a></td>
+            <td class="sub-text">300316</td>
+            <td class="sub-text">培育钻石</td>
+            <td class="text-red">+4.42%</td>
+            <td>56.27</td>
+            <td class="sub-text">179.6%</td>
+            <td class="sub-text">4.33%</td>
+            <td class="text-red">4519.84万</td>
+            <td><span style="color:#eab308;font-weight:700;">0.574</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">16</td>
+            <td><a href="https://quote.eastmoney.com/0.300919.html" target="_blank" class="stock-link">中伟新材</a></td>
+            <td class="sub-text">300919</td>
+            <td class="sub-text">磷化工</td>
+            <td class="text-red">+3.95%</td>
+            <td>50.56</td>
+            <td class="sub-text">23.7%</td>
+            <td class="sub-text">2.25%</td>
+            <td class="text-red">5552.98万</td>
+            <td><span style="color:#eab308;font-weight:700;">0.570</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">17</td>
+            <td><a href="https://quote.eastmoney.com/0.002170.html" target="_blank" class="stock-link">芭田股份</a></td>
+            <td class="sub-text">002170</td>
+            <td class="sub-text">磷化工</td>
+            <td class="text-red">+3.88%</td>
+            <td>11.24</td>
+            <td class="sub-text">10.0%</td>
+            <td class="sub-text">3.12%</td>
+            <td class="text-red">1789.88万</td>
+            <td><span style="color:#eab308;font-weight:700;">0.570</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">18</td>
+            <td><a href="https://quote.eastmoney.com/1.603993.html" target="_blank" class="stock-link">洛阳钼业</a></td>
+            <td class="sub-text">603993</td>
+            <td class="sub-text">磷化工</td>
+            <td class="text-red">+6.04%</td>
+            <td>21.25</td>
+            <td class="sub-text">14.7%</td>
+            <td class="sub-text">5.49%</td>
+            <td class="text-red">11.19亿</td>
+            <td><span style="color:#eab308;font-weight:700;">0.564</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">19</td>
+            <td><a href="https://quote.eastmoney.com/0.300505.html" target="_blank" class="stock-link">川金诺</a></td>
+            <td class="sub-text">300505</td>
+            <td class="sub-text">磷化工</td>
+            <td class="text-red">+11.48%</td>
+            <td>23.79</td>
+            <td class="sub-text">39.7%</td>
+            <td class="sub-text">2.30%</td>
+            <td class="text-red">7855.44万</td>
+            <td><span style="color:#eab308;font-weight:700;">0.553</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">20</td>
+            <td><a href="https://quote.eastmoney.com/0.002978.html" target="_blank" class="stock-link">安宁股份</a></td>
+            <td class="sub-text">002978</td>
+            <td class="sub-text">钛白粉概念</td>
+            <td class="text-red">+5.98%</td>
+            <td>28.73</td>
+            <td class="sub-text">22.2%</td>
+            <td class="sub-text">1.55%</td>
+            <td class="text-red">742.91万</td>
+            <td><span style="color:#eab308;font-weight:700;">0.549</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">21</td>
+            <td><a href="https://quote.eastmoney.com/0.301358.html" target="_blank" class="stock-link">湖南裕能</a></td>
+            <td class="sub-text">301358</td>
+            <td class="sub-text">磷化工</td>
+            <td class="text-red">+12.67%</td>
+            <td>85.72</td>
+            <td class="sub-text">13.3%</td>
+            <td class="sub-text">3.86%</td>
+            <td class="text-red">2.88亿</td>
+            <td><span style="color:#eab308;font-weight:700;">0.545</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">22</td>
+            <td><a href="https://quote.eastmoney.com/0.002237.html" target="_blank" class="stock-link">恒邦股份</a></td>
+            <td class="sub-text">002237</td>
+            <td class="sub-text">磷化工</td>
+            <td class="text-red">+5.68%</td>
+            <td>15.25</td>
+            <td class="sub-text">29.9%</td>
+            <td class="sub-text">1.64%</td>
+            <td class="text-red">471.42万</td>
+            <td><span style="color:#eab308;font-weight:700;">0.543</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">23</td>
+            <td><a href="https://quote.eastmoney.com/0.000830.html" target="_blank" class="stock-link">鲁西化工</a></td>
+            <td class="sub-text">000830</td>
+            <td class="sub-text">磷化工</td>
+            <td class="text-red">+3.89%</td>
+            <td>13.08</td>
+            <td class="sub-text">14.2%</td>
+            <td class="sub-text">1.31%</td>
+            <td class="text-red">819.69万</td>
+            <td><span style="color:#eab308;font-weight:700;">0.536</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">24</td>
+            <td><a href="https://quote.eastmoney.com/1.600916.html" target="_blank" class="stock-link">中国黄金</a></td>
+            <td class="sub-text">600916</td>
+            <td class="sub-text">培育钻石</td>
+            <td class="text-green">-0.66%</td>
+            <td>7.50</td>
+            <td class="sub-text">19.2%</td>
+            <td class="sub-text">1.79%</td>
+            <td class="text-red">576.86万</td>
+            <td><span style="color:#eab308;font-weight:700;">0.520</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">25</td>
+            <td><a href="https://quote.eastmoney.com/0.000422.html" target="_blank" class="stock-link">湖北宜化</a></td>
+            <td class="sub-text">000422</td>
+            <td class="sub-text">磷化工</td>
+            <td class="text-red">+6.25%</td>
+            <td>13.95</td>
+            <td class="sub-text">20.9%</td>
+            <td class="sub-text">2.55%</td>
+            <td class="text-red">2014.80万</td>
+            <td><span style="color:#eab308;font-weight:700;">0.516</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">26</td>
+            <td><a href="https://quote.eastmoney.com/1.600078.html" target="_blank" class="stock-link">澄星股份</a></td>
+            <td class="sub-text">600078</td>
+            <td class="sub-text">磷化工</td>
+            <td class="text-red">+10.02%</td>
+            <td>14.61</td>
+            <td class="sub-text">89.6%</td>
+            <td class="sub-text">5.80%</td>
+            <td class="text-red">1.21亿</td>
+            <td><span style="color:#f97316;font-weight:700;">0.498</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">27</td>
+            <td><a href="https://quote.eastmoney.com/0.000902.html" target="_blank" class="stock-link">新洋丰</a></td>
+            <td class="sub-text">000902</td>
+            <td class="sub-text">磷化工</td>
+            <td class="text-red">+3.54%</td>
+            <td>12.58</td>
+            <td class="sub-text">7.9%</td>
+            <td class="sub-text">1.31%</td>
+            <td class="text-red">18.69万</td>
+            <td><span style="color:#f97316;font-weight:700;">0.495</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">28</td>
+            <td><a href="https://quote.eastmoney.com/1.600096.html" target="_blank" class="stock-link">云天化</a></td>
+            <td class="sub-text">600096</td>
+            <td class="sub-text">磷化工</td>
+            <td class="text-red">+7.14%</td>
+            <td>31.68</td>
+            <td class="sub-text">10.1%</td>
+            <td class="sub-text">2.42%</td>
+            <td class="text-red">1.76亿</td>
+            <td><span style="color:#f97316;font-weight:700;">0.494</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">29</td>
+            <td><a href="https://quote.eastmoney.com/0.002942.html" target="_blank" class="stock-link">新农股份</a></td>
+            <td class="sub-text">002942</td>
+            <td class="sub-text">磷化工</td>
+            <td class="text-green">-0.91%</td>
+            <td>15.21</td>
+            <td class="sub-text">12.8%</td>
+            <td class="sub-text">1.95%</td>
+            <td class="text-red">78.06万</td>
+            <td><span style="color:#f97316;font-weight:700;">0.467</span></td>
+        </tr>
+        <tr>
+            <td class="rank-cell">30</td>
+            <td><a href="https://quote.eastmoney.com/1.600596.html" target="_blank" class="stock-link">新安股份</a></td>
+            <td class="sub-text">600596</td>
+            <td class="sub-text">磷化工</td>
+            <td class="text-red">+6.83%</td>
+            <td>16.43</td>
+            <td class="sub-text">57.6%</td>
+            <td class="sub-text">1.79%</td>
+            <td class="text-red">7281.63万</td>
+            <td><span style="color:#f97316;font-weight:700;">0.428</span></td>
+        </tr></tbody>
+                </table>
+            </div>
+            
+    <div style="display:flex;gap:18px;margin-top:12px;font-size:12px;color:var(--text-muted);flex-wrap:wrap;">
+        <span>📊 评分维度：<b style="color:#f87171;">资金面 35%</b>（主力净流入占比）</span>
+        <span><b style="color:#60a5fa;">估值面 35%</b>（PE+PB 同板块相对排名）</span>
+        <span><b style="color:#fbbf24;">动量面 30%</b>（涨幅合理性，2%~8%区间最优）</span>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:var(--text-secondary);">
+        ⚠️ 评分仅在同板块内相对比较，不构成买入建议。高评分说明该标在同类题材中资金+估值+动量的综合性价比更高。
+    </div>
+        </div>
+    </div>
+    <div class="section">
+        <h2>📰 影响股市新闻</h2>
+        <div class="news-grid">
+        <a href="http://finance.eastmoney.com/a/202606223777325315.html" target="_blank" class="news-card">
+            <div class="news-title">沪深两市成交额突破1万亿 较上一日此时放量近1500亿</div>
+            <div class="news-meta">东方财富Choice数据 · 2026-06-22 09:52:39</div>
+        </a>
+        <a href="http://finance.eastmoney.com/a/202606223777318770.html" target="_blank" class="news-card">
+            <div class="news-title">光通信概念反复活跃 源杰科技涨超10%续创历史新高</div>
+            <div class="news-meta">东方财富Choice数据 · 2026-06-22 09:51:23</div>
+        </a>
+        <a href="http://finance.eastmoney.com/a/202606223777312492.html" target="_blank" class="news-card">
+            <div class="news-title">港股智谱涨幅一度扩大至40%</div>
+            <div class="news-meta">东方财富Choice数据 · 2026-06-22 09:49:24</div>
+        </a>
+        <a href="http://finance.eastmoney.com/a/202606223777286333.html" target="_blank" class="news-card">
+            <div class="news-title">AI应用端局部异动 华凯易佰触及20cm涨停</div>
+            <div class="news-meta">东方财富Choice数据 · 2026-06-22 09:46:53</div>
+        </a>
+        <a href="http://finance.eastmoney.com/a/202606223777284332.html" target="_blank" class="news-card">
+            <div class="news-title">源杰科技股价续创新高突破1800元</div>
+            <div class="news-meta">东方财富Choice数据 · 2026-06-22 09:46:08</div>
+        </a>
+        <a href="http://finance.eastmoney.com/a/202606223777283187.html" target="_blank" class="news-card">
+            <div class="news-title">港股主要指数盘初下挫 恒生指数跌超2%</div>
+            <div class="news-meta">东方财富Choice数据 · 2026-06-22 09:45:32</div>
+        </a>
+        <a href="http://finance.eastmoney.com/a/202606223777305383.html" target="_blank" class="news-card">
+            <div class="news-title">港股科技分化加剧！港股通信息技术ETF易方达（159196）逆市涨2.92%，AI算力主线持续活跃</div>
+            <div class="news-meta">东方财富证券 · 2026-06-22 09:44:54</div>
+        </a>
+        <a href="http://finance.eastmoney.com/a/202606223777282919.html" target="_blank" class="news-card">
+            <div class="news-title">存储芯片概念表现活跃 香农芯创涨超10%</div>
+            <div class="news-meta">东方财富Choice数据 · 2026-06-22 09:44:33</div>
+        </a>
+        <a href="http://finance.eastmoney.com/a/202606223777295686.html" target="_blank" class="news-card">
+            <div class="news-title">金属钴、有色金属板块集体拉升 中钨高新触及涨停</div>
+            <div class="news-meta">东方财富Choice数据 · 2026-06-22 09:43:00</div>
+        </a>
+        <a href="http://finance.eastmoney.com/a/202606223777282824.html" target="_blank" class="news-card">
+            <div class="news-title">半导体设备板块延续强势！半导体设备ETF易方达（159558）涨3.70%，成交额突破2.28亿元</div>
+            <div class="news-meta">东方财富证券 · 2026-06-22 09:42:05</div>
+        </a></div>
+    </div>
+    <div class="footer">
+        <p>生成时间：2026-06-22 09:53:34</p>
+        <p>数据来源：东方财富、新浪财经 | 仅供数据整理参考</p>
+        <p class="disclaimer">⚠️ 仅为数据整理，不构成任何投资建议。股市有风险，投资需谨慎。</p>
+    </div>
+</body>
+</html>

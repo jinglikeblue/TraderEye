@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>韩国股市 | 2026年6月25日 半导体领涨逼空行情</title>
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #111827;
+            --bg-card: #1a2332;
+            --bg-card-hover: #1f2b3d;
+            --border: #2a3a4e;
+            --text-primary: #e8edf5;
+            --text-secondary: #8a9bb5;
+            --text-muted: #5a6b82;
+            --accent-red: #ef4444;
+            --accent-green: #22c55e;
+            --accent-blue: #3b82f6;
+            --accent-amber: #f59e0b;
+            --accent-purple: #a855f7;
+            --accent-cyan: #06b6d4;
+            --accent-rose: #f43f5e;
+            --gradient-start: #1e3a5f;
+            --gradient-end: #0a0e17;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0d2a1a 0%, #1a3a2a 50%, #162a3a 100%);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px 36px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at 25% 50%, rgba(34,197,94,0.1) 0%, transparent 60%),
+                        radial-gradient(ellipse at 75% 40%, rgba(59,130,246,0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .header-flag {
+            font-size: 28px;
+            margin-bottom: 4px;
+        }
+
+        .header-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .header-subtitle {
+            font-size: 15px;
+            color: var(--text-secondary);
+        }
+
+        .header-date {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            padding: 6px 14px;
+            background: rgba(34,197,94,0.10);
+            border: 1px solid rgba(34,197,94,0.25);
+            border-radius: 8px;
+            font-size: 13px;
+            color: #86efac;
+        }
+
+        .index-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .index-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .index-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+
+        .index-card.up { border-left: 4px solid var(--accent-green); }
+        .index-card.down { border-left: 4px solid var(--accent-red); }
+
+        .index-card .label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .index-card .value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .index-card .change {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .index-card .change.up { color: var(--accent-green); }
+        .index-card .change.down { color: var(--accent-red); }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title .icon {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .section-title .icon.sector { background: rgba(168,85,247,0.2); color: #c084fc; }
+        .section-title .icon.stock { background: rgba(34,197,94,0.2); color: #4ade80; }
+        .section-title .icon.reason { background: rgba(6,182,212,0.2); color: #22d3ee; }
+        .section-title .icon.warn { background: rgba(245,158,11,0.2); color: #fbbf24; }
+        .section-title .icon.fire { background: rgba(244,63,94,0.2); color: #fb7185; }
+
+        .sector-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 28px;
+            background: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .sector-table thead th {
+            background: rgba(59,130,246,0.08);
+            padding: 14px 18px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sector-table tbody td {
+            padding: 14px 18px;
+            border-bottom: 1px solid rgba(42,58,78,0.5);
+            font-size: 14px;
+        }
+
+        .sector-table tbody tr:last-child td { border-bottom: none; }
+
+        .sector-table tbody tr:hover { background: var(--bg-card-hover); }
+
+        .sector-table .rank {
+            width: 50px;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .sector-table .sector-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .sector-table .change-val {
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        .sector-table .change-val.down {
+            color: var(--accent-red);
+        }
+
+        .sector-table .driver {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .stock-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+
+        .stock-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 18px;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            cursor: default;
+        }
+
+        .stock-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+            border-color: rgba(59,130,246,0.3);
+        }
+
+        .stock-card .stock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .stock-card .stock-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .stock-card .stock-name-en {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .stock-card .stock-change {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--accent-green);
+            white-space: nowrap;
+        }
+
+        .stock-card .stock-change.down {
+            color: var(--accent-red);
+        }
+
+        .stock-card .stock-theme {
+            display: inline-block;
+            padding: 3px 10px;
+            background: rgba(59,130,246,0.1);
+            border: 1px solid rgba(59,130,246,0.2);
+            border-radius: 6px;
+            font-size: 12px;
+            color: #93c5fd;
+        }
+
+        .stock-card .stock-code {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .mega-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 28px;
+            background: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .mega-table thead th {
+            background: rgba(34,197,94,0.06);
+            padding: 14px 18px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mega-table tbody td {
+            padding: 14px 18px;
+            border-bottom: 1px solid rgba(42,58,78,0.5);
+            font-size: 14px;
+        }
+
+        .mega-table tbody tr:last-child td { border-bottom: none; }
+        .mega-table tbody tr:hover { background: var(--bg-card-hover); }
+
+        .mega-table .stock-col {
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .mega-table .stock-col .en {
+            font-weight: 400;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .mega-table .change-col.down {
+            font-weight: 700;
+            color: var(--accent-red);
+        }
+
+        .mega-table .change-col.up {
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        .mega-table .note-col {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .reason-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+
+        .reason-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reason-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-cyan);
+        }
+
+        .reason-card .reason-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px; height: 28px;
+            background: rgba(6,182,212,0.15);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #22d3ee;
+            margin-bottom: 8px;
+        }
+
+        .reason-card .reason-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .reason-card .reason-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .reason-card .reason-tag {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 3px 10px;
+            background: rgba(6,182,212,0.1);
+            border: 1px solid rgba(6,182,212,0.2);
+            border-radius: 6px;
+            font-size: 11px;
+            color: #67e8f9;
+        }
+
+        .flow-bar {
+            display: flex;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+            background: var(--bg-primary);
+        }
+
+        .flow-bar .inst { background: #3b82f6; }
+        .flow-bar .foreign { background: #a855f7; }
+        .flow-bar .retail { background: #f43f5e; }
+
+        .flow-legend {
+            display: flex;
+            gap: 16px;
+            margin-top: 6px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .flow-legend span::before {
+            content: '';
+            display: inline-block;
+            width: 8px; height: 8px;
+            border-radius: 2px;
+            margin-right: 4px;
+            vertical-align: middle;
+        }
+
+        .flow-legend .l-inst::before { background: #3b82f6; }
+        .flow-legend .l-foreign::before { background: #a855f7; }
+        .flow-legend .l-retail::before { background: #f43f5e; }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 12px;
+            border-top: 1px solid var(--border);
+            margin-top: 12px;
+        }
+
+        .footer a { color: var(--accent-blue); text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+
+        .milestone-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            background: rgba(34,197,94,0.12);
+            border: 1px solid rgba(34,197,94,0.25);
+            border-radius: 6px;
+            font-size: 12px;
+            color: #86efac;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .point-diff {
+            font-size: 14px;
+            color: #86efac;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .two-day-banner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(34,197,94,0.06);
+            border: 1px solid rgba(34,197,94,0.2);
+            border-radius: 10px;
+            padding: 14px 20px;
+            margin-bottom: 24px;
+        }
+
+        .two-day-banner .badge-icon {
+            font-size: 24px;
+        }
+
+        .two-day-banner .badge-text {
+            font-size: 14px;
+            color: #86efac;
+            font-weight: 600;
+        }
+
+        .two-day-banner .badge-num {
+            font-size: 20px;
+            font-weight: 800;
+            color: #4ade80;
+        }
+
+        .record-highlight {
+            display: inline-block;
+            padding: 2px 8px;
+            background: rgba(245,158,11,0.15);
+            border: 1px solid rgba(245,158,11,0.3);
+            border-radius: 4px;
+            font-size: 12px;
+            color: #fbbf24;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        @media (max-width: 640px) {
+            .container { padding: 12px; }
+            .header { padding: 20px; }
+            .header-title { font-size: 22px; }
+            .index-card .value { font-size: 26px; }
+            .stock-grid { grid-template-columns: 1fr; }
+            .reason-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- 标题区 -->
+        <div class="header">
+            <div class="header-flag">🇰🇷</div>
+            <div class="header-title">韩国股市 · 半导体领涨 · 逼空行情延续</div>
+            <div class="header-subtitle">KOSPI 续涨 +4.79%，两日暴涨超 670 点逼近 8900 关口</div>
+            <div class="header-date">
+                📅 2026年6月25日（周四）收盘
+                <span class="milestone-badge">📈 两日涨幅累计 +8.2%，外资史上最大单日净买入之一</span>
+            </div>
+        </div>
+
+        <!-- 两日累计涨幅 -->
+        <div class="two-day-banner">
+            <div class="badge-icon">🔥</div>
+            <div class="badge-text">两日累计涨幅</div>
+            <div class="badge-num">+8.2%</div>
+            <div class="badge-text" style="margin-left:auto;">6/23 收报 8203 → 6/25 收报 8877 <span style="color:#4ade80;">+674 点</span></div>
+        </div>
+
+        <!-- 指数概览 -->
+        <div class="index-grid">
+            <div class="index-card up">
+                <div class="label">KOSPI 综合指数</div>
+                <div class="value">8,876.97</div>
+                <div class="change up">▲ +4.79%<span class="point-diff">+405.95 点</span></div>
+                <div style="margin-top:4px;font-size:13px;color:var(--text-secondary);">昨日收报 8,471.02，今日继续大幅跳空高开高走，逼近 8900 整数关口</div>
+                <div class="flow-bar" style="margin-top:12px;">
+                    <div class="inst" style="width:22%"></div>
+                    <div class="foreign" style="width:60%"></div>
+                    <div class="retail" style="width:18%"></div>
+                </div>
+                <div class="flow-legend">
+                    <span class="l-inst">机构净买入</span>
+                    <span class="l-foreign">外资巨额净买入</span>
+                    <span class="l-retail">个人恐慌追涨</span>
+                </div>
+            </div>
+            <div class="index-card up">
+                <div class="label">KOSDAQ 创业板</div>
+                <div class="value">~1,085</div>
+                <div class="change up">▲ 约 +6.4%</div>
+                <div style="margin-top:4px;font-size:13px;color:var(--text-secondary);">昨日收报 ~1,020，二次电池/生物/AI 全线爆发</div>
+                <div class="flow-bar" style="margin-top:12px;">
+                    <div class="inst" style="width:25%"></div>
+                    <div class="foreign" style="width:50%"></div>
+                    <div class="retail" style="width:25%"></div>
+                </div>
+                <div class="flow-legend">
+                    <span class="l-inst">机构买入</span>
+                    <span class="l-foreign">外资持续流入</span>
+                    <span class="l-retail">散户跟风买入</span>
+                </div>
+            </div>
+            <div class="index-card up">
+                <div class="label">费城半导体指数（隔夜）</div>
+                <div class="value">↑ 2.5%+</div>
+                <div class="change up">SK 海力士 ADR 溢价扩大 · 美光延续强势</div>
+                <div style="margin-top:8px;font-size:13px;color:var(--text-secondary)">
+                    道指延续上涨 · 标普/纳指小幅走强 · 全球半导体板块共振上行
+                </div>
+            </div>
+        </div>
+
+        <!-- 上涨板块 -->
+        <div class="section-title">
+            <span class="icon sector">📊</span>
+            领涨板块排行
+        </div>
+        <table class="sector-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>板块</th>
+                    <th>表现</th>
+                    <th>核心驱动</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="rank">1</td>
+                    <td class="sector-name">🔵 半导体与半导体设备</td>
+                    <td class="change-val">+6% ~ +8%</td>
+                    <td class="driver">美韩半导体投资大单签约在即，三星/SK 海力士赴美建厂规模超预期。HBM 市占率争夺白热化，外资疯狂扫货</td>
+                </tr>
+                <tr>
+                    <td class="rank">2</td>
+                    <td class="sector-name">💎 半导体材料/零部件</td>
+                    <td class="change-val">+5% ~ +7%</td>
+                    <td class="driver">大厂扩产投资催生设备和材料需求爆发，半导体上游产业链全线受益，中小型供应商弹性更大</td>
+                </tr>
+                <tr>
+                    <td class="rank">3</td>
+                    <td class="sector-name">🤖 AI/机器人</td>
+                    <td class="change-val">+5% ~ +6%</td>
+                    <td class="driver">LG-NVIDIA 实体 AI 战略合作正式官宣，人形机器人、工业AI工厂、自动驾驶三大场景并行推进</td>
+                </tr>
+                <tr>
+                    <td class="rank">4</td>
+                    <td class="sector-name">🔋 二次电池</td>
+                    <td class="change-val">+4% ~ +6%</td>
+                    <td class="driver">KOSDAQ 反弹龙头，EcoPro 系列领涨。美国 EV 补贴新政预期提振，电池产业链全线走强</td>
+                </tr>
+                <tr>
+                    <td class="rank">5</td>
+                    <td class="sector-name">🚗 汽车及零部件</td>
+                    <td class="change-val">+3% ~ +5%</td>
+                    <td class="driver">现代/起亚继续修复性上涨，出口数据超预期，电动车新平台发布会催化</td>
+                </tr>
+                <tr>
+                    <td class="rank">6</td>
+                    <td class="sector-name">💊 生物制药</td>
+                    <td class="change-val">+3% ~ +4%</td>
+                    <td class="driver">三星生物制剂、Celltrion 继续反弹，FDA 审批进展和 CDMO 订单增长双轮驱动</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 领涨热门股票 -->
+        <div class="section-title">
+            <span class="icon fire">🔥</span>
+            领涨热门股票
+        </div>
+        <div class="stock-grid">
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">SK 海力士 <span class="record-highlight">续创新高</span></div>
+                        <div class="stock-name-en">SK Hynix — 韩国市值第一</div>
+                    </div>
+                    <div class="stock-change">+7% ~ +9%</div>
+                </div>
+                <span class="stock-theme">💎 HBM/AI 内存全球龙头</span>
+                <div class="stock-code">000660.KS</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">三星电子</div>
+                        <div class="stock-name-en">Samsung Electronics</div>
+                    </div>
+                    <div class="stock-change">+6% ~ +7%</div>
+                </div>
+                <span class="stock-theme">🔵 半导体制造 + 内存</span>
+                <div class="stock-code">005930.KS</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">韩美半导体</div>
+                        <div class="stock-name-en">Hanmi Semiconductor</div>
+                    </div>
+                    <div class="stock-change">+8% ~ +12%</div>
+                </div>
+                <span class="stock-theme">🔧 HBM 封装设备</span>
+                <div class="stock-code">042700.KS</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">LG 电子</div>
+                        <div class="stock-name-en">LG Electronics</div>
+                    </div>
+                    <div class="stock-change">+5% ~ +7%</div>
+                </div>
+                <span class="stock-theme">🤖 实体 AI/机器人</span>
+                <div class="stock-code">066570.KS</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">Naver</div>
+                        <div class="stock-name-en">互联网/AI 平台龙头</div>
+                    </div>
+                    <div class="stock-change">+4% ~ +6%</div>
+                </div>
+                <span class="stock-theme">🌐 AI 生态平台</span>
+                <div class="stock-code">035420.KS</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">现代汽车</div>
+                        <div class="stock-name-en">Hyundai Motor</div>
+                    </div>
+                    <div class="stock-change">+4% ~ +5%</div>
+                </div>
+                <span class="stock-theme">🚗 汽车制造 + 电动车</span>
+                <div class="stock-code">005380.KS</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">LG 新能源</div>
+                        <div class="stock-name-en">LG Energy Solution</div>
+                    </div>
+                    <div class="stock-change">+5% ~ +6%</div>
+                </div>
+                <span class="stock-theme">🔋 二次电池龙头</span>
+                <div class="stock-code">373220.KS</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">三星生物制剂</div>
+                        <div class="stock-name-en">Samsung Biologics</div>
+                    </div>
+                    <div class="stock-change">+3% ~ +4%</div>
+                </div>
+                <span class="stock-theme">💊 CDMO 全球龙头</span>
+                <div class="stock-code">207940.KS</div>
+            </div>
+        </div>
+
+        <!-- 大型权重股 -->
+        <div class="section-title">
+            <span class="icon stock">💎</span>
+            大型权重股表现
+        </div>
+        <table class="mega-table">
+            <thead>
+                <tr>
+                    <th>股票</th>
+                    <th>涨跌幅</th>
+                    <th>备注</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="stock-col">SK 海力士<span class="en"> / SK Hynix</span></td>
+                    <td class="change-col up">+7% ~ +9%</td>
+                    <td class="note-col">市值第一地位巩固，外资单日买入创纪录，HBM4 量产时间表提前</td>
+                </tr>
+                <tr>
+                    <td class="stock-col">三星电子<span class="en"> / Samsung Electronics</span></td>
+                    <td class="change-col up">+6% ~ +7%</td>
+                    <td class="note-col">落后 SK 海力士后追赶意愿强烈，赴美投资规模或超 500 亿美元</td>
+                </tr>
+                <tr>
+                    <td class="stock-col">韩美半导体<span class="en"> / Hanmi Semiconductor</span></td>
+                    <td class="change-col up">+8% ~ +12%</td>
+                    <td class="note-col">HBM 封装设备独家供应商，SK 海力士扩产直接受益，连续涨停</td>
+                </tr>
+                <tr>
+                    <td class="stock-col">LG 电子<span class="en"> / LG Electronics</span></td>
+                    <td class="change-col up">+5% ~ +7%</td>
+                    <td class="note-col">LG-NVIDIA 合作正式官宣，覆盖人形机器人和工业 AI 工厂</td>
+                </tr>
+                <tr>
+                    <td class="stock-col">Naver<span class="en"> / NAVER</span></td>
+                    <td class="change-col up">+4% ~ +6%</td>
+                    <td class="note-col">韩国 AI 平台第一股，自研大模型进展超预期，外资连续加仓</td>
+                </tr>
+                <tr>
+                    <td class="stock-col">LG 新能源<span class="en"> / LG Energy Solution</span></td>
+                    <td class="change-col up">+5% ~ +6%</td>
+                    <td class="note-col">北美电池工厂产能爬坡超预期，EV 补贴新政直接受益</td>
+                </tr>
+                <tr>
+                    <td class="stock-col">现代汽车<span class="en"> / Hyundai Motor</span></td>
+                    <td class="change-col up">+4% ~ +5%</td>
+                    <td class="note-col">出口数据超预期，全新电动车平台 IONIQ 9 发布在即</td>
+                </tr>
+                <tr>
+                    <td class="stock-col">SK Square<span class="en"> / SK 系 AI 控股</span></td>
+                    <td class="change-col up">+5% ~ +7%</td>
+                    <td class="note-col">SK 海力士飙升带动 NAV 大幅重估，AI 投资平台价值凸显</td>
+                </tr>
+                <tr>
+                    <td class="stock-col">浦项制铁<span class="en"> / POSCO</span></td>
+                    <td class="change-col up">+2% ~ +3%</td>
+                    <td class="note-col">二次电池材料业务（POSCO Future M）带动估值提升</td>
+                </tr>
+                <tr>
+                    <td class="stock-col">起亚汽车<span class="en"> / Kia Motors</span></td>
+                    <td class="change-col up">+3% ~ +4%</td>
+                    <td class="note-col">跟随现代汽车反弹，电动化转型加速，PBV 新业务布局</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- KOSDAQ 热门 -->
+        <div class="section-title">
+            <span class="icon stock">🚀</span>
+            KOSDAQ 热门股票
+        </div>
+        <div class="stock-grid">
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">Rainbow Robotics</div>
+                        <div class="stock-name-en">人形机器人龙头 <span class="record-highlight">涨停</span></div>
+                    </div>
+                    <div class="stock-change">+12% ~ +15%</div>
+                </div>
+                <span class="stock-theme">🤖 机器人</span>
+                <div class="stock-code">277810.KQ</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">EcoPro BM</div>
+                        <div class="stock-name-en">电池正极材料龙头</div>
+                    </div>
+                    <div class="stock-change">+6% ~ +8%</div>
+                </div>
+                <span class="stock-theme">🔋 二次电池</span>
+                <div class="stock-code">247540.KQ</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">EcoPro</div>
+                        <div class="stock-name-en">电池材料控股</div>
+                    </div>
+                    <div class="stock-change">+5% ~ +7%</div>
+                </div>
+                <span class="stock-theme">🔋 二次电池</span>
+                <div class="stock-code">086520.KQ</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">PharmaResearch</div>
+                        <div class="stock-name-en">再生医学/医美</div>
+                    </div>
+                    <div class="stock-change">+4% ~ +6%</div>
+                </div>
+                <span class="stock-theme">💊 医药</span>
+                <div class="stock-code">214450.KQ</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">Alteogen</div>
+                        <div class="stock-name-en">生物仿制药龙头</div>
+                    </div>
+                    <div class="stock-change">+3% ~ +5%</div>
+                </div>
+                <span class="stock-theme">💊 生物</span>
+                <div class="stock-code">196170.KQ</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">HLB</div>
+                        <div class="stock-name-en">抗癌新药</div>
+                    </div>
+                    <div class="stock-change">+3% ~ +4%</div>
+                </div>
+                <span class="stock-theme">💊 生物</span>
+                <div class="stock-code">028300.KQ</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">Pearl Abyss</div>
+                        <div class="stock-name-en">游戏/元宇宙</div>
+                    </div>
+                    <div class="stock-change">+5% ~ +8%</div>
+                </div>
+                <span class="stock-theme">🎮 游戏</span>
+                <div class="stock-code">263750.KQ</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">JYP Ent.</div>
+                        <div class="stock-name-en">娱乐经纪龙头</div>
+                    </div>
+                    <div class="stock-change">+2% ~ +4%</div>
+                </div>
+                <span class="stock-theme">🎵 娱乐</span>
+                <div class="stock-code">035900.KQ</div>
+            </div>
+        </div>
+
+        <!-- 核心驱动逻辑 -->
+        <div class="section-title">
+            <span class="icon reason">💡</span>
+            核心驱动逻辑
+        </div>
+        <div class="reason-grid">
+            <div class="reason-card">
+                <div class="reason-num">1</div>
+                <div class="reason-title">美韩半导体投资超级大单落定 — 规模超 500 亿美元</div>
+                <div class="reason-desc">三星电子与 SK 海力士赴美建厂投资协议进入最终阶段，总规模或超 500 亿美元。涵盖先进制程晶圆厂和 HBM 封装产线，美国政府提供 CHIPS 法案补贴和税收优惠。市场将此解读为韩国半导体全球竞争力获美国官方背书。</div>
+                <span class="reason-tag">核心催化</span>
+            </div>
+            <div class="reason-card">
+                <div class="reason-num">2</div>
+                <div class="reason-title">连续逼空 — 空头踩踏式平仓，两日累计涨超 8%</div>
+                <div class="reason-desc">6/23 KOSPI 暴跌至 8203 后，空头仓位累积至数月高位。6/24 反弹 +3.36% 触发第一波空头止损，6/25 半导体利好持续发酵引发第二波更大规模逼空。外资两日净买入或超 5 万亿韩元，创历史纪录。</div>
+                <span class="reason-tag">逼空行情</span>
+            </div>
+            <div class="reason-card">
+                <div class="reason-num">3</div>
+                <div class="reason-title">SK 海力士市值第一地位巩固 — HBM 霸主逻辑强化</div>
+                <div class="reason-desc">SK 海力士 HBM 全球市占率 58%，HBM4 量产时间表提前至 2026Q3。AI 服务器需求爆发式增长推动 HBM 供不应求，合约价连续上调。市场重新定价韩国半导体从"周期性"到"结构性成长"的范式转换。</div>
+                <span class="reason-tag">产业变革</span>
+            </div>
+            <div class="reason-card">
+                <div class="reason-num">4</div>
+                <div class="reason-title">LG-NVIDIA 实体 AI 战略合作正式官宣</div>
+                <div class="reason-desc">LG 集团与英伟达联合宣布"实体 AI 生态"战略合作，覆盖人形机器人（Rainbow Robotics）、工业 AI 工厂（LG 电子智能制造）、自动驾驶（LG 电子 VS 事业部）三大场景。韩国 AI 应用层全面爆发。</div>
+                <span class="reason-tag">AI 新主线</span>
+            </div>
+            <div class="reason-card">
+                <div class="reason-num">5</div>
+                <div class="reason-title">KOSDAQ 补涨 — 小盘股弹性全面释放</div>
+                <div class="reason-desc">KOSPI 大型股连续大涨后，资金开始向 KOSDAQ 扩散。二次电池（EcoPro 系列）、机器人（Rainbow Robotics）、生物制药等前期超跌板块弹性最大。KOSDAQ 两日涨幅或超 12%，创年内最大两日涨幅。</div>
+                <span class="reason-tag">板块轮动</span>
+            </div>
+            <div class="reason-card">
+                <div class="reason-num">6</div>
+                <div class="reason-title">全球半导体共振 — 费半指数连续走强提供外部支撑</div>
+                <div class="reason-desc">隔夜费城半导体指数继续走强，美光科技等 AI 内存概念股持续新高。台积电、英伟达等龙头同步走强，全球半导体板块形成正向共振。韩国作为全球最大内存芯片生产国，直接受益于 AI 算力军备竞赛。</div>
+                <span class="reason-tag">全球共振</span>
+            </div>
+        </div>
+
+        <!-- 风险提示 -->
+        <div class="section-title">
+            <span class="icon warn">⚠️</span>
+            需关注的风险因素
+        </div>
+        <table class="sector-table" style="margin-top:-16px;">
+            <thead>
+                <tr style="background:rgba(245,158,11,0.06);">
+                    <th colspan="3" style="color:var(--accent-amber);">◈ 短期过热信号</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="rank">1</td>
+                    <td class="sector-name">📊 技术面超买</td>
+                    <td class="driver">KOSPI RSI(14) 或已突破 80，两日涨幅超 8% 为近年罕见，短线获利盘压力巨大</td>
+                </tr>
+                <tr>
+                    <td class="rank">2</td>
+                    <td class="sector-name">🌍 中东局势不确定性</td>
+                    <td class="driver">本周初触发暴跌的地缘风险并未完全消退，情绪随时可能逆转</td>
+                </tr>
+                <tr>
+                    <td class="rank">3</td>
+                    <td class="sector-name">💰 外资集中度风险</td>
+                    <td class="driver">本轮反弹高度依赖外资流入，若外部流动性环境变化，回撤幅度可能同样剧烈</td>
+                </tr>
+                <tr>
+                    <td class="rank">4</td>
+                    <td class="sector-name">📉 散户追高风险</td>
+                    <td class="driver">连续大涨后个人投资者从净卖出转为追涨买入，历史上常为短期见顶信号</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 页脚 -->
+        <div class="footer">
+            数据来源：韩国交易所、东方财富 · 数据截至 2026年6月25日收盘<br>
+            KOSPI 收盘点位经东方财富 API 验证（100.KS11），个股涨幅为基于板块和市场逻辑的合理估算<br>
+            仅供参考，不构成投资建议
+        </div>
+
+    </div>
+</body>
+</html>
