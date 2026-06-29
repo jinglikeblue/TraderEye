@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>国产算力+存储双链 · 交叉受益核心标的</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #0a0e17; color: #e0e6f0; line-height: 1.6; min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+        .header { text-align: center; margin-bottom: 48px; }
+        .header h1 { font-size: 36px; font-weight: 700;
+            background: linear-gradient(135deg, #f97316, #ef4444, #8b5cf6, #06b6d4, #34d399);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 12px; }
+        .header .subtitle { font-size: 16px; color: #8892a8; }
+        .header .topic-tags { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+        .header .topic-tag { font-size: 13px; padding: 5px 14px; border-radius: 20px; font-weight: 500; }
+        .topic-tag.cross { background: rgba(249,115,22,0.2); color: #fb923c; border: 1px solid rgba(249,115,22,0.4); font-weight: 700; }
+        .topic-tag.compute { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.25); }
+        .topic-tag.storage { background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.25); }
+        .topic-tag.equip { background: rgba(52,211,153,0.15); color: #34d399; border: 1px solid rgba(52,211,153,0.25); }
+        .topic-tag.package { background: rgba(6,182,212,0.15); color: #06b6d4; border: 1px solid rgba(6,182,212,0.25); }
+        .header .update-time { font-size: 13px; color: #5a6478; margin-top: 12px; }
+
+        .section-title { font-size: 22px; font-weight: 600; color: #c8d0e0;
+            margin-bottom: 24px; padding-left: 14px; border-left: 3px solid #fb923c; }
+        .section-subtitle { font-size: 14px; color: #5a6478; margin-top: -18px; margin-bottom: 24px; padding-left: 17px; }
+
+        /* 统计卡片 */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 16px; margin-bottom: 56px; }
+        .stat-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 12px; padding: 20px; }
+        .stat-card .stat-label { font-size: 13px; color: #5a6478; margin-bottom: 6px; }
+        .stat-card .stat-value { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+        .stat-card .stat-note { font-size: 12px; color: #5a6478; }
+        .stat-orange .stat-value { color: #fb923c; }
+        .stat-red .stat-value { color: #ef4444; }
+        .stat-green .stat-value { color: #34d399; }
+        .stat-blue .stat-value { color: #3b82f6; }
+        .stat-purple .stat-value { color: #8b5cf6; }
+        .stat-cyan .stat-value { color: #06b6d4; }
+
+        /* 文氏图区域 */
+        .venn-section { margin-bottom: 56px; }
+        .venn-wrapper { display: flex; gap: 24px; align-items: stretch; }
+        .venn-column { flex: 1; background: #111827; border-radius: 14px; padding: 24px; border: 1px solid #1e293b; }
+        .venn-column.compute { border-top: 3px solid #ef4444; }
+        .venn-column.cross { border-top: 3px solid #fb923c; position: relative; }
+        .venn-column.cross::after { content: '★ 双链交叉'; position: absolute;
+            top: -12px; left: 50%; transform: translateX(-50%);
+            background: #fb923c; color: #000; font-size: 11px; font-weight: 700;
+            padding: 2px 12px; border-radius: 10px; white-space: nowrap; }
+        .venn-column.storage { border-top: 3px solid #3b82f6; }
+        .venn-column h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+        .venn-column.compute h3 { color: #ef4444; }
+        .venn-column.cross h3 { color: #fb923c; }
+        .venn-column.storage h3 { color: #3b82f6; }
+        .venn-column .venn-count { font-size: 28px; font-weight: 800; margin-bottom: 12px; }
+        .venn-column.compute .venn-count { color: #ef4444; }
+        .venn-column.cross .venn-count { color: #fb923c; }
+        .venn-column.storage .venn-count { color: #3b82f6; }
+        .venn-column .venn-list { font-size: 13px; color: #8892a8; line-height: 2; }
+        .venn-column .venn-list span { color: #c8d0e0; font-weight: 500; }
+
+        /* 双链交叉逻辑说明 */
+        .cross-logic { background: linear-gradient(135deg, rgba(251,146,60,0.08), rgba(249,115,22,0.04));
+            border: 1px solid rgba(251,146,60,0.2); border-radius: 14px; padding: 28px 32px; margin-bottom: 48px; }
+        .cross-logic h3 { font-size: 18px; font-weight: 700; color: #fb923c; margin-bottom: 14px; }
+        .cross-logic p { font-size: 14px; color: #c8d0e0; line-height: 2; }
+        .cross-logic strong { color: #fb923c; }
+
+        /* 产业链流程图 */
+        .flow-section { margin-bottom: 56px; }
+        .flow-diagram { display: flex; align-items: stretch; gap: 0;
+            background: #111827; border-radius: 16px; border: 1px solid #1e293b; overflow: hidden; }
+        .flow-stage { flex: 1; padding: 28px 20px; position: relative; }
+        .flow-stage:not(:last-child)::after {
+            content: '→'; position: absolute; right: -14px; top: 50%;
+            transform: translateY(-50%); font-size: 28px; color: #4b5563; z-index: 2; }
+        .flow-stage:not(:last-child) { border-right: 1px solid #1e293b; }
+        .flow-stage .stage-label { font-size: 13px; font-weight: 600; letter-spacing: 1px;
+            margin-bottom: 12px; padding: 4px 12px; border-radius: 20px; display: inline-block; }
+        .flow-stage:nth-child(1) .stage-label { background: rgba(251,146,60,0.15); color: #fb923c; }
+        .flow-stage:nth-child(2) .stage-label { background: rgba(52,211,153,0.15); color: #34d399; }
+        .flow-stage:nth-child(3) .stage-label { background: rgba(6,182,212,0.15); color: #06b6d4; }
+        .flow-stage .stage-title { font-size: 18px; font-weight: 600; color: #e0e6f0; margin-bottom: 8px; }
+        .flow-stage .stage-desc { font-size: 13px; color: #8892a8; }
+        .flow-stage .stage-products { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+        .flow-stage .product-tag { font-size: 12px; padding: 3px 10px; border-radius: 12px;
+            background: rgba(255,255,255,0.06); color: #a0aec0;
+            border: 1px solid rgba(255,255,255,0.08); }
+        .flow-stage .compute-badge, .flow-stage .storage-badge {
+            display: inline-block; font-size: 10px; font-weight: 700; padding: 1px 6px;
+            border-radius: 6px; margin-left: 4px; vertical-align: middle; }
+        .flow-stage .compute-badge { background: rgba(239,68,68,0.15); color: #ef4444; }
+        .flow-stage .storage-badge { background: rgba(59,130,246,0.15); color: #3b82f6; }
+
+        /* 公司卡片 */
+        .companies-section { margin-bottom: 48px; }
+        .company-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; }
+        .company-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; transition: border-color 0.2s, transform 0.2s; position: relative; }
+        .company-card:hover { border-color: #374151; transform: translateY(-2px); }
+        .company-card.dual-chain { border-left: 3px solid #fb923c; }
+        .company-card .card-header { display: flex; justify-content: space-between;
+            align-items: flex-start; margin-bottom: 14px; }
+        .company-card .card-name { font-size: 18px; font-weight: 600; color: #e0e6f0; }
+        .company-card .card-code { font-size: 13px; font-weight: 500; padding: 3px 10px;
+            border-radius: 8px; background: rgba(251,146,60,0.12); color: #fb923c; white-space: nowrap; }
+        .company-card .dual-badge { position: absolute; top: -1px; right: -1px;
+            background: linear-gradient(135deg, #fb923c, #f97316); color: #000;
+            font-size: 11px; font-weight: 700; padding: 4px 12px;
+            border-radius: 0 14px 0 10px; }
+        .company-card .card-position { font-size: 13px; padding: 3px 10px;
+            border-radius: 8px; display: inline-block; margin-bottom: 10px; }
+        .position-equip { background: rgba(52,211,153,0.12); color: #34d399; }
+        .position-material { background: rgba(139,92,246,0.12); color: #8b5cf6; }
+        .position-package { background: rgba(6,182,212,0.12); color: #06b6d4; }
+        .company-card .card-binding { font-size: 13px; color: #c8d0e0; padding: 10px 14px;
+            background: rgba(251,146,60,0.06); border-radius: 8px; border-left: 3px solid #fb923c;
+            margin-bottom: 10px; line-height: 1.6; }
+        .company-card .card-binding strong { color: #fb923c; }
+        .company-card .card-dual-logic { font-size: 13px; color: #c8d0e0; padding: 10px 14px;
+            background: rgba(239,68,68,0.04); border-radius: 8px; border-left: 3px solid #ef4444;
+            margin-bottom: 10px; line-height: 1.6; }
+        .company-card .card-dual-logic strong { color: #ef4444; }
+        .company-card .card-dual-logic.storage-side { border-left-color: #3b82f6; background: rgba(59,130,246,0.04); }
+        .company-card .card-dual-logic.storage-side strong { color: #3b82f6; }
+        .company-card .card-data-row { display: flex; flex-wrap: wrap; gap: 8px 18px;
+            font-size: 13px; color: #c8d0e0; padding: 10px 14px;
+            background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 3px solid #374151; }
+        .company-card .card-data-row strong { color: #e0e6f0; margin-left: 2px; }
+
+        /* 财务标签 */
+        .finance-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .f-tag { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 12px; display: flex; align-items: center; gap: 4px; }
+        .f-tag .tag-icon { font-size: 12px; }
+        .f-tag.margin-high { background: rgba(52,211,153,0.15); color: #34d399; border: 1px solid rgba(52,211,153,0.3); }
+        .f-tag.margin-mid { background: rgba(96,165,250,0.15); color: #60a5fa; border: 1px solid rgba(96,165,250,0.3); }
+        .f-tag.margin-low { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+        .f-tag.growth-high { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+        .f-tag.growth-mid { background: rgba(249,115,22,0.15); color: #f97316; border: 1px solid rgba(249,115,22,0.3); }
+        .f-tag.profit { background: rgba(96,165,250,0.12); color: #93c5fd; border: 1px solid rgba(96,165,250,0.2); }
+
+        /* 上下游划分 */
+        .chain-position-section { margin-bottom: 56px; }
+        .chain-position-wrapper { display: flex; gap: 24px; align-items: stretch; }
+        .chain-pos-group { flex: 1; background: #111827; border-radius: 16px; overflow: hidden;
+            border: 1px solid #1e293b; }
+        .chain-pos-group .pos-header { padding: 16px 20px; display: flex;
+            align-items: center; gap: 10px; }
+        .chain-pos-group .pos-header .pos-icon { font-size: 22px; }
+        .chain-pos-group .pos-header .pos-title { font-size: 16px; font-weight: 700; }
+        .chain-pos-group .pos-header .pos-count { font-size: 13px; color: #8892a8;
+            margin-left: auto; }
+        .chain-pos-group.upstream .pos-header { background: linear-gradient(135deg, rgba(52,211,153,0.12), rgba(52,211,153,0.04)); }
+        .chain-pos-group.upstream .pos-header .pos-title { color: #34d399; }
+        .chain-pos-group.midstream .pos-header { background: linear-gradient(135deg, rgba(6,182,212,0.12), rgba(6,182,212,0.04)); }
+        .chain-pos-group.midstream .pos-header .pos-title { color: #06b6d4; }
+        .chain-pos-group.downstream .pos-header { background: linear-gradient(135deg, rgba(139,92,246,0.12), rgba(139,92,246,0.04)); }
+        .chain-pos-group.downstream .pos-header .pos-title { color: #8b5cf6; }
+        .chain-pos-group .pos-body { padding: 16px 20px 20px; }
+        .pos-item { background: rgba(255,255,255,0.03); border: 1px solid #1e293b;
+            border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; }
+        .pos-item:last-child { margin-bottom: 0; }
+        .pos-item .pos-item-header { display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px; }
+        .pos-item .pos-item-name { font-size: 15px; font-weight: 600; color: #e0e6f0; }
+        .pos-item .pos-item-code { font-size: 12px; font-weight: 500; padding: 2px 8px;
+            border-radius: 6px; white-space: nowrap; }
+        .pos-item.upstream-item .pos-item-code { background: rgba(52,211,153,0.15); color: #34d399; }
+        .pos-item.midstream-item .pos-item-code { background: rgba(6,182,212,0.15); color: #06b6d4; }
+        .pos-item.downstream-item .pos-item-code { background: rgba(139,92,246,0.15); color: #8b5cf6; }
+        .pos-item .pos-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 8px;
+            white-space: nowrap; display: inline-block; }
+        .pos-tag.cross { background: rgba(251,146,60,0.18); color: #fb923c; border: 1px solid rgba(251,146,60,0.35); }
+        .pos-tag.compute-only { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+        .pos-tag.storage-only { background: rgba(59,130,246,0.12); color: #60a5fa; border: 1px solid rgba(59,130,246,0.2); }
+        .pos-item .pos-item-role { font-size: 12px; color: #fbbf24; font-weight: 500;
+            display: inline-block; padding: 2px 8px; border-radius: 6px;
+            background: rgba(251,191,36,0.1); margin-bottom: 6px; }
+        .pos-item .pos-item-desc { font-size: 12px; color: #8892a8; line-height: 1.6; }
+        .pos-item .pos-item-desc strong { color: #c8d0e0; }
+        .pos-sub-arrow { text-align: center; color: #4b5563; font-size: 18px;
+            padding: 8px 0; }
+
+        /* 评级 */
+        .rating-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+        .rating-card { border-radius: 10px; padding: 10px 12px; border: 1px solid; background: rgba(255,255,255,0.03); }
+        .rating-title { font-size: 12px; color: #8892a8; margin-bottom: 4px; }
+        .rating-level { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .rating-reason { font-size: 12px; color: #8892a8; line-height: 1.5; }
+        .rating-strong { border-color: rgba(251,146,60,0.35); background: rgba(251,146,60,0.08); }
+        .rating-strong .rating-level { color: #fb923c; }
+
+        /* 对比表 */
+        .compare-section { margin-bottom: 56px; }
+        .compare-table { width: 100%; border-collapse: collapse; background: #111827;
+            border: 1px solid #1e293b; border-radius: 12px; overflow: hidden; }
+        .compare-table th { background: rgba(251,146,60,0.1); color: #fb923c; font-size: 13px;
+            font-weight: 600; padding: 14px 16px; text-align: left; border-bottom: 1px solid #1e293b; }
+        .compare-table td { padding: 14px 16px; font-size: 13px; color: #8892a8;
+            border-bottom: 1px solid rgba(30,41,59,0.5); line-height: 1.5; }
+        .compare-table tr:last-child td { border-bottom: none; }
+        .compare-table .col-name { color: #e0e6f0; font-weight: 600; white-space: nowrap; }
+
+        /* 关系图 */
+        .relation-section { margin-bottom: 56px; }
+        .relation-diagram { background: #111827; border: 1px solid #1e293b;
+            border-radius: 16px; padding: 32px; overflow-x: auto; }
+        .relation-group { margin-bottom: 20px; padding: 16px; border-radius: 12px; border: 1px solid; }
+        .relation-group:last-child { margin-bottom: 0; }
+        .relation-group.layer-cross { border-color: rgba(251,146,60,0.25); background: rgba(251,146,60,0.06); }
+        .relation-group-title { font-size: 13px; font-weight: 700; letter-spacing: 2px;
+            margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid; }
+        .relation-group.layer-cross .relation-group-title { color: #fb923c; border-color: rgba(251,146,60,0.25); }
+        .relation-row { display: flex; align-items: center; margin-bottom: 12px; }
+        .relation-row:last-child { margin-bottom: 0; }
+        .relation-label { min-width: 120px; font-size: 14px; font-weight: 600;
+            color: #8892a8; flex-shrink: 0; }
+        .relation-items { display: flex; flex-wrap: wrap; gap: 10px; }
+        .relation-node { padding: 8px 16px; border-radius: 10px; font-size: 14px;
+            font-weight: 500; border: 1px solid; }
+        .relation-node.cross { background: rgba(251,146,60,0.1);
+            border-color: rgba(251,146,60,0.35); color: #fb923c; }
+        .relation-node .node-code { font-size: 11px; opacity: 0.7; margin-left: 6px; }
+        .relation-arrow { text-align: center; color: #4b5563; font-size: 20px; padding: 4px 0; }
+        .chain-tag { font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 4px;
+            margin-left: 4px; vertical-align: middle; }
+        .chain-tag.ai { background: rgba(239,68,68,0.2); color: #ef4444; }
+        .chain-tag.st { background: rgba(59,130,246,0.2); color: #3b82f6; }
+
+        /* 核心关注卡片 */
+        .focus-section { margin-bottom: 40px; }
+        .focus-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .focus-card { background: linear-gradient(135deg, #111827, #1a2332);
+            border: 1px solid #1e293b; border-radius: 14px; padding: 24px;
+            position: relative; overflow: hidden; }
+        .focus-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .focus-card:nth-child(1)::before { background: linear-gradient(90deg, #fb923c, #f97316); }
+        .focus-card:nth-child(2)::before { background: linear-gradient(90deg, #ef4444, #dc2626); }
+        .focus-card:nth-child(3)::before { background: linear-gradient(90deg, #3b82f6, #2563eb); }
+        .focus-card:nth-child(4)::before { background: linear-gradient(90deg, #34d399, #22c55e); }
+        .focus-card:nth-child(5)::before { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
+        .focus-card:nth-child(6)::before { background: linear-gradient(90deg, #06b6d4, #0891b2); }
+        .focus-card .focus-rank { font-size: 48px; font-weight: 800;
+            color: rgba(255,255,255,0.04); position: absolute; top: 8px; right: 16px; }
+        .focus-card .focus-name { font-size: 16px; font-weight: 600; color: #e0e6f0; margin-bottom: 4px; }
+        .focus-card .focus-tag { font-size: 12px; color: #8892a8; margin-bottom: 10px; }
+        .focus-card .focus-reason { font-size: 13px; color: #8892a8; line-height: 1.7; }
+
+        /* 风险提示 */
+        .risk-section { margin-bottom: 56px; }
+        .risk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+        .risk-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; border-left: 3px solid #f87171; }
+        .risk-card .risk-title { font-size: 16px; font-weight: 600; color: #f87171; margin-bottom: 8px; }
+        .risk-card .risk-desc { font-size: 14px; color: #8892a8; line-height: 1.7; }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            .header h1 { font-size: 26px; }
+            .flow-diagram { flex-direction: column; }
+            .flow-stage:not(:last-child)::after { content: '↓'; right: auto; bottom: -16px; top: auto;
+                left: 50%; transform: translateX(-50%); }
+            .flow-stage:not(:last-child) { border-right: none; border-bottom: 1px solid #1e293b; }
+            .company-grid { grid-template-columns: 1fr; }
+            .rating-row { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .focus-cards { grid-template-columns: 1fr; }
+            .risk-grid { grid-template-columns: 1fr; }
+            .venn-wrapper { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>国产算力+存储双链交叉受益</h1>
+            <div class="subtitle">算力芯片 + 存储芯片 → 共享半导体设备/材料/封测平台 · 5只双链核心交叉标的，双重扩产周期共振</div>
+            <div class="topic-tags">
+                <span class="topic-tag cross">★ 双链交叉</span>
+                <span class="topic-tag compute">AI算力链</span>
+                <span class="topic-tag storage">存储芯片链</span>
+                <span class="topic-tag equip">半导体设备</span>
+                <span class="topic-tag package">材料+封测</span>
+            </div>
+            <div class="update-time">数据来源：东方财富、同花顺、各公司年报/公告、券商研报 | 整理时间：2026-06-29</div>
+        </div>
+
+        <!-- 文氏图 -->
+        <div class="venn-section">
+            <div class="section-title">两条产业链交叉分析</div>
+            <div class="section-subtitle">国产AI算力链（18只标的）与国产存储芯片链（12只标的）的交叉映射 — 5家公司同时受益于算力+存储双向扩产</div>
+            <div class="venn-wrapper">
+                <div class="venn-column compute">
+                    <h3>🔴 国产AI算力链</h3>
+                    <div class="venn-count">13只独有</div>
+                    <div class="venn-list">
+                        <span>寒武纪 688256</span> · AI芯片<br>
+                        <span>海光信息 688041</span> · DCU加速卡<br>
+                        <span>华大九天 301269</span> · EDA<br>
+                        <span>沪硅产业 688126</span> · 大硅片<br>
+                        <span>中芯国际 688981</span> · 晶圆制造<br>
+                        <span>长电科技 600584</span> · 先进封装<br>
+                        <span>拓维信息 002261</span> · 昇腾OEM<br>
+                        <span>神州数码 000034</span> · 昇腾分销<br>
+                        <span>高新发展 000628</span> · 华鲲振宇<br>
+                        <span>中科曙光 603019</span> · HPC服务器<br>
+                        <span>润泽科技 300442</span> · AIDC租赁<br>
+                        <span>数据港 603881</span> · 阿里AIDC<br>
+                        <span>光环新网 300383</span> · 一线AIDC
+                    </div>
+                </div>
+                <div class="venn-column cross">
+                    <h3>🟠 双链交叉</h3>
+                    <div class="venn-count">5只共有</div>
+                    <div class="venn-list">
+                        <span>北方华创 002371</span> · 设备<br>
+                        <span>中微公司 688012</span> · 刻蚀<br>
+                        <span>拓荆科技 688072</span> · 薄膜<br>
+                        <span>安集科技 688019</span> · CMP材料<br>
+                        <span>通富微电 002156</span> · 封测<br>
+                    </div>
+                </div>
+                <div class="venn-column storage">
+                    <h3>🔵 国产存储芯片链</h3>
+                    <div class="venn-count">7只独有</div>
+                    <div class="venn-list">
+                        <span>兆易创新 603986</span> · NOR Flash<br>
+                        <span>北京君正 300223</span> · 利基DRAM<br>
+                        <span>澜起科技 688008</span> · DDR5接口<br>
+                        <span>江波龙 301308</span> · 存储模组<br>
+                        <span>佰维存储 688525</span> · 嵌入式存储<br>
+                        <span>雅克科技 002409</span> · 前驱体材料<br>
+                        <span>鼎龙股份 300054</span> · CMP抛光垫
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 双链交叉逻辑说明 -->
+        <div class="cross-logic">
+            <h3>🔗 为什么这5家公司同时受益于两条产业链？</h3>
+            <p>
+                <strong>半导体设备（北方华创/中微公司/拓荆科技）：</strong>设备是芯片制造的"工具"，<strong>算力芯片</strong>（寒武纪GPU/海光DCU/昇腾910C）和<strong>存储芯片</strong>（长鑫DRAM/长江存储NAND）的制造都需要刻蚀机、薄膜沉积设备、清洗设备。<br>
+                中芯国际（算力芯片代工）和长鑫/长江存储各自独立扩产→设备订单来自两条互不重叠的需求曲线→双链共振。<br><br>
+                <strong>CMP材料（安集科技）：</strong>CMP抛光液是芯片制造的通用耗材，先进制程中抛光步骤达30+次。算力芯片（7nm AI芯片）和存储芯片（3D NAND 232层）都需要大量CMP步骤→耗材用量与晶圆产出量正相关→双链扩产=双倍耗材增量。<br><br>
+                <strong>先进封装（通富微电）：</strong>算力芯片需要Chiplet/FC-BGA封装，存储芯片需要DRAM/NAND封测。通富微电的合肥基地专为长鑫存储配套，同时为AMD提供AI芯片封装→存储+算力双赛道协同。
+            </p>
+        </div>
+
+        <!-- 统计概览 -->
+        <div class="overview-section">
+            <div class="section-title">双链交叉标的核心概览</div>
+            <div class="stats-grid">
+                <div class="stat-card stat-orange">
+                    <div class="stat-label">双链交叉核心标的</div>
+                    <div class="stat-value">5只</div>
+                    <div class="stat-note">设备3只 + 材料1只 + 封测1只，共享基础设施属性</div>
+                </div>
+                <div class="stat-card stat-red">
+                    <div class="stat-label">算力链半导体设备市场</div>
+                    <div class="stat-value">$380亿</div>
+                    <div class="stat-note">全球最大设备市场，国产化率~15%，替代空间>300亿美元</div>
+                </div>
+                <div class="stat-card stat-blue">
+                    <div class="stat-label">存储链产能扩张规模</div>
+                    <div class="stat-value">50万片/月</div>
+                    <div class="stat-note">长鑫DRAM(~20万)+长存NAND(~30万)，双链同步扩产中</div>
+                </div>
+                <div class="stat-card stat-green">
+                    <div class="stat-label">国产设备采购比例提升</div>
+                    <div class="stat-value">15%→35%</div>
+                    <div class="stat-note">2023-2026年中芯/长鑫/长存国产设备采购比例翻倍以上</div>
+                </div>
+                <div class="stat-card stat-purple">
+                    <div class="stat-label">CMP材料双链需求</div>
+                    <div class="stat-value">>30次/片</div>
+                    <div class="stat-note">先进制程每片晶圆抛光步骤30+次，双链扩产=耗材量翻倍</div>
+                </div>
+                <div class="stat-card stat-cyan">
+                    <div class="stat-label">先进封装双赛道价值</div>
+                    <div class="stat-value">$50→$500+</div>
+                    <div class="stat-note">Chiplet使封装价值量10x跃升，存储+算力均需先进封装</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 产业链流程图 -->
+        <div class="flow-section">
+            <div class="section-title">双链共享平台 · 设备/材料/封测是两条产业链的"最大公约数"</div>
+            <div class="flow-diagram">
+                <div class="flow-stage">
+                    <span class="stage-label">半导体设备</span>
+                    <div class="stage-title">刻蚀·薄膜·清洗·炉管</div>
+                    <div class="stage-desc">
+                        <span class="compute-badge">算力链</span> 中芯国际AI芯片代工产线
+                        <br><span class="storage-badge">存储链</span> 长鑫DRAM+长存NAND产线
+                    </div>
+                    <div class="stage-products">
+                        <span class="product-tag">CCP/ICP刻蚀</span>
+                        <span class="product-tag">PECVD/ALD</span>
+                        <span class="product-tag">CMP抛光机</span>
+                        <span class="product-tag">清洗/炉管</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <span class="stage-label">半导体材料</span>
+                    <div class="stage-title">CMP耗材·硅片·前驱体</div>
+                    <div class="stage-desc">
+                        <span class="compute-badge">算力链</span> 7nm AI芯片CMP抛光步骤30+次
+                        <br><span class="storage-badge">存储链</span> 232层NAND每层均需CMP平坦化
+                    </div>
+                    <div class="stage-products">
+                        <span class="product-tag">CMP抛光液</span>
+                        <span class="product-tag">CMP抛光垫</span>
+                        <span class="product-tag">12寸大硅片</span>
+                        <span class="product-tag">High-K前驱体</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <span class="stage-label">先进封装</span>
+                    <div class="stage-title">FC-BGA·Chiplet·晶圆测试</div>
+                    <div class="stage-desc">
+                        <span class="compute-badge">算力链</span> GPU Chiplet封装(CoWoS-like)
+                        <br><span class="storage-badge">存储链</span> DRAM/NAND晶圆测试+封测
+                    </div>
+                    <div class="stage-products">
+                        <span class="product-tag">FC-BGA</span>
+                        <span class="product-tag">Chiplet</span>
+                        <span class="product-tag">晶圆测试</span>
+                        <span class="product-tag">SiP封装</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ 公司卡片 ============ -->
+
+        <!-- 一、半导体设备（双链交叉 · 3只） -->
+        <div class="companies-section">
+            <div class="section-title">一、半导体设备 — 双链扩产共振 · 产业链"卖铲人"</div>
+            <div class="section-subtitle">设备是算力链（中芯国际AI芯片代工）和存储链（长鑫DRAM+长江存储NAND）扩产的共同受益环节。每一轮扩产都需要购买设备——算力芯片和存储芯片的扩产计划互不重叠，形成双重订单驱动</div>
+            <div class="company-grid">
+                <div class="company-card dual-chain">
+                    <div class="dual-badge">★ 双链交叉</div>
+                    <div class="card-header">
+                        <div class="card-name">北方华创</div>
+                        <div class="card-code">002371</div>
+                    </div>
+                    <span class="card-position position-equip">综合半导体设备龙头</span>
+                    <div class="card-binding"><strong>双链逻辑：</strong>国内产品线最全的半导体设备平台型企业，覆盖刻蚀/薄膜沉积/清洗/炉管全工艺，品类40+种领跑国产厂商。中芯国际（算力链）+长鑫/长江存储（存储链）均为核心客户，三大客户同步扩产→设备订单来自三条独立需求曲线。</div>
+                    <div class="card-dual-logic"><strong>▸ 算力链：</strong>中芯国际AI芯片代工产能扩张（12寸月产~85万片→目标100万+），14nm/7nm制程对高端刻蚀/薄膜/清洗设备需求急增。</div>
+                    <div class="card-dual-logic storage-side"><strong>▸ 存储链：</strong>长鑫DRAM三期扩产（~20万片/月）+长江存储NAND二期产能爬坡（~30万片/月），全品类设备需求同步爆发。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>刻蚀/薄膜/清洗/炉管</strong></span>
+                        <span>客户 <strong>中芯/长鑫/长存</strong></span>
+                        <span>品类 <strong>40+种</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-high"><span class="tag-icon">💰</span>毛利率~45%</span>
+                        <span class="f-tag growth-high"><span class="tag-icon">📈</span>净利增速>50%</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>国内设备利润王</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">双链共振强度</div>
+                            <div class="rating-level">★★★ 最高</div>
+                            <div class="rating-reason">平台化品类最多，算力+存储三条产线同时受益</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 最高</div>
+                            <div class="rating-reason">国内晶圆厂国产采购比例15%→35%趋势明确</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card dual-chain">
+                    <div class="dual-badge">★ 双链交叉</div>
+                    <div class="card-header">
+                        <div class="card-name">中微公司</div>
+                        <div class="card-code">688012</div>
+                    </div>
+                    <span class="card-position position-equip">CCP/ICP刻蚀龙头</span>
+                    <div class="card-binding"><strong>双链逻辑：</strong>国产刻蚀设备绝对龙头，全球刻蚀TOP5唯一中资。刻蚀是半导体制造单步投资最大的设备品类（占设备开支25%+）。算力链的先进逻辑芯片（14nm/7nm）+存储链的3D NAND高深宽比刻蚀，两类需求叠加驱动刻蚀设备订单翻倍。</div>
+                    <div class="card-dual-logic"><strong>▸ 算力链：</strong>中芯国际先进逻辑制程（14nm FinFET/7nm研发），CCP+ICP刻蚀需求量大，5nm以下已验证进入台积电。</div>
+                    <div class="card-dual-logic storage-side"><strong>▸ 存储链：</strong>3D NAND从128→232层，高深宽比(90:1)刻蚀步骤增加3-4倍。DRAM电容刻蚀难度持续提升。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>CCP/ICP刻蚀机</strong></span>
+                        <span>客户 <strong>台积电/中芯/长存/长鑫</strong></span>
+                        <span>地位 <strong>全球刻蚀TOP5</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-high"><span class="tag-icon">💰</span>毛利率~50%</span>
+                        <span class="f-tag growth-high"><span class="tag-icon">📈</span>净利增速>40%</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>刻蚀高壁垒高利润</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">双链共振强度</div>
+                            <div class="rating-level">★★★ 最高</div>
+                            <div class="rating-reason">全球TOP5唯一中资，逻辑+存储四大客户全覆盖</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 最高</div>
+                            <div class="rating-reason">NAND层数倍增=刻蚀需求翻倍，弹性最大的设备品类</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card dual-chain">
+                    <div class="dual-badge">★ 双链交叉</div>
+                    <div class="card-header">
+                        <div class="card-name">拓荆科技</div>
+                        <div class="card-code">688072</div>
+                    </div>
+                    <span class="card-position position-equip">CVD/PVD薄膜设备龙头</span>
+                    <div class="card-binding"><strong>双链逻辑：</strong>国内唯一实现CVD设备批量供货的厂商，薄膜沉积是仅次于刻蚀的第二大设备品类。算力链的先进逻辑芯片（高K介质/金属栅极）和存储链的3D NAND（交替堆叠薄膜层）均需要大量薄膜沉积步骤。</div>
+                    <div class="card-dual-logic"><strong>▸ 算力链：</strong>先进逻辑芯片的High-K介质沉积和金属栅极ALD工艺，PECVD覆盖14nm+逻辑产线。</div>
+                    <div class="card-dual-logic storage-side"><strong>▸ 存储链：</strong>3D NAND层数增加使交替堆叠的薄膜沉积需求翻倍，ALD是先进存储制造的关键工艺。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>PECVD/ALD/SACVD</strong></span>
+                        <span>客户 <strong>中芯/长存/长鑫/华虹</strong></span>
+                        <span>壁垒 <strong>CVD国产唯一</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-high"><span class="tag-icon">💰</span>毛利率~48%</span>
+                        <span class="f-tag growth-high"><span class="tag-icon">📈</span>营收增速>60%</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>CVD稀缺高增长</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">双链共振强度</div>
+                            <div class="rating-level">★★★ 最高</div>
+                            <div class="rating-reason">国产CVD唯一供应商，算力+存储双链深度绑定</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 最高</div>
+                            <div class="rating-reason">ALD突破先进制程，NAND层数+先进逻辑双驱动</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 二、半导体材料（双链交叉 · 1只） -->
+        <div class="companies-section">
+            <div class="section-title">二、半导体材料 — 通用耗材 · 扩产=用量增长</div>
+            <div class="section-subtitle">CMP抛光液是芯片制造中用量最大、重复次数最多的耗材。算力芯片和存储芯片都需要大量CMP步骤——晶圆产出越多，耗材消耗越多</div>
+            <div class="company-grid">
+                <div class="company-card dual-chain">
+                    <div class="dual-badge">★ 双链交叉</div>
+                    <div class="card-header">
+                        <div class="card-name">安集科技</div>
+                        <div class="card-code">688019</div>
+                    </div>
+                    <span class="card-position position-material">CMP抛光液龙头</span>
+                    <div class="card-binding"><strong>双链逻辑：</strong>国内CMP抛光液绝对龙头，年报确认长鑫为前五大客户。中芯国际（算力链）+长鑫/长江存储（存储链）均为核心客户。CMP抛光是先进制程中重复次数最多的工艺（30+次/片），耗材属性决定其与晶圆总产出量正相关——双链扩产=耗材消耗量翻倍。</div>
+                    <div class="card-dual-logic"><strong>▸ 算力链：</strong>中芯国际14nm/7nm逻辑芯片，先进制程CMP步骤大幅增加，铜互连/钨塞/浅沟槽隔离均需抛光。</div>
+                    <div class="card-dual-logic storage-side"><strong>▸ 存储链：</strong>长鑫DRAM（CMP步骤密集）+长江存储232层NAND（每层均需CMP平坦化），3D NAND层数翻倍=抛光步骤翻倍。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>铜/钨/硅抛光液</strong></span>
+                        <span>客户 <strong>中芯/长鑫(前五大)/长存</strong></span>
+                        <span>品类 <strong>全系列覆盖</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-high"><span class="tag-icon">💰</span>毛利率~55%</span>
+                        <span class="f-tag growth-mid"><span class="tag-icon">📈</span>净利增速>30%</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>耗材高利润稳增长</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">双链共振强度</div>
+                            <div class="rating-level">★★★ 最高</div>
+                            <div class="rating-reason">三链客户全覆盖，纯耗材属性确定性强</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 最高</div>
+                            <div class="rating-reason">NAND层数×2+逻辑制程微缩=抛光液用量×3</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 三、先进封装（双链交叉 · 1只） -->
+        <div class="companies-section">
+            <div class="section-title">三、先进封装 — 算力+存储双赛道封测平台</div>
+            <div class="section-subtitle">先进封装是算力芯片（Chiplet/FC-BGA）和存储芯片（DRAM/NAND封测）的共同需求。封装从"后端工序"变为"前端核心"</div>
+            <div class="company-grid">
+                <div class="company-card dual-chain">
+                    <div class="dual-badge">★ 双链交叉</div>
+                    <div class="card-header">
+                        <div class="card-name">通富微电</div>
+                        <div class="card-code">002156</div>
+                    </div>
+                    <span class="card-position position-package">AMD封测+长鑫存储封测</span>
+                    <div class="card-binding"><strong>双链逻辑：</strong>国内唯一同时深度绑定AMD（算力链）和长鑫存储（存储链）的封测企业。AMD MI系列AI加速卡扩张→算力芯片封装订单增长；长鑫DRAM扩产→合肥基地存储封测产能利用率提升。两个赛道独立运行，互为风险对冲。</div>
+                    <div class="card-dual-logic"><strong>▸ 算力链：</strong>深度绑定AMD，MI系列AI加速卡放量推动FC-BGA/Chiplet封装订单增长。AMD AI芯片出货量翻倍增长驱动。</div>
+                    <div class="card-dual-logic storage-side"><strong>▸ 存储链：</strong>合肥基地紧邻长鑫存储，地理优势+深度绑定独一无二。长鑫DRAM扩产→存储封测需求直接增长，兑现路径最短。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>FC-BGA/Chiplet/存储封测</strong></span>
+                        <span>客户 <strong>AMD+长鑫+长江存储</strong></span>
+                        <span>基地 <strong>合肥存储/苏州算力</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-low"><span class="tag-icon">💰</span>毛利率~16%</span>
+                        <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~25%</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>双赛道弹性叠加</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">双链共振强度</div>
+                            <div class="rating-level">★★★ 最高</div>
+                            <div class="rating-reason">唯一AMD+长鑫双绑定的封测企业</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 最高</div>
+                            <div class="rating-reason">算力Chiplet+存储HBM封装双弹性</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 全标的上中下游划分 -->
+        <div class="chain-position-section">
+            <div class="section-title">全部25只标的 · 产业链上中下游全景划分</div>
+            <div class="section-subtitle">将算力链独有（13只）、存储链独有（7只）、双链交叉（5只）的所有标的，按上游(设备/材料/EDA)→中游(晶圆制造/封测)→下游(芯片设计/服务器/模组/租赁/智算)统一归类，标签区分受益链条</div>
+            <div style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;font-size:12px;color:#8892a8;">
+                <span class="pos-tag cross">✦ 双链交叉</span> = 同时受益算力+存储
+                <span class="pos-tag compute-only" style="font-size:12px;">算力独有</span> = 仅国产AI算力链
+                <span class="pos-tag storage-only" style="font-size:12px;">存储独有</span> = 仅国产存储芯片链
+            </div>
+            <div class="chain-position-wrapper">
+                <!-- 上游 -->
+                <div class="chain-pos-group upstream">
+                    <div class="pos-header">
+                        <span class="pos-icon">🏭</span>
+                        <span class="pos-title">上游 · 制造基础</span>
+                        <span class="pos-count">8只</span>
+                    </div>
+                    <div class="pos-body">
+                        <!-- 半导体设备 -->
+                        <div style="font-size:11px;color:#5a6478;margin-bottom:8px;padding-bottom:6px;border-bottom:1px dashed #1e293b;">── 半导体设备（4只）──</div>
+                        <div class="pos-item upstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">北方华创</span>
+                                <span class="pos-item-code">002371</span>
+                                <span class="pos-tag cross">✦ 双链</span>
+                            </div>
+                            <div class="pos-item-desc">综合半导体设备平台，品类40+种。中芯(算力)+长鑫/长存(存储)全客户覆盖</div>
+                        </div>
+                        <div class="pos-item upstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">中微公司</span>
+                                <span class="pos-item-code">688012</span>
+                                <span class="pos-tag cross">✦ 双链</span>
+                            </div>
+                            <div class="pos-item-desc">CCP/ICP刻蚀龙头，全球TOP5唯一中资。逻辑芯片+3D NAND+DRAM三场景覆盖</div>
+                        </div>
+                        <div class="pos-item upstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">拓荆科技</span>
+                                <span class="pos-item-code">688072</span>
+                                <span class="pos-tag cross">✦ 双链</span>
+                            </div>
+                            <div class="pos-item-desc">CVD/PVD/ALD薄膜设备龙头，国产CVD唯一供应商。NAND层数+逻辑制程双驱动</div>
+                        </div>
+                        <!-- EDA -->
+                        <div style="font-size:11px;color:#5a6478;margin:10px 0 8px;padding-bottom:6px;border-bottom:1px dashed #1e293b;">── EDA工具（1只）──</div>
+                        <div class="pos-item upstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">华大九天</span>
+                                <span class="pos-item-code">301269</span>
+                                <span class="pos-tag compute-only">算力独有</span>
+                            </div>
+                            <div class="pos-item-desc">国产EDA绝对龙头，模拟IC全流程覆盖。毛利率~85%，美国EDA禁令倒逼替代</div>
+                        </div>
+                        <!-- 半导体材料 -->
+                        <div style="font-size:11px;color:#5a6478;margin:10px 0 8px;padding-bottom:6px;border-bottom:1px dashed #1e293b;">── 半导体材料（3只）──</div>
+                        <div class="pos-item upstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">安集科技</span>
+                                <span class="pos-item-code">688019</span>
+                                <span class="pos-tag cross">✦ 双链</span>
+                            </div>
+                            <div class="pos-item-desc">CMP抛光液龙头，中芯(算力)+长鑫/长存(存储)全客户。耗材模式，晶圆产出越多用量越多</div>
+                        </div>
+                        <div class="pos-item upstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">沪硅产业</span>
+                                <span class="pos-item-code">688126</span>
+                                <span class="pos-tag compute-only">算力独有</span>
+                            </div>
+                            <div class="pos-item-desc">国产12寸大硅片唯一标的，月产60万片+。产能利用率提升→毛利率弹性极大</div>
+                        </div>
+                        <div class="pos-item upstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">雅克科技</span>
+                                <span class="pos-item-code">002409</span>
+                                <span class="pos-tag storage-only">存储独有</span>
+                            </div>
+                            <div class="pos-item-desc">前驱体/光刻胶/特气三料平台，SK海力士+长鑫+长存三链贯通</div>
+                        </div>
+                        <div class="pos-item upstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">鼎龙股份</span>
+                                <span class="pos-item-code">300054</span>
+                                <span class="pos-tag storage-only">存储独有</span>
+                            </div>
+                            <div class="pos-item-desc">CMP抛光垫国产份额70%+，耗材模式。抛光垫→抛光液→PSPI光刻胶产品矩阵扩展</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 中游 -->
+                <div class="chain-pos-group midstream">
+                    <div class="pos-header">
+                        <span class="pos-icon">📦</span>
+                        <span class="pos-title">中游 · 晶圆制造+封测</span>
+                        <span class="pos-count">4只</span>
+                    </div>
+                    <div class="pos-body">
+                        <div style="font-size:11px;color:#5a6478;margin-bottom:8px;padding-bottom:6px;border-bottom:1px dashed #1e293b;">── 晶圆制造（1只）──</div>
+                        <div class="pos-item midstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">中芯国际</span>
+                                <span class="pos-item-code">688981</span>
+                                <span class="pos-tag compute-only">算力独有</span>
+                            </div>
+                            <div class="pos-item-desc">国产晶圆代工绝对龙头，全球TOP5纯代工。14nm量产/7nm研发，国产AI芯片核心代工平台</div>
+                        </div>
+                        <div style="font-size:11px;color:#5a6478;margin:10px 0 8px;padding-bottom:6px;border-bottom:1px dashed #1e293b;">── 先进封装+封测（3只）──</div>
+                        <div class="pos-item midstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">通富微电</span>
+                                <span class="pos-item-code">002156</span>
+                                <span class="pos-tag cross">✦ 双链</span>
+                            </div>
+                            <div class="pos-item-desc">唯一AMD(算力)+长鑫(存储)双绑定封测。苏州+C合肥双基地独立运营</div>
+                        </div>
+                        <div class="pos-item midstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">长电科技</span>
+                                <span class="pos-item-code">600584</span>
+                                <span class="pos-tag compute-only">算力独有</span>
+                            </div>
+                            <div class="pos-item-desc">全球TOP3 OSAT封测龙头，FC-BGA/Fan-out/SiP全产品线。Chiplet→封装价值量10x</div>
+                        </div>
+                        <!-- 存储链的芯片设计也属于中游(Fabless设计) - 兆易创新/北京君正/澜起科技 -->
+                        <div style="font-size:11px;color:#5a6478;margin:10px 0 8px;padding-bottom:6px;border-bottom:1px dashed #1e293b;">── 存储芯片设计 Fabless（3只）──</div>
+                        <div class="pos-item midstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">兆易创新</span>
+                                <span class="pos-item-code">603986</span>
+                                <span class="pos-tag storage-only">存储独有</span>
+                            </div>
+                            <div class="pos-item-desc">国产NOR Flash龙头(全球第三)，代销长鑫DRAM+参股长鑫。车规级NOR已量产</div>
+                        </div>
+                        <div class="pos-item midstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">北京君正</span>
+                                <span class="pos-item-code">300223</span>
+                                <span class="pos-tag storage-only">存储独有</span>
+                            </div>
+                            <div class="pos-item-desc">国内稀缺自主DRAM设计(ISSI)，利基型DDR2/DDR3/LPDDR4。车规存储认证壁垒极高</div>
+                        </div>
+                        <div class="pos-item midstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">澜起科技</span>
+                                <span class="pos-item-code">688008</span>
+                                <span class="pos-tag storage-only">存储独有</span>
+                            </div>
+                            <div class="pos-item-desc">全球DDR5内存接口芯片龙头(市占~45%)。PCIe Retimer+CXL打开第二成长曲线</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 下游 -->
+                <div class="chain-pos-group downstream">
+                    <div class="pos-header">
+                        <span class="pos-icon">🖥</span>
+                        <span class="pos-title">下游 · 终端系统与应用</span>
+                        <span class="pos-count">13只</span>
+                    </div>
+                    <div class="pos-body">
+                        <div style="font-size:11px;color:#5a6478;margin-bottom:8px;padding-bottom:6px;border-bottom:1px dashed #1e293b;">── AI芯片设计（2只）──</div>
+                        <div class="pos-item downstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">寒武纪</span>
+                                <span class="pos-item-code">688256</span>
+                                <span class="pos-tag compute-only">算力独有</span>
+                            </div>
+                            <div class="pos-item-desc">A股最纯正AI算力芯片，思元590对标A100。智算中心刚需采购，年替代空间800亿+</div>
+                        </div>
+                        <div class="pos-item downstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">海光信息</span>
+                                <span class="pos-item-code">688041</span>
+                                <span class="pos-tag compute-only">算力独有</span>
+                            </div>
+                            <div class="pos-item-desc">深算DCU兼容CUDA生态(ROCm)，国产GPU中迁移成本最低。信创+AI双赛道持续盈利</div>
+                        </div>
+                        <div style="font-size:11px;color:#5a6478;margin:10px 0 8px;padding-bottom:6px;border-bottom:1px dashed #1e293b;">── 昇腾生态 / 算力服务器（4只）──</div>
+                        <div class="pos-item downstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">拓维信息</span>
+                                <span class="pos-item-code">002261</span>
+                                <span class="pos-tag compute-only">算力独有</span>
+                            </div>
+                            <div class="pos-item-desc">昇腾核心OEM，"兆瀚"AI服务器基于910C。运营商/政府集采核心供应商</div>
+                        </div>
+                        <div class="pos-item downstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">神州数码</span>
+                                <span class="pos-item-code">000034</span>
+                                <span class="pos-tag compute-only">算力独有</span>
+                            </div>
+                            <div class="pos-item-desc">昇腾最大分销+整机，"神州鲲泰"系列。自有品牌AI服务器放量中</div>
+                        </div>
+                        <div class="pos-item downstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">高新发展</span>
+                                <span class="pos-item-code">000628</span>
+                                <span class="pos-tag compute-only">算力独有</span>
+                            </div>
+                            <div class="pos-item-desc">华鲲振宇(昇腾核心供应商)借壳，低基数+高增长，弹性最大</div>
+                        </div>
+                        <div class="pos-item downstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">中科曙光</span>
+                                <span class="pos-item-code">603019</span>
+                                <span class="pos-tag compute-only">算力独有</span>
+                            </div>
+                            <div class="pos-item-desc">国产HPC龙头+国家级智算中心核心供应商。海光DCU+服务器一体化生态闭环</div>
+                        </div>
+                        <div style="font-size:11px;color:#5a6478;margin:10px 0 8px;padding-bottom:6px;border-bottom:1px dashed #1e293b;">── 算力租赁 / 智算中心（3只）──</div>
+                        <div class="pos-item downstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">润泽科技</span>
+                                <span class="pos-item-code">300442</span>
+                                <span class="pos-tag compute-only">算力独有</span>
+                            </div>
+                            <div class="pos-item-desc">AIDC+算力租赁双龙头，机柜运行5万+在建8万+。字节/阿里核心供应商，毛利率~45%</div>
+                        </div>
+                        <div class="pos-item downstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">数据港</span>
+                                <span class="pos-item-code">603881</span>
+                                <span class="pos-tag compute-only">算力独有</span>
+                            </div>
+                            <div class="pos-item-desc">阿里云AIDC核心运营商，深度绑定阿里AI扩张(Qwen大模型)。定制化高粘性</div>
+                        </div>
+                        <div class="pos-item downstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">光环新网</span>
+                                <span class="pos-item-code">300383</span>
+                                <span class="pos-tag compute-only">算力独有</span>
+                            </div>
+                            <div class="pos-item-desc">北京一线城市AIDC龙头，地段稀缺性壁垒。AI算力租赁业务增速快</div>
+                        </div>
+                        <div style="font-size:11px;color:#5a6478;margin:10px 0 8px;padding-bottom:6px;border-bottom:1px dashed #1e293b;">── 存储模组/品牌（2只）──</div>
+                        <div class="pos-item downstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">江波龙</span>
+                                <span class="pos-item-code">301308</span>
+                                <span class="pos-tag storage-only">存储独有</span>
+                            </div>
+                            <div class="pos-item-desc">国产存储品牌龙头(Lexar+FORESEE)，长存NAND+长鑫DRAM晶圆→品牌SSD/内存条闭环</div>
+                        </div>
+                        <div class="pos-item downstream-item">
+                            <div class="pos-item-header">
+                                <span class="pos-item-name">佰维存储</span>
+                                <span class="pos-item-code">688525</span>
+                                <span class="pos-tag storage-only">存储独有</span>
+                            </div>
+                            <div class="pos-item-desc">嵌入式存储龙头(eMMC/UFS/LPDDR/ePOP)，小米/OPPO/荣耀核心供应商</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="font-size:12px;color:#5a6478;margin-top:16px;text-align:right;">
+                📊 上游8只(交叉4+算力2+存储2) · 中游4只(交叉1+算力1+存储3→含Fabless设计) · 下游13只(算力9+存储4→含AI芯片设计)
+            </div>
+        </div>
+
+        <!-- 双链交叉对比表 -->
+        <div class="compare-section">
+            <div class="section-title">5只双链交叉标的 · 算力链 vs 存储链 受益逻辑</div>
+            <div class="section-subtitle">同一家公司，在两条产业链中扮演不同的受益角色，形成"算力+存储"双重驱动</div>
+            <div style="overflow-x:auto;">
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>公司</th>
+                        <th>环节</th>
+                        <th>算力链受益逻辑</th>
+                        <th>算力链客户</th>
+                        <th>存储链受益逻辑</th>
+                        <th>存储链客户</th>
+                        <th>共振弹性</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="col-name">北方华创<br><span style="font-size:11px;color:#fb923c;">002371</span></td>
+                        <td style="color:#34d399;font-weight:600;">设备</td>
+                        <td>中芯国际AI芯片代工产能扩张→全品类设备需求</td>
+                        <td style="color:#ef4444;">中芯国际</td>
+                        <td>长鑫DRAM+长江存储NAND同步扩产→设备订单双驱动</td>
+                        <td style="color:#3b82f6;">长鑫/长江存储</td>
+                        <td><span style="color:#fb923c;font-weight:700;">★★★</span></td>
+                    </tr>
+                    <tr>
+                        <td class="col-name">中微公司<br><span style="font-size:11px;color:#fb923c;">688012</span></td>
+                        <td style="color:#34d399;font-weight:600;">设备</td>
+                        <td>先进逻辑芯片刻蚀（14nm/7nm FinFET）需求</td>
+                        <td style="color:#ef4444;">中芯/台积电</td>
+                        <td>3D NAND 90:1高深宽比刻蚀+DRAM电容刻蚀</td>
+                        <td style="color:#3b82f6;">长存/长鑫/海力士</td>
+                        <td><span style="color:#fb923c;font-weight:700;">★★★</span></td>
+                    </tr>
+                    <tr>
+                        <td class="col-name">拓荆科技<br><span style="font-size:11px;color:#fb923c;">688072</span></td>
+                        <td style="color:#34d399;font-weight:600;">设备</td>
+                        <td>High-K介质/金属栅极CVD/ALD沉积需求</td>
+                        <td style="color:#ef4444;">中芯/华虹</td>
+                        <td>3D NAND交替堆叠薄膜沉积，层数增加→需求翻倍</td>
+                        <td style="color:#3b82f6;">长存/长鑫</td>
+                        <td><span style="color:#fb923c;font-weight:700;">★★★</span></td>
+                    </tr>
+                    <tr>
+                        <td class="col-name">安集科技<br><span style="font-size:11px;color:#fb923c;">688019</span></td>
+                        <td style="color:#8b5cf6;font-weight:600;">材料</td>
+                        <td>先进逻辑铜互连/钨塞CMP抛光液需求</td>
+                        <td style="color:#ef4444;">中芯国际</td>
+                        <td>DRAM+D NAND CMP抛光液，年报确认为长鑫前五大客户</td>
+                        <td style="color:#3b82f6;">长鑫(前五大)/长存</td>
+                        <td><span style="color:#fb923c;font-weight:700;">★★★</span></td>
+                    </tr>
+                    <tr>
+                        <td class="col-name">通富微电<br><span style="font-size:11px;color:#fb923c;">002156</span></td>
+                        <td style="color:#06b6d4;font-weight:600;">封测</td>
+                        <td>AMD AI芯片FC-BGA/Chiplet封装，MI系列放量</td>
+                        <td style="color:#ef4444;">AMD</td>
+                        <td>合肥基地专为长鑫配套，DRAM+NAND封测</td>
+                        <td style="color:#3b82f6;">长鑫/长江存储</td>
+                        <td><span style="color:#fb923c;font-weight:700;">★★★</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+
+        <!-- 产业链关系图 -->
+        <div class="relation-section">
+            <div class="section-title">双链交叉标的 产业链位置总览</div>
+            <div class="relation-diagram">
+                <div class="relation-group layer-cross">
+                    <div class="relation-group-title">🔗 半导体设备/材料/封测 — 算力+存储共享平台</div>
+                    <div class="relation-row">
+                        <div class="relation-label">设备（3只）</div>
+                        <div class="relation-items">
+                            <div class="relation-node cross">北方华创<span class="node-code">002371</span><span class="chain-tag ai">算力</span><span class="chain-tag st">存储</span></div>
+                            <div class="relation-node cross">中微公司<span class="node-code">688012</span><span class="chain-tag ai">算力</span><span class="chain-tag st">存储</span></div>
+                            <div class="relation-node cross">拓荆科技<span class="node-code">688072</span><span class="chain-tag ai">算力</span><span class="chain-tag st">存储</span></div>
+                        </div>
+                    </div>
+                    <div class="relation-arrow">↕ 材料耗材 ↕</div>
+                    <div class="relation-row">
+                        <div class="relation-label">材料（1只）</div>
+                        <div class="relation-items">
+                            <div class="relation-node cross">安集科技<span class="node-code">688019</span><span class="chain-tag ai">算力</span><span class="chain-tag st">存储</span></div>
+                        </div>
+                    </div>
+                    <div class="relation-arrow">↕ 封测平台 ↕</div>
+                    <div class="relation-row">
+                        <div class="relation-label">封测（1只）</div>
+                        <div class="relation-items">
+                            <div class="relation-node cross">通富微电<span class="node-code">002156</span><span class="chain-tag ai">算力</span><span class="chain-tag st">存储</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 核心关注维度 -->
+        <div class="focus-section">
+            <div class="section-title">核心关注维度</div>
+            <div class="focus-cards">
+                <div class="focus-card">
+                    <div class="focus-rank">01</div>
+                    <div class="focus-name">双链扩产节奏共振</div>
+                    <div class="focus-tag">最大催化剂</div>
+                    <div class="focus-reason">中芯国际（算力链）、长鑫科技（DRAM）、长江存储（NAND）三家的产能扩张计划能否同步推进，是双链交叉标的最大的订单共振变量。如果三个客户同时进入扩产高峰期，设备/材料/封测订单将出现叠加爆发。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">02</div>
+                    <div class="focus-name">国产设备采购比例持续提升</div>
+                    <div class="focus-tag">业绩验证核心</div>
+                    <div class="focus-reason">中芯国际/长鑫/长存的国产设备采购比例从15%→35%趋势能否持续，直接决定北方华创/中微/拓荆的订单增速。三大晶圆厂年度CAPEX指引和设备国产化率目标是核心跟踪指标。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">03</div>
+                    <div class="focus-name">长鑫科技IPO进程</div>
+                    <div class="focus-tag">存储链核心催化</div>
+                    <div class="focus-reason">长鑫科技IPO将加速产能扩张（三期/四期规划），直接拉动设备/材料/封测全链订单。北方华创/中微/拓荆/安集科技/通富微电均深度绑定长鑫，IPO将带来估值重估催化。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">04</div>
+                    <div class="focus-name">3D NAND层数提升</div>
+                    <div class="focus-tag">设备/材料用量弹性</div>
+                    <div class="focus-reason">长江存储从128层→232层，刻蚀和薄膜沉积步骤增加3-4倍，CMP步骤同步翻倍。这是设备（中微/拓荆）和材料（安集）用量弹性最大的结构性变化。300+层是下一代技术目标。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">05</div>
+                    <div class="focus-name">Chiplet+先进封装趋势</div>
+                    <div class="focus-tag">封测环节最大增量</div>
+                    <div class="focus-reason">算力芯片Chiplet化+存储芯片HBM封装是先进封装的两大驱动力。通富微电同时布局两个方向：苏州基地承接AMD Chiplet封装，合肥基地承接长鑫存储封测。HBM封装技术突破是关键催化剂。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">06</div>
+                    <div class="focus-name">美国出口管制升级</div>
+                    <div class="focus-tag">双刃剑</div>
+                    <div class="focus-reason">出口管制收紧一方面压制晶圆厂获取海外设备，另一方面加速国产替代进程。设备股是管制影响弹性最大的环节——存量设备"断维"风险如果成真，国产设备替代紧迫性将急剧上升。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 风险提示 -->
+        <div class="risk-section">
+            <div class="section-title">核心风险提示</div>
+            <div class="risk-grid">
+                <div class="risk-card">
+                    <div class="risk-title">双链扩产不及预期风险</div>
+                    <div class="risk-desc">中芯国际/长鑫/长江存储的扩产节奏受地缘政治、设备获取、资金等多重因素影响。若三大晶圆厂中任何一家的扩产进度放缓，双链交叉标的的订单弹性将打折扣。过度依赖少数大客户是设备/材料行业的天然风险。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">出口管制"断维"风险</div>
+                    <div class="risk-desc">中国存量ASML光刻机和TEL刻蚀设备的维护服务面临被切断风险。若关键设备因缺乏原厂维护而停机，国内晶圆厂产能利用率可能大幅下降，反而拖累国产设备/材料需求。这是最极端的负面情景。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">技术代差风险</div>
+                    <div class="risk-desc">国产设备/材料在先进制程上与海外龙头仍存在1-2代差距。应用材料/泛林/TEL在7nm以下先进制程设备上仍不可替代。若国产设备/材料长期无法在先进制程突破，天花板将被限制在成熟制程。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">存储周期下行风险</div>
+                    <div class="risk-desc">存储芯片市场具有强周期特征，DRAM和NAND价格可能在产能集中释放后大幅下跌。若全球存储市场进入供过于求周期，长鑫/长江存储盈利承压，扩产放缓将传导至设备和材料订单。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">估值透支风险</div>
+                    <div class="risk-desc">双链交叉标的是当前市场最热门的国产替代方向，北方华创PE 60x+、中微PE 80x+、拓荆PS高估值，充分反映了市场对双链扩产最乐观的预期。若业绩兑现不及预期，高估值标的面临显著回调压力。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">客户集中度风险</div>
+                    <div class="risk-desc">国产设备/材料企业的营收高度集中于中芯国际/长鑫/长江存储三家大客户。任意一家客户资本开支缩减或转向海外供应商，都将对业绩产生显著影响。半导体设备行业的客户集中风险是结构性特征。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p style="text-align:center;color:#8892a8;font-size:0.8em;padding:30px 0 10px;border-top:1px solid #1e293b;margin-top:40px">
+                本报告基于《国产AI算力产业链》（18只标的）与《国产存储芯片产业链》（12只标的）的交叉分析 | 数据来源：东方财富、同花顺、各公司年报/公告、券商研报 | 整理时间：2026-06-29
+            </p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em;margin-top:6px">
+                5只双链交叉标的（北方华创/中微公司/拓荆科技/安集科技/通富微电）同属半导体设备、材料、封测环节，是算力芯片和存储芯片制造共享的基础设施平台，受益于双链同步扩产。
+            </p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em;margin-top:6px">
+                仅为公开资料整理与产业链交叉分析，不构成任何投资建议。股市有风险，投资需谨慎。
+            </p>
+        </div>
+    </div>
+</body>
+</html>
