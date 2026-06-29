@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>韩国股市收盘分析 | 2026年06月29日</title>
+    <style>        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #111827;
+            --bg-card: #1a2332;
+            --bg-card-hover: #1f2b3d;
+            --border: #2a3a4e;
+            --text-primary: #e8edf5;
+            --text-secondary: #8a9bb5;
+            --text-muted: #5a6b82;
+            --accent-red: #ef4444;
+            --accent-green: #22c55e;
+            --accent-blue: #3b82f6;
+            --accent-amber: #f59e0b;
+            --accent-purple: #a855f7;
+            --accent-cyan: #06b6d4;
+            --accent-rose: #f43f5e;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .header {
+            background: linear-gradient(135deg, #0d2a1a 0%, #1a2a3a 50%, #1a1a2a 100%);
+            border: 1px solid var(--border); border-radius: 16px; padding: 32px 36px;
+            margin-bottom: 24px; position: relative; overflow: hidden;
+        }
+        .header::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at 25% 50%, rgba(239,68,68,0.08) 0%, transparent 55%),
+                        radial-gradient(ellipse at 75% 50%, rgba(59,130,246,0.06) 0%, transparent 55%);
+            pointer-events: none;
+        }
+        .header-flag { font-size: 28px; margin-bottom: 4px; position: relative; }
+        .header-title { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 6px; position: relative; }
+        .header-subtitle { font-size: 15px; color: var(--text-secondary); position: relative; }
+        .header-date {
+            display: inline-flex; align-items: center; gap: 8px; margin-top: 12px;
+            padding: 6px 14px; background: rgba(239,68,68,0.10);
+            border: 1px solid rgba(239,68,68,0.25); border-radius: 8px;
+            font-size: 13px; color: #fca5a5; position: relative;
+        }
+        .nav-link {
+            display: inline-block; padding: 10px 20px; background: var(--bg-card);
+            border: 1px solid var(--border); border-radius: 8px; color: var(--accent-blue);
+            text-decoration: none; font-size: 14px; margin-bottom: 24px; transition: all .2s;
+        }
+        .nav-link:hover { background: rgba(59,130,246,0.1); border-color: var(--accent-blue); }
+        .two-day-banner {
+            display: flex; align-items: center; gap: 12px;
+            background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.2);
+            border-radius: 10px; padding: 14px 20px; margin-bottom: 24px;
+        }
+        .two-day-banner .badge-icon { font-size: 24px; }
+        .two-day-banner .badge-text { font-size: 14px; color: #fca5a5; font-weight: 600; }
+        .two-day-banner .badge-num { font-size: 20px; font-weight: 800; color: var(--accent-green); }
+        .index-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 28px; }
+        .index-card {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+            padding: 24px; transition: transform .2s, box-shadow .2s;
+        }
+        .index-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+        .index-card.up { border-left: 4px solid var(--accent-green); }
+        .index-card.down { border-left: 4px solid var(--accent-red); }
+        .index-card .label { font-size: 13px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .index-card .value { font-size: 32px; font-weight: 700; margin-bottom: 4px; }
+        .index-card .change { font-size: 18px; font-weight: 600; }
+        .index-card .change.up { color: var(--accent-green); }
+        .index-card .change.down { color: var(--accent-red); }
+        .section-title {
+            font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 16px;
+            padding-bottom: 12px; border-bottom: 2px solid var(--border);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .section-title .icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .section-title .icon.idx { background: rgba(59,130,246,0.2); color: #60a5fa; }
+        .section-title .icon.sec { background: rgba(168,85,247,0.2); color: #c084fc; }
+        .section-title .icon.stk { background: rgba(34,197,94,0.2); color: #4ade80; }
+        .section-title .icon.reason { background: rgba(6,182,212,0.2); color: #22d3ee; }
+        .section-title .icon.mega { background: rgba(239,68,68,0.2); color: #f87171; }
+        .section-title .icon.detail { background: rgba(168,85,247,0.2); color: #c084fc; }
+        .sector-table {
+            width: 100%; border-collapse: separate; border-spacing: 0; margin-bottom: 28px;
+            background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border);
+        }
+        .sector-table thead th {
+            background: rgba(239,68,68,0.06); padding: 14px 18px; text-align: left;
+            font-size: 13px; font-weight: 600; color: var(--text-secondary);
+            text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid var(--border);
+        }
+        .sector-table tbody td { padding: 14px 18px; border-bottom: 1px solid rgba(42,58,78,0.5); font-size: 14px; }
+        .sector-table tbody tr:last-child td { border-bottom: none; }
+        .sector-table tbody tr:hover { background: var(--bg-card-hover); }
+        .sector-table .rank { width: 50px; font-weight: 700; color: var(--text-muted); }
+        .sector-table .sector-name { font-weight: 600; color: var(--text-primary); }
+        .sector-table .change-val { font-weight: 700; }
+        .sector-table .change-val.up { color: var(--accent-green); }
+        .sector-table .change-val.down { color: var(--accent-red); }
+        .sector-table .driver { color: var(--text-secondary); font-size: 13px; }
+        .mega-table {
+            width: 100%; border-collapse: separate; border-spacing: 0; margin-bottom: 28px;
+            background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border);
+        }
+        .mega-table thead th {
+            background: rgba(239,68,68,0.05); padding: 14px 18px; text-align: left;
+            font-size: 13px; font-weight: 600; color: var(--text-secondary);
+            text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid var(--border);
+        }
+        .mega-table tbody td { padding: 14px 18px; border-bottom: 1px solid rgba(42,58,78,0.5); font-size: 14px; }
+        .mega-table tbody tr:last-child td { border-bottom: none; }
+        .mega-table tbody tr:hover { background: var(--bg-card-hover); }
+        .mega-table .stock-col { font-weight: 700; color: #fff; }
+        .mega-table .stock-col .en { font-weight: 400; font-size: 12px; color: var(--text-muted); }
+        .mega-table .change-col { font-weight: 700; }
+        .mega-table .change-col.up { color: var(--accent-green); }
+        .mega-table .change-col.down { color: var(--accent-red); }
+        .mega-table .note-col { color: var(--text-secondary); font-size: 13px; }
+        .reason-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; margin-bottom: 28px; }
+        .reason-card {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+            padding: 20px; position: relative; overflow: hidden;
+        }
+        .reason-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; }
+        .reason-card.red::before { background: var(--accent-red); }
+        .reason-card.green::before { background: var(--accent-green); }
+        .reason-card.blue::before { background: var(--accent-blue); }
+        .reason-card.cyan::before { background: var(--accent-cyan); }
+        .reason-card.amber::before { background: var(--accent-amber); }
+        .reason-card.purple::before { background: var(--accent-purple); }
+        .reason-card .reason-num {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; border-radius: 8px;
+            font-size: 14px; font-weight: 700; margin-bottom: 8px;
+        }
+        .reason-card.red .reason-num { background: rgba(239,68,68,0.15); color: #f87171; }
+        .reason-card.green .reason-num { background: rgba(34,197,94,0.15); color: #86efac; }
+        .reason-card.blue .reason-num { background: rgba(59,130,246,0.15); color: #60a5fa; }
+        .reason-card.cyan .reason-num { background: rgba(6,182,212,0.15); color: #22d3ee; }
+        .reason-card.amber .reason-num { background: rgba(245,158,11,0.15); color: #fbbf24; }
+        .reason-card.purple .reason-num { background: rgba(168,85,247,0.15); color: #c084fc; }
+        .reason-card .reason-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+        .reason-card .reason-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+        .reason-card .reason-tag {
+            display: inline-block; margin-top: 10px; padding: 3px 10px;
+            border-radius: 6px; font-size: 11px;
+        }
+        .reason-card.red .reason-tag { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; }
+        .reason-card.green .reason-tag { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); color: #86efac; }
+        .reason-card.blue .reason-tag { background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2); color: #93c5fd; }
+        .reason-card.cyan .reason-tag { background: rgba(6,182,212,0.1); border: 1px solid rgba(6,182,212,0.2); color: #67e8f9; }
+        .reason-card.amber .reason-tag { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2); color: #fde68a; }
+        .reason-card.purple .reason-tag { background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.2); color: #d8b4fe; }
+        .footer { text-align: center; color: var(--text-muted); font-size: 12px; padding: 20px 0; border-top: 1px solid var(--border); margin-top: 12px; }
+        .disclaimer { color: var(--text-muted); font-size: 12px; text-align: center; margin-top: 8px; }
+        .milestone-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 4px 12px; background: rgba(34,197,94,0.12);
+            border: 1px solid rgba(34,197,94,0.25); border-radius: 6px;
+            font-size: 12px; color: #86efac; font-weight: 600; margin-left: 10px;
+        }
+        @media (max-width: 640px) {
+            .container { padding: 12px; }
+            .header { padding: 20px; }
+            .header-title { font-size: 22px; }
+            .index-card .value { font-size: 26px; }
+            .reason-grid { grid-template-columns: 1fr; }
+        }</style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-flag">🇰🇷</div>
+            <div class="header-title">韩国股市收盘分析</div>
+            <div class="header-subtitle">2026年06月29日 · KOSPI微跌-0.20% vs KOSDAQ暴涨+8.13%，市场严重分化</div>
+            <div class="header-date">📅 2026年06月29日 收盘总结 · KOSPI指数 8,394.65 / KOSDAQ 920.57</div>
+        </div>
+        <a class="nav-link" href="index.html">← 返回导航</a>
+
+        <div class="two-day-banner">
+            <div class="badge-icon">⚡</div>
+            <div class="badge-text">二板分化：KOSPI</div>
+            <div class="badge-num" style="color:var(--accent-red)">-0.20%</div>
+            <div class="badge-text">KOSDAQ</div>
+            <div class="badge-num">+8.13%</div>
+            <div class="badge-text">二次电池/生物制药领涨创业板</div>
+        </div>
+
+        <div class="section-title">
+            <span class="icon idx">📈</span>
+            主要指数
+        </div>
+        <div class="index-grid"><div style="color:var(--text-muted);text-align:center;padding:20px">指数数据获取中...</div></div>
+
+        <div class="section-title">
+            <span class="icon mega">💰</span>
+            核心权重股
+        </div>
+        <table class="mega-table">
+            <thead>
+                <tr>
+                    <th>股票</th>
+                    <th>最新价</th>
+                    <th>涨跌幅</th>
+                    <th>主题 / 权重地位</th>
+                </tr>
+            </thead>
+            <tbody><tr><td colspan="4" style="color:var(--text-muted);text-align:center;padding:20px">权重股数据获取中...</td></tr></tbody>
+        </table>
+
+        <div class="section-title">
+            <span class="icon sec">📊</span>
+            板块表现
+        </div>
+        <table class="sector-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>板块</th>
+                    <th>涨跌幅</th>
+                    <th>核心驱动</th>
+                </tr>
+            </thead>
+            <tbody>
+        <tr>
+            <td class="rank">1</td>
+            <td class="sector-name">建筑/工程</td>
+            <td class="change-val up">▲ +14.96%</td>
+            <td class="driver">三星工程+14.96%，中东新项目预期</td>
+        </tr>
+        <tr>
+            <td class="rank">2</td>
+            <td class="sector-name">化妆品/消费</td>
+            <td class="change-val up">▲ +14.95%</td>
+            <td class="driver">爱茉莉太平洋+14.95%，出口增长预期强劲</td>
+        </tr>
+        <tr>
+            <td class="rank">3</td>
+            <td class="sector-name">二次电池/新能源</td>
+            <td class="change-val up">▲ +13.65%</td>
+            <td class="driver">三星SDI+12.53%领涨，LG化学+13.65%，POSCO控股+9.18%，电池材料全线暴涨</td>
+        </tr>
+        <tr>
+            <td class="rank">4</td>
+            <td class="sector-name">钢铁/材料</td>
+            <td class="change-val up">▲ +9.18%</td>
+            <td class="driver">POSCO控股+9.18%领涨，二次电池材料业务估值修复</td>
+        </tr>
+        <tr>
+            <td class="rank">5</td>
+            <td class="sector-name">生物制药</td>
+            <td class="change-val up">▲ +8.65%</td>
+            <td class="driver">韩美药品+16.94%，Hanall Biopharma+19.38%，新药研发催化</td>
+        </tr>
+        <tr>
+            <td class="rank">6</td>
+            <td class="sector-name">互联网/平台</td>
+            <td class="change-val up">▲ +3.87%</td>
+            <td class="driver">NAVER+3.87%，Kakao跟涨，AI应用概念扩散</td>
+        </tr>
+        <tr>
+            <td class="rank">7</td>
+            <td class="sector-name">汽车制造</td>
+            <td class="change-val up">▲ +3.43%</td>
+            <td class="driver">现代汽车+3.43%、起亚+3.92%，出口数据回暖预期</td>
+        </tr>
+        <tr>
+            <td class="rank">8</td>
+            <td class="sector-name">银行/金融</td>
+            <td class="change-val up">▲ +2.95%</td>
+            <td class="driver">KB金融+2.95%，利率预期稳定，银行股温和上行</td>
+        </tr>
+        <tr>
+            <td class="rank">9</td>
+            <td class="sector-name">军工/防御</td>
+            <td class="change-val up">▲ +0.85%</td>
+            <td class="driver">地缘政治紧张下防御性配置需求</td>
+        </tr>
+        <tr>
+            <td class="rank">10</td>
+            <td class="sector-name">半导体/电子</td>
+            <td class="change-val down">▼ -1.85%</td>
+            <td class="driver">三星电子-4.86%拖累指数，DB HiTek-9.29%，AI估值担忧延续</td>
+        </tr></tbody>
+        </table>
+
+        <div class="section-title">
+            <span class="icon reason">💡</span>
+            市场分析
+        </div>
+        <div class="reason-grid">
+            <div class="reason-card red">
+                <div class="reason-num">1</div>
+                <div class="reason-title">KOSPI微跌-0.20%，三星电子-4.86%沉重拖累</div>
+                <div class="reason-desc">KOSPI收盘8,394.65，盘中振幅达4.7%（低点8,127.99 / 高点8,525.53）。三星电子₩323,000大跌-4.86%，作为KOSPI第一大权重股严重压制指数。AI算力估值担忧自上周传导至韩国半导体板块，外资持续减持。</div>
+                <span class="reason-tag">权重拖累</span>
+            </div>
+            <div class="reason-card green">
+                <div class="reason-num">2</div>
+                <div class="reason-title">KOSDAQ暴涨+8.13%，二次电池/生物制药全线爆发</div>
+                <div class="reason-desc">KOSDAQ收盘920.57，单日飙升69.20点，创近期最大涨幅。三星SDI+12.53%、LG化学+13.65%、POSCO控股+9.18%领涨二次电池材料板块；韩美药品+16.94%、Hanall Biopharma+19.38%带动生物制药。资金从大市值半导体轮动至中小创成长股。</div>
+                <span class="reason-tag">板块轮动</span>
+            </div>
+            <div class="reason-card blue">
+                <div class="reason-num">3</div>
+                <div class="reason-title">汽车板块强势：现代+3.43%、起亚+3.92%</div>
+                <div class="reason-desc">现代汽车₩497,000涨+3.43%、起亚₩140,600涨+3.92%，汽车板块整体跑赢大盘。市场认为出口数据回暖预期及北美市场强劲需求支撑估值。现代汽车机器人/自动驾驶概念亦有催化。</div>
+                <span class="reason-tag">出口回暖</span>
+            </div>
+            <div class="reason-card cyan">
+                <div class="reason-num">4</div>
+                <div class="reason-title">KOSPI vs KOSDAQ严重分化——风格切换信号？</div>
+                <div class="reason-desc">KOSPI -0.20% vs KOSDAQ +8.13%，二板分化程度罕见。大盘股受外资减持压力（三星/SK海力士），而中小创受益于内资+散户流入及主题投资（电池材料、生物制药、化妆品出口）。关注此风格切换是否持续。</div>
+                <span class="reason-tag">风格切换</span>
+            </div>
+            <div class="reason-card amber">
+                <div class="reason-num">5</div>
+                <div class="reason-title">SK海力士-1.68%：HBM存储龙头承压</div>
+                <div class="reason-desc">SK海力士₩2,628,000跌-1.68%，延续AI泡沫担忧以来的弱势。尽管HBM3E订单饱满，市场对AI资本开支可持续性存疑。成交量5.22M仅次于三星电子，多空分歧加大。</div>
+                <span class="reason-tag">AI算力</span>
+            </div>
+            <div class="reason-card purple">
+                <div class="reason-num">6</div>
+                <div class="reason-title">化妆品/消费板块异动：爱茉莉太平洋+14.95%</div>
+                <div class="reason-desc">爱茉莉太平洋单日大涨近15%，带动化妆品板块领涨消费。韩国化妆品对华/对美出口增长预期强劲，叠加韩元汇率有利出口竞争力。建筑/工程板块（三星工程+14.96%）受中东新项目催化同步走强。</div>
+                <span class="reason-tag">消费出口</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>生成时间：2026-06-29 17:51</p>
+            <p class="disclaimer">⚠️ 数据来源：Investing.com · 仅为数据整理，不构成任何投资建议。股市有风险，投资需谨慎。</p>
+        </div>
+    </div>
+</body>
+</html>

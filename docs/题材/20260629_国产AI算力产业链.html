@@ -227,6 +227,58 @@
         .risk-card .risk-title { font-size: 16px; font-weight: 600; color: #f87171; margin-bottom: 8px; }
         .risk-card .risk-desc { font-size: 14px; color: #8892a8; line-height: 1.7; }
 
+        /* 上中下游板块划分 */
+        .segment-section { margin-bottom: 56px; }
+        .segment-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+        .segment-card { background: #111827; border: 1px solid #1e293b; border-radius: 16px; padding: 28px 24px; position: relative; overflow: hidden; }
+        .segment-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+        .segment-card.upstream::before { background: linear-gradient(90deg, #ef4444, #f97316); }
+        .segment-card.midstream::before { background: linear-gradient(90deg, #06b6d4, #22d3ee); }
+        .segment-card.downstream::before { background: linear-gradient(90deg, #22c55e, #34d399); }
+        .segment-card .seg-badge { display: inline-flex; align-items: center; gap: 6px;
+            font-size: 13px; font-weight: 700; letter-spacing: 1px; padding: 5px 14px;
+            border-radius: 20px; margin-bottom: 14px; }
+        .segment-card.upstream .seg-badge { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.25); }
+        .segment-card.midstream .seg-badge { background: rgba(6,182,212,0.15); color: #06b6d4; border: 1px solid rgba(6,182,212,0.25); }
+        .segment-card.downstream .seg-badge { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.25); }
+        .segment-card .seg-subtitle { font-size: 14px; font-weight: 600; color: #c8d0e0; margin-bottom: 6px; }
+        .segment-card .seg-count { font-size: 12px; color: #5a6478; margin-bottom: 16px; }
+        .segment-card .seg-companies { display: flex; flex-direction: column; gap: 8px; }
+        .segment-card .seg-company { display: flex; align-items: center; gap: 10px;
+            padding: 8px 12px; border-radius: 10px; background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06); transition: border-color 0.2s; }
+        .segment-card .seg-company:hover { border-color: rgba(255,255,255,0.15); }
+        .segment-card .seg-company-icon { width: 30px; height: 30px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; font-weight: 700; flex-shrink: 0; }
+        .segment-card.upstream .seg-company-icon { background: rgba(239,68,68,0.12); color: #ef4444; }
+        .segment-card.midstream .seg-company-icon { background: rgba(6,182,212,0.12); color: #06b6d4; }
+        .segment-card.downstream .seg-company-icon { background: rgba(34,197,94,0.12); color: #22c55e; }
+        .segment-card .seg-company-info { display: flex; flex-direction: column; }
+        .segment-card .seg-company-name { font-size: 13px; font-weight: 600; color: #e0e6f0; }
+        .segment-card .seg-company-code { font-size: 11px; color: #5a6478; }
+        .segment-card .seg-company-role { font-size: 11px; color: #8892a8; margin-left: auto; text-align: right; }
+        .segment-card .seg-desc { font-size: 13px; color: #8892a8; line-height: 1.7; margin-top: 16px;
+            padding: 12px 14px; background: rgba(255,255,255,0.03); border-radius: 10px;
+            border-left: 3px solid; }
+        .segment-card.upstream .seg-desc { border-color: rgba(239,68,68,0.3); }
+        .segment-card.midstream .seg-desc { border-color: rgba(6,182,212,0.3); }
+        .segment-card.downstream .seg-desc { border-color: rgba(34,197,94,0.3); }
+        .segment-arrow-row { display: flex; align-items: center; justify-content: center; gap: 20px;
+            margin-top: 20px; padding: 12px; background: #111827; border-radius: 12px;
+            border: 1px solid #1e293b; }
+        .segment-arrow-step { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+        .segment-arrow-step .arrow-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .segment-arrow-step .arrow-dot.red { background: #ef4444; }
+        .segment-arrow-step .arrow-dot.cyan { background: #06b6d4; }
+        .segment-arrow-step .arrow-dot.green { background: #22c55e; }
+        .segment-arrow-step .arrow-label { color: #8892a8; }
+        .segment-arrow-row .arrow-glyph { color: #4b5563; font-size: 20px; }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .segment-grid { grid-template-columns: 1fr; }
+        }
         /* 响应式 */
         @media (max-width: 768px) {
             .container { padding: 24px 16px; }
@@ -249,7 +301,7 @@
         <!-- Header -->
         <div class="header">
             <h1>国产AI算力产业链</h1>
-            <div class="subtitle">从AI芯片设计→半导体设备/材料/制造/封测→昇腾生态/算力服务器→算力租赁/智算中心 · 全链条16只核心标的</div>
+            <div class="subtitle">从AI芯片设计→半导体设备/材料/制造/封测→昇腾生态/算力服务器→算力租赁/智算中心 · 全链条18只核心标的</div>
             <div class="topic-tags">
                 <span class="topic-tag chip">AI芯片设计</span>
                 <span class="topic-tag equip">半导体设备</span>
@@ -303,7 +355,7 @@
                 </div>
                 <div class="stat-card stat-green">
                     <div class="stat-label">A股全链条核心标的</div>
-                    <div class="stat-value">16只</div>
+                    <div class="stat-value">18只</div>
                     <div class="stat-note">从芯片设计→半导体→服务器→智算中心全覆盖</div>
                 </div>
             </div>
@@ -367,6 +419,195 @@
                         <span class="product-tag">MaaS</span>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- 上中下游板块划分 -->
+        <div class="segment-section">
+            <div class="section-title">产业链上中下游一览 · 18只标的板块分布</div>
+            <div class="section-subtitle">按"芯片设计/设备材料 → 晶圆制造/封测 → 服务器/智算中心"三大环节划分</div>
+            <div class="segment-grid">
+                <!-- 上游 -->
+                <div class="segment-card upstream">
+                    <span class="seg-badge">⬆ 上游 · 芯片设计/设备/材料</span>
+                    <div class="seg-subtitle">芯片设计 + EDA + 半导体设备 + 半导体材料</div>
+                    <div class="seg-count">共 8 只标的</div>
+                    <div class="seg-companies">
+                        <div class="seg-company">
+                            <div class="seg-company-icon">寒</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">寒武纪</span>
+                                <span class="seg-company-code">688256</span>
+                            </div>
+                            <span class="seg-company-role">AI训练/推理芯片</span>
+                        </div>
+                        <div class="seg-company">
+                            <div class="seg-company-icon">海</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">海光信息</span>
+                                <span class="seg-company-code">688041</span>
+                            </div>
+                            <span class="seg-company-role">DCU加速卡+CPU</span>
+                        </div>
+                        <div class="seg-company">
+                            <div class="seg-company-icon">华</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">华大九天</span>
+                                <span class="seg-company-code">301269</span>
+                            </div>
+                            <span class="seg-company-role">EDA全流程工具</span>
+                        </div>
+                        <div class="seg-company">
+                            <div class="seg-company-icon">北</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">北方华创</span>
+                                <span class="seg-company-code">002371</span>
+                            </div>
+                            <span class="seg-company-role">综合半导体设备</span>
+                        </div>
+                        <div class="seg-company">
+                            <div class="seg-company-icon">中</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">中微公司</span>
+                                <span class="seg-company-code">688012</span>
+                            </div>
+                            <span class="seg-company-role">刻蚀+MOCVD</span>
+                        </div>
+                        <div class="seg-company">
+                            <div class="seg-company-icon">拓</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">拓荆科技</span>
+                                <span class="seg-company-code">688072</span>
+                            </div>
+                            <span class="seg-company-role">CVD/PVD薄膜</span>
+                        </div>
+                        <div class="seg-company">
+                            <div class="seg-company-icon">沪</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">沪硅产业</span>
+                                <span class="seg-company-code">688126</span>
+                            </div>
+                            <span class="seg-company-role">12寸大硅片</span>
+                        </div>
+                        <div class="seg-company">
+                            <div class="seg-company-icon">安</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">安集科技</span>
+                                <span class="seg-company-code">688019</span>
+                            </div>
+                            <span class="seg-company-role">CMP抛光液</span>
+                        </div>
+                    </div>
+                    <div class="seg-desc">上游是国产算力"自主可控"的源头，AI芯片设计决定算力上限，设备/材料决定制造下限。美国出口管制直接驱动上游国产替代加速，8只标的中7只受益确定性+弹性空间双满星。</div>
+                </div>
+
+                <!-- 中游 -->
+                <div class="segment-card midstream">
+                    <span class="seg-badge">⏸ 中游 · 晶圆制造/先进封装</span>
+                    <div class="seg-subtitle">晶圆代工 + Chiplet封装</div>
+                    <div class="seg-count">共 3 只标的</div>
+                    <div class="seg-companies">
+                        <div class="seg-company">
+                            <div class="seg-company-icon">芯</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">中芯国际</span>
+                                <span class="seg-company-code">688981</span>
+                            </div>
+                            <span class="seg-company-role">晶圆代工龙头</span>
+                        </div>
+                        <div class="seg-company">
+                            <div class="seg-company-icon">长</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">长电科技</span>
+                                <span class="seg-company-code">600584</span>
+                            </div>
+                            <span class="seg-company-role">全球OSAT TOP3</span>
+                        </div>
+                        <div class="seg-company">
+                            <div class="seg-company-icon">通</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">通富微电</span>
+                                <span class="seg-company-code">002156</span>
+                            </div>
+                            <span class="seg-company-role">AMD封测伙伴</span>
+                        </div>
+                    </div>
+                    <div class="seg-desc">中游是芯片从设计到成品的核心枢纽。中芯国际是国产设备/材料最大的验证平台，长电/通富受益于Chiplet趋势——封装从"后端"变"前端"，单颗价值量从$5→$500+。先进封装是国产算力绕不开的关键环节。</div>
+                </div>
+
+                <!-- 下游 -->
+                <div class="segment-card downstream">
+                    <span class="seg-badge">⬇ 下游 · 服务器/昇腾/智算中心</span>
+                    <div class="seg-subtitle">昇腾OEM + AI服务器 + 算力租赁 + AIDC</div>
+                    <div class="seg-count">共 7 只标的</div>
+                    <div class="seg-companies">
+                        <div class="seg-company">
+                            <div class="seg-company-icon">拓</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">拓维信息</span>
+                                <span class="seg-company-code">002261</span>
+                            </div>
+                            <span class="seg-company-role">昇腾核心OEM</span>
+                        </div>
+                        <div class="seg-company">
+                            <div class="seg-company-icon">神</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">神州数码</span>
+                                <span class="seg-company-code">000034</span>
+                            </div>
+                            <span class="seg-company-role">昇腾最大分销</span>
+                        </div>
+                        <div class="seg-company">
+                            <div class="seg-company-icon">高</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">高新发展</span>
+                                <span class="seg-company-code">000628</span>
+                            </div>
+                            <span class="seg-company-role">华鲲振宇</span>
+                        </div>
+                        <div class="seg-company">
+                            <div class="seg-company-icon">曙</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">中科曙光</span>
+                                <span class="seg-company-code">603019</span>
+                            </div>
+                            <span class="seg-company-role">高端算力服务器</span>
+                        </div>
+                        <div class="seg-company">
+                            <div class="seg-company-icon">润</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">润泽科技</span>
+                                <span class="seg-company-code">300442</span>
+                            </div>
+                            <span class="seg-company-role">AIDC+算力租赁</span>
+                        </div>
+                        <div class="seg-company">
+                            <div class="seg-company-icon">数</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">数据港</span>
+                                <span class="seg-company-code">603881</span>
+                            </div>
+                            <span class="seg-company-role">阿里AIDC运营</span>
+                        </div>
+                        <div class="seg-company">
+                            <div class="seg-company-icon">光</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">光环新网</span>
+                                <span class="seg-company-code">300383</span>
+                            </div>
+                            <span class="seg-company-role">北京AIDC龙头</span>
+                        </div>
+                    </div>
+                    <div class="seg-desc">下游是国产算力的"变现终端"。三大运营商AI服务器集采国产化率要求>50%，昇腾OEM伙伴出货量翻倍增长。润泽科技AIDC+算力租赁盈利模型最强，中科曙光背靠中科院拿单国家级智算中心。7只标的中5只受益确定性满星。</div>
+                </div>
+            </div>
+            <!-- 流向指示 -->
+            <div class="segment-arrow-row">
+                <span class="segment-arrow-step"><span class="arrow-dot red"></span><span class="arrow-label">上游</span></span>
+                <span class="arrow-glyph">⟶</span>
+                <span class="segment-arrow-step"><span class="arrow-dot cyan"></span><span class="arrow-label">中游</span></span>
+                <span class="arrow-glyph">⟶</span>
+                <span class="segment-arrow-step"><span class="arrow-dot green"></span><span class="arrow-label">下游</span></span>
             </div>
         </div>
 
@@ -1149,7 +1390,7 @@
 
         <!-- 财务指标速览 -->
         <div class="compare-section">
-            <div class="section-title">16只标的财务指标全景对比 · 哪个环节最赚钱？</div>
+            <div class="section-title">18只标的财务指标全景对比 · 哪个环节最赚钱？</div>
             <div class="section-subtitle">基于2025年报/2026Q1公开数据，按产业链5大环节对比毛利率、增速和盈利质量</div>
             <div style="overflow-x:auto;">
             <table class="compare-table">
