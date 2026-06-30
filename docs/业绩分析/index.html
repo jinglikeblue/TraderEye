@@ -40,272 +40,69 @@
         .info { flex: 1; min-width: 0; }
         .name { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .code { font-size: 11px; color: #64748b; margin-top: 1px; }
+	  .perf { font-size: 11px; margin-top: 3px; line-height: 1.4; }
+	  .meta-pos { color: #10b981; }
+	  .meta-neg { color: #ef4444; }
         .arrow { color: #475569; font-size: 16px; flex-shrink: 0; }
         .card:hover .arrow { color: #3b82f6; }
 
         .ref-section { margin-top: 20px; margin-bottom: 40px; }
         footer { text-align: center; color: #475569; font-size: 12px; margin-top: 40px; padding-bottom: 20px; }
+
+        /* 搜索框 */
+        .search-wrap { max-width: 480px; margin: 0 auto 28px; position: relative; }
+        .search-wrap input { width: 100%; padding: 12px 16px 12px 44px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #e2e8f0; font-size: 15px; outline: none; transition: border-color .2s; }
+        .search-wrap input:focus { border-color: #3b82f6; }
+        .search-wrap input::placeholder { color: #475569; }
+        .search-wrap .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #475569; font-size: 18px; pointer-events: none; }
+        .no-result { display: none; text-align: center; padding: 60px 0; color: #475569; font-size: 15px; }
+        .theme-group.hidden { display: none; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>业绩分析导航</h1>
-        <p class="subtitle">按更新时间排列 · 点击卡片在新窗口中查看详细分析报告</p>
+        <p class="subtitle">共 33 只 · 点击卡片查看报告 · 搜索框可快速过滤</p>
+
+        <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="filterInput" placeholder="搜索名称、代码、板块..." oninput="filterCards()">
+        </div>
+        <div class="no-result" id="noResult">未找到匹配的标的</div>
 
         <!-- ==================== 2026-06-30 ==================== -->
         <div class="date-section">
             <div class="date-header">
                 <span class="date-badge">06-30</span> 2026年6月30日 更新
-                <span class="count">6 只</span>
+                <span class="count">33 只</span>
             </div>
 
             <div class="theme-group">
                 <div class="theme-title">半导体设备</div>
                 <div class="grid">
-                    <a class="card" href="20260630_中微公司_688012/index.html" target="_blank">
+                    <a class="card" href="半导体设备/20260630_中微公司_688012.html" target="_blank">
                         <div class="icon stock">中</div>
-                        <div class="info"><div class="name">中微公司</div><div class="code">688012.SH</div></div>
+                        <div class="info"><div class="name">中微公司</div><div class="code">688012.SH</div><div class="perf"><span class="meta-pos">年内：+46.69%</span><br><span class="meta-pos">924：+464.46%</span></div></div>
                         <div class="arrow">›</div>
                     </a>
-                </div>
-            </div>
-
-            <div class="theme-group">
-                <div class="theme-title">封测 · 先进封装</div>
-                <div class="grid">
-                    <a class="card" href="20260630_长电科技_600584/index.html" target="_blank">
-                        <div class="icon package">长</div>
-                        <div class="info"><div class="name">长电科技</div><div class="code">600584.SH</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="theme-group">
-                <div class="theme-title">AI算力基础设施</div>
-                <div class="grid">
-                    <a class="card" href="20260630_中科曙光_603019/index.html" target="_blank">
-                        <div class="icon ai">中</div>
-                        <div class="info"><div class="name">中科曙光</div><div class="code">603019.SH</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                    <a class="card" href="20260630_利通电子_603629/index.html" target="_blank">
-                        <div class="icon ai">利</div>
-                        <div class="info"><div class="name">利通电子</div><div class="code">603629.SH</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="theme-group">
-                <div class="theme-title">通讯行业 · 光纤光缆</div>
-                <div class="grid">
-                    <a class="card" href="20260630_亨通光电_600487/index.html" target="_blank">
-                        <div class="icon comm">亨</div>
-                        <div class="info"><div class="name">亨通光电</div><div class="code">600487.SH</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                    <a class="card" href="20260630_中天科技_600522/index.html" target="_blank">
-                        <div class="icon comm">中</div>
-                        <div class="info"><div class="name">中天科技</div><div class="code">600522.SH</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- ==================== 2026-06-25 ==================== -->
-        <div class="date-section">
-            <div class="date-header">
-                <span class="date-badge">06-25</span> 2026年6月25日 更新
-                <span class="count">6 只</span>
-            </div>
-
-            <div class="theme-group">
-                <div class="theme-title">AI算力配套 · 服务器与液冷</div>
-                <div class="grid">
-                    <a class="card" href="20260625_工业富联_601138/index.html" target="_blank">
-                        <div class="icon ai">工</div>
-                        <div class="info"><div class="name">工业富联</div><div class="code">601138.SH</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                    <a class="card" href="20260625_英维克_002837/index.html" target="_blank">
-                        <div class="icon ai">英</div>
-                        <div class="info"><div class="name">英维克</div><div class="code">002837.SZ</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="theme-group">
-                <div class="theme-title">通讯行业 · 光纤光缆</div>
-                <div class="grid">
-                    <a class="card" href="20260625_通鼎互联_002491/index.html" target="_blank">
-                        <div class="icon comm">通</div>
-                        <div class="info"><div class="name">通鼎互联</div><div class="code">002491.SZ</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="theme-group">
-                <div class="theme-title">电子元件 · MLCC</div>
-                <div class="grid">
-                    <a class="card" href="20260625_风华高科_000636/index.html" target="_blank">
-                        <div class="icon comp">风</div>
-                        <div class="info"><div class="name">风华高科</div><div class="code">000636.SZ</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="theme-group">
-                <div class="theme-title">玻璃玻纤 · 新材料</div>
-                <div class="grid">
-                    <a class="card" href="20260625_国际复材_301526/index.html" target="_blank">
-                        <div class="icon fiber">国</div>
-                        <div class="info"><div class="name">国际复材</div><div class="code">301526.SZ</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="theme-group">
-                <div class="theme-title">食品饮料</div>
-                <div class="grid">
-                    <a class="card" href="20260625_莲花控股_600186/index.html" target="_blank">
-                        <div class="icon food">莲</div>
-                        <div class="info"><div class="name">莲花控股</div><div class="code">600186.SH</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- ==================== 2026-06-24 ==================== -->
-        <div class="date-section">
-            <div class="date-header">
-                <span class="date-badge">06-24</span> 2026年6月24日 更新
-                <span class="count">3 只</span>
-            </div>
-
-            <div class="theme-group">
-                <div class="theme-title">AI算力配套 · 散热与PCB</div>
-                <div class="grid">
-                    <a class="card" href="20260624_飞荣达_300602/index.html" target="_blank">
-                        <div class="icon ai">飞</div>
-                        <div class="info"><div class="name">飞荣达</div><div class="code">300602.SZ</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                    <a class="card" href="20260624_沪电股份_002463/index.html" target="_blank">
-                        <div class="icon ai">沪</div>
-                        <div class="info"><div class="name">沪电股份</div><div class="code">002463.SZ</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="theme-group">
-                <div class="theme-title">海外 · 美股</div>
-                <div class="grid">
-                    <a class="card" href="20260624_台积电_TSM/index.html" target="_blank">
-                        <div class="icon overseas">台</div>
-                        <div class="info"><div class="name">台积电</div><div class="code">TSM.US</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- ==================== 2026-06-23 ==================== -->
-        <div class="date-section">
-            <div class="date-header">
-                <span class="date-badge">06-23</span> 2026年6月23日 更新
-                <span class="count">2 只</span>
-            </div>
-
-            <div class="theme-group">
-                <div class="theme-title">半导体材料 · 前驱体</div>
-                <div class="grid">
-                    <a class="card" href="20260623_雅克科技_002409/index.html" target="_blank">
-                        <div class="icon material">雅</div>
-                        <div class="info"><div class="name">雅克科技</div><div class="code">002409.SZ</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="theme-group">
-                <div class="theme-title">AI算力基础设施 · AIDC</div>
-                <div class="grid">
-                    <a class="card" href="20260623_润泽科技_300442/index.html" target="_blank">
-                        <div class="icon ai">润</div>
-                        <div class="info"><div class="name">润泽科技</div><div class="code">300442.SZ</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- ==================== 2026-06-20 ==================== -->
-        <div class="date-section">
-            <div class="date-header">
-                <span class="date-badge">06-20</span> 2026年6月20日 更新
-                <span class="count">31 只</span>
-            </div>
-
-            <div class="theme-group">
-                <div class="theme-title">半导体设备</div>
-                <div class="grid">
-                    <a class="card" href="20260620_北方华创_002371/index.html" target="_blank">
+                    <a class="card" href="半导体设备/20260630_北方华创_002371.html" target="_blank">
                         <div class="icon stock">北</div>
-                        <div class="info"><div class="name">北方华创</div><div class="code">002371.SZ</div></div>
+                        <div class="info"><div class="name">北方华创</div><div class="code">002371.SZ</div><div class="perf"><span class="meta-pos">年内：+81.28%</span><br><span class="meta-pos">924：+294.94%</span></div></div>
                         <div class="arrow">›</div>
                     </a>
-                    <a class="card" href="20260620_拓荆科技_688072/index.html" target="_blank">
+                    <a class="card" href="半导体设备/20260630_拓荆科技_688072.html" target="_blank">
                         <div class="icon stock">拓</div>
-                        <div class="info"><div class="name">拓荆科技</div><div class="code">688072.SH</div></div>
+                        <div class="info"><div class="name">拓荆科技</div><div class="code">688072.SH</div><div class="perf"><span class="meta-pos">年内：+134.82%</span><br><span class="meta-pos">924：+678.28%</span></div></div>
                         <div class="arrow">›</div>
                     </a>
-                    <a class="card" href="20260620_华海清科_688120/index.html" target="_blank">
+                    <a class="card" href="半导体设备/20260630_华海清科_688120.html" target="_blank">
                         <div class="icon stock">华</div>
-                        <div class="info"><div class="name">华海清科</div><div class="code">688120.SH</div></div>
+                        <div class="info"><div class="name">华海清科</div><div class="code">688120.SH</div><div class="perf"><span class="meta-pos">年内：+102.10%</span><br><span class="meta-pos">924：+447.06%</span></div></div>
                         <div class="arrow">›</div>
                     </a>
-                    <a class="card" href="20260620_盛美上海_688082/index.html" target="_blank">
-                        <div class="icon stock">盛</div>
-                        <div class="info"><div class="name">盛美上海</div><div class="code">688082.SH</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                    <a class="card" href="20260620_芯源微_688037/index.html" target="_blank">
-                        <div class="icon stock">芯</div>
-                        <div class="info"><div class="name">芯源微</div><div class="code">688037.SH</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                    <a class="card" href="20260620_精测电子_300567/index.html" target="_blank">
-                        <div class="icon stock">精</div>
-                        <div class="info"><div class="name">精测电子</div><div class="code">300567.SZ</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                    <a class="card" href="20260620_万业企业_600641/index.html" target="_blank">
-                        <div class="icon stock">万</div>
-                        <div class="info"><div class="name">万业企业</div><div class="code">600641.SH</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                    <a class="card" href="20260620_华峰测控_688200/index.html" target="_blank">
+                    <a class="card" href="半导体设备/20260630_华峰测控_688200.html" target="_blank">
                         <div class="icon stock">华</div>
-                        <div class="info"><div class="name">华峰测控</div><div class="code">688200.SH</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                    <a class="card" href="20260620_长川科技_300604/index.html" target="_blank">
-                        <div class="icon stock">长</div>
-                        <div class="info"><div class="name">长川科技</div><div class="code">300604.SZ</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                    <a class="card" href="20260620_富创精密_688409/index.html" target="_blank">
-                        <div class="icon stock">富</div>
-                        <div class="info"><div class="name">富创精密</div><div class="code">688409.SH</div></div>
+                        <div class="info"><div class="name">华峰测控</div><div class="code">688200.SH</div><div class="perf"><span class="meta-pos">年内：+175.73%</span><br><span class="meta-pos">924：+857.19%</span></div></div>
                         <div class="arrow">›</div>
                     </a>
                 </div>
@@ -314,165 +111,237 @@
             <div class="theme-group">
                 <div class="theme-title">半导体材料</div>
                 <div class="grid">
-                    <a class="card" href="20260620_安集科技_688019/index.html" target="_blank">
+                    <a class="card" href="半导体材料/20260630_安集科技_688019.html" target="_blank">
                         <div class="icon material">安</div>
-                        <div class="info"><div class="name">安集科技</div><div class="code">688019.SH</div></div>
+                        <div class="info"><div class="name">安集科技</div><div class="code">688019.SH</div><div class="perf"><span class="meta-pos">年内：+34.27%</span><br><span class="meta-pos">924：+375.00%</span></div></div>
                         <div class="arrow">›</div>
                     </a>
-                    <a class="card" href="20260620_鼎龙股份_300054/index.html" target="_blank">
+                    <a class="card" href="半导体材料/20260630_鼎龙股份_300054.html" target="_blank">
                         <div class="icon material">鼎</div>
-                        <div class="info"><div class="name">鼎龙股份</div><div class="code">300054.SZ</div></div>
+                        <div class="info"><div class="name">鼎龙股份</div><div class="code">300054.SZ</div><div class="perf"><span class="meta-pos">年内：+171.30%</span><br><span class="meta-pos">924：+454.24%</span></div></div>
                         <div class="arrow">›</div>
                     </a>
-                    <a class="card" href="20260620_江丰电子_300666/index.html" target="_blank">
-                        <div class="icon material">江</div>
-                        <div class="info"><div class="name">江丰电子</div><div class="code">300666.SZ</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                    <a class="card" href="20260620_华特气体_688268/index.html" target="_blank">
-                        <div class="icon material">华</div>
-                        <div class="info"><div class="name">华特气体</div><div class="code">688268.SH</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                    <a class="card" href="20260620_南大光电_300346/index.html" target="_blank">
-                        <div class="icon material">南</div>
-                        <div class="info"><div class="name">南大光电</div><div class="code">300346.SZ</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                    <a class="card" href="20260620_上海新阳_300236/index.html" target="_blank">
-                        <div class="icon material">上</div>
-                        <div class="info"><div class="name">上海新阳</div><div class="code">300236.SZ</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                    <a class="card" href="20260620_兴福电子_688545/index.html" target="_blank">
-                        <div class="icon material">兴</div>
-                        <div class="info"><div class="name">兴福电子</div><div class="code">688545.SH</div></div>
+                    <a class="card" href="半导体材料/20260630_雅克科技_002409.html" target="_blank">
+                        <div class="icon material">雅</div>
+                        <div class="info"><div class="name">雅克科技</div><div class="code">002409.SZ</div><div class="perf"><span class="meta-pos">年内：+166.76%</span><br><span class="meta-pos">924：+325.12%</span></div></div>
                         <div class="arrow">›</div>
                     </a>
                 </div>
             </div>
 
             <div class="theme-group">
-                <div class="theme-title">工程 · 洁净室与工艺系统</div>
+                <div class="theme-title">封测 · 先进封装</div>
                 <div class="grid">
-                    <a class="card" href="20260620_至纯科技_603690/index.html" target="_blank">
-                        <div class="icon engineering">至</div>
-                        <div class="info"><div class="name">至纯科技</div><div class="code">603690.SH</div></div>
+                    <a class="card" href="封测/20260630_长电科技_600584.html" target="_blank">
+                        <div class="icon package">长</div>
+                        <div class="info"><div class="name">长电科技</div><div class="code">600584.SH</div><div class="perf"><span class="meta-pos">年内：+169.16%</span><br><span class="meta-pos">924：+259.13%</span></div></div>
                         <div class="arrow">›</div>
                     </a>
-                    <a class="card" href="20260620_正帆科技_688596/index.html" target="_blank">
-                        <div class="icon engineering">正</div>
-                        <div class="info"><div class="name">正帆科技</div><div class="code">688596.SH</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                    <a class="card" href="20260620_亚翔集成_603929/index.html" target="_blank">
-                        <div class="icon engineering">亚</div>
-                        <div class="info"><div class="name">亚翔集成</div><div class="code">603929.SH</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="theme-group">
-                <div class="theme-title">半导体封测</div>
-                <div class="grid">
-                    <a class="card" href="20260620_通富微电_002156/index.html" target="_blank">
+                    <a class="card" href="封测/20260630_通富微电_002156.html" target="_blank">
                         <div class="icon package">通</div>
-                        <div class="info"><div class="name">通富微电</div><div class="code">002156.SZ</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                    <a class="card" href="20260620_深科技_000021/index.html" target="_blank">
-                        <div class="icon package">深</div>
-                        <div class="info"><div class="name">深科技</div><div class="code">000021.SZ</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                    <a class="card" href="20260620_太极实业_600667/index.html" target="_blank">
-                        <div class="icon package">太</div>
-                        <div class="info"><div class="name">太极实业</div><div class="code">600667.SH</div></div>
+                        <div class="info"><div class="name">通富微电</div><div class="code">002156.SZ</div><div class="perf"><span class="meta-pos">年内：+83.56%</span><br><span class="meta-pos">924：+283.53%</span></div></div>
                         <div class="arrow">›</div>
                     </a>
                 </div>
             </div>
 
             <div class="theme-group">
-                <div class="theme-title">存储模组</div>
+                <div class="theme-title">AI算力基础设施 · 服务器与液冷</div>
                 <div class="grid">
-                    <a class="card" href="20260620_江波龙_301308/index.html" target="_blank">
-                        <div class="icon module">江</div>
-                        <div class="info"><div class="name">江波龙</div><div class="code">301308.SZ</div></div>
+                    <a class="card" href="AI算力/20260630_中科曙光_603019.html" target="_blank">
+                        <div class="icon ai">中</div>
+                        <div class="info"><div class="name">中科曙光</div><div class="code">603019.SH</div><div class="perf"><span class="meta-pos">年内：+11.03%</span><br><span class="meta-pos">924：+159.88%</span></div></div>
                         <div class="arrow">›</div>
                     </a>
-                    <a class="card" href="20260620_佰维存储_688525/index.html" target="_blank">
-                        <div class="icon module">佰</div>
-                        <div class="info"><div class="name">佰维存储</div><div class="code">688525.SH</div></div>
+                    <a class="card" href="AI算力/20260630_工业富联_601138.html" target="_blank">
+                        <div class="icon ai">工</div>
+                        <div class="info"><div class="name">工业富联</div><div class="code">601138.SH</div><div class="perf"><span class="meta-pos">年内：+9.33%</span><br><span class="meta-pos">924：+254.97%</span></div></div>
                         <div class="arrow">›</div>
                     </a>
-                    <a class="card" href="20260620_德明利_001309/index.html" target="_blank">
-                        <div class="icon module">德</div>
-                        <div class="info"><div class="name">德明利</div><div class="code">001309.SZ</div></div>
+                    <a class="card" href="AI算力/20260630_英维克_002837.html" target="_blank">
+                        <div class="icon ai">英</div>
+                        <div class="info"><div class="name">英维克</div><div class="code">002837.SZ</div><div class="perf"><span class="meta-neg">年内：-27.64%</span><br><span class="meta-pos">924：+502.66%</span></div></div>
+                        <div class="arrow">›</div>
+                    </a>
+                    <a class="card" href="AI算力/20260630_飞荣达_300602.html" target="_blank">
+                        <div class="icon ai">飞</div>
+                        <div class="info"><div class="name">飞荣达</div><div class="code">300602.SZ</div><div class="perf"><span class="meta-pos">年内：+53.89%</span><br><span class="meta-pos">924：+261.02%</span></div></div>
                         <div class="arrow">›</div>
                     </a>
                 </div>
             </div>
 
             <div class="theme-group">
-                <div class="theme-title">EDA 工具</div>
+                <div class="theme-title">通讯行业 · 光纤光缆 · 光模块</div>
                 <div class="grid">
-                    <a class="card" href="20260620_华大九天_301269/index.html" target="_blank">
-                        <div class="icon eda">华</div>
-                        <div class="info"><div class="name">华大九天</div><div class="code">301269.SZ</div></div>
+                    <a class="card" href="通讯/20260630_亨通光电_600487.html" target="_blank">
+                        <div class="icon comm">亨</div>
+                        <div class="info"><div class="name">亨通光电</div><div class="code">600487.SH</div><div class="perf"><span class="meta-pos">年内：+335.65%</span><br><span class="meta-pos">924：+659.35%</span></div></div>
                         <div class="arrow">›</div>
                     </a>
-                    <a class="card" href="20260620_概伦电子_688206/index.html" target="_blank">
-                        <div class="icon eda">概</div>
-                        <div class="info"><div class="name">概伦电子</div><div class="code">688206.SH</div></div>
+                    <a class="card" href="通讯/20260630_中天科技_600522.html" target="_blank">
+                        <div class="icon comm">中</div>
+                        <div class="info"><div class="name">中天科技</div><div class="code">600522.SH</div><div class="perf"><span class="meta-pos">年内：+221.53%</span><br><span class="meta-pos">924：+358.90%</span></div></div>
                         <div class="arrow">›</div>
                     </a>
-                    <a class="card" href="20260620_广立微_301095/index.html" target="_blank">
-                        <div class="icon eda">广</div>
-                        <div class="info"><div class="name">广立微</div><div class="code">301095.SZ</div></div>
+                    <a class="card" href="通讯/20260630_中际旭创_300308.html" target="_blank">
+                        <div class="icon comm">中</div>
+                        <div class="info"><div class="name">中际旭创</div><div class="code">300308.SZ</div><div class="perf"><span class="meta-pos">年内：+103.69%</span><br><span class="meta-pos">924：+956.05%</span></div></div>
                         <div class="arrow">›</div>
                     </a>
                 </div>
             </div>
 
             <div class="theme-group">
-                <div class="theme-title">芯片设计 / 参股</div>
+                <div class="theme-title">银行 · 金融</div>
                 <div class="grid">
-                    <a class="card" href="20260620_兆易创新_603986/index.html" target="_blank">
-                        <div class="icon design">兆</div>
-                        <div class="info"><div class="name">兆易创新</div><div class="code">603986.SH</div></div>
+                    <a class="card" href="银行/20260630_兴业银行_601166.html" target="_blank">
+                        <div class="icon ref">兴</div>
+                        <div class="info"><div class="name">兴业银行</div><div class="code">601166.SH</div><div class="perf"><span class="meta-neg">年内：-19.81%</span><br><span class="meta-pos">924：+12.13%</span></div></div>
                         <div class="arrow">›</div>
                     </a>
-                    <a class="card" href="20260620_紫光国微_002049/index.html" target="_blank">
-                        <div class="icon design">紫</div>
-                        <div class="info"><div class="name">紫光国微</div><div class="code">002049.SZ</div></div>
+                    <a class="card" href="银行/20260630_成都银行_601838.html" target="_blank">
+                        <div class="icon ref">成</div>
+                        <div class="info"><div class="name">成都银行</div><div class="code">601838.SH</div><div class="perf"><span class="meta-pos">年内：+11.02%</span><br><span class="meta-pos">924：+35.88%</span></div></div>
+                        <div class="arrow">›</div>
+                    </a>
+                    <a class="card" href="银行/20260630_华夏银行_600015.html" target="_blank">
+                        <div class="icon ref">华</div>
+                        <div class="info"><div class="name">华夏银行</div><div class="code">600015.SH</div><div class="perf"><span class="meta-neg">年内：-4.96%</span><br><span class="meta-pos">924：+5.08%</span></div></div>
+                        <div class="arrow">›</div>
+                    </a>
+                    <a class="card" href="银行/20260630_江苏银行_600919.html" target="_blank">
+                        <div class="icon ref">江</div>
+                        <div class="info"><div class="name">江苏银行</div><div class="code">600919.SH</div><div class="perf"><span class="meta-pos">年内：+6.41%</span><br><span class="meta-pos">924：+60.17%</span></div></div>
+                        <div class="arrow">›</div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="theme-group">
+                <div class="theme-title">医药 · CXO</div>
+                <div class="grid">
+                    <a class="card" href="医药/20260630_药明康德_603259.html" target="_blank">
+                        <div class="icon food">药</div>
+                        <div class="info"><div class="name">药明康德</div><div class="code">603259.SH</div><div class="perf"><span class="meta-pos">年内：+33.41%</span><br><span class="meta-pos">924：+221.53%</span></div></div>
+                        <div class="arrow">›</div>
+                    </a>
+                    <a class="card" href="医药/20260630_海思科_002653.html" target="_blank">
+                        <div class="icon food">海</div>
+                        <div class="info"><div class="name">海思科</div><div class="code">002653.SZ</div><div class="perf"><span class="meta-pos">年内：+14.99%</span><br><span class="meta-pos">924：+95.81%</span></div></div>
+                        <div class="arrow">›</div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="theme-group">
+                <div class="theme-title">航天 · 军工</div>
+                <div class="grid">
+                    <a class="card" href="航天军工/20260630_中国卫星_600118.html" target="_blank">
+                        <div class="icon comp">国</div>
+                        <div class="info"><div class="name">中国卫星</div><div class="code">600118.SH</div><div class="perf"><span class="meta-neg">年内：-18.53%</span><br><span class="meta-pos">924：+277.72%</span></div></div>
+                        <div class="arrow">›</div>
+                    </a>
+                    <a class="card" href="航天军工/20260630_航天动力_600343.html" target="_blank">
+                        <div class="icon comp">航</div>
+                        <div class="info"><div class="name">航天动力</div><div class="code">600343.SH</div><div class="perf"><span class="meta-neg">年内：-40.62%</span><br><span class="meta-pos">924：+227.66%</span></div></div>
+                        <div class="arrow">›</div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="theme-group">
+                <div class="theme-title">PCB · 覆铜板 · 散热</div>
+                <div class="grid">
+                    <a class="card" href="PCB电子/20260630_生益科技_600183.html" target="_blank">
+                        <div class="icon comp">生</div>
+                        <div class="info"><div class="name">生益科技</div><div class="code">600183.SH</div><div class="perf"><span class="meta-pos">年内：+133.67%</span><br><span class="meta-pos">924：+986.04%</span></div></div>
+                        <div class="arrow">›</div>
+                    </a>
+                    <a class="card" href="PCB电子/20260630_深南电路_002916.html" target="_blank">
+                        <div class="icon comp">深</div>
+                        <div class="info"><div class="name">深南电路</div><div class="code">002916.SZ</div><div class="perf"><span class="meta-pos">年内：+79.09%</span><br><span class="meta-pos">924：+548.97%</span></div></div>
+                        <div class="arrow">›</div>
+                    </a>
+                    <a class="card" href="PCB电子/20260630_沪电股份_002463.html" target="_blank">
+                        <div class="icon comp">沪</div>
+                        <div class="info"><div class="name">沪电股份</div><div class="code">002463.SZ</div><div class="perf"><span class="meta-pos">年内：+85.73%</span><br><span class="meta-pos">924：+314.88%</span></div></div>
+                        <div class="arrow">›</div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="theme-group">
+                <div class="theme-title">机器人 · 自动化</div>
+                <div class="grid">
+                    <a class="card" href="机器人/20260630_恒立液压_601100.html" target="_blank">
+                        <div class="icon engineering">恒</div>
+                        <div class="info"><div class="name">恒立液压</div><div class="code">601100.SH</div><div class="perf"><span class="meta-neg">年内：-5.58%</span><br><span class="meta-pos">924：+103.82%</span></div></div>
+                        <div class="arrow">›</div>
+                    </a>
+                    <a class="card" href="机器人/20260630_双环传动_002472.html" target="_blank">
+                        <div class="icon engineering">双</div>
+                        <div class="info"><div class="name">双环传动</div><div class="code">002472.SZ</div><div class="perf"><span class="meta-neg">年内：-19.70%</span><br><span class="meta-pos">924：+75.97%</span></div></div>
+                        <div class="arrow">›</div>
+                    </a>
+                    <a class="card" href="机器人/20260630_绿的谐波_688017.html" target="_blank">
+                        <div class="icon engineering">绿</div>
+                        <div class="info"><div class="name">绿的谐波</div><div class="code">688017.SH</div><div class="perf"><span class="meta-pos">年内：+89.27%</span><br><span class="meta-pos">924：+469.30%</span></div></div>
+                        <div class="arrow">›</div>
+                    </a>
+                    <a class="card" href="机器人/20260630_柯力传感_603662.html" target="_blank">
+                        <div class="icon engineering">柯</div>
+                        <div class="info"><div class="name">柯力传感</div><div class="code">603662.SH</div><div class="perf"><span class="meta-neg">年内：-8.38%</span><br><span class="meta-pos">924：+138.82%</span></div></div>
+                        <div class="arrow">›</div>
+                    </a>
+                    <a class="card" href="机器人/20260630_鸣志电器_603728.html" target="_blank">
+                        <div class="icon engineering">鸣</div>
+                        <div class="info"><div class="name">鸣志电器</div><div class="code">603728.SH</div><div class="perf"><span class="meta-neg">年内：-22.70%</span><br><span class="meta-pos">924：+45.96%</span></div></div>
                         <div class="arrow">›</div>
                     </a>
                 </div>
             </div>
         </div>
 
-        <!-- ==================== 2026-06-12 ==================== -->
-        <div class="date-section">
-            <div class="date-header">
-                <span class="date-badge">06-12</span> 2026年6月12日 更新
-                <span class="count">1 只</span>
-            </div>
-
-            <div class="theme-group">
-                <div class="theme-title">芯片设计 · 互联芯片</div>
-                <div class="grid">
-                    <a class="card" href="20260612_澜起科技_688008/index.html" target="_blank">
-                        <div class="icon design">澜</div>
-                        <div class="info"><div class="name">澜起科技</div><div class="code">688008.SH</div></div>
-                        <div class="arrow">›</div>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <footer>共 48 只个股 · 业绩分析报告导航 | 数据来源：东方财富 / 腾讯行情</footer>
+        <footer>共 33 只个股 · 业绩分析报告导航 | 数据来源：东方财富 / 腾讯行情</footer>
     </div>
+<script>
+function filterCards() {
+    var q = document.getElementById('filterInput').value.trim().toLowerCase();
+    var cards = document.querySelectorAll('.card');
+    var groups = document.querySelectorAll('.theme-group');
+    var sections = document.querySelectorAll('.date-section');
+    var noResult = document.getElementById('noResult');
+    var visibleCount = 0;
+
+    groups.forEach(function(g) { g.classList.remove('hidden'); });
+    sections.forEach(function(s) { s.style.display = ''; });
+
+    if (!q) {
+        cards.forEach(function(c) { c.style.display = ''; });
+        noResult.style.display = 'none';
+        return;
+    }
+
+    cards.forEach(function(c) {
+        var text = c.textContent.toLowerCase();
+        var match = text.indexOf(q) !== -1;
+        c.style.display = match ? '' : 'none';
+        if (match) visibleCount++;
+    });
+
+    groups.forEach(function(g) {
+        var visible = Array.from(g.querySelectorAll('.card')).some(function(c) { return c.style.display !== 'none'; });
+        if (!visible) g.classList.add('hidden');
+    });
+
+    sections.forEach(function(s) {
+        var visible = Array.from(s.querySelectorAll('.theme-group')).some(function(g) { return !g.classList.contains('hidden'); });
+        s.style.display = visible ? '' : 'none';
+    });
+
+    noResult.style.display = visibleCount === 0 ? '' : 'none';
+}
+</script>
 </body>
 </html>
