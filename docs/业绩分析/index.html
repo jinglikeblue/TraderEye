@@ -53,11 +53,16 @@
         footer { text-align: center; color: #475569; font-size: 12px; margin-top: 40px; padding-bottom: 20px; }
 
         /* 搜索框 */
-        .search-wrap { max-width: 480px; margin: 0 auto 28px; position: relative; }
-        .search-wrap input { width: 100%; padding: 12px 16px 12px 44px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #e2e8f0; font-size: 15px; outline: none; transition: border-color .2s; }
-        .search-wrap input:focus { border-color: #3b82f6; }
-        .search-wrap input::placeholder { color: #475569; }
-        .search-wrap .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #475569; font-size: 18px; pointer-events: none; }
+        .search-wrap { max-width: 720px; margin: 0 auto 28px; display: flex; align-items: center; gap: 12px; }
+        .search-wrap .search-box { flex: 1; position: relative; min-width: 0; }
+        .search-wrap .search-box input { width: 100%; padding: 12px 16px 12px 44px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #e2e8f0; font-size: 15px; outline: none; transition: border-color .2s; }
+        .search-wrap .search-box input:focus { border-color: #3b82f6; }
+        .search-wrap .search-box input::placeholder { color: #475569; }
+        .search-wrap .search-box .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #475569; font-size: 18px; pointer-events: none; }
+        .filter-checkboxes { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+        .filter-checkboxes label { display: flex; align-items: center; gap: 5px; font-size: 13px; color: #94a3b8; cursor: pointer; white-space: nowrap; user-select: none; }
+        .filter-checkboxes input[type="checkbox"] { accent-color: #3b82f6; width: 15px; height: 15px; cursor: pointer; }
+        .filter-checkboxes label:hover { color: #e2e8f0; }
         .no-result { display: none; text-align: center; padding: 60px 0; color: #475569; font-size: 15px; }
         .theme-group.hidden { display: none; }
     </style>
@@ -65,11 +70,17 @@
 <body>
     <div class="container">
         <h1>业绩分析导航</h1>
-        <p class="subtitle">共 33 只 · 点击卡片查看报告 · 搜索框可快速过滤</p>
+        <p class="subtitle">共 36 只 · 点击卡片查看报告 · 搜索框可快速过滤</p>
 
         <div class="search-wrap">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="filterInput" placeholder="搜索名称、代码、板块..." oninput="filterCards()">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="filterInput" placeholder="搜索名称、代码、板块..." oninput="filterCards()">
+            </div>
+            <div class="filter-checkboxes">
+                <label><input type="checkbox" id="filterPe" onchange="filterCards()"> PE&lt;100</label>
+                <label><input type="checkbox" id="filterUp924" onchange="filterCards()"> 924涨幅&lt;200%</label>
+            </div>
         </div>
         <div class="no-result" id="noResult">未找到匹配的标的</div>
 
@@ -77,7 +88,7 @@
         <div class="date-section">
             <div class="date-header">
                 <span class="date-badge">06-30</span> 2026年6月30日 更新
-                <span class="count">33 只</span>
+                <span class="count">36 只</span>
             </div>
 
             <div class="theme-group">
@@ -106,6 +117,16 @@
                     <a class="card" href="半导体设备/20260630_华峰测控_688200.html" target="_blank">
                         <div class="icon stock">华</div>
                         <div class="info"><div class="name">华峰测控</div><div class="code">688200.SH</div><div class="perf"><span class="meta-pos">年内：+175.73%</span><br><span class="meta-pos">924：+857.19%</span><br><span class="pe">PE(TTM): 279.50</span></div></div>
+                        <div class="arrow">›</div>
+                    </a>
+                    <a class="card" href="半导体设备/20260701_长川科技_300604.html" target="_blank">
+                        <div class="icon stock">长</div>
+                        <div class="info"><div class="name">长川科技</div><div class="code">300604.SZ</div><div class="perf"><span class="meta-pos">年内：+222.09%</span><br><span class="meta-pos">924：+1092.11%</span><br><span class="pe">PE(TTM): 94.00</span></div></div>
+                        <div class="arrow">›</div>
+                    </a>
+                    <a class="card" href="半导体设备/20260701_海光信息_688041.html" target="_blank">
+                        <div class="icon stock">海</div>
+                        <div class="info"><div class="name">海光信息</div><div class="code">688041.SH</div><div class="perf"><span class="meta-pos">年内：+63.85%</span><br><span class="meta-pos">924：+376.51%</span><br><span class="pe">PE(TTM): 303.20</span></div></div>
                         <div class="arrow">›</div>
                     </a>
                 </div>
@@ -275,6 +296,17 @@
             </div>
 
             <div class="theme-group">
+	                <div class="theme-title">锂矿 · 新能源</div>
+	                <div class="grid">
+	                    <a class="card" href="锂矿/20260701_天齐锂业_002466.html" target="_blank">
+	                        <div class="icon material">天</div>
+	                        <div class="info"><div class="name">天齐锂业</div><div class="code">002466.SZ</div><div class="perf"><span class="meta-pos">年内：+7.58%</span><br><span class="meta-pos">924：+123.63%</span><br><span class="pe">PE(TTM): 48.50</span></div></div>
+	                        <div class="arrow">›</div>
+	                    </a>
+	                </div>
+	            </div>
+
+	            <div class="theme-group">
                 <div class="theme-title">机器人 · 自动化</div>
                 <div class="grid">
                     <a class="card" href="机器人/20260630_恒立液压_601100.html" target="_blank">
@@ -306,36 +338,81 @@
             </div>
         </div>
 
-        <footer>共 33 只个股 · 业绩分析报告导航 | 数据来源：东方财富 / 腾讯行情</footer>
+        <footer>共 36 只个股 · 业绩分析报告导航 | 数据来源：东方财富 / 腾讯行情</footer>
     </div>
 <script>
 function filterCards() {
     var q = document.getElementById('filterInput').value.trim().toLowerCase();
+    var filterPeOn = document.getElementById('filterPe').checked;
+    var filterUp924On = document.getElementById('filterUp924').checked;
     var cards = document.querySelectorAll('.card');
     var groups = document.querySelectorAll('.theme-group');
     var sections = document.querySelectorAll('.date-section');
     var noResult = document.getElementById('noResult');
-    var visibleCount = 0;
+    var totalVisibleCards = 0;
 
     groups.forEach(function(g) { g.classList.remove('hidden'); });
     sections.forEach(function(s) { s.style.display = ''; });
 
-    if (!q) {
+    var hasActiveFilter = q || filterPeOn || filterUp924On;
+
+    if (!hasActiveFilter) {
         cards.forEach(function(c) { c.style.display = ''; });
         noResult.style.display = 'none';
         return;
     }
 
-    cards.forEach(function(c) {
-        var text = c.textContent.toLowerCase();
-        var match = text.indexOf(q) !== -1;
-        c.style.display = match ? '' : 'none';
-        if (match) visibleCount++;
-    });
-
     groups.forEach(function(g) {
-        var visible = Array.from(g.querySelectorAll('.card')).some(function(c) { return c.style.display !== 'none'; });
-        if (!visible) g.classList.add('hidden');
+        var themeTitle = g.querySelector('.theme-title');
+        var titleMatch = themeTitle && themeTitle.textContent.toLowerCase().indexOf(q) !== -1;
+
+        var groupCards = g.querySelectorAll('.card');
+        var anyCardVisible = false;
+
+        groupCards.forEach(function(c) {
+            // 1. 文字搜索过滤
+            var textMatch = !q || titleMatch || c.textContent.toLowerCase().indexOf(q) !== -1;
+
+            // 2. PE < 100 过滤
+            var pePass = true;
+            if (filterPeOn) {
+                var peEl = c.querySelector('.pe');
+                if (peEl) {
+                    var peText = peEl.textContent;
+                    var m = peText.match(/[\d.]+/);
+                    pePass = m && parseFloat(m[0]) < 100;
+                } else {
+                    pePass = false;
+                }
+            }
+
+            // 3. 924涨幅 < 200% 过滤
+            var up924Pass = true;
+            if (filterUp924On) {
+                var perfEl = c.querySelector('.perf');
+                if (perfEl) {
+                    var perfText = perfEl.textContent;
+                    var idx = perfText.indexOf('924');
+                    if (idx !== -1) {
+                        var after = perfText.substring(idx + 3);
+                        var m2 = after.match(/[\d.]+/);
+                        up924Pass = m2 && parseFloat(m2[0]) < 200;
+                    } else {
+                        up924Pass = false;
+                    }
+                } else {
+                    up924Pass = false;
+                }
+            }
+
+            var match = textMatch && pePass && up924Pass;
+            c.style.display = match ? '' : 'none';
+            if (match) { anyCardVisible = true; totalVisibleCards++; }
+        });
+
+        if (!anyCardVisible) {
+            g.classList.add('hidden');
+        }
     });
 
     sections.forEach(function(s) {
@@ -343,7 +420,7 @@ function filterCards() {
         s.style.display = visible ? '' : 'none';
     });
 
-    noResult.style.display = visibleCount === 0 ? '' : 'none';
+    noResult.style.display = totalVisibleCards === 0 ? '' : 'none';
 }
 </script>
 </body>

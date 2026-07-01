@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>氟化工材料产业链 - 从萤石到含氟新材料 · A股全链条核心标的</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #0a0e17; color: #e0e6f0; line-height: 1.6; min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+        .header { text-align: center; margin-bottom: 48px; }
+        .header h1 { font-size: 36px; font-weight: 700;
+            background: linear-gradient(135deg, #22d3ee, #60a5fa, #8b5cf6, #34d399);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 12px; }
+        .header .subtitle { font-size: 16px; color: #8892a8; }
+        .header .topic-tags { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+        .header .topic-tag { font-size: 13px; padding: 5px 14px; border-radius: 20px; font-weight: 500; }
+        .topic-tag.fluorite { background: rgba(34,211,238,0.15); color: #22d3ee; border: 1px solid rgba(34,211,238,0.25); }
+        .topic-tag.hf { background: rgba(96,165,250,0.15); color: #60a5fa; border: 1px solid rgba(96,165,250,0.25); }
+        .topic-tag.refrigerant { background: rgba(52,211,153,0.15); color: #34d399; border: 1px solid rgba(52,211,153,0.25); }
+        .topic-tag.polymer { background: rgba(139,92,246,0.15); color: #8b5cf6; border: 1px solid rgba(139,92,246,0.25); }
+        .topic-tag.electrolyte { background: rgba(244,114,182,0.15); color: #f472b6; border: 1px solid rgba(244,114,182,0.25); }
+        .topic-tag.finechem { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); }
+        .header .update-time { font-size: 13px; color: #5a6478; margin-top: 12px; }
+
+        .section-title { font-size: 22px; font-weight: 600; color: #c8d0e0;
+            margin-bottom: 24px; margin-top: 56px; padding-left: 14px; border-left: 3px solid #22d3ee; }
+        .section-subtitle { font-size: 14px; color: #5a6478; margin-top: -18px; margin-bottom: 24px; padding-left: 17px; }
+
+        /* 统计卡片 */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 16px; margin-bottom: 56px; }
+        .stat-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 12px; padding: 20px; }
+        .stat-card .stat-label { font-size: 13px; color: #5a6478; margin-bottom: 6px; }
+        .stat-card .stat-value { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+        .stat-card .stat-note { font-size: 12px; color: #5a6478; }
+        .stat-green .stat-value { color: #34d399; }
+        .stat-blue .stat-value { color: #60a5fa; }
+        .stat-purple .stat-value { color: #8b5cf6; }
+        .stat-cyan .stat-value { color: #22d3ee; }
+        .stat-pink .stat-value { color: #f472b6; }
+        .stat-yellow .stat-value { color: #fbbf24; }
+
+        /* 产业链流程图 */
+        .flow-section { margin-bottom: 56px; }
+        .flow-diagram { display: flex; align-items: stretch; gap: 0;
+            background: #111827; border-radius: 16px; border: 1px solid #1e293b; overflow: hidden; }
+        .flow-stage { flex: 1; padding: 28px 20px; position: relative; }
+        .flow-stage:not(:last-child)::after {
+            content: '→'; position: absolute; right: -14px; top: 50%;
+            transform: translateY(-50%); font-size: 28px; color: #4b5563; z-index: 2; }
+        .flow-stage:not(:last-child) { border-right: 1px solid #1e293b; }
+        .flow-stage .stage-label { font-size: 13px; font-weight: 600; letter-spacing: 1px;
+            margin-bottom: 12px; padding: 4px 12px; border-radius: 20px; display: inline-block; }
+        .flow-stage:nth-child(1) .stage-label { background: rgba(34,211,238,0.15); color: #22d3ee; }
+        .flow-stage:nth-child(2) .stage-label { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .flow-stage:nth-child(3) .stage-label { background: rgba(52,211,153,0.15); color: #34d399; }
+        .flow-stage:nth-child(4) .stage-label { background: rgba(139,92,246,0.15); color: #8b5cf6; }
+        .flow-stage:nth-child(5) .stage-label { background: rgba(244,114,182,0.15); color: #f472b6; }
+        .flow-stage .stage-title { font-size: 18px; font-weight: 600; color: #e0e6f0; margin-bottom: 8px; }
+        .flow-stage .stage-desc { font-size: 13px; color: #8892a8; }
+        .flow-stage .stage-products { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+        .flow-stage .product-tag { font-size: 12px; padding: 3px 10px; border-radius: 12px;
+            background: rgba(255,255,255,0.06); color: #a0aec0;
+            border: 1px solid rgba(255,255,255,0.08); }
+
+        /* 催化/背景高亮 */
+        .highlight-section { background: linear-gradient(135deg, rgba(34,211,238,0.06), rgba(52,211,153,0.06));
+            border: 1px solid rgba(34,211,238,0.15); border-radius: 14px; padding: 24px 28px;
+            margin-bottom: 48px; }
+        .highlight-section .highlight-title { font-size: 17px; font-weight: 600; color: #22d3ee; margin-bottom: 10px; }
+        .highlight-section .highlight-desc { font-size: 14px; color: #8892a8; line-height: 1.8; }
+
+        /* 公司卡片 */
+        .companies-section { margin-bottom: 48px; }
+        .company-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; }
+        .company-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; transition: border-color 0.2s, transform 0.2s; }
+        .company-card:hover { border-color: #374151; transform: translateY(-2px); }
+        .company-card .card-header { display: flex; justify-content: space-between;
+            align-items: flex-start; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+        .company-card .card-name { font-size: 18px; font-weight: 600; color: #e0e6f0; }
+        .company-card .card-code { font-size: 13px; font-weight: 500; padding: 3px 10px;
+            border-radius: 8px; background: rgba(34,211,238,0.12); color: #22d3ee; white-space: nowrap; }
+        .company-card .card-position { font-size: 13px; padding: 3px 10px;
+            border-radius: 8px; display: inline-block; margin-bottom: 10px; }
+        .position-fluorite { background: rgba(34,211,238,0.12); color: #22d3ee; }
+        .position-hf { background: rgba(96,165,250,0.12); color: #60a5fa; }
+        .position-refrigerant { background: rgba(52,211,153,0.12); color: #34d399; }
+        .position-polymer { background: rgba(139,92,246,0.12); color: #8b5cf6; }
+        .position-electrolyte { background: rgba(244,114,182,0.12); color: #f472b6; }
+        .position-finechem { background: rgba(251,191,36,0.12); color: #fbbf24; }
+        .position-fluororesin { background: rgba(168,85,247,0.12); color: #a855f7; }
+        .company-card .card-desc { font-size: 14px; color: #8892a8; line-height: 1.7; margin-bottom: 12px; }
+        .company-card .card-binding { font-size: 13px; color: #c8d0e0; padding: 10px 14px;
+            background: rgba(34,211,238,0.06); border-radius: 8px; border-left: 3px solid #22d3ee;
+            margin-bottom: 10px; line-height: 1.6; }
+        .company-card .card-binding strong { color: #22d3ee; }
+        .company-card .card-data-row { display: flex; flex-wrap: wrap; gap: 8px 18px;
+            font-size: 13px; color: #c8d0e0; padding: 10px 14px;
+            background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 3px solid #374151; }
+        .company-card .card-data-row strong { color: #e0e6f0; margin-left: 2px; }
+
+        /* 财务标签 */
+        .finance-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .f-tag { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 12px; display: flex; align-items: center; gap: 4px; }
+        .f-tag .tag-icon { font-size: 12px; }
+        .margin-high { background: rgba(52,211,153,0.12); color: #34d399; border: 1px solid rgba(52,211,153,0.2); }
+        .margin-mid { background: rgba(96,165,250,0.12); color: #60a5fa; border: 1px solid rgba(96,165,250,0.2); }
+        .margin-low { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.2); }
+        .growth-high { background: rgba(239,68,68,0.12); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); }
+        .growth-mid { background: rgba(249,115,22,0.12); color: #f97316; border: 1px solid rgba(249,115,22,0.2); }
+        .growth-low { background: rgba(202,138,4,0.12); color: #ca8a04; border: 1px solid rgba(202,138,4,0.2); }
+        .profit { background: rgba(147,197,253,0.12); color: #93c5fd; border: 1px solid rgba(147,197,253,0.2); }
+        .loss { background: rgba(248,113,113,0.12); color: #f87171; border: 1px solid rgba(248,113,113,0.2); }
+
+        /* 评级 */
+        .rating-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+        .rating-card { border-radius: 10px; padding: 10px 12px; border: 1px solid; background: rgba(255,255,255,0.03); }
+        .rating-title { font-size: 12px; color: #8892a8; margin-bottom: 4px; }
+        .rating-level { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .rating-reason { font-size: 12px; color: #8892a8; line-height: 1.5; }
+        .rating-strong { border-color: rgba(52,211,153,0.35); background: rgba(16,185,129,0.08); }
+        .rating-strong .rating-level { color: #34d399; }
+        .rating-mid { border-color: rgba(96,165,250,0.35); background: rgba(96,165,250,0.08); }
+        .rating-mid .rating-level { color: #60a5fa; }
+        .rating-watch { border-color: rgba(251,191,36,0.35); background: rgba(251,191,36,0.08); }
+        .rating-watch .rating-level { color: #fbbf24; }
+        .rating-weak { border-color: rgba(248,113,113,0.35); background: rgba(248,113,113,0.06); }
+        .rating-weak .rating-level { color: #f87171; }
+
+        /* 关系图 */
+        .relation-section { margin-bottom: 56px; }
+        .relation-diagram { background: #111827; border: 1px solid #1e293b;
+            border-radius: 16px; padding: 32px; overflow-x: auto; }
+        .relation-group { margin-bottom: 20px; padding: 16px; border-radius: 12px; border: 1px solid; }
+        .relation-group:last-child { margin-bottom: 0; }
+        .relation-group.upstream { border-color: rgba(34,211,238,0.2); background: rgba(34,211,238,0.04); }
+        .relation-group.midstream-a { border-color: rgba(96,165,250,0.2); background: rgba(96,165,250,0.04); }
+        .relation-group.midstream-b { border-color: rgba(52,211,153,0.2); background: rgba(52,211,153,0.04); }
+        .relation-group.downstream { border-color: rgba(139,92,246,0.2); background: rgba(139,92,246,0.04); }
+        .relation-group.terminal { border-color: rgba(244,114,182,0.2); background: rgba(244,114,182,0.04); }
+        .relation-group-title { font-size: 13px; font-weight: 700; letter-spacing: 2px;
+            margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid; }
+        .relation-group.upstream .relation-group-title { color: #22d3ee; border-color: rgba(34,211,238,0.2); }
+        .relation-group.midstream-a .relation-group-title { color: #60a5fa; border-color: rgba(96,165,250,0.2); }
+        .relation-group.midstream-b .relation-group-title { color: #34d399; border-color: rgba(52,211,153,0.2); }
+        .relation-group.downstream .relation-group-title { color: #8b5cf6; border-color: rgba(139,92,246,0.2); }
+        .relation-group.terminal .relation-group-title { color: #f472b6; border-color: rgba(244,114,182,0.2); }
+        .relation-row { display: flex; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+        .relation-row:last-child { margin-bottom: 0; }
+        .relation-label { min-width: 100px; font-size: 14px; font-weight: 600;
+            color: #8892a8; flex-shrink: 0; }
+        .relation-items { display: flex; flex-wrap: wrap; gap: 10px; }
+        .relation-node { padding: 8px 16px; border-radius: 10px; font-size: 14px;
+            font-weight: 500; border: 1px solid; }
+        .relation-node .node-code { font-size: 11px; opacity: 0.7; margin-left: 6px; }
+        .relation-node.fluorite { background: rgba(34,211,238,0.08); border-color: rgba(34,211,238,0.25); color: #22d3ee; }
+        .relation-node.hf { background: rgba(96,165,250,0.08); border-color: rgba(96,165,250,0.25); color: #60a5fa; }
+        .relation-node.refrigerant { background: rgba(52,211,153,0.08); border-color: rgba(52,211,153,0.25); color: #34d399; }
+        .relation-node.polymer { background: rgba(139,92,246,0.08); border-color: rgba(139,92,246,0.25); color: #a78bfa; }
+        .relation-node.electrolyte { background: rgba(244,114,182,0.08); border-color: rgba(244,114,182,0.25); color: #f472b6; }
+        .relation-node.finechem { background: rgba(251,191,36,0.08); border-color: rgba(251,191,36,0.25); color: #fbbf24; }
+
+        /* 核心关注卡片 */
+        .focus-section { margin-bottom: 40px; }
+        .focus-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .focus-card { background: linear-gradient(135deg, #111827, #1a2332);
+            border: 1px solid #1e293b; border-radius: 14px; padding: 24px;
+            position: relative; overflow: hidden; }
+        .focus-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .focus-card:nth-child(1)::before { background: linear-gradient(90deg, #22d3ee, #06b6d4); }
+        .focus-card:nth-child(2)::before { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+        .focus-card:nth-child(3)::before { background: linear-gradient(90deg, #34d399, #10b981); }
+        .focus-card:nth-child(4)::before { background: linear-gradient(90deg, #a78bfa, #8b5cf6); }
+        .focus-card:nth-child(5)::before { background: linear-gradient(90deg, #f472b6, #ec4899); }
+        .focus-card:nth-child(6)::before { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+        .focus-card .focus-rank { font-size: 48px; font-weight: 800;
+            color: rgba(255,255,255,0.04); position: absolute; top: 8px; right: 16px; }
+        .focus-card .focus-name { font-size: 16px; font-weight: 600; color: #e0e6f0; margin-bottom: 4px; }
+        .focus-card .focus-tag { font-size: 12px; color: #8892a8; margin-bottom: 10px; }
+        .focus-card .focus-reason { font-size: 13px; color: #8892a8; line-height: 1.7; }
+
+        /* 风险提示 */
+        .risk-section { margin-bottom: 56px; }
+        .risk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+        .risk-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; border-left: 3px solid #f87171; }
+        .risk-card .risk-title { font-size: 16px; font-weight: 600; color: #f87171; margin-bottom: 8px; }
+        .risk-card .risk-desc { font-size: 14px; color: #8892a8; line-height: 1.7; }
+
+        footer { text-align: center; color: #475569; font-size: 12px; padding: 40px 0 20px; }
+        footer .disclaimer { color: #f87171; margin-top: 8px; }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            .header h1 { font-size: 26px; }
+            .flow-diagram { flex-direction: column; }
+            .flow-stage:not(:last-child)::after { content: '↓'; right: auto; bottom: -16px; top: auto;
+                left: 50%; transform: translateX(-50%); }
+            .flow-stage:not(:last-child) { border-right: none; border-bottom: 1px solid #1e293b; }
+            .company-grid { grid-template-columns: 1fr; }
+            .rating-row { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .focus-cards { grid-template-columns: 1fr; }
+            .risk-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>氟化工材料产业链</h1>
+            <div class="subtitle">巨化/东岳/多氟多 — 制冷剂配额红利 + 含氟聚合物龙头 + LiFSI高成长 · 3只双满星精选标的</div>
+            <div class="topic-tags">
+                <span class="topic-tag fluorite">萤石资源</span>
+                <span class="topic-tag hf">无水氢氟酸</span>
+                <span class="topic-tag refrigerant">制冷剂</span>
+                <span class="topic-tag polymer">含氟聚合物</span>
+                <span class="topic-tag electrolyte">锂电池电解质</span>
+                <span class="topic-tag finechem">含氟精细化学品</span>
+            </div>
+            <div class="update-time">数据更新: 2026-07-01 · 基于公开产业数据与年报披露</div>
+        </div>
+
+        <!-- 背景高亮 -->
+        <div class="highlight-section">
+            <div class="highlight-title">📌 产业链核心逻辑</div>
+            <div class="highlight-desc">
+                氟化工是"黄金产业"，萤石为不可再生战略资源，中国储量仅占全球约10%，但产量占比超60%。<br><br>
+                <strong>核心增长驱动：</strong><br>
+                ① <strong>制冷剂配额时代开启</strong> — 《基加利修正案》2024年冻结HFC基线产量，配额成为稀缺资源，R32/R125/R134a等主流制冷剂供需持续偏紧，价格中枢上移；<br>
+                ② <strong>新能源含氟材料爆发</strong> — PVDF锂电级粘结剂、LiFSI新型电解质、全氟磺酸质子交换膜（氢能）打开含氟聚合物第二增长极；<br>
+                ③ <strong>半导体用氟材料国产替代</strong> — 电子级氢氟酸、含氟电子特气（CF₄/CHF₃/SF₆）是芯片制造关键材料，国产化率快速提升。
+            </div>
+        </div>
+
+        <!-- 统计卡片 -->
+        <div class="stats-grid">
+            <div class="stat-card stat-cyan">
+                <div class="stat-label">萤石储量（中国/全球）</div>
+                <div class="stat-value">~10%</div>
+                <div class="stat-note">产量占比超60%，战略资源</div>
+            </div>
+            <div class="stat-card stat-green">
+                <div class="stat-label">制冷剂配额总规模</div>
+                <div class="stat-value">~74万吨</div>
+                <div class="stat-note">2024基线年冻结，R32占比最大</div>
+            </div>
+            <div class="stat-card stat-blue">
+                <div class="stat-label">PVDF全球需求(2025)</div>
+                <div class="stat-value">~15万吨</div>
+                <div class="stat-note">锂电级占比超40%，CAGR 20%+</div>
+            </div>
+            <div class="stat-card stat-purple">
+                <div class="stat-label">LiFSI渗透率</div>
+                <div class="stat-value">2→15%</div>
+                <div class="stat-note">2024→2028 替代LiPF6加速</div>
+            </div>
+            <div class="stat-card stat-pink">
+                <div class="stat-label">电子级氢氟酸国产率</div>
+                <div class="stat-value">~70%</div>
+                <div class="stat-note">12寸晶圆用已达进口替代水平</div>
+            </div>
+            <div class="stat-card stat-yellow">
+                <div class="stat-label">含氟精细化学品市场</div>
+                <div class="stat-value">~500亿</div>
+                <div class="stat-note">医药/农药/液晶中间体 稳步增长</div>
+            </div>
+        </div>
+
+        <!-- 产业链流程图 -->
+        <div class="flow-section">
+            <div class="section-title">产业链全景流程图</div>
+            <div class="flow-diagram">
+                <div class="flow-stage">
+                    <div class="stage-label">上游 · 资源</div>
+                    <div class="stage-title">萤石矿采选</div>
+                    <div class="stage-desc">氟化工产业链唯一原料来源，不可再生战略矿产</div>
+                    <div class="stage-products">
+                        <span class="product-tag">酸级萤石精粉</span>
+                        <span class="product-tag">冶金级萤石</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <div class="stage-label">中游① · 基础原料</div>
+                    <div class="stage-title">无水氢氟酸(AHF)</div>
+                    <div class="stage-desc">萤石+硫酸反应制取，氟化工"中枢"产品</div>
+                    <div class="stage-products">
+                        <span class="product-tag">AHF</span>
+                        <span class="product-tag">电子级氢氟酸</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <div class="stage-label">中游② · 氟碳化学品</div>
+                    <div class="stage-title">制冷剂/发泡剂</div>
+                    <div class="stage-desc">AHF+氯代烃合成HCFC/HFC/HFO，受配额管制</div>
+                    <div class="stage-products">
+                        <span class="product-tag">R32</span>
+                        <span class="product-tag">R125</span>
+                        <span class="product-tag">R134a</span>
+                        <span class="product-tag">R410A</span>
+                        <span class="product-tag">HFO-1234yf</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <div class="stage-label">中游③ · 含氟聚合物</div>
+                    <div class="stage-title">含氟高分子材料</div>
+                    <div class="stage-desc">TFE/VDF/HFP 单体聚合，应用于新能源/半导体/航空航天</div>
+                    <div class="stage-products">
+                        <span class="product-tag">PTFE</span>
+                        <span class="product-tag">PVDF</span>
+                        <span class="product-tag">FKM</span>
+                        <span class="product-tag">FEP</span>
+                        <span class="product-tag">全氟磺酸膜</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <div class="stage-label">下游 · 终端应用</div>
+                    <div class="stage-title">新能源/半导体/医药</div>
+                    <div class="stage-desc">锂电池、光伏背板、芯片制造、制冷设备、医药农药</div>
+                    <div class="stage-products">
+                        <span class="product-tag">动力电池</span>
+                        <span class="product-tag">储能</span>
+                        <span class="product-tag">空调冰箱</span>
+                        <span class="product-tag">半导体</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 公司卡片 - 双满星精选 -->
+        <div class="companies-section">
+            <div class="section-title">核心标的 · 受益确定性与弹性空间双满星精选</div>
+            <div class="section-subtitle">仅保留产业链各环节中确定性最强+弹性最大的龙头标的</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <span class="card-name">巨化股份</span>
+                        <span class="card-code">600160.SH</span>
+                    </div>
+                    <span class="card-position position-hf">AHF/制冷剂/含氟聚合物</span>
+                    <div class="card-desc">国内氟化工综合龙头，产业链最完整。自有萤石矿保障部分AHF原料，拥有全国最大制冷剂产能（R32配额约22%），同时布局PTFE/PVDF/FKM等含氟聚合物。2025年受益制冷剂配额红利，业绩大幅增长。</div>
+                    <div class="card-binding"><strong>核心逻辑：</strong>制冷剂配额红利+含氟材料平台化发展。R32配额占比行业第一，制冷剂价格每涨1000元/吨，年化利润增厚超1亿。PVDF锂电级已送样验证。</div>
+                    <div class="card-data-row">
+                        <span>R32配额占比<strong>~22%</strong></span>
+                        <span>制冷剂总产能<strong>40+万吨</strong></span>
+                        <span>含氟聚合物产能<strong>~3万吨</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利25%+</span>
+                        <span class="f-tag growth-high"><span class="tag-icon">📈</span>高增长</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>盈利</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 强</div>
+                            <div class="rating-reason">制冷剂配额龙头，配额红利直接兑现，产业链一体化护城河深</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 强</div>
+                            <div class="rating-reason">制冷剂价格弹性极大，PVDF/PTFE/PFA多品类布局打开成长空间</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="company-card">
+                    <div class="card-header">
+                        <span class="card-name">东岳集团</span>
+                        <span class="card-code">00189.HK</span>
+                    </div>
+                    <span class="card-position position-polymer">含氟聚合物/制冷剂/AHF</span>
+                    <div class="card-desc">国内含氟聚合物龙头（PTFE/PVDF/FKM全品类覆盖），同时拥有制冷剂完整产线。PTFE产能行业第一，PVDF锂电级已批量出货。子公司"东岳未来氢能"布局全氟磺酸质子交换膜，切入氢能赛道。</div>
+                    <div class="card-binding"><strong>核心逻辑：</strong>含氟聚合物平台化龙头，PTFE/PVDF/FKM品类最为齐全。氢能质子交换膜是长期期权，制冷剂亦分享配额红利。</div>
+                    <div class="card-data-row">
+                        <span>PTFE产能<strong>行业第一</strong></span>
+                        <span>PVDF产能<strong>1.5万吨</strong></span>
+                        <span>质子交换膜<strong>氢能布局</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利28%+</span>
+                        <span class="f-tag growth-mid"><span class="tag-icon">📈</span>稳健增长</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>盈利</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 强</div>
+                            <div class="rating-reason">含氟聚合物+制冷剂双主线，品类最全，客户覆盖新能源汽车/半导体</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 强</div>
+                            <div class="rating-reason">PVDF放量+氢能膜长期空间，港股估值折价带来潜在修复</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="company-card">
+                    <div class="card-header">
+                        <span class="card-name">多氟多</span>
+                        <span class="card-code">002407.SZ</span>
+                    </div>
+                    <span class="card-position position-electrolyte">六氟磷酸锂/LiFSI/电子级氢氟酸</span>
+                    <div class="card-desc">全球六氟磷酸锂（LiPF6）龙头，产能约8.5万吨，全球市占率超30%。LiFSI新型电解质先行者，产能3000吨+并持续扩产。电子级氢氟酸已切入台积电/中芯国际供应链，实现UP-SSS级（12寸晶圆用）出货。</div>
+                    <div class="card-binding"><strong>核心逻辑：</strong>LiPF6龙头地位稳固，LiFSI从0到1放量最确定标的。电子级氢氟酸半导体级验证通过，打开第二成长曲线。</div>
+                    <div class="card-data-row">
+                        <span>LiPF6产能<strong>8.5万吨</strong></span>
+                        <span>LiFSI产能<strong>3000+吨</strong></span>
+                        <span>电子级HF<strong>台积电供应商</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利22%+</span>
+                        <span class="f-tag growth-high"><span class="tag-icon">📈</span>高增长</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>盈利</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 强</div>
+                            <div class="rating-reason">LiPF6全球龙头，LiFSI放量+电子级HF半导体验证通过</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 强</div>
+                            <div class="rating-reason">LiFSI高成长赛道+电解液全产业链定价权，弹性充分</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 产业链关系图 -->
+        <div class="relation-section">
+            <div class="section-title">产业链关系图</div>
+            <div class="relation-diagram">
+                <div class="relation-group midstream-a">
+                    <div class="relation-group-title">🔷 中游① · AHF + 制冷剂</div>
+                    <div class="relation-row">
+                        <div class="relation-label">AHF/制冷剂龙头</div>
+                        <div class="relation-items">
+                            <div class="relation-node hf">巨化股份<span class="node-code">600160</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="relation-group midstream-b">
+                    <div class="relation-group-title">🔷 中游② · 含氟聚合物</div>
+                    <div class="relation-row">
+                        <div class="relation-label">PTFE/PVDF/FKM</div>
+                        <div class="relation-items">
+                            <div class="relation-node polymer">东岳集团<span class="node-code">00189</span></div>
+                            <div class="relation-node polymer">巨化股份<span class="node-code">600160</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="relation-group downstream">
+                    <div class="relation-group-title">🔷 下游 · 锂电池电解质</div>
+                    <div class="relation-row">
+                        <div class="relation-label">LiPF6/LiFSI</div>
+                        <div class="relation-items">
+                            <div class="relation-node electrolyte">多氟多<span class="node-code">002407</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 核心关注维度 -->
+        <div class="focus-section">
+            <div class="section-title">核心关注维度</div>
+            <div class="focus-cards">
+                <div class="focus-card">
+                    <div class="focus-rank">01</div>
+                    <div class="focus-name">制冷剂配额红利兑现节奏</div>
+                    <div class="focus-tag">巨化/三美/永和 · 政策驱动</div>
+                    <div class="focus-reason">2024基线年冻结后，HFC配额成为稀缺资源。R32/R134a/R125配额分配格局基本锁定，巨化股份以22%的R32配额居首。后续重点关注配额交易市场建立、维修市场配额释放、以及HFO替代进度对HFC价格的影响。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">02</div>
+                    <div class="focus-name">萤石供给端收缩趋势</div>
+                    <div class="focus-tag">金石资源 · 资源稀缺</div>
+                    <div class="focus-reason">环保+安全监察趋严，小型矿山持续退出。国内单一萤石矿品位下降，新增产能周期长。包钢"选化一体"项目回收伴生萤石是增量来源，但总供给弹性有限，萤石价格中枢趋势向上。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">03</div>
+                    <div class="focus-name">LiFSI渗透率加速提升</div>
+                    <div class="focus-tag">多氟多/天赐材料 · 技术迭代</div>
+                    <div class="focus-reason">LiFSI（双氟磺酰亚胺锂）相比LiPF6热稳定性更好、电导率更高，是高压快充/高镍电池的优选电解质。当前全球渗透率仅~5%，随着成本下降（规模化+工艺进步），预计2028年渗透率可达15-20%，对应市场增量超50亿元。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">04</div>
+                    <div class="focus-name">PVDF锂电级供需再平衡</div>
+                    <div class="focus-tag">联创/东岳/巨化 · 周期反转</div>
+                    <div class="focus-reason">2022年PVDF锂电级价格一度冲高至80万/吨，随后产能集中释放导致价格暴跌至15-20万/吨。2025-2026年行业新增产能放缓，锂电池涂覆隔膜/正极粘结剂需求稳步增长，供需格局有望改善。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">05</div>
+                    <div class="focus-name">电子级氢氟酸国产替代</div>
+                    <div class="focus-tag">多氟多/巨化 · 半导体材料</div>
+                    <div class="focus-reason">12寸晶圆用电子级氢氟酸（UP-SSS级）长期被Stella/森田化学垄断。多氟多已通过台积电验证实现批量供货，巨化博瑞电子级HF同样取得突破。国内晶圆厂扩产带来增量需求，国产替代空间大。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">06</div>
+                    <div class="focus-name">含氟精细化学品平台价值</div>
+                    <div class="focus-tag">新宙邦/昊华科技 · 高壁垒</div>
+                    <div class="focus-reason">含氟医药中间体（如含氟芳香族化合物）、含氟农药中间体、全氟聚醚等产品附加值极高，毛利率60%+。新宙邦海斯福/海德福、昊华科技晨光院等平台持续拓宽含氟精细化学品品类，是穿越周期的利润压舱石。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 风险提示 -->
+        <div class="risk-section">
+            <div class="section-title">风险提示</div>
+            <div class="risk-grid">
+                <div class="risk-card">
+                    <div class="risk-title">制冷剂价格周期性回落</div>
+                    <div class="risk-desc">制冷剂需求受空调/汽车产销影响大，若下游需求不及预期或HFO替代加速，HFC制冷剂价格可能回落，配额红利兑现不及预期。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">萤石进口替代冲击</div>
+                    <div class="risk-desc">墨西哥/蒙古/南非等萤石主产国扩产，若国际萤石供给大幅增加，可能压低国内萤石价格。另外，磷矿副产氟资源回收（如贵州磷化）可能增加供给。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">PVDF/LiFSI产能过剩</div>
+                    <div class="risk-desc">含氟聚合物新建产能集中释放，若下游锂电池需求增速放缓，PVDF可能出现阶段性过剩。LiFSI同样面临多家企业大规模扩产后的供需失衡。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">环保政策趋严</div>
+                    <div class="risk-desc">氟化工生产涉及含氟废水/废气处理，环保成本高。若政策进一步收紧，部分中小产能可能停产，但合规龙头同样面临环保投入增加的压力。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">原材料成本波动</div>
+                    <div class="risk-desc">AHF生产依赖硫酸（硫磺）、制冷剂依赖氯代烃（甲烷氯化物）、含氟聚合物依赖萤石，上游原材料价格波动直接影响氟化工企业利润空间。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">地缘政治与出口限制</div>
+                    <div class="risk-desc">萤石已被多国列为关键矿产，中国对萤石出口实行配额管理。若出口政策进一步收紧，短期利好国内供给但长期可能加速海外萤石替代开发。</div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>数据来源：各公司年报、生态环境部制冷剂配额公告、百川盈孚、卓创资讯、公开产业研究</p>
+            <p class="disclaimer">⚠ 免责声明：本报告仅为公开资料整理与产业链梳理，不构成任何投资建议。股市有风险，投资需谨慎。</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美股物理AI产业链 — 美国概念股产业链全景</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #0a0e17; color: #e0e6f0; line-height: 1.6; min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+        .header { text-align: center; margin-bottom: 48px; }
+        .header h1 { font-size: 36px; font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa, #34d399, #a78bfa, #f472b6);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 12px; }
+        .header .subtitle { font-size: 16px; color: #8892a8; }
+        .header .topic-tags { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+        .header .topic-tag { font-size: 13px; padding: 5px 14px; border-radius: 20px; font-weight: 500; }
+        .topic-tag.ai { background: rgba(96,165,250,0.15); color: #60a5fa; border: 1px solid rgba(96,165,250,0.25); }
+        .topic-tag.robot { background: rgba(244,114,182,0.15); color: #f472b6; border: 1px solid rgba(244,114,182,0.25); }
+        .topic-tag.sim { background: rgba(52,211,153,0.15); color: #34d399; border: 1px solid rgba(52,211,153,0.25); }
+        .topic-tag.sensor { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); }
+        .topic-tag.actuator { background: rgba(167,139,250,0.15); color: #a78bfa; border: 1px solid rgba(167,139,250,0.25); }
+        .topic-tag.nvidia { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.25); }
+        .topic-tag.compute { background: rgba(248,113,113,0.15); color: #f87171; border: 1px solid rgba(248,113,113,0.25); }
+        .topic-tag.us { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.25); }
+        .header .update-time { font-size: 13px; color: #5a6478; margin-top: 12px; }
+
+        .section-title { font-size: 22px; font-weight: 600; color: #c8d0e0;
+            margin-bottom: 24px; padding-left: 14px; border-left: 3px solid #60a5fa; }
+        .section-subtitle { font-size: 14px; color: #5a6478; margin-top: -18px; margin-bottom: 24px; padding-left: 17px; }
+
+        /* 统计卡片 */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 16px; margin-bottom: 56px; }
+        .stat-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 12px; padding: 20px; }
+        .stat-card .stat-label { font-size: 13px; color: #5a6478; margin-bottom: 6px; }
+        .stat-card .stat-value { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+        .stat-card .stat-note { font-size: 12px; color: #5a6478; }
+        .stat-green .stat-value { color: #34d399; }
+        .stat-blue .stat-value { color: #60a5fa; }
+        .stat-purple .stat-value { color: #a78bfa; }
+        .stat-pink .stat-value { color: #f472b6; }
+        .stat-yellow .stat-value { color: #fbbf24; }
+        .stat-red .stat-value { color: #f87171; }
+
+        /* 产业链流程图 */
+        .flow-section { margin-bottom: 56px; }
+        .flow-diagram { display: flex; align-items: stretch; gap: 0;
+            background: #111827; border-radius: 16px; border: 1px solid #1e293b; overflow: hidden; }
+        .flow-stage { flex: 1; padding: 28px 20px; position: relative; }
+        .flow-stage:not(:last-child)::after {
+            content: '→'; position: absolute; right: -14px; top: 50%;
+            transform: translateY(-50%); font-size: 28px; color: #4b5563; z-index: 2; }
+        .flow-stage:not(:last-child) { border-right: 1px solid #1e293b; }
+        .flow-stage .stage-label { font-size: 13px; font-weight: 600; letter-spacing: 1px;
+            margin-bottom: 12px; padding: 4px 12px; border-radius: 20px; display: inline-block; }
+        .flow-stage:nth-child(1) .stage-label { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .flow-stage:nth-child(2) .stage-label { background: rgba(52,211,153,0.15); color: #34d399; }
+        .flow-stage:nth-child(3) .stage-label { background: rgba(167,139,250,0.15); color: #a78bfa; }
+        .flow-stage:nth-child(4) .stage-label { background: rgba(244,114,182,0.15); color: #f472b6; }
+        .flow-stage .stage-title { font-size: 18px; font-weight: 600; color: #e0e6f0; margin-bottom: 8px; }
+        .flow-stage .stage-desc { font-size: 13px; color: #8892a8; }
+        .flow-stage .stage-products { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+        .flow-stage .product-tag { font-size: 12px; padding: 3px 10px; border-radius: 12px;
+            background: rgba(255,255,255,0.06); color: #a0aec0;
+            border: 1px solid rgba(255,255,255,0.08); }
+
+        /* 市场背景高亮 */
+        .highlight-section { background: linear-gradient(135deg, rgba(96,165,250,0.06), rgba(52,211,153,0.06));
+            border: 1px solid rgba(96,165,250,0.15); border-radius: 14px; padding: 24px 28px;
+            margin-bottom: 48px; }
+        .highlight-section .highlight-title { font-size: 17px; font-weight: 600; color: #60a5fa; margin-bottom: 10px; }
+        .highlight-section .highlight-desc { font-size: 14px; color: #8892a8; line-height: 1.8; }
+
+        /* 公司卡片 */
+        .companies-section { margin-bottom: 48px; }
+        .company-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; }
+        .company-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; transition: border-color 0.2s, transform 0.2s; }
+        .company-card:hover { border-color: #374151; transform: translateY(-2px); }
+        .company-card .card-header { display: flex; justify-content: space-between;
+            align-items: flex-start; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+        .company-card .card-name { font-size: 18px; font-weight: 600; color: #e0e6f0; }
+        .company-card .card-code { font-size: 13px; font-weight: 500; padding: 3px 10px;
+            border-radius: 8px; background: rgba(96,165,250,0.12); color: #60a5fa; white-space: nowrap; }
+        .company-card .card-position { font-size: 13px; padding: 3px 10px;
+            border-radius: 8px; display: inline-block; margin-bottom: 10px; }
+        .position-sim { background: rgba(52,211,153,0.12); color: #34d399; }
+        .position-compute { background: rgba(248,113,113,0.12); color: #f87171; }
+        .position-vision { background: rgba(251,191,36,0.12); color: #fbbf24; }
+        .position-sensor { background: rgba(251,191,36,0.12); color: #fbbf24; }
+        .position-reducer { background: rgba(167,139,250,0.12); color: #a78bfa; }
+        .position-screw { background: rgba(34,211,238,0.12); color: #22d3ee; }
+        .position-motor { background: rgba(248,113,113,0.12); color: #f87171; }
+        .position-actuator { background: rgba(244,114,182,0.12); color: #f472b6; }
+        .position-platform { background: rgba(16,185,129,0.12); color: #10b981; }
+        .position-auto { background: rgba(59,130,246,0.12); color: #60a5fa; }
+        .position-robot { background: rgba(239,68,68,0.12); color: #ef4444; }
+        .position-logistics { background: rgba(249,115,22,0.12); color: #f97316; }
+        .company-card .card-desc { font-size: 14px; color: #8892a8; line-height: 1.7; margin-bottom: 12px; }
+        .company-card .card-binding { font-size: 13px; color: #c8d0e0; padding: 10px 14px;
+            background: rgba(96,165,250,0.06); border-radius: 8px; border-left: 3px solid #60a5fa;
+            margin-bottom: 10px; line-height: 1.6; }
+        .company-card .card-binding strong { color: #60a5fa; }
+        .company-card .card-data-row { display: flex; flex-wrap: wrap; gap: 8px 18px;
+            font-size: 13px; color: #c8d0e0; padding: 10px 14px;
+            background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 3px solid #374151; }
+        .company-card .card-data-row strong { color: #e0e6f0; margin-left: 2px; }
+
+        /* 财务标签 */
+        .finance-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .f-tag { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 12px; display: flex; align-items: center; gap: 4px; }
+        .f-tag .tag-icon { font-size: 12px; }
+        .margin-high { background: rgba(52,211,153,0.12); color: #34d399; border: 1px solid rgba(52,211,153,0.2); }
+        .margin-mid { background: rgba(96,165,250,0.12); color: #60a5fa; border: 1px solid rgba(96,165,250,0.2); }
+        .margin-low { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.2); }
+        .growth-high { background: rgba(239,68,68,0.12); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); }
+        .growth-mid { background: rgba(249,115,22,0.12); color: #f97316; border: 1px solid rgba(249,115,22,0.2); }
+        .growth-low { background: rgba(202,138,4,0.12); color: #ca8a04; border: 1px solid rgba(202,138,4,0.2); }
+        .profit { background: rgba(147,197,253,0.12); color: #93c5fd; border: 1px solid rgba(147,197,253,0.2); }
+        .loss { background: rgba(248,113,113,0.12); color: #f87171; border: 1px solid rgba(248,113,113,0.2); }
+
+        .leader-badge { display: inline-block; font-size: 11px; font-weight: 700;
+            padding: 2px 8px; border-radius: 10px;
+            background: rgba(16,185,129,0.15); color: #10b981;
+            border: 1px solid rgba(16,185,129,0.3); }
+        .tech-barrier-badge { display: inline-block; font-size: 11px; font-weight: 700;
+            padding: 2px 8px; border-radius: 10px;
+            background: rgba(251,191,36,0.15); color: #fbbf24;
+            border: 1px solid rgba(251,191,36,0.3); }
+        .nv-badge { display: inline-block; font-size: 11px; font-weight: 700;
+            padding: 2px 8px; border-radius: 10px;
+            background: rgba(16,185,129,0.15); color: #10b981;
+            border: 1px solid rgba(16,185,129,0.3); }
+        .shortage-badge { display: inline-block; font-size: 11px; font-weight: 700;
+            padding: 2px 8px; border-radius: 10px;
+            background: rgba(248,113,113,0.15); color: #fb7185;
+            border: 1px solid rgba(248,113,113,0.3); }
+        .premium-badge { display: inline-block; font-size: 11px; font-weight: 700;
+            padding: 2px 8px; border-radius: 10px;
+            background: rgba(167,139,250,0.15); color: #a78bfa;
+            border: 1px solid rgba(167,139,250,0.3); }
+
+        /* 评级 */
+        .rating-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+        .rating-card { border-radius: 10px; padding: 10px 12px; border: 1px solid; background: rgba(255,255,255,0.03); }
+        .rating-title { font-size: 12px; color: #8892a8; margin-bottom: 4px; }
+        .rating-level { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .rating-reason { font-size: 12px; color: #8892a8; line-height: 1.5; }
+        .rating-strong { border-color: rgba(52,211,153,0.35); background: rgba(16,185,129,0.08); }
+        .rating-strong .rating-level { color: #34d399; }
+        .rating-mid { border-color: rgba(96,165,250,0.35); background: rgba(96,165,250,0.08); }
+        .rating-mid .rating-level { color: #60a5fa; }
+        .rating-watch { border-color: rgba(251,191,36,0.35); background: rgba(251,191,36,0.08); }
+        .rating-watch .rating-level { color: #fbbf24; }
+        .rating-weak { border-color: rgba(248,113,113,0.35); background: rgba(248,113,113,0.06); }
+        .rating-weak .rating-level { color: #f87171; }
+
+        /* 对比表 */
+        .compare-section { margin-bottom: 48px; overflow-x: auto; }
+        .compare-table { width: 100%; border-collapse: collapse; background: #111827;
+            border: 1px solid #1e293b; border-radius: 12px; overflow: hidden; font-size: 13px; min-width: 800px; }
+        .compare-table th { background: rgba(96,165,250,0.1); color: #60a5fa; font-size: 13px;
+            font-weight: 600; padding: 14px 16px; text-align: left; border-bottom: 1px solid #1e293b; }
+        .compare-table td { padding: 14px 16px; font-size: 13px; color: #8892a8;
+            border-bottom: 1px solid rgba(30,41,59,0.5); line-height: 1.5; }
+        .compare-table tr:last-child td { border-bottom: none; }
+        .highlight-green { color: #34d399; font-weight: 600; }
+        .highlight-blue { color: #60a5fa; font-weight: 600; }
+        .highlight-yellow { color: #fbbf24; font-weight: 600; }
+        .highlight-red { color: #f87171; font-weight: 600; }
+        .highlight-orange { color: #fb923c; font-weight: 600; }
+        .rowspan-label { color: #94a3b8; font-weight: 600; vertical-align: middle; }
+        .row-label { color: #c8d0e0; font-weight: 600; }
+
+        /* 核心关注卡片 */
+        .focus-section { margin-bottom: 40px; }
+        .focus-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .focus-card { background: linear-gradient(135deg, #111827, #1a2332);
+            border: 1px solid #1e293b; border-radius: 14px; padding: 24px;
+            position: relative; overflow: hidden; }
+        .focus-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .focus-card:nth-child(1)::before { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+        .focus-card:nth-child(2)::before { background: linear-gradient(90deg, #34d399, #10b981); }
+        .focus-card:nth-child(3)::before { background: linear-gradient(90deg, #a78bfa, #8b5cf6); }
+        .focus-card:nth-child(4)::before { background: linear-gradient(90deg, #f472b6, #ec4899); }
+        .focus-card:nth-child(5)::before { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+        .focus-card:nth-child(6)::before { background: linear-gradient(90deg, #f87171, #ef4444); }
+        .focus-card .focus-rank { font-size: 48px; font-weight: 800;
+            color: rgba(255,255,255,0.04); position: absolute; top: 8px; right: 16px; }
+        .focus-card .focus-name { font-size: 16px; font-weight: 600; color: #e0e6f0; margin-bottom: 4px; }
+        .focus-card .focus-tag { font-size: 12px; color: #8892a8; margin-bottom: 10px; }
+        .focus-card .focus-reason { font-size: 13px; color: #8892a8; line-height: 1.7; }
+
+        /* 中美对标 */
+        .mapping-section { margin-bottom: 56px; overflow-x: auto; }
+        .mapping-table { width: 100%; border-collapse: collapse; background: #111827;
+            border: 1px solid #1e293b; border-radius: 12px; overflow: hidden; font-size: 13px; min-width: 700px; }
+        .mapping-table th { background: rgba(167,139,250,0.1); color: #a78bfa; font-size: 13px;
+            font-weight: 600; padding: 14px 16px; text-align: left; border-bottom: 1px solid #1e293b; }
+        .mapping-table td { padding: 14px 16px; font-size: 13px; color: #8892a8;
+            border-bottom: 1px solid rgba(30,41,59,0.5); line-height: 1.5; }
+        .mapping-table tr:last-child td { border-bottom: none; }
+        .mapping-table .col-tag { display: inline-block; font-size: 11px; padding: 2px 10px; border-radius: 12px; font-weight: 600; }
+        .col-us { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+        .col-cn { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+
+        /* 关系图 */
+        .relation-section { margin-bottom: 56px; }
+        .relation-diagram { background: #111827; border: 1px solid #1e293b;
+            border-radius: 16px; padding: 32px; overflow-x: auto; }
+        .relation-group { margin-bottom: 20px; padding: 16px; border-radius: 12px; border: 1px solid; }
+        .relation-group:last-child { margin-bottom: 0; }
+        .relation-group.upstream { border-color: rgba(96,165,250,0.2); background: rgba(96,165,250,0.04); }
+        .relation-group.midstream { border-color: rgba(52,211,153,0.2); background: rgba(52,211,153,0.04); }
+        .relation-group.downstream { border-color: rgba(167,139,250,0.2); background: rgba(167,139,250,0.04); }
+        .relation-group.terminal { border-color: rgba(244,114,182,0.2); background: rgba(244,114,182,0.04); }
+        .relation-group-title { font-size: 13px; font-weight: 700; letter-spacing: 2px;
+            margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid; }
+        .relation-group.upstream .relation-group-title { color: #60a5fa; border-color: rgba(96,165,250,0.2); }
+        .relation-group.midstream .relation-group-title { color: #34d399; border-color: rgba(52,211,153,0.2); }
+        .relation-group.downstream .relation-group-title { color: #a78bfa; border-color: rgba(167,139,250,0.2); }
+        .relation-group.terminal .relation-group-title { color: #f472b6; border-color: rgba(244,114,182,0.2); }
+        .relation-row { display: flex; align-items: center; margin-bottom: 12px; }
+        .relation-row:last-child { margin-bottom: 0; }
+        .relation-label { min-width: 100px; font-size: 14px; font-weight: 600;
+            color: #8892a8; flex-shrink: 0; }
+        .relation-items { display: flex; flex-wrap: wrap; gap: 10px; }
+        .relation-node { padding: 8px 16px; border-radius: 10px; font-size: 14px;
+            font-weight: 500; border: 1px solid; }
+        .relation-node .node-code { font-size: 11px; opacity: 0.7; margin-left: 6px; }
+        .relation-node.sim { background: rgba(52,211,153,0.08); border-color: rgba(52,211,153,0.25); color: #34d399; }
+        .relation-node.compute { background: rgba(248,113,113,0.08); border-color: rgba(248,113,113,0.25); color: #f87171; }
+        .relation-node.vision { background: rgba(251,191,36,0.08); border-color: rgba(251,191,36,0.25); color: #fbbf24; }
+        .relation-node.sensor { background: rgba(251,191,36,0.08); border-color: rgba(251,191,36,0.25); color: #fbbf24; }
+        .relation-node.reducer { background: rgba(167,139,250,0.08); border-color: rgba(167,139,250,0.25); color: #a78bfa; }
+        .relation-node.screw { background: rgba(34,211,238,0.08); border-color: rgba(34,211,238,0.25); color: #22d3ee; }
+        .relation-node.motor { background: rgba(248,113,113,0.08); border-color: rgba(248,113,113,0.25); color: #f87171; }
+        .relation-node.actuator { background: rgba(244,114,182,0.08); border-color: rgba(244,114,182,0.25); color: #f472b6; }
+        .relation-node.integration { background: rgba(249,115,22,0.08); border-color: rgba(249,115,22,0.25); color: #f97316; }
+        .relation-node.platform { background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.25); color: #10b981; }
+        .relation-node.end { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.25); color: #ef4444; }
+        .relation-arrow { text-align: center; color: #4b5563; font-size: 20px; padding: 4px 0; }
+
+        /* 风险提示 */
+        .risk-section { margin-bottom: 56px; }
+        .risk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+        .risk-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; border-left: 3px solid #f87171; }
+        .risk-card .risk-title { font-size: 16px; font-weight: 600; color: #f87171; margin-bottom: 8px; }
+        .risk-card .risk-desc { font-size: 14px; color: #8892a8; line-height: 1.7; }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            .header h1 { font-size: 26px; }
+            .flow-diagram { flex-direction: column; }
+            .flow-stage:not(:last-child)::after { content: '↓'; right: auto; bottom: -16px; top: auto;
+                left: 50%; transform: translateX(-50%); }
+            .flow-stage:not(:last-child) { border-right: none; border-bottom: 1px solid #1e293b; }
+            .company-grid { grid-template-columns: 1fr; }
+            .rating-row { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .focus-cards { grid-template-columns: 1fr; }
+            .risk-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>美股物理AI产业链概念股</h1>
+            <div class="subtitle">仿真平台/算力芯片/3D视觉/工业机器人/人形机器人/自动驾驶 — 覆盖物理AI全栈核心标的 · 纳斯达克+纽交所</div>
+            <div class="topic-tags">
+                <span class="topic-tag us">美股市场</span>
+                <span class="topic-tag nvidia">英伟达生态</span>
+                <span class="topic-tag sim">仿真软件</span>
+                <span class="topic-tag ai">AI算力</span>
+                <span class="topic-tag robot">工业机器人</span>
+                <span class="topic-tag actuator">人形机器人</span>
+                <span class="topic-tag compute">自主驾驶</span>
+            </div>
+            <div class="update-time">数据来源：SEC Filings、公司财报、Bloomberg、公开报道 | 整理时间：2026-07-01</div>
+        </div>
+
+        <!-- 核心概览 -->
+        <div class="overview-section">
+            <div class="section-title">美股物理AI市场概览</div>
+            <div class="stats-grid">
+                <div class="stat-card stat-blue">
+                    <div class="stat-label">NVIDIA市值（物理AI平台中心）</div>
+                    <div class="stat-value">$4.2万亿</div>
+                    <div class="stat-note">Cosmos世界模型+Isaac Sim+Omniverse+Jetson Thor构成物理AI完整技术栈</div>
+                </div>
+                <div class="stat-card stat-green">
+                    <div class="stat-label">全球物理AI市场规模（2030E）</div>
+                    <div class="stat-value">$4700亿</div>
+                    <div class="stat-note">德勤测算，2026-2030 CAGR 48%，美股标的覆盖全链条</div>
+                </div>
+                <div class="stat-card stat-purple">
+                    <div class="stat-label">Synopsys并购ANSYS估值</div>
+                    <div class="stat-value">$350亿</div>
+                    <div class="stat-note">EDA+多物理场仿真整合，打造物理AI设计仿真一体化平台</div>
+                </div>
+                <div class="stat-card stat-pink">
+                    <div class="stat-label">特斯拉Optimus量产目标</div>
+                    <div class="stat-value">5万台+</div>
+                    <div class="stat-note">2026年内部工厂部署，物理AI在消费级人形机器人的首次规模化落地</div>
+                </div>
+                <div class="stat-card stat-yellow">
+                    <div class="stat-label">全球协作机器人市场（2030E）</div>
+                    <div class="stat-value">$240亿</div>
+                    <div class="stat-note">Universal Robots（Teradyne）市占率约40%，AI视觉+力控是增长核心驱动</div>
+                </div>
+                <div class="stat-card stat-red">
+                    <div class="stat-label">本报告覆盖美股标的</div>
+                    <div class="stat-value">8</div>
+                    <div class="stat-note">涵盖平台/仿真/视觉/机器人/人形机器人/自动驾驶/仓储物流七大核心环节</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 产业链全景流程图 -->
+        <div class="flow-section">
+            <div class="section-title">美股物理AI产业链全景</div>
+            <div class="flow-diagram">
+                <div class="flow-stage">
+                    <span class="stage-label">上游</span>
+                    <div class="stage-title">AI算力平台 + 仿真软件</div>
+                    <div class="stage-desc">物理AI的"大脑与训练场"——NVIDIA Cosmos/Isaac/Omniverse构成完整平台生态，ANSYS/Synopsys/Cadence提供可微分多物理场仿真引擎</div>
+                    <div class="stage-products">
+                        <span class="product-tag">GPU集群</span>
+                        <span class="product-tag">世界模型</span>
+                        <span class="product-tag">数字孪生</span>
+                        <span class="product-tag">CAE仿真</span>
+                        <span class="product-tag">合成数据</span>
+                        <span class="product-tag">EDA工具</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <span class="stage-label">中游</span>
+                    <div class="stage-title">机器视觉 + 工业传感</div>
+                    <div class="stage-desc">物理AI的"眼睛与感官"——Cognex 3D视觉/AI深度学习相机输出物理世界点云数据，Universal Robots集成六维力/力矩传感实现精密力控操作</div>
+                    <div class="stage-products">
+                        <span class="product-tag">3D视觉系统</span>
+                        <span class="product-tag">AI深度学习相机</span>
+                        <span class="product-tag">力/力矩传感</span>
+                        <span class="product-tag">缺陷检测</span>
+                        <span class="product-tag">激光雷达</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <span class="stage-label">下游</span>
+                    <div class="stage-title">工业机器人 + 协同机器人</div>
+                    <div class="stage-desc">物理AI的"手臂与身体"——Teradyne(UR+MiR)工业/协作/移动机器人全球龙头，Rockwell Automation AI工厂+独立台车系统，Symbotic AI仓储全自动拆垛</div>
+                    <div class="stage-products">
+                        <span class="product-tag">协作机器人</span>
+                        <span class="product-tag">AMR自主移动</span>
+                        <span class="product-tag">AI视觉引导</span>
+                        <span class="product-tag">智能仓储</span>
+                        <span class="product-tag">工业自动化</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <span class="stage-label">终端</span>
+                    <div class="stage-title">人形机器人 + 自动驾驶</div>
+                    <div class="stage-desc">物理AI的终极落地场景——特斯拉Optimus V3人形机器人从仿真训练到真实产线工作，Aurora Innovation全无人卡车物流干线运输，物理世界模型直接驱动实体决策</div>
+                    <div class="stage-products">
+                        <span class="product-tag">Optimus V3</span>
+                        <span class="product-tag">FSD自动驾驶</span>
+                        <span class="product-tag">无人卡车</span>
+                        <span class="product-tag">智慧工厂</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 核心催化 -->
+        <div class="highlight-section">
+            <div class="highlight-title">核心催化 — 2026年美股物理AI产业化拐点确立</div>
+            <div class="highlight-desc">
+                <strong>英伟达生态全栈闭环：</strong>2025-2026年，NVIDIA密集发布Cosmos 3开源世界模型（支持真实物理参数迁移）、Isaac Sim 2026（机器人仿真训练效率提升50%）、Jetson Thor边缘推理平台（算力较上一代提升7.5-10倍）。Omniverse+Isaak+Cosmos三位一体构成物理AI的"操作系统级"平台，美股物理AI生态围绕此核心展开。<br><br>
+                <strong>并购整合加速：</strong>Synopsys以$350亿收购ANSYS（2026年1月完成）、Siemens以$106亿收购Altair Engineering——全球仿真软件大洗牌，物理AI设计工具进入寡头时代。Cadence独立坚守AI驱动的多物理场仿真路线，与Synopsys-ANSYS形成双寡头竞争格局。<br><br>
+                <strong>人形机器人量产起点：</strong>特斯拉Optimus V3发布（自由度增至22 DoF/手），2026年下半年计划在Giga Texas内部物流线部署5000台+。Figure 02、Apptronik Apollo等美国初创人形机器人企业进入车企产线验证阶段。人形机器人从实验室走向产线，物理AI训练需求指数级增长。市场预期2027年全球人形机器人出货量10万台+，供应链需求开始实质性释放。<br><br>
+                <strong>政策与资本共振：</strong>美国《芯片与科学法案》持续拨款支持AI芯片制造，国防部明确物理AI为下一代战斗力核心技术方向。全球VC在人形机器人/物理AI赛道2025年总投资超$120亿，产业资本密集布局。
+            </div>
+        </div>
+
+        <!-- ============ 公司卡片 ============ -->
+
+        <!-- 一、算力平台与仿真软件 -->
+        <div class="companies-section">
+             <div class="section-title">一、AI算力平台 + 仿真软件（上游 — 物理AI的"操作系统与训练场"）</div>
+            <div class="section-subtitle">物理AI的训练依赖大规模GPU集群与高保真多物理场仿真环境。NVIDIA提供从芯片到世界模型的完整技术栈，ANSYS/Synopsys/Cadence则提供底层物理仿真引擎。这三家是美股物理AI产业链中"卖铲子"的环节，确定性最高</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">NVIDIA</div>
+                        <div class="card-code">NVDA (NASDAQ)</div>
+                        <span class="leader-badge">平台中心</span>
+                        <span class="tech-barrier-badge">全栈技术壁垒</span>
+                    </div>
+                    <span class="card-position position-platform">物理AI平台中心</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong> 英伟达定义了物理AI的技术范式。Cosmos世界模型（合成物理数据生成），Isaac Sim（机器人物理仿真训练平台），Omniverse（工业数字孪生底座），Jetson Thor（机器人边缘推理SoC）——构成物理AI从训练到部署的完整闭环。DGX/HGX GPU集群是物理AI训练的算力基座，Blackwell Ultra/ Vera Rubin两代芯片为机器人AI训练提供指数级算力增长。英伟达是物理AI产业链中最大的单一受益者，几乎每一家人形机器人/自动驾驶/工业自动化公司都在其平台上构建。</div>
+                    <div class="card-data-row">
+                        <span>旗舰平台 <strong>Cosmos+Isaac+Omniverse</strong></span>
+                        <span>AI芯片 <strong>Blackwell Ultra / Vera Rubin</strong></span>
+                        <span>毛利率 <strong>~75%</strong></span>
+                        <span>市值 <strong>$4.2万亿</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-high"><span class="tag-icon">💰</span>毛利率~75%</span>
+                        <span class="f-tag growth-high"><span class="tag-icon">📈</span>营收增速>100%</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>净利率~57%</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">全栈平台+芯片双垄断，物理AI"水电煤"基础设施</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">物理AI训练算力消耗5-10倍于数字AI，芯片需求增速远超预期</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">Synopsys</div>
+                        <div class="card-code">SNPS (NASDAQ)</div>
+                        <span class="leader-badge">并购ANSYS</span>
+                        <span class="tech-barrier-badge">仿真+EDA双壁垒</span>
+                    </div>
+                    <span class="card-position position-sim">仿真+EDA一体化平台</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong> 2026年1月完成对ANSYS的$350亿收购，形成"芯片设计(EDA) + 系统级多物理场仿真"一体化平台。ANSYS是全球CAE仿真软件绝对龙头（市占率约40%），其CFD/结构/电磁仿真引擎已被特斯拉/波士顿动力用于物理AI训练。合并后Synopsys成为唯一一家覆盖"芯片设计→系统仿真→物理AI验证"全链路的平台公司。物理AI设计复杂度远超传统工程仿真，AI驱动的仿真加速方案是核心增长引擎。</div>
+                    <div class="card-data-row">
+                        <span>核心平台 <strong>Synopsys+ANSYS融合</strong></span>
+                        <span>并购金额 <strong>$350亿</strong></span>
+                        <span>毛利率 <strong>~80%</strong></span>
+                        <span>壁垒 <strong>EDA+CAE双寡头</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-high"><span class="tag-icon">💰</span>毛利率~80%</span>
+                        <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~15%</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>净利率~25%</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">EDA+CAE双寡头，物理AI芯片和系统仿真双受益</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">物理AI驱动仿真需求指数级增长，AI加速仿真为增量市场</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">Cadence Design Systems</div>
+                        <div class="card-code">CDNS (NASDAQ)</div>
+                        <span class="premium-badge">独立平台</span>
+                        <span class="tech-barrier-badge">AI仿真引擎</span>
+                    </div>
+                    <span class="card-position position-sim">AI驱动多物理场仿真</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong> Synopsys-ANSYS合并后，Cadence是全球唯二具备EDA+多物理场仿真能力的独立平台。2024年收购BETA CAE（汽车仿真）强化多物理场布局。自研Optimality Intelligent System Explorer AI仿真引擎大幅缩短物理仿真时间，直接受益于物理AI对仿真算力的需求增长。Cadence的Celsius Thermal Solver（热仿真）、Clarity 3D Solver（电磁仿真）等产品是物理AI芯片（尤其是3D-IC/HBM）设计的关键工具。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>Optimality AI仿真引擎</strong></span>
+                        <span>收购BETA CAE <strong>$12.4亿</strong></span>
+                        <span>毛利率 <strong>~89%</strong></span>
+                        <span>竞争者 <strong>Synopsys-ANSYS</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-high"><span class="tag-icon">💰</span>毛利率~89%</span>
+                        <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~12%</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>净利率~28%</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">双寡头格局稳固，物理AI芯片+系统仿真双受益</div>
+                        </div>
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★☆ 中高</div>
+                            <div class="rating-reason">增速略低于SNPS，但AI仿真引擎差异化优势明显</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 二、机器视觉与感知 -->
+        <div class="companies-section">
+            <div class="section-title">二、机器视觉与感知（中游 — 物理AI的"眼睛与感官"）</div>
+            <div class="section-subtitle">物理AI需通过传感器感知真实物理世界。3D视觉、力/力矩传感器、AI深度学习相机是机器人从"盲操"升级到"智能交互"的关键硬件。Cognex是全球机器视觉绝对龙头，是物理AI感知层的纯正标的</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">Cognex</div>
+                        <div class="card-code">CGNX (NASDAQ)</div>
+                        <span class="leader-badge">全球龙头</span>
+                        <span class="tech-barrier-badge">AI视觉壁垒</span>
+                    </div>
+                    <span class="card-position position-vision">全球机器视觉龙头</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong> 全球工业机器视觉市占率第一（约25%），In-Sight 3D-L4000系列深度相机为机器人提供毫米级空间感知能力。自研ViDi EL AI深度学习分类工具直接嵌入视觉传感器固件，边缘端完成物理世界缺陷检测/尺寸测量/分类推理，延迟<10ms。2025年收购Meka Robotics视觉部门、推出AI计数/分类一体机。24年营收触底后，25年起受益于全球制造业自动化复苏+物理AI需求增长，营收增速拐点确立。物理AI中3D视觉的普及（每台协作机器人需至少1个3D视觉模块）是Cognex最大的增量逻辑。</div>
+                    <div class="card-data-row">
+                        <span>旗舰产品 <strong>In-Sight 3D-L4000</strong></span>
+                        <span>AI引擎 <strong>ViDi EL深度学习</strong></span>
+                        <span>毛利率 <strong>~70%</strong></span>
+                        <span>市占率 <strong>全球~25%</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-high"><span class="tag-icon">💰</span>毛利率~70%</span>
+                        <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~12%</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>净利率~22%</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">物理AI视觉感知刚需，全球机器视觉龙头市占确立</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">3D视觉+AI相机渗透率快速提升，营收拐点+估值修复共振</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 三、工业机器人与自动化 -->
+        <div class="companies-section">
+            <div class="section-title">三、工业机器人 + 协同机器人（下游 — 物理AI的"手臂与身体"）</div>
+            <div class="section-subtitle">物理AI的训练成果需通过机器人硬件在真实工厂落地。协作机器人(cobot)、自主移动机器人(AMR)、AI视觉引导系统是物理AI在工业场景的核心硬件载体</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">Teradyne</div>
+                        <div class="card-code">TER (NASDAQ)</div>
+                        <span class="leader-badge">协作机器人王者</span>
+                        <span class="tech-barrier-badge">UR+MiR双品牌</span>
+                    </div>
+                    <span class="card-position position-robot">协作+移动机器人全球龙头</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong> 旗下Universal Robots (UR) 是全球协作机器人绝对龙头（市占率~40%），累计出货超8万台。UR30/UR20系列集成AI视觉引导+力/力矩传感，直接对接物理AI控制指令。Mobile Industrial Robots (MiR) 是全球AMR先驱，累计出货超1.5万台。2025年UR+MiR发布AI驱动的联合编程套件。物理AI仿真训练输出的抓取/移动/装配策略需通过cobot硬件落地，Teradyne是全球最大的"物理AI终端执行硬件平台"。AutoMate半导体测试业务底部的复苏与机器人增长形成双重驱动。</div>
+                    <div class="card-data-row">
+                        <span>UR累计出货 <strong>8万台+</strong></span>
+                        <span>协作机器人市占 <strong>全球~40%</strong></span>
+                        <span>MiR累计出货 <strong>1.5万台+</strong></span>
+                        <span>二元驱动 <strong>机器人+半导体测试</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利率~58%</span>
+                        <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~10%</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>净利率~18%</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">全球cobot绝对龙头，物理AI终端执行硬件平台确定性极强</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">物理AI+自动化浪潮双重驱动，UR+MiR AI编程套件打开增量市场</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">Rockwell Automation</div>
+                        <div class="card-code">ROK (NYSE)</div>
+                        <span class="leader-badge">工业自动化航母</span>
+                    </div>
+                    <span class="card-position position-robot">智能工厂+工业AI龙头</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong> 北美工业自动化绝对龙头。2023年收购OTTO Motors（AMR自主移动机器人，年出货量>4000台）和Clearpath Robotics（自主移动机器人研发平台），2024年收购加拿大AI机器视觉公司。其FactoryTalk AI平台将物理仿真与工厂实际产线运行数据结合，实现"数字孪生→物理AI→产线自动优化"的闭环。Logix AI模块已开始在物理AI应用中提供实时推理+控制，将AI决策直接写回PLC控制器驱动物理动作。工业自动化市场的"AI化"是ROK最大的长期增长逻辑。</div>
+                    <div class="card-data-row">
+                        <span>AI平台 <strong>FactoryTalk AI</strong></span>
+                        <span>AMR品牌 <strong>OTTO Motors</strong></span>
+                        <span>毛利率 <strong>~40%</strong></span>
+                        <span>年营收 <strong>$90亿+</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利率~40%</span>
+                        <span class="f-tag growth-low"><span class="tag-icon">📈</span>营收增速~5%</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>净利率~12%</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">北美工业自动化寡头，物理AI工厂落地核心平台</div>
+                        </div>
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★☆ 中高</div>
+                            <div class="rating-reason">存量市场为主，AI增量需要时间渗透，弹性不如纯机器人标的高</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 四、人形机器人 + 自动驾驶 -->
+        <div class="companies-section">
+            <div class="section-title">四、人形机器人 + 自主驾驶 + 智能仓储（终端 — 物理AI的"终极载体"）</div>
+            <div class="section-subtitle">物理AI在消费级人形机器人、全无人自动驾驶、AI仓储物流三大终端实现商业闭环。这三家公司分别代表物理AI在"人形操作""自主移动""物流分拣"三个最大落地场景的领军者</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">Tesla</div>
+                        <div class="card-code">TSLA (NASDAQ)</div>
+                        <span class="leader-badge">Optimus V3</span>
+                        <span class="tech-barrier-badge">垂直整合壁垒</span>
+                    </div>
+                    <span class="card-position position-actuator">人形机器人+自动驾驶双轮驱动</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong> Optimus V3（2026年发布）自由度提升至22 DoF/手，通过特斯拉自研物理世界模型在虚拟环境中完成数百万次训练后直接迁移至Giga Texas真实产线工作。Optimus内部使用FSD同源AI架构（端到端神经网络+占用网络），共享Dojo超算集群训练。2026年下半年计划在内部部署5000台+，验证"真实产线作业能力"后逐步向外部客户开放销售。战略目标：人形机器人的"iPhone时刻"——特斯拉定义产品形态+制造工艺+物理AI训练流程，长期目标年产百万台，单台成本$2万以下。</div>
+                    <div class="card-data-row">
+                        <span>人形机器人 <strong>Optimus V3</strong></span>
+                        <span>训练基座 <strong>Dojo超算+FSD架构</strong></span>
+                        <span>2026E部署 <strong>5000台+</strong></span>
+                        <span>长期目标 <strong>年产百万台</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-mid"><span class="tag-icon">💰</span>汽车毛利率~18%</span>
+                        <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~15%</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>净利率~8%</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">Optimus V3量产在即+FSD AI架构复用+Dojo超算生态闭环</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">人形机器人市场天花板>汽车，Optimus成功将重塑特斯拉估值框架</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">Aurora Innovation</div>
+                        <div class="card-code">AUR (NASDAQ)</div>
+                        <span class="shortage-badge">稀缺标的</span>
+                        <span class="tech-barrier-badge">L4全无人</span>
+                    </div>
+                    <span class="card-position position-auto">L4全无人卡车先驱</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong> 美国唯一纯正L4全无人重卡自动驾驶上市公司。Aurora Driver平台基于物理AI方法构建——多传感器融合（激光雷达+摄像头+毫米波雷达）+ 物理世界语义地图，直接从原始传感器数据中推理物理障碍物/路面摩擦系数/风速影响等真实物理量。2025年4月实现达拉斯→休斯顿无人卡车商业运营（安全员下车），2026年计划扩展至凤凰城走廊。与FedEx/Werner/Schneider签订长期货运协议。全球干线物流TAM超$8000亿/年，物理AI实现全无人驾驶后成本结构将彻底重构。</div>
+                    <div class="card-data-row">
+                        <span>核心平台 <strong>Aurora Driver</strong></span>
+                        <span>里程碑 <strong>2025年安全员下车</strong></span>
+                        <span>合作伙伴 <strong>FedEx/Werner/Schneider</strong></span>
+                        <span>TAM <strong>$8000亿+/年</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-low"><span class="tag-icon">💰</span>商业化初期</span>
+                        <span class="f-tag growth-low"><span class="tag-icon">📈</span>营收<1亿</span>
+                        <span class="f-tag loss"><span class="tag-icon">✗</span>研发期亏损</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★☆ 中高</div>
+                            <div class="rating-reason">L4全无人技术领先，但商业化仍处早期，盈利时点不确定</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">无人卡车颠覆$8000亿物流市场，成功后弹性极大</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">Symbotic</div>
+                        <div class="card-code">SYM (NASDAQ)</div>
+                        <span class="leader-badge">AI仓储机器人</span>
+                    </div>
+                    <span class="card-position position-logistics">AI全自动仓储系统</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong> 全球AI仓储机器人系统领军者，沃尔玛是其最大客户+股东。Symbotic系统采用AI视觉+高密度SWARM群控机器人，在物理世界中实时感知/抓取/堆叠/分拣纸箱，全自动完成拆垛→分拣→码垛→装车全流程。物理AI核心挑战——非结构化物体（大小不一的纸箱/软包）的视觉识别+物理抓取规划——在仓储场景得到大规模验证。2025财年营收$25亿+（YoY~50%），已部署全球60+个沃尔玛配送中心。与Softbank合资GreenBox布局零售供应链AI仓储即服务。</div>
+                    <div class="card-data-row">
+                        <span>核心客户 <strong>沃尔玛(股东)</strong></span>
+                        <span>AI技术 <strong>3D视觉+SWARM群控</strong></span>
+                        <span>2025营收 <strong>$25亿+</strong></span>
+                        <span>部署规模 <strong>60+配送中心</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利率~20%</span>
+                        <span class="f-tag growth-high"><span class="tag-icon">📈</span>营收增速~50%</span>
+                        <span class="f-tag loss"><span class="tag-icon">✗</span>投资期微亏</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">沃尔玛订单锁定+AI仓储刚需，营收高速增长确定性极强</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">国际扩张+零售供应链AI仓储即服务，天花板极高</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 全产业链财务指标对比 -->
+        <div class="compare-section">
+            <div class="section-title">全产业链财务指标对比</div>
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>产业链环节</th>
+                        <th>公司</th>
+                        <th>市值</th>
+                        <th>毛利率</th>
+                        <th>净利率</th>
+                        <th>营收增速</th>
+                        <th>物理AI角色</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="rowspan-label" rowspan="3">算力平台<br>+仿真软件</td>
+                        <td>NVIDIA <span style="color:#5a6478;">NVDA</span></td>
+                        <td class="highlight-green">$4.2万亿</td>
+                        <td class="highlight-green">~75%</td>
+                        <td class="highlight-green">~57%</td>
+                        <td class="highlight-red">>100%</td>
+                        <td>物理AI全栈平台+芯片双垄断</td>
+                    </tr>
+                    <tr>
+                        <td>Synopsys <span style="color:#5a6478;">SNPS</span></td>
+                        <td class="highlight-blue">$900亿+</td>
+                        <td class="highlight-green">~80%</td>
+                        <td class="highlight-blue">~25%</td>
+                        <td class="highlight-blue">~15%</td>
+                        <td>EDA+CAE融合，物理AI设计仿真一体化</td>
+                    </tr>
+                    <tr>
+                        <td>Cadence <span style="color:#5a6478;">CDNS</span></td>
+                        <td class="highlight-blue">$800亿+</td>
+                        <td class="highlight-green">~89%</td>
+                        <td class="highlight-blue">~28%</td>
+                        <td class="highlight-blue">~12%</td>
+                        <td>独立AI仿真引擎，物理AI芯片设计工具</td>
+                    </tr>
+                    <tr>
+                        <td class="rowspan-label">机器视觉</td>
+                        <td>Cognex <span style="color:#5a6478;">CGNX</span></td>
+                        <td class="highlight-blue">$90亿+</td>
+                        <td class="highlight-green">~70%</td>
+                        <td class="highlight-blue">~22%</td>
+                        <td class="highlight-blue">~12%</td>
+                        <td>3D视觉+AI相机，物理AI感知刚需</td>
+                    </tr>
+                    <tr>
+                        <td class="rowspan-label" rowspan="2">工业机器人</td>
+                        <td>Teradyne <span style="color:#5a6478;">TER</span></td>
+                        <td class="highlight-blue">$200亿+</td>
+                        <td class="highlight-blue">~58%</td>
+                        <td class="highlight-blue">~18%</td>
+                        <td class="highlight-blue">~10%</td>
+                        <td>协作+移动机器人全球龙头，物理AI执行硬件</td>
+                    </tr>
+                    <tr>
+                        <td>Rockwell <span style="color:#5a6478;">ROK</span></td>
+                        <td class="highlight-blue">$300亿+</td>
+                        <td class="highlight-blue">~40%</td>
+                        <td class="highlight-blue">~12%</td>
+                        <td class="highlight-yellow">~5%</td>
+                        <td>工业AI+AMR，数字孪生→物理AI闭环</td>
+                    </tr>
+                    <tr>
+                        <td class="rowspan-label" rowspan="3">终端应用</td>
+                        <td>Tesla <span style="color:#5a6478;">TSLA</span></td>
+                        <td class="highlight-green">$8000亿+</td>
+                        <td class="highlight-yellow">~18%</td>
+                        <td class="highlight-yellow">~8%</td>
+                        <td class="highlight-blue">~15%</td>
+                        <td>Optimus人形机器人+FSD双轨物理AI落地</td>
+                    </tr>
+                    <tr>
+                        <td>Aurora <span style="color:#5a6478;">AUR</span></td>
+                        <td class="highlight-yellow">$120亿+</td>
+                        <td class="highlight-yellow">商业化初期</td>
+                        <td class="highlight-red">亏损</td>
+                        <td class="highlight-yellow"><1亿</td>
+                        <td>L4全无人卡车，物理AI干线物流</td>
+                    </tr>
+                    <tr>
+                        <td>Symbotic <span style="color:#5a6478;">SYM</span></td>
+                        <td class="highlight-yellow">$150亿+</td>
+                        <td class="highlight-blue">~20%</td>
+                        <td class="highlight-yellow">微亏</td>
+                        <td class="highlight-orange">~50%</td>
+                        <td>AI仓储机器人，物理AI抓取+分拣</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 产业链关系图 -->
+        <div class="relation-section">
+            <div class="section-title">美股物理AI产业链 A股映射关系</div>
+            <div class="relation-diagram">
+                <!-- 上游 -->
+                <div class="relation-group upstream">
+                    <div class="relation-group-title">⬆ 上游 — AI算力平台 + 物理仿真软件（物理AI的"大脑与训练场"）</div>
+                    <div class="relation-row">
+                        <div class="relation-label">全栈平台</div>
+                        <div class="relation-items">
+                            <div class="relation-node platform">NVIDIA<span class="node-code">NVDA</span></div>
+                        </div>
+                    </div>
+                    <div class="relation-arrow">→ 仿真+EDA →</div>
+                    <div class="relation-row">
+                        <div class="relation-label">仿真/EDA</div>
+                        <div class="relation-items">
+                            <div class="relation-node sim">Synopsys<span class="node-code">SNPS</span></div>
+                            <div class="relation-node sim">Cadence<span class="node-code">CDNS</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 中游 -->
+                <div class="relation-group midstream">
+                    <div class="relation-group-title">⬆ 中游 — 机器视觉与感知（物理AI的"眼睛与感官"）</div>
+                    <div class="relation-row">
+                        <div class="relation-label">3D机器视觉</div>
+                        <div class="relation-items">
+                            <div class="relation-node vision">Cognex<span class="node-code">CGNX</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 下游 -->
+                <div class="relation-group downstream">
+                    <div class="relation-group-title">⬇ 下游 — 工业机器人与自动化（物理AI的"手臂与身体"）</div>
+                    <div class="relation-row">
+                        <div class="relation-label">协作机器人</div>
+                        <div class="relation-items">
+                            <div class="relation-node actuator">Teradyne(UR)<span class="node-code">TER</span></div>
+                        </div>
+                    </div>
+                    <div class="relation-arrow">→ 智能工厂 →</div>
+                    <div class="relation-row">
+                        <div class="relation-label">工业自动化+AMR</div>
+                        <div class="relation-items">
+                            <div class="relation-node integration">Rockwell Automation<span class="node-code">ROK</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 终端 -->
+                <div class="relation-group terminal">
+                    <div class="relation-group-title">⬇ 终端 — 人形机器人 + 自动驾驶 + 智能仓储（物理AI落地载体）</div>
+                    <div class="relation-row">
+                        <div class="relation-label">人形机器人</div>
+                        <div class="relation-items">
+                            <div class="relation-node end">Tesla(Optimus)<span class="node-code">TSLA</span></div>
+                        </div>
+                    </div>
+                    <div class="relation-row">
+                        <div class="relation-label">L4全无人卡车</div>
+                        <div class="relation-items">
+                            <div class="relation-node compute">Aurora Innovation<span class="node-code">AUR</span></div>
+                        </div>
+                    </div>
+                    <div class="relation-row">
+                        <div class="relation-label">AI仓储物流</div>
+                        <div class="relation-items">
+                            <div class="relation-node screw">Symbotic<span class="node-code">SYM</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 中美对标映射 -->
+        <div class="mapping-section">
+            <div class="section-title">中美物理AI产业链对标</div>
+            <table class="mapping-table">
+                <thead>
+                    <tr>
+                        <th>产业链环节</th>
+                        <th style="text-align:center"><span class="col-tag col-us">美股</span></th>
+                        <th style="text-align:center"><span class="col-tag col-cn">A股对标</span></th>
+                        <th>差异核心</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="row-label">仿真软件</td>
+                        <td style="text-align:center">Synopsys<span style="color:#5a6478;">SNPS</span> / Cadence<span style="color:#5a6478;">CDNS</span></td>
+                        <td style="text-align:center">索辰科技<span style="color:#5a6478;">688507</span></td>
+                        <td>美股覆盖EDA+CAE全栈，是平台级寡头；A股聚焦CAE单点突破，军工场景优先</td>
+                    </tr>
+                    <tr>
+                        <td class="row-label">AI算力平台</td>
+                        <td style="text-align:center">NVIDIA<span style="color:#5a6478;">NVDA</span></td>
+                        <td style="text-align:center">工业富联<span style="color:#5a6478;">601138</span>（服务器）</td>
+                        <td>美股是芯片+平台原厂；A股是代工制造配套，卡位层次不同</td>
+                    </tr>
+                    <tr>
+                        <td class="row-label">3D视觉</td>
+                        <td style="text-align:center">Cognex<span style="color:#5a6478;">CGNX</span></td>
+                        <td style="text-align:center">奥比中光<span style="color:#5a6478;">688322</span></td>
+                        <td>美股聚焦工业机器视觉检测；A股聚焦消费级3D深度相机，场景互补</td>
+                    </tr>
+                    <tr>
+                        <td class="row-label">力觉传感器</td>
+                        <td style="text-align:center" colspan="2" style="text-align:center;color:#8892a8;">美股无纯正对标（Honeywell/TE业务庞杂）</td>
+                        <td>A股柯力传感<span style="color:#5a6478;">603662</span>更纯正聚焦力传感器赛道</td>
+                    </tr>
+                    <tr>
+                        <td class="row-label">减速器/丝杠/电机</td>
+                        <td style="text-align:center" colspan="2" style="text-align:center;color:#8892a8;">美股无纯正对标（日本Harmonic Drive/Parker业务多元）</td>
+                        <td>A股绿的谐波/恒立液压/鸣志电器独占此细分赛道</td>
+                    </tr>
+                    <tr>
+                        <td class="row-label">协作机器人</td>
+                        <td style="text-align:center">Teradyne(UR)<span style="color:#5a6478;">TER</span></td>
+                        <td style="text-align:center;color:#8892a8;">A股无纯正对标</td>
+                        <td>美股UR是cobot全球第一品牌；A股机器人集成商偏系统集成，非本体制造商</td>
+                    </tr>
+                    <tr>
+                        <td class="row-label">人形机器人整机</td>
+                        <td style="text-align:center">Tesla(Optimus)<span style="color:#5a6478;">TSLA</span></td>
+                        <td style="text-align:center;color:#8892a8;">A股无直接对标</td>
+                        <td>美股Optimus引领全栈自研路线；A股人形机器人企业多为初创(宇树/智元)</td>
+                    </tr>
+                    <tr>
+                        <td class="row-label">自动驾驶L4</td>
+                        <td style="text-align:center">Aurora<span style="color:#5a6478;">AUR</span></td>
+                        <td style="text-align:center;color:#8892a8;">A股无纯正对标</td>
+                        <td>美股L4无人卡车已商业运营；A股自动驾驶聚焦ADAS，L4已从概念走向现实</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 核心关注维度 -->
+        <div class="focus-section">
+            <div class="section-title">核心关注维度</div>
+            <div class="focus-cards">
+                <div class="focus-card">
+                    <div class="focus-rank">01</div>
+                    <div class="focus-name">英伟达GTC/AI Day物理AI路线图</div>
+                    <div class="focus-tag">最核心催化变量</div>
+                    <div class="focus-reason">英伟达每届GTC大会发布的Cosmos/Isaac/Omniverse/Jetson新产品路线图是美股物理AI产业链最核心的催化剂。2026年重点关注：Cosmos 4世界模型参数规模扩展、Isaac Sim物理引擎精度提升、Jetson Thor实际客户采用率。NVIDIA市值$4万亿的市值波动会直接传导至整个物理AI板块的估值。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">02</div>
+                    <div class="focus-name">特斯拉Optimus V3量产及外部销售进展</div>
+                    <div class="focus-tag">硬件需求最大驱动</div>
+                    <div class="focus-reason">特斯拉计划2026年下半年在内部工厂部署5000台Optimus V3，验证真实产线工作能力后逐步向外部客户开放。V3的22 DoF灵巧手精度/产线任务完成率/成本控制是判断人形机器人商业化拐点的三大指标。若2027年公告外部客户订单，TSLA估值体系将发生根本性变化。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">03</div>
+                    <div class="focus-name">Synopsys-ANSYS整合效果</div>
+                    <div class="focus-tag">仿真层寡头格局确认</div>
+                    <div class="focus-reason">Synopsys以$350亿收购ANSYS于2026年1月完成，这是仿真行业史上最大并购。EDA+多物理场CAE融合能产生多大的物理AI协同效应，是SNPS未来3-5年的核心逻辑。关注整合后的客户留存率、产品线精简进度、物理AI仿真新订单增速。Cadence能否保持独立竞争力是另一关键变量。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">04</div>
+                    <div class="focus-name">Aurora全无人卡车规模化扩张</div>
+                    <div class="focus-tag">L4自动驾驶商业化标志</div>
+                    <div class="focus-reason">Aurora于2025年实现达拉斯→休斯顿走廊安全员下车运营，是全球首家实现无人重卡商业运营的公司。2026年能否拓展至凤凰城走廊、客户订单能否规模化是判断"物理AI+物流"商业闭环的关键。美国干线物流市场规模$8000亿，L4无人驾驶渗透率的每个百分点都对应巨大市值空间。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">05</div>
+                    <div class="focus-name">全球协作机器人AI化渗透率</div>
+                    <div class="focus-tag">物理AI执行端增量</div>
+                    <div class="focus-reason">Universal Robots (Teradyne) 全球cobot市占率约40%，但AI视觉引导+力控集成的渗透率仍在早期。UR+MiR联合AI编程套件的客户采用率是判断物理AI在工业执行端渗透节奏的核心先行指标。Cognex In-Sight 3D-L4000系列出货量同样反映物理AI视觉在工业端的落地速度。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">06</div>
+                    <div class="focus-name">美国制造业回流+AI自动化政策</div>
+                    <div class="focus-tag">政策面驱动</div>
+                    <div class="focus-reason">《芯片与科学法案》持续推动AI芯片本土制造，国防部将物理AI/自主系统列为下一代战力核心。若特朗普/拜登政府进一步出台自动化税收抵免，Rockwell/Teradyne/Cognex等工业AI公司直接受益。关注2026年中期选举后的制造业政策变化，以及国防部物理AI项目采购节奏。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 风险提示 -->
+        <div class="risk-section">
+            <div class="section-title">核心风险提示</div>
+            <div class="risk-grid">
+                <div class="risk-card">
+                    <div class="risk-title">NVIDIA估值与AI资本开支退潮风险</div>
+                    <div class="risk-desc">NVIDIA PE估值已反映极高增长预期。若全球AI CapEx增速放缓、或竞争对手（AMD/自研芯片）蚕食份额，NVDA股价回调将带动全板块下行。物理AI芯片需求虽确定性强，但节奏可能慢于市场预期。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">特斯拉Optimus量产不及预期</div>
+                    <div class="risk-desc">特斯拉Optimus V3可能面临产线适配困难、灵巧手精度不足、批量一致性差等工程挑战，实际交付时间可能晚于2026H2目标。若量产延迟超过1年，物理AI产业链的订单周期将整体后移。TSLA极高的Optimus期权价值将受冲击。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">Aurora商业化扩张缓慢</div>
+                    <div class="risk-desc">无人卡车商业化面临监管审批、恶劣天气可靠性、客户信任建立等多重阻力。无人卡车营收从<1亿到$10亿的跨越需要较长时间。AUR目前仍在亏损期，若现金消耗速度超出预期，可能需要融资稀释。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">Synopsys-ANSYS整合风险</div>
+                    <div class="risk-desc">$350亿并购规模的整合风险不可忽视：ANSYS与Synopsys文化融合、核心客户流失（Cadence趁机挖角）、产品线重叠裁员等。整合期的执行风险可能拖累短期业绩，影响物理AI仿真业务推进节奏。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">物理AI商业化落地缓慢</div>
+                    <div class="risk-desc">物理AI整体仍处产业化早期，世界模型推理延迟/泛化能力/安全性等挑战尚未完全解决。多数企业客户仍处观望期，大规模部署可能慢于市场乐观预期。人形机器人从万台到百万台的跨越道路漫长且充满不确定性。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">概念炒作与估值泡沫风险</div>
+                    <div class="risk-desc">物理AI/人形机器人是美股最热门主题之一，多数标的估值已处历史高位（NVIDIA PE 70x+、Aurora/Symbotic尚未盈利）。产业趋势虽好，但股价可能已透支未来2-3年业绩。需关注业绩兑现节奏与市场预期之间的差距，谨防主题退潮后的估值回归。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p style="text-align:center;color:#8892a8;font-size:0.8em;padding:30px 0 10px;border-top:1px solid #1e293b;margin-top:40px">
+                数据来源：SEC Filings、公司财报、Bloomberg、英伟达GTC/AI Day发布、德勤白皮书、公开报道 | 整理时间：2026-07-01
+            </p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em;margin-top:6px">
+                本报告综合整理自物理AI/仿真软件/算力/机器视觉/工业机器人/人形机器人/自动驾驶/智能仓储产业链公开资料，标的均与物理AI产业链存在深度业务关联，仅为产业链公开资料整理与梳理，不构成任何投资建议。
+            </p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em;margin-top:6px">
+                美股投资涉及汇率风险、地缘政治风险及信息披露差异风险。股市有风险，投资需谨慎。
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function walkText(node) {
+                if (node.nodeType === 3) {
+                    var text = node.textContent;
+                    var span = document.createElement('span');
+                    var html = text
+                        .replace(/英伟达/g, '<span class="tsl-highlight" style="background:linear-gradient(120deg,rgba(16,185,129,0.2) 0%,rgba(16,185,129,0.08) 100%);padding:0 3px;border-radius:3px;color:#10b981;font-weight:700;">英伟达</span>')
+                        .replace(/NVIDIA/g, '<span class="tsl-highlight" style="background:linear-gradient(120deg,rgba(16,185,129,0.2) 0%,rgba(16,185,129,0.08) 100%);padding:0 3px;border-radius:3px;color:#10b981;font-weight:700;">NVIDIA</span>')
+                        .replace(/特斯拉/g, '<span class="tsl-highlight" style="background:linear-gradient(120deg,rgba(239,68,68,0.2) 0%,rgba(239,68,68,0.08) 100%);padding:0 3px;border-radius:3px;color:#ef4444;font-weight:700;">特斯拉</span>')
+                        .replace(/Optimus/g, '<span class="tsl-highlight" style="background:linear-gradient(120deg,rgba(239,68,68,0.2) 0%,rgba(239,68,68,0.08) 100%);padding:0 3px;border-radius:3px;color:#ef4444;font-weight:700;">Optimus</span>');
+                    if (html !== text) {
+                        span.innerHTML = html;
+                        node.parentNode.replaceChild(span, node);
+                    }
+                } else if (node.nodeType === 1 && !/^(script|style|textarea)$/i.test(node.tagName)) {
+                    for (var i = 0; i < node.childNodes.length; i++) {
+                        walkText(node.childNodes[i]);
+                    }
+                }
+            }
+            walkText(document.body);
+        });
+    </script>
+</body>
+</html>
