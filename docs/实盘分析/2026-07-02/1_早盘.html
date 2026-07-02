@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026年07月02日 A股开盘晨报</title>
+<style>
+:root {
+    --bg-primary: #0a0e17;
+    --bg-card: #111827;
+    --bg-card-alt: #0f172a;
+    --border-color: #1e293b;
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent-red: #ef4444;
+    --accent-green: #22c55e;
+    --accent-blue: #3b82f6;
+    --accent-yellow: #eab308;
+    --accent-purple: #a855f7;
+    --accent-pink: #ec4899;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    text-align: center;
+    padding: 30px 0 20px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 24px;
+}
+
+.header h1 {
+    font-size: 28px;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+}
+
+.header .subtitle {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.section {
+    margin-bottom: 28px;
+}
+
+.section h2 {
+    font-size: 20px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.stat-value {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.stat-change {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.stat-sub {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+.text-red { color: var(--accent-red); }
+.text-green { color: var(--accent-green); }
+.text-gray { color: var(--text-muted); }
+
+.breadth-bar {
+    display: flex;
+    border-radius: 6px;
+    overflow: hidden;
+    height: 32px;
+    margin-top: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.breadth-up {
+    background: var(--accent-red);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    padding: 0 8px;
+}
+
+.breadth-flat {
+    background: var(--text-muted);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    padding: 0 4px;
+}
+
+.breadth-down {
+    background: var(--accent-green);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    padding: 0 8px;
+}
+
+.fund-summary {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 14px;
+    font-size: 15px;
+}
+
+.fund-direction {
+    font-weight: 600;
+}
+
+.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.table-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.table-card h3 {
+    font-size: 14px;
+    margin-bottom: 12px;
+    color: var(--text-secondary);
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+th {
+    text-align: left;
+    padding: 8px 6px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+td {
+    padding: 7px 6px;
+    border-bottom: 1px solid rgba(30, 41, 59, 0.5);
+    white-space: nowrap;
+}
+
+.rank-cell {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    width: 30px;
+}
+
+.sub-text {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.badge-industry {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+    margin-right: 4px;
+}
+
+.badge-concept {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    background: rgba(168, 85, 247, 0.15);
+    color: #c084fc;
+    margin-right: 4px;
+}
+
+.stock-link {
+    color: var(--accent-blue);
+    text-decoration: none;
+}
+
+.stock-link:hover {
+    text-decoration: underline;
+}
+
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 10px;
+}
+
+.news-card {
+    display: block;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 14px 16px;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: border-color 0.2s;
+}
+
+.news-card:hover {
+    border-color: var(--accent-blue);
+}
+
+.news-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+.news-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.footer {
+    margin-top: 32px;
+    padding: 20px 0;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.footer .disclaimer {
+    color: var(--accent-yellow);
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .two-col {
+        grid-template-columns: 1fr;
+    }
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .news-grid {
+        grid-template-columns: 1fr;
+    }
+    body {
+        padding: 12px;
+    }
+    .header h1 {
+        font-size: 22px;
+    }
+}
+</style>
+</head>
+<body>
+<div class="header">
+    <h1>2026年07月02日 A股开盘晨报</h1>
+    <div class="subtitle">市场开盘数据一览 · 生成于 2026-07-02 09:22:31</div>
+</div>
+
+    <div class="section">
+        <h2>📈 开盘概览</h2>
+        <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">上证指数</div>
+            <div class="stat-value text-green">4112.11</div>
+            <div class="stat-change text-green">-0.01%</div>
+            <div class="stat-sub">成交额: 0.00</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">深证成指</div>
+            <div class="stat-value ">0.00</div>
+            <div class="stat-change ">—</div>
+            <div class="stat-sub">成交额: 0.00</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">创业板指</div>
+            <div class="stat-value ">0.00</div>
+            <div class="stat-change ">—</div>
+            <div class="stat-sub">成交额: 0.00</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">科创50</div>
+            <div class="stat-value text-gray">2153.04</div>
+            <div class="stat-change text-gray">+0.00%</div>
+            <div class="stat-sub">成交额: 0.00</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">北证50</div>
+            <div class="stat-value text-gray">1264.94</div>
+            <div class="stat-change text-gray">+0.00%</div>
+            <div class="stat-sub">成交额: 0.00</div>
+        </div></div>
+        
+        <div class="breadth-bar">
+            <div class="breadth-up" style="width:39.6%">涨 2287</div>
+            <div class="breadth-flat" style="width:0.0%">平 0</div>
+            <div class="breadth-down" style="width:60.4%">跌 3486</div>
+        </div>
+    </div>
+    <div class="section">
+        <h2>💰 资金流向</h2>
+        <div class="fund-summary">
+            <span class="fund-direction text-gray">资金数据缺失，市场观望</span>
+        </div>
+        <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">主力净流入</div>
+            <div class="stat-value text-gray">0.00</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">超大单净流入</div>
+            <div class="stat-value text-gray">0.00</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">大单净流入</div>
+            <div class="stat-value text-gray">0.00</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">中单净流入</div>
+            <div class="stat-value text-gray">0.00</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">小单净流入</div>
+            <div class="stat-value text-gray">0.00</div>
+        </div></div>
+    </div>
+    <div class="section">
+        <h2>📊 板块资金流向</h2>
+        <div class="two-col">
+        <div class="table-card">
+            <h3>🔥 申万一级·资金净流入 TOP15</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>#</th><th>板块</th><th>涨跌幅</th><th>主力净流入</th><th>领涨股</th></tr></thead>
+                    <tbody>
+            <tr>
+                <td class="rank-cell">1</td>
+                <td>综合</td>
+                <td class="text-red">+0.02%</td>
+                <td class="text-green">0.00</td>
+                <td class="sub-text">ST三木</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">2</td>
+                <td>有色金属</td>
+                <td class="text-green">-0.27%</td>
+                <td class="text-green">0.00</td>
+                <td class="sub-text">盛达资源</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">3</td>
+                <td>银行</td>
+                <td class="text-green">-0.04%</td>
+                <td class="text-green">0.00</td>
+                <td class="sub-text">成都银行</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">4</td>
+                <td>医药生物</td>
+                <td class="text-green">-0.04%</td>
+                <td class="text-green">0.00</td>
+                <td class="sub-text">昊帆生物</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">5</td>
+                <td>通信</td>
+                <td class="text-green">-1.27%</td>
+                <td class="text-green">0.00</td>
+                <td class="sub-text">中通国脉</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">6</td>
+                <td>食品饮料</td>
+                <td class="text-red">+0.40%</td>
+                <td class="text-green">0.00</td>
+                <td class="sub-text">紫燕食品</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">7</td>
+                <td>石油石化</td>
+                <td class="text-green">-0.20%</td>
+                <td class="text-green">0.00</td>
+                <td class="sub-text">岳阳兴长</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">8</td>
+                <td>社会服务</td>
+                <td class="text-green">-0.19%</td>
+                <td class="text-green">0.00</td>
+                <td class="sub-text">中纺标</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">9</td>
+                <td>商贸零售</td>
+                <td class="text-red">+0.03%</td>
+                <td class="text-green">0.00</td>
+                <td class="sub-text">宁波中百</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">10</td>
+                <td>轻工制造</td>
+                <td class="text-green">-0.04%</td>
+                <td class="text-green">0.00</td>
+                <td class="sub-text">康欣新材</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">11</td>
+                <td>汽车</td>
+                <td class="text-green">-0.04%</td>
+                <td class="text-green">0.00</td>
+                <td class="sub-text">亚通精工</td>
+            </tr></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="table-card">
+            <h3>❄️ 申万一级·资金净流出 TOP15</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>#</th><th>板块</th><th>涨跌幅</th><th>主力净流出</th><th>领涨股</th></tr></thead>
+                    <tbody>
+            <tr>
+                <td class="rank-cell">1</td>
+                <td>综合</td>
+                <td class="text-red">+0.02%</td>
+                <td class="text-green">0.00</td>
+                <td class="sub-text">ST三木</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">2</td>
+                <td>有色金属</td>
+                <td class="text-green">-0.27%</td>
+                <td class="text-green">0.00</td>
+                <td class="sub-text">盛达资源</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">3</td>
+                <td>银行</td>
+                <td class="text-green">-0.04%</td>
+                <td class="text-green">0.00</td>
+                <td class="sub-text">成都银行</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">4</td>
+                <td>医药生物</td>
+                <td class="text-green">-0.04%</td>
+                <td class="text-green">0.00</td>
+                <td class="sub-text">昊帆生物</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">5</td>
+                <td>通信</td>
+                <td class="text-green">-1.27%</td>
+                <td class="text-green">0.00</td>
+                <td class="sub-text">中通国脉</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">6</td>
+                <td>食品饮料</td>
+                <td class="text-red">+0.40%</td>
+                <td class="text-green">0.00</td>
+                <td class="sub-text">紫燕食品</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">7</td>
+                <td>石油石化</td>
+                <td class="text-green">-0.20%</td>
+                <td class="text-green">0.00</td>
+                <td class="sub-text">岳阳兴长</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">8</td>
+                <td>社会服务</td>
+                <td class="text-green">-0.19%</td>
+                <td class="text-green">0.00</td>
+                <td class="sub-text">中纺标</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">9</td>
+                <td>商贸零售</td>
+                <td class="text-red">+0.03%</td>
+                <td class="text-green">0.00</td>
+                <td class="sub-text">宁波中百</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">10</td>
+                <td>轻工制造</td>
+                <td class="text-green">-0.04%</td>
+                <td class="text-green">0.00</td>
+                <td class="sub-text">康欣新材</td>
+            </tr>
+            <tr>
+                <td class="rank-cell">11</td>
+                <td>汽车</td>
+                <td class="text-green">-0.04%</td>
+                <td class="text-green">0.00</td>
+                <td class="sub-text">亚通精工</td>
+            </tr></tbody>
+                </table>
+            </div>
+        </div></div>
+    </div>
+    <div class="section">
+        <h2>🔥 热门板块（申万一级行业）</h2>
+        <div class="table-card">
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>#</th><th>板块</th><th>涨跌幅</th><th>主力净流入</th><th>领涨股</th><th>涨跌幅</th></tr></thead>
+                    <tbody>
+        <tr>
+            <td class="rank-cell">1</td>
+            <td>有色金属</td>
+            <td class="text-red">+2.09%</td>
+            <td class="text-gray">0.00</td>
+            <td class="sub-text">盛达资源</td>
+            <td class="sub-text">+6.73%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">2</td>
+            <td>纺织服饰</td>
+            <td class="text-red">+1.25%</td>
+            <td class="text-gray">0.00</td>
+            <td class="sub-text">富春染织</td>
+            <td class="sub-text">+8.90%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">3</td>
+            <td>基础化工</td>
+            <td class="text-red">+1.20%</td>
+            <td class="text-gray">0.00</td>
+            <td class="sub-text">优彩资源</td>
+            <td class="sub-text">+10.07%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">4</td>
+            <td>建筑材料</td>
+            <td class="text-red">+1.16%</td>
+            <td class="text-gray">0.00</td>
+            <td class="sub-text">*ST亚士</td>
+            <td class="sub-text">+3.16%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">5</td>
+            <td>食品饮料</td>
+            <td class="text-red">+0.95%</td>
+            <td class="text-gray">0.00</td>
+            <td class="sub-text">紫燕食品</td>
+            <td class="sub-text">+9.91%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">6</td>
+            <td>机械设备</td>
+            <td class="text-red">+0.95%</td>
+            <td class="text-gray">0.00</td>
+            <td class="sub-text">炜冈科技</td>
+            <td class="sub-text">+9.99%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">7</td>
+            <td>农林牧渔</td>
+            <td class="text-red">+0.94%</td>
+            <td class="text-gray">0.00</td>
+            <td class="sub-text">益生股份</td>
+            <td class="sub-text">+10.06%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">8</td>
+            <td>传媒</td>
+            <td class="text-red">+0.89%</td>
+            <td class="text-gray">0.00</td>
+            <td class="sub-text">易点天下</td>
+            <td class="sub-text">+4.94%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">9</td>
+            <td>计算机</td>
+            <td class="text-red">+0.85%</td>
+            <td class="text-gray">0.00</td>
+            <td class="sub-text">通达海</td>
+            <td class="sub-text">+7.77%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">10</td>
+            <td>家用电器</td>
+            <td class="text-red">+0.76%</td>
+            <td class="text-gray">0.00</td>
+            <td class="sub-text">*ST康佳A</td>
+            <td class="sub-text">+4.96%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">11</td>
+            <td>轻工制造</td>
+            <td class="text-red">+0.76%</td>
+            <td class="text-gray">0.00</td>
+            <td class="sub-text">康欣新材</td>
+            <td class="sub-text">+9.89%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">12</td>
+            <td>交通运输</td>
+            <td class="text-red">+0.75%</td>
+            <td class="text-gray">0.00</td>
+            <td class="sub-text">圆通速递</td>
+            <td class="sub-text">+9.98%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">13</td>
+            <td>公用事业</td>
+            <td class="text-red">+0.75%</td>
+            <td class="text-gray">0.00</td>
+            <td class="sub-text">宝塔实业</td>
+            <td class="sub-text">+10.10%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">14</td>
+            <td>房地产</td>
+            <td class="text-red">+0.72%</td>
+            <td class="text-gray">0.00</td>
+            <td class="sub-text">*ST南置</td>
+            <td class="sub-text">+2.20%</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">15</td>
+            <td>美容护理</td>
+            <td class="text-red">+0.69%</td>
+            <td class="text-gray">0.00</td>
+            <td class="sub-text">倍加洁</td>
+            <td class="sub-text">+4.88%</td>
+        </tr></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <h2>⭐ 热门股票 TOP50</h2>
+        <div class="table-card">
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>#</th><th>名称</th><th>代码</th><th>板块</th><th>最新价</th><th>涨跌幅</th><th>成交额</th><th>换手率</th><th>主力净流入</th></tr></thead>
+                    <tbody>
+        <tr>
+            <td class="rank-cell">1</td>
+            <td><a href="https://quote.eastmoney.com/1.920992.html" target="_blank" class="stock-link">中科美菱</a></td>
+            <td class="sub-text">920992</td>
+            <td class="sub-text">医药生物·医疗器械</td>
+            <td class="text-green">11.89</td>
+            <td class="text-green">-1.25%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">2</td>
+            <td><a href="https://quote.eastmoney.com/1.920985.html" target="_blank" class="stock-link">海泰新能</a></td>
+            <td class="sub-text">920985</td>
+            <td class="sub-text">电力设备·光伏设备</td>
+            <td class="text-red">5.00</td>
+            <td class="text-red">+0.40%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">3</td>
+            <td><a href="https://quote.eastmoney.com/1.920982.html" target="_blank" class="stock-link">锦波生物</a></td>
+            <td class="sub-text">920982</td>
+            <td class="sub-text">美容护理·医疗美容</td>
+            <td class="text-red">129.00</td>
+            <td class="text-red">+0.55%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">4</td>
+            <td><a href="https://quote.eastmoney.com/1.920981.html" target="_blank" class="stock-link">晶赛科技</a></td>
+            <td class="sub-text">920981</td>
+            <td class="sub-text">电子·元件</td>
+            <td class="text-green">45.00</td>
+            <td class="text-green">-9.09%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">5</td>
+            <td><a href="https://quote.eastmoney.com/1.920978.html" target="_blank" class="stock-link">开特股份</a></td>
+            <td class="sub-text">920978</td>
+            <td class="sub-text">汽车·汽车零部件</td>
+            <td class="">—</td>
+            <td class="">—</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">6</td>
+            <td><a href="https://quote.eastmoney.com/1.920976.html" target="_blank" class="stock-link">视声智能</a></td>
+            <td class="sub-text">920976</td>
+            <td class="sub-text">计算机设备</td>
+            <td class="text-red">17.49</td>
+            <td class="text-red">+5.23%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">7</td>
+            <td><a href="https://quote.eastmoney.com/1.920974.html" target="_blank" class="stock-link">凯大催化</a></td>
+            <td class="sub-text">920974</td>
+            <td class="sub-text">基础化工·化学制品</td>
+            <td class="text-green">6.10</td>
+            <td class="text-green">-0.16%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">8</td>
+            <td><a href="https://quote.eastmoney.com/1.920971.html" target="_blank" class="stock-link">天马新材</a></td>
+            <td class="sub-text">920971</td>
+            <td class="sub-text">基础化工·非金属材料Ⅱ</td>
+            <td class="text-green">36.39</td>
+            <td class="text-green">-3.14%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">9</td>
+            <td><a href="https://quote.eastmoney.com/1.920970.html" target="_blank" class="stock-link">大禹生物</a></td>
+            <td class="sub-text">920970</td>
+            <td class="sub-text">农林牧渔·动物保健Ⅱ</td>
+            <td class="text-gray">6.76</td>
+            <td class="text-gray">+0.00%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">10</td>
+            <td><a href="https://quote.eastmoney.com/1.920964.html" target="_blank" class="stock-link">润农节水</a></td>
+            <td class="sub-text">920964</td>
+            <td class="sub-text">农林牧渔·农业综合Ⅱ</td>
+            <td class="">—</td>
+            <td class="">—</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">11</td>
+            <td><a href="https://quote.eastmoney.com/1.920961.html" target="_blank" class="stock-link">创远信科</a></td>
+            <td class="sub-text">920961</td>
+            <td class="sub-text">机械设备·通用设备</td>
+            <td class="text-green">23.95</td>
+            <td class="text-green">-0.54%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">12</td>
+            <td><a href="https://quote.eastmoney.com/1.920957.html" target="_blank" class="stock-link">汉维科技</a></td>
+            <td class="sub-text">920957</td>
+            <td class="sub-text">基础化工·化学制品</td>
+            <td class="">—</td>
+            <td class="">—</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">13</td>
+            <td><a href="https://quote.eastmoney.com/1.920953.html" target="_blank" class="stock-link">国子软件</a></td>
+            <td class="sub-text">920953</td>
+            <td class="sub-text">计算机·IT服务Ⅱ</td>
+            <td class="text-red">23.11</td>
+            <td class="text-red">+0.04%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">14</td>
+            <td><a href="https://quote.eastmoney.com/1.920950.html" target="_blank" class="stock-link">迅安科技</a></td>
+            <td class="sub-text">920950</td>
+            <td class="sub-text">机械设备·通用设备</td>
+            <td class="">—</td>
+            <td class="">—</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">15</td>
+            <td><a href="https://quote.eastmoney.com/1.920946.html" target="_blank" class="stock-link">森萱医药</a></td>
+            <td class="sub-text">920946</td>
+            <td class="sub-text">医药生物·化学制药</td>
+            <td class="text-green">10.01</td>
+            <td class="text-green">-1.09%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">16</td>
+            <td><a href="https://quote.eastmoney.com/1.920943.html" target="_blank" class="stock-link">优机股份</a></td>
+            <td class="sub-text">920943</td>
+            <td class="sub-text">机械设备·通用设备</td>
+            <td class="text-red">13.48</td>
+            <td class="text-red">+0.52%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">17</td>
+            <td><a href="https://quote.eastmoney.com/1.920942.html" target="_blank" class="stock-link">恒立钻具</a></td>
+            <td class="sub-text">920942</td>
+            <td class="sub-text">机械设备·工程机械</td>
+            <td class="">—</td>
+            <td class="">—</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">18</td>
+            <td><a href="https://quote.eastmoney.com/1.920932.html" target="_blank" class="stock-link">科达自控</a></td>
+            <td class="sub-text">920932</td>
+            <td class="sub-text">计算机·软件开发</td>
+            <td class="text-red">12.88</td>
+            <td class="text-red">+1.50%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">19</td>
+            <td><a href="https://quote.eastmoney.com/1.920931.html" target="_blank" class="stock-link">无锡鼎邦</a></td>
+            <td class="sub-text">920931</td>
+            <td class="sub-text">机械设备·专用设备</td>
+            <td class="">—</td>
+            <td class="">—</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">20</td>
+            <td><a href="https://quote.eastmoney.com/1.920926.html" target="_blank" class="stock-link">鸿智科技</a></td>
+            <td class="sub-text">920926</td>
+            <td class="sub-text">家用电器·小家电</td>
+            <td class="">—</td>
+            <td class="">—</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">21</td>
+            <td><a href="https://quote.eastmoney.com/1.920925.html" target="_blank" class="stock-link">锦好医疗</a></td>
+            <td class="sub-text">920925</td>
+            <td class="sub-text">医药生物·医疗器械</td>
+            <td class="">—</td>
+            <td class="">—</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">22</td>
+            <td><a href="https://quote.eastmoney.com/1.920924.html" target="_blank" class="stock-link">广脉科技</a></td>
+            <td class="sub-text">920924</td>
+            <td class="sub-text">通信·通信服务</td>
+            <td class="text-green">14.62</td>
+            <td class="text-green">-1.81%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">23</td>
+            <td><a href="https://quote.eastmoney.com/1.920914.html" target="_blank" class="stock-link">远航精密</a></td>
+            <td class="sub-text">920914</td>
+            <td class="sub-text">电力设备·电池</td>
+            <td class="text-red">18.48</td>
+            <td class="text-red">+0.65%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">24</td>
+            <td><a href="https://quote.eastmoney.com/1.920906.html" target="_blank" class="stock-link">舜宇精工</a></td>
+            <td class="sub-text">920906</td>
+            <td class="sub-text">汽车·汽车零部件</td>
+            <td class="text-red">17.56</td>
+            <td class="text-red">+1.44%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">25</td>
+            <td><a href="https://quote.eastmoney.com/1.920896.html" target="_blank" class="stock-link">旺成科技</a></td>
+            <td class="sub-text">920896</td>
+            <td class="sub-text">汽车·汽车零部件</td>
+            <td class="">—</td>
+            <td class="">—</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">26</td>
+            <td><a href="https://quote.eastmoney.com/1.920895.html" target="_blank" class="stock-link">花溪科技</a></td>
+            <td class="sub-text">920895</td>
+            <td class="sub-text">机械设备·专用设备</td>
+            <td class="text-green">11.98</td>
+            <td class="text-green">-0.58%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">27</td>
+            <td><a href="https://quote.eastmoney.com/1.920892.html" target="_blank" class="stock-link">广咨国际</a></td>
+            <td class="sub-text">920892</td>
+            <td class="sub-text">建筑装饰·工程咨询服务Ⅱ</td>
+            <td class="text-gray">11.25</td>
+            <td class="text-gray">+0.00%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">28</td>
+            <td><a href="https://quote.eastmoney.com/1.920885.html" target="_blank" class="stock-link">星辰科技</a></td>
+            <td class="sub-text">920885</td>
+            <td class="sub-text">机械设备·自动化设备</td>
+            <td class="">—</td>
+            <td class="">—</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">29</td>
+            <td><a href="https://quote.eastmoney.com/1.920879.html" target="_blank" class="stock-link">基康技术</a></td>
+            <td class="sub-text">920879</td>
+            <td class="sub-text">机械设备·通用设备</td>
+            <td class="">—</td>
+            <td class="">—</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">30</td>
+            <td><a href="https://quote.eastmoney.com/1.920876.html" target="_blank" class="stock-link">慧为智能</a></td>
+            <td class="sub-text">920876</td>
+            <td class="sub-text">电子·消费电子</td>
+            <td class="text-red">17.50</td>
+            <td class="text-red">+0.98%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">31</td>
+            <td><a href="https://quote.eastmoney.com/1.920873.html" target="_blank" class="stock-link">中设咨询</a></td>
+            <td class="sub-text">920873</td>
+            <td class="sub-text">建筑装饰·工程咨询服务Ⅱ</td>
+            <td class="text-green">7.09</td>
+            <td class="text-green">-2.21%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">32</td>
+            <td><a href="https://quote.eastmoney.com/1.920871.html" target="_blank" class="stock-link">派特尔</a></td>
+            <td class="sub-text">920871</td>
+            <td class="sub-text">汽车·汽车零部件</td>
+            <td class="text-gray">10.75</td>
+            <td class="text-gray">+0.00%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">33</td>
+            <td><a href="https://quote.eastmoney.com/1.920870.html" target="_blank" class="stock-link">恒进感应</a></td>
+            <td class="sub-text">920870</td>
+            <td class="sub-text">机械设备·通用设备</td>
+            <td class="text-red">12.99</td>
+            <td class="text-red">+3.42%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">34</td>
+            <td><a href="https://quote.eastmoney.com/1.920866.html" target="_blank" class="stock-link">绿亨科技</a></td>
+            <td class="sub-text">920866</td>
+            <td class="sub-text">基础化工·农化制品</td>
+            <td class="">—</td>
+            <td class="">—</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">35</td>
+            <td><a href="https://quote.eastmoney.com/1.920857.html" target="_blank" class="stock-link">泓禧科技</a></td>
+            <td class="sub-text">920857</td>
+            <td class="sub-text">电子·消费电子</td>
+            <td class="text-red">14.00</td>
+            <td class="text-red">+0.07%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">36</td>
+            <td><a href="https://quote.eastmoney.com/1.920856.html" target="_blank" class="stock-link">浩淼科技</a></td>
+            <td class="sub-text">920856</td>
+            <td class="sub-text">机械设备·专用设备</td>
+            <td class="text-gray">8.75</td>
+            <td class="text-gray">+0.00%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">37</td>
+            <td><a href="https://quote.eastmoney.com/1.920855.html" target="_blank" class="stock-link">浙江大农</a></td>
+            <td class="sub-text">920855</td>
+            <td class="sub-text">机械设备·专用设备</td>
+            <td class="">—</td>
+            <td class="">—</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">38</td>
+            <td><a href="https://quote.eastmoney.com/1.920839.html" target="_blank" class="stock-link">万通液压</a></td>
+            <td class="sub-text">920839</td>
+            <td class="sub-text">机械设备·工程机械</td>
+            <td class="text-green">26.18</td>
+            <td class="text-green">-1.28%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">39</td>
+            <td><a href="https://quote.eastmoney.com/1.920837.html" target="_blank" class="stock-link">华原股份</a></td>
+            <td class="sub-text">920837</td>
+            <td class="sub-text">汽车·汽车零部件</td>
+            <td class="text-red">9.70</td>
+            <td class="text-red">+1.78%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">40</td>
+            <td><a href="https://quote.eastmoney.com/1.920834.html" target="_blank" class="stock-link">三维装备</a></td>
+            <td class="sub-text">920834</td>
+            <td class="sub-text">基础化工·橡胶</td>
+            <td class="text-red">9.92</td>
+            <td class="text-red">+1.33%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">41</td>
+            <td><a href="https://quote.eastmoney.com/1.920833.html" target="_blank" class="stock-link">美心翼申</a></td>
+            <td class="sub-text">920833</td>
+            <td class="sub-text">机械设备·通用设备</td>
+            <td class="text-red">9.20</td>
+            <td class="text-red">+0.44%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">42</td>
+            <td><a href="https://quote.eastmoney.com/1.920832.html" target="_blank" class="stock-link">齐鲁华信</a></td>
+            <td class="sub-text">920832</td>
+            <td class="sub-text">基础化工·非金属材料Ⅱ</td>
+            <td class="text-red">6.16</td>
+            <td class="text-red">+2.33%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">43</td>
+            <td><a href="https://quote.eastmoney.com/1.920826.html" target="_blank" class="stock-link">盖世食品</a></td>
+            <td class="sub-text">920826</td>
+            <td class="sub-text">食品饮料·食品加工</td>
+            <td class="text-green">8.13</td>
+            <td class="text-green">-0.25%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">44</td>
+            <td><a href="https://quote.eastmoney.com/1.920821.html" target="_blank" class="stock-link">则成电子</a></td>
+            <td class="sub-text">920821</td>
+            <td class="sub-text">电子·元件</td>
+            <td class="text-green">19.41</td>
+            <td class="text-green">-2.85%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">45</td>
+            <td><a href="https://quote.eastmoney.com/1.920819.html" target="_blank" class="stock-link">颖泰生物</a></td>
+            <td class="sub-text">920819</td>
+            <td class="sub-text">基础化工·农化制品</td>
+            <td class="text-gray">2.73</td>
+            <td class="text-gray">+0.00%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">46</td>
+            <td><a href="https://quote.eastmoney.com/1.920810.html" target="_blank" class="stock-link">春光智能</a></td>
+            <td class="sub-text">920810</td>
+            <td class="sub-text">机械设备·专用设备</td>
+            <td class="">—</td>
+            <td class="">—</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">47</td>
+            <td><a href="https://quote.eastmoney.com/1.920809.html" target="_blank" class="stock-link">安达科技</a></td>
+            <td class="sub-text">920809</td>
+            <td class="sub-text">电力设备·电池</td>
+            <td class="text-green">9.03</td>
+            <td class="text-green">-1.63%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">48</td>
+            <td><a href="https://quote.eastmoney.com/1.920808.html" target="_blank" class="stock-link">曙光数创</a></td>
+            <td class="sub-text">920808</td>
+            <td class="sub-text">计算机设备</td>
+            <td class="text-green">81.45</td>
+            <td class="text-green">-1.63%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">49</td>
+            <td><a href="https://quote.eastmoney.com/1.920807.html" target="_blank" class="stock-link">奔朗新材</a></td>
+            <td class="sub-text">920807</td>
+            <td class="sub-text">机械设备·通用设备</td>
+            <td class="text-green">11.07</td>
+            <td class="text-green">-1.16%</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr>
+        <tr>
+            <td class="rank-cell">50</td>
+            <td><a href="https://quote.eastmoney.com/1.920806.html" target="_blank" class="stock-link">云星宇</a></td>
+            <td class="sub-text">920806</td>
+            <td class="sub-text">计算机·IT服务Ⅱ</td>
+            <td class="">—</td>
+            <td class="">—</td>
+            <td>—</td>
+            <td>0.00%</td>
+            <td class="text-gray">—</td>
+        </tr></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- EXTENDED_MODULES -->
+    
+    <div class="section">
+        <h2>📰 影响股市新闻</h2>
+        <div class="news-grid">
+        <a href="http://forex.eastmoney.com/a/202607023791088974.html" target="_blank" class="news-card">
+            <div class="news-title">人民币兑美元中间价报6.8088</div>
+            <div class="news-meta">东方财富Choice数据 · 2026-07-02 09:17:22</div>
+        </a>
+        <a href="http://finance.eastmoney.com/a/202607023791079822.html" target="_blank" class="news-card">
+            <div class="news-title">大中矿业、万华化学投资成立新能源公司</div>
+            <div class="news-meta">人民财讯 · 2026-07-02 09:17:21</div>
+        </a>
+        <a href="http://finance.eastmoney.com/a/202607023791102979.html" target="_blank" class="news-card">
+            <div class="news-title">印度对原产于或进口自中国的模制钠钙玻璃瓶启动反倾销调查</div>
+            <div class="news-meta">界面新闻 · 2026-07-02 09:15:22</div>
+        </a>
+        <a href="http://finance.eastmoney.com/a/202607023791047547.html" target="_blank" class="news-card">
+            <div class="news-title">福斯达与中建三局三公司达成战略合作</div>
+            <div class="news-meta">人民财讯 · 2026-07-02 09:12:16</div>
+        </a>
+        <a href="http://finance.eastmoney.com/a/202607023791036946.html" target="_blank" class="news-card">
+            <div class="news-title">新宙邦：通过投资石磊氟材料和永晶科技布局氢氟酸</div>
+            <div class="news-meta">人民财讯 · 2026-07-02 09:10:36</div>
+        </a>
+        <a href="http://finance.eastmoney.com/a/202607023791025055.html" target="_blank" class="news-card">
+            <div class="news-title">具身智能机器人走进千家万户，难在哪儿</div>
+            <div class="news-meta">科技日报 · 2026-07-02 09:08:25</div>
+        </a>
+        <a href="http://finance.eastmoney.com/a/202607023791019037.html" target="_blank" class="news-card">
+            <div class="news-title">《智能网联汽车 组合驾驶辅助系统安全要求》强制性国家标准正式发布</div>
+            <div class="news-meta">工信部网站 · 2026-07-02 09:08:13</div>
+        </a>
+        <a href="http://finance.eastmoney.com/a/202607023791033064.html" target="_blank" class="news-card">
+            <div class="news-title">HarmonyOS 6终端设备数突破7000万</div>
+            <div class="news-meta">财联社 · 2026-07-02 09:06:33</div>
+        </a>
+        <a href="http://stock.eastmoney.com/a/202607023790989663.html" target="_blank" class="news-card">
+            <div class="news-title">双重“热浪”来袭！美国最大电网运营商警告：电力需求即将突破纪录</div>
+            <div class="news-meta">财联社 · 2026-07-02 09:04:23</div>
+        </a>
+        <a href="http://finance.eastmoney.com/a/202607023791001424.html" target="_blank" class="news-card">
+            <div class="news-title">鸿擎科技完成超13亿元Pre-B轮融资</div>
+            <div class="news-meta">界面新闻 · 2026-07-02 09:03:55</div>
+        </a></div>
+    </div>
+    <div class="footer">
+        <p>生成时间：2026-07-02 09:22:31</p>
+        <p>数据来源：东方财富、新浪财经 | 仅供数据整理参考</p>
+        <p class="disclaimer">⚠️ 仅为数据整理，不构成任何投资建议。股市有风险，投资需谨慎。</p>
+    </div>
+</body>
+</html>

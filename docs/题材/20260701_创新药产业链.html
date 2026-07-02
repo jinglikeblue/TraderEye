@@ -180,6 +180,55 @@
             background: rgba(244,114,182,0.15); color: #f472b6;
             border: 1px solid rgba(244,114,182,0.3); }
 
+        /* 护城河标签 */
+        .moat-badge { display: inline-block; font-size: 11px; font-weight: 700;
+            padding: 2px 8px; border-radius: 10px; margin-left: 6px; }
+        .moat-extreme { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+        .moat-deep { background: rgba(249,115,22,0.15); color: #f97316; border: 1px solid rgba(249,115,22,0.3); }
+        .moat-mid { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+
+        /* 护城河评级条 */
+        .moat-bars { display: flex; flex-direction: column; gap: 3px; margin-top: 6px; }
+        .moat-bar-row { display: flex; align-items: center; gap: 6px; }
+        .moat-bar-label { font-size: 10px; color: #8892a8; width: 52px; text-align: right; flex-shrink: 0; }
+        .moat-bar-track { flex: 1; height: 5px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; }
+        .moat-bar-fill { height: 100%; border-radius: 3px; }
+        .moat-l5 { width: 100%; background: #ef4444; }
+        .moat-l4 { width: 80%; background: #f97316; }
+        .moat-l3 { width: 60%; background: #fbbf24; }
+        .moat-l2 { width: 40%; background: #a855f7; }
+        .moat-l1 { width: 20%; background: #6b7280; }
+
+        /* 护城河分析卡片 */
+        .moat-analysis-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+        .moat-dim-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 12px; padding: 20px; border-top: 3px solid; }
+        .moat-dim-card:nth-child(1) { border-top-color: #ef4444; }
+        .moat-dim-card:nth-child(2) { border-top-color: #f97316; }
+        .moat-dim-card:nth-child(3) { border-top-color: #fbbf24; }
+        .moat-dim-card:nth-child(4) { border-top-color: #3b82f6; }
+        .moat-dim-card:nth-child(5) { border-top-color: #10b981; }
+        .moat-dim-card:nth-child(6) { border-top-color: #8b5cf6; }
+        .moat-dim-card .dim-icon { font-size: 22px; margin-bottom: 8px; }
+        .moat-dim-card .dim-title { font-size: 15px; font-weight: 600; color: #e0e6f0; margin-bottom: 6px; }
+        .moat-dim-card .dim-desc { font-size: 12px; color: #8892a8; line-height: 1.7; }
+        .moat-dim-card .dim-champion { font-size: 11px; color: #5a6478; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.06); }
+        .moat-dim-card .dim-champion strong { color: #c8d0e0; }
+
+        /* 护城河总分徽章(用于对比表) */
+        .moat-score-inline { display: inline-flex; align-items: center; gap: 3px;
+            font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 12px; white-space: nowrap; }
+        .moat-score-inline.extreme { background: rgba(239,68,68,0.12); color: #ef4444; border: 1px solid rgba(239,68,68,0.25); }
+        .moat-score-inline.deep { background: rgba(249,115,22,0.12); color: #f97316; border: 1px solid rgba(249,115,22,0.25); }
+        .moat-score-inline.mid-deep { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); }
+        .moat-score-inline.moderate { background: rgba(168,85,247,0.12); color: #a855f7; border: 1px solid rgba(168,85,247,0.25); }
+
+        /* 护城河总结框 */
+        .moat-summary { background: linear-gradient(135deg, rgba(239,68,68,0.04), rgba(249,115,22,0.04));
+            border: 1px solid rgba(239,68,68,0.15); border-radius: 14px; padding: 24px 28px; margin-top: 20px; }
+        .moat-summary h4 { font-size: 16px; font-weight: 600; color: #ef4444; margin-bottom: 10px; }
+        .moat-summary p { font-size: 14px; color: #8892a8; line-height: 1.8; }
+
         /* 评级 */
         .rating-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
         .rating-card { border-radius: 10px; padding: 10px 12px; border: 1px solid; background: rgba(255,255,255,0.03); }
@@ -276,7 +325,7 @@
         <!-- Header -->
         <div class="header">
             <h1>创新药产业链</h1>
-            <div class="subtitle">从CRO/CDMO早期研发→临床前/临床→NDA上市→商业化/License Out出海 · 28只全链条核心标的</div>
+            <div class="subtitle">从CRO/CDMO早期研发→临床前/临床→NDA上市→商业化/License Out出海 · 7只全链条核心标的</div>
             <div class="topic-tags">
                 <span class="topic-tag cro">CRO/CDMO</span>
                 <span class="topic-tag cdmo">CXO出海分化</span>
@@ -425,7 +474,7 @@
                 <div class="segment-card upstream">
                     <div class="seg-badge">上游</div>
                     <div class="seg-subtitle">CXO研发服务 + 试剂耗材</div>
-                    <div class="seg-count">11只核心标的 · 药物发现→临床前→临床→CDMO→试剂</div>
+                    <div class="seg-count">2只核心标的 · 全链条CXO龙头 + 临床CRO龙头</div>
                     <div class="seg-companies">
                         <div class="seg-company">
                             <div class="seg-company-icon">药</div>
@@ -436,14 +485,6 @@
                             <div class="seg-company-role">全链条CXO龙头</div>
                         </div>
                         <div class="seg-company">
-                            <div class="seg-company-icon">康</div>
-                            <div class="seg-company-info">
-                                <div class="seg-company-name">康龙化成</div>
-                                <div class="seg-company-code">300759</div>
-                            </div>
-                            <div class="seg-company-role">临床前CRO老二</div>
-                        </div>
-                        <div class="seg-company">
                             <div class="seg-company-icon">泰</div>
                             <div class="seg-company-info">
                                 <div class="seg-company-name">泰格医药</div>
@@ -451,73 +492,9 @@
                             </div>
                             <div class="seg-company-role">临床CRO龙头</div>
                         </div>
-                        <div class="seg-company">
-                            <div class="seg-company-icon">凯</div>
-                            <div class="seg-company-info">
-                                <div class="seg-company-name">凯莱英</div>
-                                <div class="seg-company-code">002821</div>
-                            </div>
-                            <div class="seg-company-role">CDMO龙头</div>
-                        </div>
-                        <div class="seg-company">
-                            <div class="seg-company-icon">昭</div>
-                            <div class="seg-company-info">
-                                <div class="seg-company-name">昭衍新药</div>
-                                <div class="seg-company-code">603127</div>
-                            </div>
-                            <div class="seg-company-role">药物安全性评价</div>
-                        </div>
-                        <div class="seg-company">
-                            <div class="seg-company-icon">美</div>
-                            <div class="seg-company-info">
-                                <div class="seg-company-name">美迪西</div>
-                                <div class="seg-company-code">688202</div>
-                            </div>
-                            <div class="seg-company-role">临床前CRO</div>
-                        </div>
-                        <div class="seg-company">
-                            <div class="seg-company-icon">博</div>
-                            <div class="seg-company-info">
-                                <div class="seg-company-name">博腾股份</div>
-                                <div class="seg-company-code">300363</div>
-                            </div>
-                            <div class="seg-company-role">CDMO</div>
-                        </div>
-                        <div class="seg-company">
-                            <div class="seg-company-icon">百</div>
-                            <div class="seg-company-info">
-                                <div class="seg-company-name">百普赛斯</div>
-                                <div class="seg-company-code">301080</div>
-                            </div>
-                            <div class="seg-company-role">重组蛋白试剂</div>
-                        </div>
-                        <div class="seg-company">
-                            <div class="seg-company-icon">义</div>
-                            <div class="seg-company-info">
-                                <div class="seg-company-name">义翘神州</div>
-                                <div class="seg-company-code">301047</div>
-                            </div>
-                            <div class="seg-company-role">生物试剂</div>
-                        </div>
-                        <div class="seg-company">
-                            <div class="seg-company-icon">诺</div>
-                            <div class="seg-company-info">
-                                <div class="seg-company-name">诺唯赞</div>
-                                <div class="seg-company-code">688105</div>
-                            </div>
-                            <div class="seg-company-role">分子试剂/原料酶</div>
-                        </div>
-                        <div class="seg-company">
-                            <div class="seg-company-icon">纳</div>
-                            <div class="seg-company-info">
-                                <div class="seg-company-name">纳微科技</div>
-                                <div class="seg-company-code">688690</div>
-                            </div>
-                            <div class="seg-company-role">色谱填料</div>
-                        </div>
                     </div>
                     <div class="seg-desc">
-                        CXO行业2024-2025年受Biotech寒冬+地缘政治（生物安全法案）影响估值承压，但订单端已触底回升。以药明康德为代表的龙头通过拆分海外业务（WuXi ATU）应对监管，CDMO和临床前CRO核心竞争力未变。国产生物试剂和耗材渗透率不足20%，替代空间巨大。
+                        CXO行业2024-2025年受地缘政治影响估值承压，但以药明康德为代表的全链条龙头通过拆分海外业务应对监管，核心竞争力未变。泰格医药受益于国内创新药IND数量回升+海外多中心临床需求增长，订单恢复双位数增长。
                     </div>
                 </div>
 
@@ -525,7 +502,7 @@
                 <div class="segment-card midstream">
                     <div class="seg-badge">中游</div>
                     <div class="seg-subtitle">创新药研发企业 · 多技术平台</div>
-                    <div class="seg-count">12只核心标的 · 小分子/抗体/ADC/双抗/CAR-T/PROTAC</div>
+                    <div class="seg-count">5只核心标的 · 小分子/ADC/双抗/CAR-T</div>
                     <div class="seg-companies">
                         <div class="seg-company">
                             <div class="seg-company-icon">恒</div>
@@ -544,76 +521,12 @@
                             <div class="seg-company-role">全球化Biotech龙头</div>
                         </div>
                         <div class="seg-company">
-                            <div class="seg-company-icon">信</div>
-                            <div class="seg-company-info">
-                                <div class="seg-company-name">信达生物</div>
-                                <div class="seg-company-code">01801.HK</div>
-                            </div>
-                            <div class="seg-company-role">PD-1+代谢/自免</div>
-                        </div>
-                        <div class="seg-company">
                             <div class="seg-company-icon">康</div>
                             <div class="seg-company-info">
                                 <div class="seg-company-name">康方生物</div>
                                 <div class="seg-company-code">09926.HK</div>
                             </div>
                             <div class="seg-company-role">双抗龙头</div>
-                        </div>
-                        <div class="seg-company">
-                            <div class="seg-company-icon">荣</div>
-                            <div class="seg-company-info">
-                                <div class="seg-company-name">荣昌生物</div>
-                                <div class="seg-company-code">688331</div>
-                            </div>
-                            <div class="seg-company-role">ADC龙头</div>
-                        </div>
-                        <div class="seg-company">
-                            <div class="seg-company-icon">君</div>
-                            <div class="seg-company-info">
-                                <div class="seg-company-name">君实生物</div>
-                                <div class="seg-company-code">688180</div>
-                            </div>
-                            <div class="seg-company-role">PD-1+抗感染</div>
-                        </div>
-                        <div class="seg-company">
-                            <div class="seg-company-icon">和</div>
-                            <div class="seg-company-info">
-                                <div class="seg-company-name">和黄医药</div>
-                                <div class="seg-company-code">00013.HK</div>
-                            </div>
-                            <div class="seg-company-role">小分子靶向药/出海</div>
-                        </div>
-                        <div class="seg-company">
-                            <div class="seg-company-icon">再</div>
-                            <div class="seg-company-info">
-                                <div class="seg-company-name">再鼎医药</div>
-                                <div class="seg-company-code">09688.HK</div>
-                            </div>
-                            <div class="seg-company-role">license-in+自研</div>
-                        </div>
-                        <div class="seg-company">
-                            <div class="seg-company-icon">迪</div>
-                            <div class="seg-company-info">
-                                <div class="seg-company-name">迪哲医药</div>
-                                <div class="seg-company-code">688192</div>
-                            </div>
-                            <div class="seg-company-role">小分子差异化创新</div>
-                        </div>
-                        <div class="seg-company">
-                            <div class="seg-company-icon">亚</div>
-                            <div class="seg-company-info">
-                                <div class="seg-company-name">亚盛医药</div>
-                                <div class="seg-company-code">06855.HK</div>
-                            </div>
-                            <div class="seg-company-role">细胞凋亡通路</div>
-                        </div>
-                        <div class="seg-company">
-                            <div class="seg-company-icon">加</div>
-                            <div class="seg-company-info">
-                                <div class="seg-company-name">加科思</div>
-                                <div class="seg-company-code">01167.HK</div>
-                            </div>
-                            <div class="seg-company-role">变构抑制剂</div>
                         </div>
                         <div class="seg-company">
                             <div class="seg-company-icon">科</div>
@@ -623,34 +536,6 @@
                             </div>
                             <div class="seg-company-role">ADC平台/默沙东合作</div>
                         </div>
-                    </div>
-                    <div class="seg-desc">
-                        国产创新药正在经历从"Fast Follow"到"Global FIC"的转型。ADC赛道中国管线数全球第一，科伦博泰与默沙东的ADC合作项目总额超$100亿标志行业拐点。康方生物的PD-1/VEGF双抗卡度尼利国内获批+FDA审批推进，验证了中国的双抗平台竞争力。关键挑战：Biotech融资环境虽有改善但仍偏冷，现金流管理能力成为分化标准。
-                    </div>
-                </div>
-
-                <!-- 下游：AI制药等 -->
-                <div class="segment-card downstream">
-                    <div class="seg-badge">技术创新</div>
-                    <div class="seg-subtitle">AI制药 + CGT + 新兴技术</div>
-                    <div class="seg-count">5只核心标的 · AI制药/CGT/合成生物学</div>
-                    <div class="seg-companies">
-                        <div class="seg-company">
-                            <div class="seg-company-icon">晶</div>
-                            <div class="seg-company-info">
-                                <div class="seg-company-name">晶泰科技</div>
-                                <div class="seg-company-code">02228.HK</div>
-                            </div>
-                            <div class="seg-company-role">AI药物发现平台</div>
-                        </div>
-                        <div class="seg-company">
-                            <div class="seg-company-icon">英</div>
-                            <div class="seg-company-info">
-                                <div class="seg-company-name">英矽智能</div>
-                                <div class="seg-company-code">02256.HK</div>
-                            </div>
-                            <div class="seg-company-role">AI端到端药物研发</div>
-                        </div>
                         <div class="seg-company">
                             <div class="seg-company-icon">传</div>
                             <div class="seg-company-info">
@@ -659,27 +544,12 @@
                             </div>
                             <div class="seg-company-role">CAR-T全球标杆</div>
                         </div>
-                        <div class="seg-company">
-                            <div class="seg-company-icon">药</div>
-                            <div class="seg-company-info">
-                                <div class="seg-company-name">药明巨诺</div>
-                                <div class="seg-company-code">02126.HK</div>
-                            </div>
-                            <div class="seg-company-role">CAR-T商业化领先</div>
-                        </div>
-                        <div class="seg-company">
-                            <div class="seg-company-icon">华</div>
-                            <div class="seg-company-info">
-                                <div class="seg-company-name">华大智造</div>
-                                <div class="seg-company-code">688114</div>
-                            </div>
-                            <div class="seg-company-role">基因测序仪</div>
-                        </div>
                     </div>
                     <div class="seg-desc">
-                        AI制药已经从概念期进入管线验证期。晶泰科技和英矽智能均有AI设计的分子进入临床阶段，AI将药物发现周期从4-5年缩短到18-24个月。CGT（细胞与基因治疗）赛道：传奇生物（Carvykti）由强生全球商业化，2025年销售额预计突破$25亿，是全球唯一商业化成功的中国原创CAR-T。
+                        国产创新药正在经历从"Fast Follow"到"Global FIC"的转型。百济神州实现全球自主商业化，泽布替尼$40亿+；科伦博泰与默沙东ADC合作总额超$100亿；康方生物双抗ivonescimab头对头优效K药；传奇生物Carvykti全球$25亿+；恒瑞医药创新药收入占比突破50%。
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -695,6 +565,14 @@
                         <span class="card-code">603259</span>
                     </div>
                     <span class="card-position position-cro">全链条CXO龙头</span>
+                    <span class="moat-badge moat-extreme">🛡 极深</span>
+                    <div class="moat-bars">
+                        <div class="moat-bar-row"><span class="moat-bar-label">技术独占</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l5"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">客户锁定</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l5"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">规模壁垒</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l5"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">监管壁垒</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l4"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">品牌先发</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l4"></div></div></div>
+                    </div>
                     <div class="card-desc">
                         全球唯一"端到端"CRDMO/CTDMO平台，覆盖从药物发现到商业化生产全链条。2025年营收约400亿+，化学业务（WuXi Chemistry）为绝对主力收入引擎，TIDES（多肽/寡核苷酸）CDMO高速增长受益于GLP-1浪潮。
                     </div>
@@ -721,6 +599,14 @@
                     </div>
                     <span class="card-position position-pharma">全球化Biotech龙头</span>
                     <span class="fda-badge">FDA批准</span>
+                    <span class="moat-badge moat-extreme">🛡 极深</span>
+                    <div class="moat-bars">
+                        <div class="moat-bar-row"><span class="moat-bar-label">全球商业化</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l5"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">管线壁垒</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l4"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">品牌先发</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l5"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">技术独占</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l4"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">数据飞轮</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l4"></div></div></div>
+                    </div>
                     <div class="card-desc">
                         中国唯一实现全球化自主商业化的创新药企。泽布替尼（百悦泽/Brukinsa）全球BTK抑制剂市场领先，2025年全球销售额突破$40亿。替雷利珠单抗海外授权诺华后回归自主商业化，BTK CDAC（BTK降解剂）为全球FIC管线。
                     </div>
@@ -747,6 +633,14 @@
                     </div>
                     <span class="card-position position-pharma">综合型Pharma龙头</span>
                     <span class="licenseout-badge">License Out</span>
+                    <span class="moat-badge moat-deep">🛡 深厚</span>
+                    <div class="moat-bars">
+                        <div class="moat-bar-row"><span class="moat-bar-label">管线壁垒</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l5"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">渠道网络</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l5"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">研发规模</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l5"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">技术独占</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l3"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">品牌先发</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l4"></div></div></div>
+                    </div>
                     <div class="card-desc">
                         国内研发投入最大的综合型制药企业。2024年研发投入超70亿元，创新药收入占比突破50%+。ADC管线（HER2 ADC/MET ADC等）通过License Out实现全球价值兑现。集采影响消化后重回增长轨道。
                     </div>
@@ -773,6 +667,14 @@
                     </div>
                     <span class="card-position position-bispecific">双抗全球标杆</span>
                     <span class="fda-badge">FDA审批中</span>
+                    <span class="moat-badge moat-deep">🛡 深厚</span>
+                    <div class="moat-bars">
+                        <div class="moat-bar-row"><span class="moat-bar-label">技术独占</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l5"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">临床数据</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l5"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">专利护城河</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l4"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">品牌先发</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l3"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">商业化力</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l2"></div></div></div>
+                    </div>
                     <div class="card-desc">
                         全球双特异性抗体平台领先企业。卡度尼利（PD-1/VEGF双抗）国内获批宫颈癌、非小细胞肺癌等适应症，FDA审批推进中。ivonescimab在与Keytruda头对头III期临床中取得优效数据，潜在全球重磅炸弹。
                     </div>
@@ -791,32 +693,6 @@
                     </div>
                 </div>
 
-                <!-- 荣昌生物 -->
-                <div class="company-card">
-                    <div class="card-header">
-                        <span class="card-name">荣昌生物</span>
-                        <span class="card-code">688331</span>
-                    </div>
-                    <span class="card-position position-adc">ADC龙头</span>
-                    <span class="adc-badge">ADC</span>
-                    <div class="card-desc">
-                        中国ADC先行者，维迪西妥单抗（RC48，HER2 ADC）国内获批胃癌/尿路上皮癌。License Out给Seagen（后被辉瑞收购），总交易额$26亿，为中国ADC出海里程碑。后续ADC管线（RC88/RC108等）持续推进。
-                    </div>
-                    <div class="card-binding">
-                        <strong>AI辅助</strong>：引入AI分子模拟优化ADC linker-payload设计，提升DAR值均一性和肿瘤选择性。
-                    </div>
-                    <div class="card-data-row">
-                        <span>营收<strong>~15亿</strong></span>
-                        <span>License收入<strong>~$2亿</strong></span>
-                        <span>研发费用<strong>~15亿</strong></span>
-                    </div>
-                    <div class="finance-tags">
-                        <span class="f-tag margin-mid"><span class="tag-icon">◆</span>毛利率70%</span>
-                        <span class="f-tag growth-mid"><span class="tag-icon">▲</span>商业化爬坡</span>
-                        <span class="f-tag loss"><span class="tag-icon">●</span>研发投入期</span>
-                    </div>
-                </div>
-
                 <!-- 科伦博泰 -->
                 <div class="company-card">
                     <div class="card-header">
@@ -826,6 +702,14 @@
                     <span class="card-position position-adc">ADC出海旗舰</span>
                     <span class="adc-badge">ADC</span>
                     <span class="licenseout-badge">默沙东合作</span>
+                    <span class="moat-badge moat-deep">🛡 深厚</span>
+                    <div class="moat-bars">
+                        <div class="moat-bar-row"><span class="moat-bar-label">技术独占</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l5"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">平台壁垒</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l5"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">合作排他</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l5"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">临床数据</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l4"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">专利护城河</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l4"></div></div></div>
+                    </div>
                     <div class="card-desc">
                         与默沙东达成ADC平台级合作的国产Biotech标杆，9款ADC授权总交易额超$118亿，创中国药企License Out金额纪录。核心产品SKB264（TROP2 ADC）III期数据优异，有望成为TROP2赛道best-in-class。
                     </div>
@@ -851,6 +735,14 @@
                         <span class="card-code">300347</span>
                     </div>
                     <span class="card-position position-cro">临床CRO龙头</span>
+                    <span class="moat-badge moat-deep">🛡 深厚</span>
+                    <div class="moat-bars">
+                        <div class="moat-bar-row"><span class="moat-bar-label">客户锁定</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l4"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">规模壁垒</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l4"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">监管壁垒</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l4"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">品牌先发</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l4"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">数据飞轮</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l3"></div></div></div>
+                    </div>
                     <div class="card-desc">
                         中国最大的临床CRO，覆盖I-IV期临床+数统+注册全流程。2025年受益于国内创新药IND数量回升+海外多中心临床试验需求增长，订单恢复双位数增长。国际化布局（亚太/北美）持续推进。
                     </div>
@@ -869,58 +761,6 @@
                     </div>
                 </div>
 
-                <!-- 和黄医药 -->
-                <div class="company-card">
-                    <div class="card-header">
-                        <span class="card-name">和黄医药</span>
-                        <span class="card-code">00013.HK</span>
-                    </div>
-                    <span class="card-position position-small">小分子出海标杆</span>
-                    <span class="fda-badge">FDA批准</span>
-                    <div class="card-desc">
-                        呋喹替尼（Fruzaqla）经FDA批准用于转移性结直肠癌，由武田在全球（除中国）商业化。2025年全球销售超$5亿，验证了中国小分子创新药全球注册和商业化能力。后续管线索乐匹尼布等持续推进全球临床。
-                    </div>
-                    <div class="card-binding">
-                        <strong>AI/计算</strong>：自研激酶抑制剂库利用计算化学和AI辅助筛选，加速了化合物从Hit到Lead的优化流程。
-                    </div>
-                    <div class="card-data-row">
-                        <span>营收<strong>~$8亿</strong></span>
-                        <span>呋喹替尼全球<strong>~$5亿</strong></span>
-                        <span>现金储备<strong>~$10亿</strong></span>
-                    </div>
-                    <div class="finance-tags">
-                        <span class="f-tag margin-high"><span class="tag-icon">◆</span>毛利率75%</span>
-                        <span class="f-tag growth-high"><span class="tag-icon">▲</span>出海放量</span>
-                        <span class="f-tag profit"><span class="tag-icon">●</span>实现盈利</span>
-                    </div>
-                </div>
-
-                <!-- 晶泰科技 -->
-                <div class="company-card">
-                    <div class="card-header">
-                        <span class="card-name">晶泰科技</span>
-                        <span class="card-code">02228.HK</span>
-                    </div>
-                    <span class="card-position position-aidrug">AI制药平台</span>
-                    <span class="ai-badge">AI制药</span>
-                    <div class="card-desc">
-                        中国AI制药第一股，基于量子物理+AI的药物发现平台。拥有全球最大的AI药物发现湿实验室验证闭环，与辉瑞、礼来等MNC签约合作。2025年首个AI设计分子进入临床II期，验证平台产出能力。
-                    </div>
-                    <div class="card-binding">
-                        <strong>技术壁垒</strong>：量子力学/分子动力学模拟+AI生成模型+自动化湿实验室，三位一体形成数据飞轮效应。
-                    </div>
-                    <div class="card-data-row">
-                        <span>营收<strong>~3亿</strong></span>
-                        <span>合作管线<strong>~50+</strong></span>
-                        <span>自有管线<strong>~5条</strong></span>
-                    </div>
-                    <div class="finance-tags">
-                        <span class="f-tag margin-low"><span class="tag-icon">◆</span>SaaS+里程碑</span>
-                        <span class="f-tag growth-high"><span class="tag-icon">▲</span>管线推进</span>
-                        <span class="f-tag loss"><span class="tag-icon">●</span>研发投入期</span>
-                    </div>
-                </div>
-
                 <!-- 传奇生物 -->
                 <div class="company-card">
                     <div class="card-header">
@@ -929,6 +769,14 @@
                     </div>
                     <span class="card-position position-cart">CAR-T全球标杆</span>
                     <span class="fda-badge">FDA批准</span>
+                    <span class="moat-badge moat-extreme">🛡 极深</span>
+                    <div class="moat-bars">
+                        <div class="moat-bar-row"><span class="moat-bar-label">技术独占</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l5"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">全球商业化</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l5"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">临床数据</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l5"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">专利护城河</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l4"></div></div></div>
+                        <div class="moat-bar-row"><span class="moat-bar-label">适应症扩展</span><div class="moat-bar-track"><div class="moat-bar-fill moat-l4"></div></div></div>
+                    </div>
                     <div class="card-desc">
                         全球最成功的中国原创CAR-T产品Carvykti（西达基奥仑赛），由强生/杨森全球商业化。2025年全球销售额预计突破$25亿，先后获批多发性骨髓瘤四线→二线→一线，峰值销售有望超$60亿。
                     </div>
@@ -976,15 +824,6 @@
                             <td>中国药企最大单笔License Out</td>
                         </tr>
                         <tr>
-                            <td>2023.12</td>
-                            <td class="row-label">百利天恒</td>
-                            <td>BMS</td>
-                            <td>BL-B01D1双抗ADC</td>
-                            <td class="highlight-money">$84亿</td>
-                            <td>$8亿</td>
-                            <td>首付款创新高</td>
-                        </tr>
-                        <tr>
                             <td>2024.04</td>
                             <td class="row-label">恒瑞医药</td>
                             <td>多家MNC</td>
@@ -1001,33 +840,6 @@
                             <td class="highlight-money">$50亿</td>
                             <td>$5亿</td>
                             <td>双抗头对头优效K药</td>
-                        </tr>
-                        <tr>
-                            <td>2024.09</td>
-                            <td class="row-label">荣昌生物</td>
-                            <td>辉瑞(Seagen)</td>
-                            <td>RC48 ADC</td>
-                            <td class="highlight-money">$26亿</td>
-                            <td>$2亿</td>
-                            <td>早期ADC出海标杆续约扩展</td>
-                        </tr>
-                        <tr>
-                            <td>2025.03</td>
-                            <td class="row-label">信达生物</td>
-                            <td>赛诺菲</td>
-                            <td>IBI363/IBI343</td>
-                            <td class="highlight-money">$30亿</td>
-                            <td>$3亿</td>
-                            <td>GLP-1/ADC双赛道授权</td>
-                        </tr>
-                        <tr>
-                            <td>2025.06</td>
-                            <td class="row-label">迪哲医药</td>
-                            <td>阿斯利康</td>
-                            <td>舒沃替尼</td>
-                            <td class="highlight-money">$20亿</td>
-                            <td>$1.5亿</td>
-                            <td>罕见靶点全球价值兑现</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1047,6 +859,7 @@
                             <th>核心产品/收入引擎</th>
                             <th>出海进展</th>
                             <th>AI赋能程度</th>
+                            <th>护城河等级</th>
                             <th>综合评级</th>
                         </tr>
                     </thead>
@@ -1058,6 +871,7 @@
                             <td>化学CDMO/TIDES</td>
                             <td class="highlight-blue">全球化深度嵌入</td>
                             <td class="highlight-cyan">AI平台成熟</td>
+                            <td class="highlight-green">极深</td>
                             <td class="highlight-blue">核心关注</td>
                         </tr>
                         <tr>
@@ -1067,6 +881,7 @@
                             <td>泽布替尼$40亿+</td>
                             <td class="highlight-green">自主全球化</td>
                             <td class="highlight-blue">AI辅助设计</td>
+                            <td class="highlight-green">极深</td>
                             <td class="highlight-green">核心关注</td>
                         </tr>
                         <tr>
@@ -1076,6 +891,7 @@
                             <td>创新药管线最多</td>
                             <td class="highlight-blue">License Out加速</td>
                             <td class="highlight-blue">AI合作引入</td>
+                            <td class="highlight-blue" style="color:#f97316;">深厚</td>
                             <td class="highlight-green">核心关注</td>
                         </tr>
                         <tr>
@@ -1085,6 +901,7 @@
                             <td>卡度尼利/ivonescimab</td>
                             <td class="highlight-green">Summit合作</td>
                             <td class="highlight-cyan">计算生物学辅助</td>
+                            <td class="highlight-blue" style="color:#f97316;">深厚</td>
                             <td class="highlight-green">核心关注</td>
                         </tr>
                         <tr>
@@ -1094,6 +911,7 @@
                             <td>TROP2 ADC</td>
                             <td class="highlight-green">默沙东$118亿</td>
                             <td class="highlight-cyan">AI优化设计</td>
+                            <td class="highlight-blue" style="color:#f97316;">深厚</td>
                             <td class="highlight-green">核心关注</td>
                         </tr>
                         <tr>
@@ -1103,24 +921,7 @@
                             <td>临床试验+数统</td>
                             <td class="highlight-blue">亚太/北美布局</td>
                             <td class="highlight-blue">AI提效应用</td>
-                            <td class="highlight-blue">重点关注</td>
-                        </tr>
-                        <tr>
-                            <td class="row-label">荣昌生物</td>
-                            <td>ADC龙头</td>
-                            <td>ADC偶联技术</td>
-                            <td>维迪西妥单抗</td>
-                            <td class="highlight-blue">辉瑞$26亿</td>
-                            <td class="highlight-cyan">AI辅助linker设计</td>
-                            <td class="highlight-blue">重点关注</td>
-                        </tr>
-                        <tr>
-                            <td class="row-label">和黄医药</td>
-                            <td>小分子靶向药</td>
-                            <td>激酶抑制剂</td>
-                            <td>呋喹替尼</td>
-                            <td class="highlight-green">武田商业化</td>
-                            <td class="highlight-blue">计算化学辅助</td>
+                            <td class="highlight-blue" style="color:#f97316;">深厚</td>
                             <td class="highlight-blue">重点关注</td>
                         </tr>
                         <tr>
@@ -1130,43 +931,8 @@
                             <td>Carvykti $25亿+</td>
                             <td class="highlight-green">强生全球商业化</td>
                             <td class="highlight-yellow">工程化优化</td>
+                            <td class="highlight-green">极深</td>
                             <td class="highlight-green">核心关注</td>
-                        </tr>
-                        <tr>
-                            <td class="row-label">晶泰科技</td>
-                            <td>AI制药平台</td>
-                            <td>量子物理+AI</td>
-                            <td>AI CRO服务</td>
-                            <td class="highlight-blue">MNC合作签约</td>
-                            <td class="highlight-green">AI原生</td>
-                            <td class="highlight-blue">重点关注</td>
-                        </tr>
-                        <tr>
-                            <td class="row-label">百普赛斯</td>
-                            <td>上游试剂</td>
-                            <td>重组蛋白/抗体</td>
-                            <td>生物试剂</td>
-                            <td class="highlight-blue">海外收入>50%</td>
-                            <td class="highlight-yellow">有限</td>
-                            <td class="highlight-blue">关注</td>
-                        </tr>
-                        <tr>
-                            <td class="row-label">凯莱英</td>
-                            <td>CDMO</td>
-                            <td>化学+多肽CDMO</td>
-                            <td>GLP-1/小分子</td>
-                            <td class="highlight-blue">MNC订单占比高</td>
-                            <td class="highlight-yellow">有限</td>
-                            <td class="highlight-blue">关注</td>
-                        </tr>
-                        <tr>
-                            <td class="row-label">华大智造</td>
-                            <td>测序/工具</td>
-                            <td>DNBSEQ测序</td>
-                            <td>基因测序仪</td>
-                            <td class="highlight-blue">全球装机量领先</td>
-                            <td class="highlight-blue">AI生信分析</td>
-                            <td class="highlight-blue">关注</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1213,6 +979,180 @@
                     <div class="focus-tag">CAR-T全球标杆 · Carvykti $25亿+ · 一线获批放量</div>
                     <div class="focus-reason">Carvykti获批一线适应症后市场扩容4-5倍，峰值销售有望超$60亿。强生全球商业化渠道无可匹敌，Legend享受50%利润分成，现金流爆发表明回报期到来。</div>
                 </div>
+            </div>
+        </div>
+
+        <!-- 技术壁垒与护城河分析 -->
+        <div class="moat-section" style="margin-bottom: 56px;">
+            <div class="section-title">技术壁垒与护城河 — 五维分析框架</div>
+            <div class="section-subtitle">从技术独占性、平台/管线壁垒、客户锁定、规模/网络效应、品牌/先发优势五大维度，量化每只标的的护城河强度</div>
+
+            <!-- 五维分析维度说明 -->
+            <div class="moat-analysis-grid" style="margin-bottom: 32px;">
+                <div class="moat-dim-card">
+                    <div class="dim-icon">🔬</div>
+                    <div class="dim-title">技术独占性</div>
+                    <div class="dim-desc">平台技术或产品的不可替代性。包括核心技术是否全球唯一/领先、是否存在FIC/BIC临床数据、竞品替代难度。ADC偶联技术、双抗工程化平台、AI分子生成算法等属于高壁垒技术。</div>
+                    <div class="dim-champion">冠军：<strong>传奇生物</strong>（双表位BCMA CAR-T全球唯一商业化）｜<strong>科伦博泰</strong>（OptiDC平台默沙东$118亿绑定）</div>
+                </div>
+                <div class="moat-dim-card">
+                    <div class="dim-icon">🧬</div>
+                    <div class="dim-title">平台/管线壁垒</div>
+                    <div class="dim-desc">管线广度×深度×差异化程度。在研管线数量、临床阶段分布、靶点独特性、技术平台可复用性。管线越深越宽、靶点越稀缺，护城河越强。</div>
+                    <div class="dim-champion">冠军：<strong>恒瑞医药</strong>（管线数A股第一，研发投入每年70亿+）｜<strong>药明康德</strong>（CRDMO平台不可复制）</div>
+                </div>
+                <div class="moat-dim-card">
+                    <div class="dim-icon">🔗</div>
+                    <div class="dim-title">客户锁定/转换成本</div>
+                    <div class="dim-desc">下游客户一旦合作后难以更换的成本。CXO行业体现为GMP工厂审计、原料药DMF备案、临床数据连续性；创新药体现为MNC战略绑定和License Out合作协议排他性。</div>
+                    <div class="dim-champion">冠军：<strong>科伦博泰</strong>（默沙东9款ADC排他性绑定）｜<strong>泰格医药</strong>（临床CRO切换成本极高）</div>
+                </div>
+                <div class="moat-dim-card">
+                    <div class="dim-icon">📐</div>
+                    <div class="dim-title">规模/网络效应</div>
+                    <div class="dim-desc">营收规模带来的成本优势、全国/全球销售网络密度、商业化团队规模。规模越大，单品分摊的研发/销售成本越低，后发者追赶难度越大。数据飞轮也纳入此维度。</div>
+                    <div class="dim-champion">冠军：<strong>百济神州</strong>（全球30+国家自主销售网络）｜<strong>恒瑞医药</strong>（国内销售团队8000+人）</div>
+                </div>
+                <div class="moat-dim-card">
+                    <div class="dim-icon">🏆</div>
+                    <div class="dim-title">品牌/先发/监管壁垒</div>
+                    <div class="dim-desc">FDA/NMPA获批先行者优势、学术指南推荐地位、医生处方习惯、患者品牌认知。先发者享有更长的独占期和更稳固的临床地位，"首家获批"标签在肿瘤药领域价值显著。</div>
+                    <div class="dim-champion">冠军：<strong>百济神州</strong>（泽布替尼全球BTK首选）｜<strong>传奇生物</strong>（Carvykti CAR-T标杆）</div>
+                </div>
+                <div class="moat-dim-card">
+                    <div class="dim-icon">⚖️</div>
+                    <div class="dim-title">护城河持久性评估</div>
+                    <div class="dim-desc">护城河不仅看当前宽度，更要看随时间衰减方向。核心评估：专利到期窗口（>10年为佳）、新技术替代风险（如双抗替代单抗）、地缘政治风险（CXO生物安全法案）。专利悬崖是创新药护城河第1大杀手。</div>
+                    <div class="dim-champion">持续时间最长：<strong>药明康德</strong>（平台型护城河不依赖单个专利）｜<strong>传奇生物</strong>（Carvykti双表位BCMA专利保护深入，CAR-T生产复杂性壁垒极高）</div>
+                </div>
+            </div>
+
+            <!-- 关键标的护城河强度排序 -->
+            <div style="overflow-x:auto; margin-top: 12px;">
+                <table class="compare-table">
+                    <thead>
+                        <tr>
+                            <th>公司</th>
+                            <th>产业链位置</th>
+                            <th>技术独占性</th>
+                            <th>管线/平台壁垒</th>
+                            <th>客户锁定</th>
+                            <th>规模/网络效应</th>
+                            <th>品牌/先发</th>
+                            <th style="text-align:center;">综合护城河等级</th>
+                            <th>护城河趋势</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="row-label">传奇生物</td>
+                            <td>CAR-T</td>
+                            <td class="highlight-green">★★★★★</td>
+                            <td class="highlight-blue">★★★★</td>
+                            <td class="highlight-blue">★★★★</td>
+                            <td class="highlight-green">★★★★★</td>
+                            <td class="highlight-green">★★★★★</td>
+                            <td style="text-align:center;"><span class="moat-score-inline extreme">极深</span></td>
+                            <td class="highlight-green">↑ 一线获批拓宽</td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">百济神州</td>
+                            <td>全球化Pharma</td>
+                            <td class="highlight-blue">★★★★</td>
+                            <td class="highlight-blue">★★★★</td>
+                            <td class="highlight-yellow">★★★</td>
+                            <td class="highlight-green">★★★★★</td>
+                            <td class="highlight-green">★★★★★</td>
+                            <td style="text-align:center;"><span class="moat-score-inline extreme">极深</span></td>
+                            <td class="highlight-green">↑ BTK降解剂接力</td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">药明康德</td>
+                            <td>CXO全链条</td>
+                            <td class="highlight-blue">★★★★</td>
+                            <td class="highlight-green">★★★★★</td>
+                            <td class="highlight-green">★★★★★</td>
+                            <td class="highlight-green">★★★★★</td>
+                            <td class="highlight-blue">★★★★</td>
+                            <td style="text-align:center;"><span class="moat-score-inline extreme">极深</span></td>
+                            <td class="highlight-yellow">→ 地缘待消化</td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">科伦博泰</td>
+                            <td>ADC平台</td>
+                            <td class="highlight-green">★★★★★</td>
+                            <td class="highlight-blue">★★★★</td>
+                            <td class="highlight-green">★★★★★</td>
+                            <td class="highlight-yellow">★★★</td>
+                            <td class="highlight-yellow">★★★</td>
+                            <td style="text-align:center;"><span class="moat-score-inline deep">深厚</span></td>
+                            <td class="highlight-green">↑ 里程碑兑现中</td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">恒瑞医药</td>
+                            <td>综合Pharma</td>
+                            <td class="highlight-yellow">★★★</td>
+                            <td class="highlight-green">★★★★★</td>
+                            <td class="highlight-yellow">★★★</td>
+                            <td class="highlight-green">★★★★★</td>
+                            <td class="highlight-blue">★★★★</td>
+                            <td style="text-align:center;"><span class="moat-score-inline deep">深厚</span></td>
+                            <td class="highlight-blue">→ 创新药占比↑</td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">康方生物</td>
+                            <td>双抗龙头</td>
+                            <td class="highlight-green">★★★★★</td>
+                            <td class="highlight-yellow">★★★</td>
+                            <td class="highlight-yellow">★★★</td>
+                            <td class="highlight-yellow">★★</td>
+                            <td class="highlight-yellow">★★★</td>
+                            <td style="text-align:center;"><span class="moat-score-inline deep">深厚</span></td>
+                            <td class="highlight-green">↑ 若FDA获批跃升</td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">泰格医药</td>
+                            <td>临床CRO</td>
+                            <td class="highlight-yellow">★★★</td>
+                            <td class="highlight-blue">★★★★</td>
+                            <td class="highlight-blue">★★★★</td>
+                            <td class="highlight-blue">★★★★</td>
+                            <td class="highlight-blue">★★★★</td>
+                            <td style="text-align:center;"><span class="moat-score-inline deep">深厚</span></td>
+                            <td class="highlight-blue">→ 海外扩张拓深</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 护城河等级体系说明 -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-top: 24px;">
+                <div style="background:#111827; border:1px solid rgba(239,68,68,0.3); border-radius:10px; padding:16px;">
+                    <span class="moat-score-inline extreme" style="font-size:14px;">🛡 极深护城河</span>
+                    <div style="font-size:12px; color:#8892a8; margin-top:8px; line-height:1.7;">
+                        3个以上维度达到5星，且无维度过弱。具备全球唯一性或不可复制性，护城河可持续>10年。<br>
+                        <strong style="color:#ef4444;">代表：传奇生物、百济神州、药明康德</strong>
+                    </div>
+                </div>
+                <div style="background:#111827; border:1px solid rgba(249,115,22,0.3); border-radius:10px; padding:16px;">
+                    <span class="moat-score-inline deep" style="font-size:14px;">🛡 深厚护城河</span>
+                    <div style="font-size:12px; color:#8892a8; margin-top:8px; line-height:1.7;">
+                        1-2个维度达5星，整体竞争壁垒清晰但存在个别短板。护城河可持续5-10年。<br>
+                        <strong style="color:#f97316;">代表：科伦博泰、恒瑞、康方、泰格</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 护城河总结 -->
+            <div class="moat-summary">
+                <h4>护城河分析核心结论</h4>
+                <p>
+                    ① <strong>最宽护城河在"不可复制性"</strong>：传奇生物（Carvykti全球唯一双表位BCMA CAR-T）、药明康德（端到端CRDMO平台全球独此一家）、百济神州（中国唯一实现全球自主商业化的创新药企）——这三家的护城河宽度源自"全球唯一"，而非简单的"中国领先"。<br>
+                    ② <strong>科伦博泰的护城河是"深度绑定"型</strong>：默沙东$118亿合作不只是金额大，更重要的是排他性——默沙东在ADC领域的战略资源已与科伦博泰的OptiDC平台深度耦合，竞争者几乎无法拆解这个关系。<br>
+                    ③ <strong>恒瑞的护城河是"系统能力"型</strong>：单个维度不极致，但管线数量×研发投入×销售网络×资金实力形成的系统级护城河让Biotech几乎无法挑战。<br>
+                    ④ <strong>护城河最大的敌人是"时间"</strong>：ADC赛道随着科伦博泰、恒瑞等各家平台成熟，3-5年后技术壁垒可能收敛。双抗领域康方的领先窗口期约为3-4年。CXO的护城河最持久——平台型生意不依赖单个产品专利期。<br>
+                    ⑤ <strong>警惕"假护城河"</strong>：License Out金额大不代表护城河深（首付款兑现后剩余价值取决于对方推进意愿）；管线数量多不代表壁垒强（要看临床阶段、靶点差异化、FIC/BIC潜力）。
+                </p>
             </div>
         </div>
 
