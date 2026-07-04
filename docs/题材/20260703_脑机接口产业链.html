@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>脑机接口产业链 - 从电极芯片到神经康复 · A股全链条核心标的</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #0a0e17; color: #e0e6f0; line-height: 1.6; min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+        .header { text-align: center; margin-bottom: 48px; }
+        .header h1 { font-size: 36px; font-weight: 700;
+            background: linear-gradient(135deg, #8b5cf6, #a78bfa, #c084fc, #e879f9);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 12px; }
+        .header .subtitle { font-size: 16px; color: #8892a8; }
+        .header .topic-tags { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+        .header .topic-tag { font-size: 13px; padding: 5px 14px; border-radius: 20px; font-weight: 500; }
+        .topic-tag.electrode { background: rgba(139,92,246,0.15); color: #8b5cf6; border: 1px solid rgba(139,92,246,0.25); }
+        .topic-tag.chip { background: rgba(96,165,250,0.15); color: #60a5fa; border: 1px solid rgba(96,165,250,0.25); }
+        .topic-tag.device { background: rgba(52,211,153,0.15); color: #34d399; border: 1px solid rgba(52,211,153,0.25); }
+        .topic-tag.rehab { background: rgba(244,114,182,0.15); color: #f472b6; border: 1px solid rgba(244,114,182,0.25); }
+        .topic-tag.neuromod { background: rgba(34,211,238,0.15); color: #22d3ee; border: 1px solid rgba(34,211,238,0.25); }
+        .topic-tag.ai { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); }
+        .topic-tag.material { background: rgba(248,113,113,0.15); color: #f87171; border: 1px solid rgba(248,113,113,0.25); }
+        .header .update-time { font-size: 13px; color: #5a6478; margin-top: 12px; }
+
+        .section-title { font-size: 22px; font-weight: 600; color: #c8d0e0;
+            margin-bottom: 24px; margin-top: 56px; padding-left: 14px; border-left: 3px solid #8b5cf6; }
+        .section-subtitle { font-size: 14px; color: #5a6478; margin-top: -18px; margin-bottom: 24px; padding-left: 17px; }
+
+        /* 统计卡片 */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 16px; margin-bottom: 56px; }
+        .stat-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 12px; padding: 20px; }
+        .stat-card .stat-label { font-size: 13px; color: #5a6478; margin-bottom: 6px; }
+        .stat-card .stat-value { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+        .stat-card .stat-note { font-size: 12px; color: #5a6478; }
+        .stat-green .stat-value { color: #34d399; }
+        .stat-blue .stat-value { color: #60a5fa; }
+        .stat-purple .stat-value { color: #8b5cf6; }
+        .stat-cyan .stat-value { color: #22d3ee; }
+        .stat-pink .stat-value { color: #f472b6; }
+        .stat-yellow .stat-value { color: #fbbf24; }
+
+        /* 产业链流程图 */
+        .flow-section { margin-bottom: 56px; }
+        .flow-diagram { display: flex; align-items: stretch; gap: 0;
+            background: #111827; border-radius: 16px; border: 1px solid #1e293b; overflow: hidden; }
+        .flow-stage { flex: 1; padding: 28px 20px; position: relative; }
+        .flow-stage:not(:last-child)::after {
+            content: '→'; position: absolute; right: -14px; top: 50%;
+            transform: translateY(-50%); font-size: 28px; color: #4b5563; z-index: 2; }
+        .flow-stage:not(:last-child) { border-right: 1px solid #1e293b; }
+        .flow-stage .stage-label { font-size: 13px; font-weight: 600; letter-spacing: 1px;
+            margin-bottom: 12px; padding: 4px 12px; border-radius: 20px; display: inline-block; }
+        .flow-stage:nth-child(1) .stage-label { background: rgba(139,92,246,0.15); color: #8b5cf6; }
+        .flow-stage:nth-child(2) .stage-label { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .flow-stage:nth-child(3) .stage-label { background: rgba(34,211,238,0.15); color: #22d3ee; }
+        .flow-stage:nth-child(4) .stage-label { background: rgba(52,211,153,0.15); color: #34d399; }
+        .flow-stage .stage-title { font-size: 18px; font-weight: 600; color: #e0e6f0; margin-bottom: 8px; }
+        .flow-stage .stage-desc { font-size: 13px; color: #8892a8; }
+        .flow-stage .stage-products { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+        .flow-stage .product-tag { font-size: 12px; padding: 3px 10px; border-radius: 12px;
+            background: rgba(255,255,255,0.06); color: #a0aec0;
+            border: 1px solid rgba(255,255,255,0.08); }
+
+        /* 技术路线对比 */
+        .tech-compare { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 48px; }
+        .tech-card { background: #111827; border: 1px solid #1e293b; border-radius: 14px; padding: 24px; }
+        .tech-card.invasive { border-top: 3px solid #f87171; }
+        .tech-card.semi { border-top: 3px solid #fbbf24; }
+        .tech-card.non-invasive { border-top: 3px solid #34d399; }
+        .tech-card .tech-name { font-size: 18px; font-weight: 700; margin-bottom: 12px; }
+        .tech-card.invasive .tech-name { color: #f87171; }
+        .tech-card.semi .tech-name { color: #fbbf24; }
+        .tech-card.non-invasive .tech-name { color: #34d399; }
+        .tech-card .tech-desc { font-size: 13px; color: #8892a8; line-height: 1.7; margin-bottom: 12px; }
+        .tech-card .tech-barriers { font-size: 12px; color: #a78bfa; }
+        .tech-card .tech-players { font-size: 12px; color: #60a5fa; margin-top: 8px; }
+        .tech-card .tech-commercial { font-size: 12px; color: #34d399; margin-top: 8px; }
+
+        /* 催化/背景高亮 */
+        .highlight-section { background: linear-gradient(135deg, rgba(139,92,246,0.06), rgba(168,85,247,0.06));
+            border: 1px solid rgba(139,92,246,0.15); border-radius: 14px; padding: 24px 28px;
+            margin-bottom: 48px; }
+        .highlight-section .highlight-title { font-size: 17px; font-weight: 600; color: #a78bfa; margin-bottom: 10px; }
+        .highlight-section .highlight-desc { font-size: 14px; color: #8892a8; line-height: 1.8; }
+
+        /* 壁垒分析卡片 */
+        .barrier-section { margin-bottom: 48px; }
+        .barrier-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+        .barrier-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; border-left: 3px solid #8b5cf6; }
+        .barrier-card .barrier-title { font-size: 16px; font-weight: 600; color: #a78bfa; margin-bottom: 8px; }
+        .barrier-card .barrier-desc { font-size: 14px; color: #8892a8; line-height: 1.7; }
+        .barrier-card .barrier-moat { font-size: 13px; color: #34d399; margin-top: 8px; }
+
+        /* 公司卡片 */
+        .companies-section { margin-bottom: 48px; }
+        .company-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; }
+        .company-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; transition: border-color 0.2s, transform 0.2s;
+            position: relative; overflow: hidden; }
+        .company-card:hover { border-color: #374151; transform: translateY(-2px); }
+        .company-card.moat-high { border-left: 3px solid #34d399; }
+        .company-card.moat-mid { border-left: 3px solid #60a5fa; }
+        .company-card .card-header { display: flex; justify-content: space-between;
+            align-items: flex-start; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+        .company-card .card-name { font-size: 18px; font-weight: 600; color: #e0e6f0; }
+        .company-card .card-code { font-size: 13px; font-weight: 500; padding: 3px 10px;
+            border-radius: 8px; background: rgba(139,92,246,0.12); color: #a78bfa; white-space: nowrap; }
+        .company-card .card-position { font-size: 13px; padding: 3px 10px;
+            border-radius: 8px; display: inline-block; margin-bottom: 10px; }
+        .position-electrode { background: rgba(139,92,246,0.12); color: #8b5cf6; }
+        .position-chip { background: rgba(96,165,250,0.12); color: #60a5fa; }
+        .position-device { background: rgba(52,211,153,0.12); color: #34d399; }
+        .position-rehab { background: rgba(244,114,182,0.12); color: #f472b6; }
+        .position-neuromod { background: rgba(34,211,238,0.12); color: #22d3ee; }
+        .position-material { background: rgba(248,113,113,0.12); color: #f87171; }
+        .position-algorithm { background: rgba(251,191,36,0.12); color: #fbbf24; }
+        .position-surgery { background: rgba(168,85,247,0.12); color: #c084fc; }
+        .position-cro { background: rgba(147,197,253,0.12); color: #93c5fd; }
+        .company-card .card-desc { font-size: 14px; color: #8892a8; line-height: 1.7; margin-bottom: 12px; }
+        .company-card .card-binding { font-size: 13px; color: #c8d0e0; padding: 10px 14px;
+            background: rgba(139,92,246,0.06); border-radius: 8px; border-left: 3px solid #8b5cf6;
+            margin-bottom: 10px; line-height: 1.6; }
+        .company-card .card-binding strong { color: #a78bfa; }
+        .company-card .card-data-row { display: flex; flex-wrap: wrap; gap: 8px 18px;
+            font-size: 13px; color: #c8d0e0; padding: 10px 14px;
+            background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 3px solid #374151; }
+        .company-card .card-data-row strong { color: #e0e6f0; margin-left: 2px; }
+
+        /* 壁垒评分徽章 */
+        .moat-badge { position: absolute; top: 12px; right: 12px; font-size: 11px; font-weight: 700;
+            padding: 4px 10px; border-radius: 12px; }
+        .moat-5star { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+        .moat-4star { background: rgba(249,115,22,0.15); color: #f97316; border: 1px solid rgba(249,115,22,0.3); }
+        .moat-3star { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+
+        /* 财务标签 */
+        .finance-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .f-tag { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 12px; }
+        .margin-high { background: rgba(52,211,153,0.12); color: #34d399; border: 1px solid rgba(52,211,153,0.2); }
+        .margin-mid { background: rgba(96,165,250,0.12); color: #60a5fa; border: 1px solid rgba(96,165,250,0.2); }
+        .margin-low { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.2); }
+        .growth-high { background: rgba(239,68,68,0.12); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); }
+        .growth-mid { background: rgba(249,115,22,0.12); color: #f97316; border: 1px solid rgba(249,115,22,0.2); }
+        .growth-low { background: rgba(202,138,4,0.12); color: #ca8a04; border: 1px solid rgba(202,138,4,0.2); }
+        .profit { background: rgba(147,197,253,0.12); color: #93c5fd; border: 1px solid rgba(147,197,253,0.2); }
+        .loss { background: rgba(248,113,113,0.12); color: #f87171; border: 1px solid rgba(248,113,113,0.2); }
+
+        /* 评级 */
+        .rating-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+        .rating-card { border-radius: 10px; padding: 10px 12px; border: 1px solid; background: rgba(255,255,255,0.03); }
+        .rating-title { font-size: 12px; color: #8892a8; margin-bottom: 4px; }
+        .rating-level { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .rating-reason { font-size: 12px; color: #8892a8; line-height: 1.5; }
+        .rating-strong { border-color: rgba(52,211,153,0.35); background: rgba(16,185,129,0.08); }
+        .rating-strong .rating-level { color: #34d399; }
+        .rating-mid { border-color: rgba(96,165,250,0.35); background: rgba(96,165,250,0.08); }
+        .rating-mid .rating-level { color: #60a5fa; }
+        .rating-watch { border-color: rgba(251,191,36,0.35); background: rgba(251,191,36,0.08); }
+        .rating-watch .rating-level { color: #fbbf24; }
+        .rating-early { border-color: rgba(248,113,113,0.35); background: rgba(248,113,113,0.06); }
+        .rating-early .rating-level { color: #f87171; }
+
+        /* 商业前景评分卡片 */
+        .prospect-section { margin-bottom: 56px; }
+        .prospect-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+        .prospect-card { background: linear-gradient(135deg, #111827, #1a2332);
+            border: 1px solid #1e293b; border-radius: 14px; padding: 24px;
+            position: relative; overflow: hidden; }
+        .prospect-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .prospect-card:nth-child(1)::before { background: linear-gradient(90deg, #34d399, #10b981); }
+        .prospect-card:nth-child(2)::before { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+        .prospect-card:nth-child(3)::before { background: linear-gradient(90deg, #a78bfa, #8b5cf6); }
+        .prospect-card:nth-child(4)::before { background: linear-gradient(90deg, #f472b6, #ec4899); }
+        .prospect-card:nth-child(5)::before { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+        .prospect-card:nth-child(6)::before { background: linear-gradient(90deg, #22d3ee, #06b6d4); }
+        .prospect-card:nth-child(7)::before { background: linear-gradient(90deg, #f97316, #ea580c); }
+        .prospect-card:nth-child(8)::before { background: linear-gradient(90deg, #ef4444, #dc2626); }
+        .prospect-card .prospect-rank { font-size: 48px; font-weight: 800;
+            color: rgba(255,255,255,0.04); position: absolute; top: 8px; right: 16px; }
+        .prospect-card .prospect-name { font-size: 16px; font-weight: 600; color: #e0e6f0; margin-bottom: 4px; }
+        .prospect-card .prospect-code { font-size: 12px; color: #5a6478; margin-bottom: 10px; }
+        .prospect-card .prospect-reason { font-size: 13px; color: #8892a8; line-height: 1.7; }
+
+        /* 壁垒深度排序 */
+        .barrier-rank-section { margin-bottom: 56px; }
+        .barrier-rank-table { width: 100%; background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; overflow: hidden; }
+        .barrier-rank-row { display: grid; grid-template-columns: 60px 1fr 140px 200px 1fr;
+            align-items: center; padding: 16px 20px; border-bottom: 1px solid #1e293b; gap: 16px; }
+        .barrier-rank-row:last-child { border-bottom: none; }
+        .barrier-rank-row.header-row { background: rgba(139,92,246,0.06);
+            border-bottom: 2px solid rgba(139,92,246,0.25); padding: 14px 20px; }
+        .barrier-rank-row.header-row .br-cell { font-size: 12px; font-weight: 700;
+            color: #a78bfa; letter-spacing: 1px; text-transform: uppercase; }
+        .barrier-rank-row:hover { background: rgba(139,92,246,0.03); }
+        .br-rank { font-size: 22px; font-weight: 800; text-align: center; }
+        .br-rank.gold { color: #fbbf24; }
+        .br-rank.silver { color: #94a3b8; }
+        .br-rank.bronze { color: #d97706; }
+        .br-name { font-size: 15px; font-weight: 600; color: #e0e6f0; }
+        .br-code { font-size: 12px; color: #5a6478; margin-left: 8px; }
+        .br-stars { font-size: 14px; font-weight: 700; text-align: center; }
+        .br-stars.star5 { color: #ef4444; }
+        .br-stars.star4 { color: #f97316; }
+        .br-stars.star3 { color: #fbbf24; }
+        .br-moat-type { font-size: 13px; color: #c8d0e0; line-height: 1.5; }
+        .br-barrier-detail { font-size: 12px; color: #8892a8; line-height: 1.5; }
+        @media (max-width: 768px) {
+            .barrier-rank-row { grid-template-columns: 40px 1fr 80px;
+                padding: 12px 14px; gap: 8px; }
+            .barrier-rank-row .br-moat-type, .barrier-rank-row .br-barrier-type { display: none; }
+        }
+
+        /* 风险提示 */
+        .risk-section { margin-bottom: 56px; }
+        .risk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+        .risk-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; border-left: 3px solid #f87171; }
+        .risk-card .risk-title { font-size: 16px; font-weight: 600; color: #f87171; margin-bottom: 8px; }
+        .risk-card .risk-desc { font-size: 14px; color: #8892a8; line-height: 1.7; }
+
+        /* 全球格局vs中国 */
+        .global-section { margin-bottom: 56px; }
+        .global-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .global-card { background: #111827; border: 1px solid #1e293b; border-radius: 14px; padding: 28px; }
+        .global-card.global { border-top: 3px solid #60a5fa; }
+        .global-card.china { border-top: 3px solid #ef4444; }
+        .global-card .global-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+        .global-card.global .global-title { color: #60a5fa; }
+        .global-card.china .global-title { color: #ef4444; }
+        .global-card .global-item { padding: 10px 0; border-bottom: 1px solid #1e293b; }
+        .global-card .global-item:last-child { border-bottom: none; }
+        .global-card .global-item .item-name { font-size: 14px; font-weight: 600; color: #e0e6f0; }
+        .global-card .global-item .item-desc { font-size: 13px; color: #8892a8; margin-top: 4px; }
+
+        footer { text-align: center; color: #475569; font-size: 12px; padding: 40px 0 20px; }
+        footer .disclaimer { color: #f87171; margin-top: 8px; }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            .header h1 { font-size: 26px; }
+            .flow-diagram { flex-direction: column; }
+            .flow-stage:not(:last-child)::after { content: '↓'; right: auto; bottom: -16px; top: auto;
+                left: 50%; transform: translateX(-50%); }
+            .flow-stage:not(:last-child) { border-right: none; border-bottom: 1px solid #1e293b; }
+            .company-grid { grid-template-columns: 1fr; }
+            .rating-row { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .barrier-grid { grid-template-columns: 1fr; }
+            .risk-grid { grid-template-columns: 1fr; }
+            .tech-compare { grid-template-columns: 1fr; }
+            .global-grid { grid-template-columns: 1fr; }
+            .prospect-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>脑机接口（BCI）产业链</h1>
+            <div class="subtitle">电极芯片 → 神经信号采集 → AI解码 → 医疗康复与神经调控 · 10只核心标的 · 技术壁垒+商业前景深度梳理</div>
+            <div class="topic-tags">
+                <span class="topic-tag electrode">微电极阵列</span>
+                <span class="topic-tag chip">信号采集芯片</span>
+                <span class="topic-tag device">BCI设备系统</span>
+                <span class="topic-tag rehab">神经康复</span>
+                <span class="topic-tag neuromod">神经调控</span>
+                <span class="topic-tag ai">AI算法解码</span>
+                <span class="topic-tag material">植入材料</span>
+            </div>
+            <div class="update-time">数据更新: 2026-07-03 · 基于公开产业数据与年报披露</div>
+        </div>
+
+        <!-- 背景高亮 -->
+        <div class="highlight-section">
+            <div class="highlight-title">📌 产业链核心逻辑</div>
+            <div class="highlight-desc">
+                脑机接口（Brain-Computer Interface, BCI）是实现人脑与外部设备直接通信的颠覆性技术，被视为继AI之后的下一个万亿级赛道。<br><br>
+                <strong>核心催化：</strong><br>
+                ① <strong>Neuralink人体试验突破</strong> — 2024年1月首例人类植入，2025年第二例患者完成，实现意念控制计算机光标。马斯克计划到2030年为数千名患者植入，彻底点燃全球BCI产业；<br>
+                ② <strong>中国脑计划百亿投入</strong> — "十四五"将"脑科学与类脑研究"列为7大科技前沿之一，国家投入超100亿元。2025年北京/上海相继出台脑机接口产业支持政策，目标2030年产业规模超千亿；<br>
+                ③ <strong>非侵入式BCI率先商业化</strong> — 康复机器人、经颅磁刺激(TMS)、睡眠监测等非侵入式BCI产品已获得NMPA注册证，进入规模放量阶段，是当前产业链最确定的商业化方向；<br>
+                ④ <strong>AI解码技术质变</strong> — 大模型（Transformer架构）大幅提升神经信号解码精度，从"简单分类"进化为"连续意图解码"，是BCI从实验室走向临床的核心技术突破。
+            </div>
+        </div>
+
+        <!-- 统计卡片 -->
+        <div class="stats-grid">
+            <div class="stat-card stat-purple">
+                <div class="stat-label">全球BCI市场规模(2024)</div>
+                <div class="stat-value">~$23亿</div>
+                <div class="stat-note">CAGR 17%+ 预计2030达$62亿</div>
+            </div>
+            <div class="stat-card stat-green">
+                <div class="stat-label">中国脑计划投入</div>
+                <div class="stat-value">>100亿</div>
+                <div class="stat-note">"十四五"科技前沿，北京/上海专项</div>
+            </div>
+            <div class="stat-card stat-blue">
+                <div class="stat-label">非侵入式占比(2024)</div>
+                <div class="stat-value">~85%</div>
+                <div class="stat-note">当前商业化主力，侵入式增速最快</div>
+            </div>
+            <div class="stat-card stat-cyan">
+                <div class="stat-label">Neuralink估值</div>
+                <div class="stat-value">$80亿+</div>
+                <div class="stat-note">2025年最新融资，全球BCI估值锚</div>
+            </div>
+            <div class="stat-card stat-pink">
+                <div class="stat-label">中国BCI初创融资</div>
+                <div class="stat-value">>50亿</div>
+                <div class="stat-note">博睿康/脑虎/阶梯等累计融资</div>
+            </div>
+            <div class="stat-card stat-yellow">
+                <div class="stat-label">潜在患者人群(中国)</div>
+                <div class="stat-value">>5000万</div>
+                <div class="stat-note">瘫痪/卒中/帕金森/癫痫/ALS等</div>
+            </div>
+        </div>
+
+        <!-- 产业链流程图 -->
+        <div class="flow-section">
+            <div class="section-title">产业链全景流程图</div>
+            <div class="flow-diagram">
+                <div class="flow-stage">
+                    <div class="stage-label">上游 · 核心器件</div>
+                    <div class="stage-title">电极/芯片/材料</div>
+                    <div class="stage-desc">微电极阵列、低噪声模拟前端AFE、生物相容封装材料</div>
+                    <div class="stage-products">
+                        <span class="product-tag">柔性微电极</span>
+                        <span class="product-tag">脑电AFE芯片</span>
+                        <span class="product-tag">Parylene封装</span>
+                        <span class="product-tag">无线传输芯片</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <div class="stage-label">中游① · 设备系统</div>
+                    <div class="stage-title">BCI信号采集设备</div>
+                    <div class="stage-desc">侵入式微电极阵列系统 / 半侵入式ECoG / 非侵入式EEG/fNIRS</div>
+                    <div class="stage-products">
+                        <span class="product-tag">植入式BCI</span>
+                        <span class="product-tag">ECoG电极阵列</span>
+                        <span class="product-tag">高密度EEG</span>
+                        <span class="product-tag">无线脑电头环</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <div class="stage-label">中游② · AI算法</div>
+                    <div class="stage-title">神经信号解码与AI</div>
+                    <div class="stage-desc">神经信号去噪/特征提取/意图解码，大模型驱动的连续意图预测</div>
+                    <div class="stage-products">
+                        <span class="product-tag">脑电解码算法</span>
+                        <span class="product-tag">运动意图预测</span>
+                        <span class="product-tag">语言解码模型</span>
+                        <span class="product-tag">情感识别</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <div class="stage-label">下游 · 应用终端</div>
+                    <div class="stage-title">医疗康复/神经调控/人机交互</div>
+                    <div class="stage-desc">瘫痪运动重建、神经调控(DBS/TMS)、康复机器人、VR/AR脑控交互</div>
+                    <div class="stage-products">
+                        <span class="product-tag">运动功能重建</span>
+                        <span class="product-tag">DBS脑起搏器</span>
+                        <span class="product-tag">TMS治疗</span>
+                        <span class="product-tag">BCI康复机器人</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 三大技术路线对比 -->
+        <div class="section-title">三大技术路线对比</div>
+        <div class="tech-compare">
+            <div class="tech-card invasive">
+                <div class="tech-name">侵入式 BCI</div>
+                <div class="tech-desc">将微电极阵列直接植入大脑皮层（灰质），获取最高分辨率（单神经元级别）的神经信号。Neuralink N1芯片1024通道，柔性电极线程直径仅头发丝1/10。</div>
+                <div class="tech-barriers">🔒 壁垒：①微电极长期生物相容性（>5年）②手术机器人精度（微米级血管避让）③无线供电+散热 ④免疫排斥反应控制</div>
+                <div class="tech-players">🏢 代表：Neuralink(美)、Synchron(美)、Paradromics(美)、脑虎科技(中)、微灵医疗(中)</div>
+                <div class="tech-commercial">💰 商业化：早期(2025-2030)，目标瘫痪/ALS患者，单台手术费用$5-10万+</div>
+            </div>
+            <div class="tech-card semi">
+                <div class="tech-name">半侵入式 ECoG</div>
+                <div class="tech-desc">电极置于硬脑膜下/硬脑膜外（不穿透脑组织），信号分辨率介于侵入与非侵入之间。Synchron支架电极通过颈静脉植入，无需开颅手术。</div>
+                <div class="tech-barriers">🔒 壁垒：①微创手术路径设计（Synchron血管内支架独有技术）②长期稳定贴附 ③信号分辨率与安全性的平衡</div>
+                <div class="tech-players">🏢 代表：Synchron(美，Neuralink最大对手)、阶梯医疗(中)、Precision Neuroscience(美)</div>
+                <div class="tech-commercial">💰 商业化：中早期，Synchron已有FDA临床数据，患者可意念发微信/网购</div>
+            </div>
+            <div class="tech-card non-invasive">
+                <div class="tech-name">非侵入式 EEG/fNIRS</div>
+                <div class="tech-desc">通过头皮电极采集脑电(EEG)或近红外光谱(fNIRS)间接获取脑活动。信号分辨率最低但安全性最高，已获大量NMPA/FDA注册证。</div>
+                <div class="tech-barriers">🔒 壁垒：①信号噪声与伪迹滤除（AI去噪是核心）②电极密度与佩戴舒适度平衡 ③干电极材料创新（免导电膏）</div>
+                <div class="tech-players">🏢 代表：博睿康(中)、BrainCo(中/美)、翔宇医疗(中)、伟思医疗(中)、emotiv(澳)</div>
+                <div class="tech-commercial">💰 商业化：已进入放量期，康复/睡眠/注意力训练等应用场景清晰，单价数千到数万元</div>
+            </div>
+        </div>
+
+        <!-- 技术壁垒深度分析 -->
+        <div class="barrier-section">
+            <div class="section-title">核心技术壁垒深度分析</div>
+            <div class="barrier-grid">
+                <div class="barrier-card">
+                    <div class="barrier-title">① 微电极制造工艺</div>
+                    <div class="barrier-desc">侵入式BCI最核心壁垒。柔性微电极需在微米级尺度上实现高密度（1000+通道）、低阻抗（<1MΩ）、长期稳定（>5年），涉及MEMS微加工+生物相容性材料+电化学界面修饰三重技术。全球仅Neuralink/Blackrock Neurotech/脑虎科技少数企业掌握。</div>
+                    <div class="barrier-moat">🛡️ 护城河等级：极深 → MEMS工艺+材料科学+神经科学交叉学科壁垒，难以短期追赶</div>
+                </div>
+                <div class="barrier-card">
+                    <div class="barrier-title">② 超低噪声模拟前端芯片</div>
+                    <div class="barrier-desc">脑电信号仅微伏(μV)级，需要极低噪声（<1μVrms）的模拟前端进行放大与模数转换。高端脑电AFE芯片长期被TI(ADS1299)、ADI垄断。国产替代尚在起步阶段，是"卡脖子"关键环节。</div>
+                    <div class="barrier-moat">🛡️ 护城河等级：极深 → 模拟IC设计Know-How+工艺积累，国内稀缺</div>
+                </div>
+                <div class="barrier-card">
+                    <div class="barrier-title">③ 无线供电与超低功耗通信</div>
+                    <div class="barrier-desc">植入式设备无法外接电源，无线充电+超低功耗设计是核心挑战。Neuralink N1芯片通过电感耦合充电+红外数据传输实现全植入式方案。功耗和发热控制直接决定植入安全性和使用寿命。</div>
+                    <div class="barrier-moat">🛡️ 护城河等级：深 → 系统级工程，需要跨射频/IC/材料多领域团队</div>
+                </div>
+                <div class="barrier-card">
+                    <div class="barrier-title">④ 神经信号AI解码算法</div>
+                    <div class="barrier-desc">将原始神经信号解码为具体意图（运动方向/语言/情感）。Transformer架构的引入使连续意图解码精度大幅提升。算法壁垒体现在：①训练数据获取难度（需要侵入式记录）②个体化校准精度 ③实时性要求（<100ms延迟）。</div>
+                    <div class="barrier-moat">🛡️ 护城河等级：中深 → 数据壁垒+算法迭代速度是关键</div>
+                </div>
+                <div class="barrier-card">
+                    <div class="barrier-title">⑤ 神经外科临床能力</div>
+                    <div class="barrier-desc">侵入式BCI手术需要顶尖功能神经外科团队：立体定向精准植入、血管分布避开、术后管理。全球能实施此类手术的中心不超过50家。三博脑科/天坛医院等顶级神经外科中心掌握临床入口，是BCI产业化的关键"守门人"。</div>
+                    <div class="barrier-moat">🛡️ 护城河等级：深 → 神经外科专家培养周期10年+，供给极度稀缺</div>
+                </div>
+                <div class="barrier-card">
+                    <div class="barrier-title">⑥ 医疗器械注册与伦理</div>
+                    <div class="barrier-desc">侵入式BCI属于III类有源植入器械，NMPA/FDA审批周期长（5-8年），需要大规模临床试验验证安全性和有效性。伦理审查、数据隐私(脑数据是终极隐私)也是重大准入壁垒。</div>
+                    <div class="barrier-moat">🛡️ 护城河等级：中深 → 先发者形成注册证壁垒+临床数据壁垒</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 全球 vs 中国竞争格局 -->
+        <div class="global-section">
+            <div class="section-title">全球 vs 中国 BCI 竞争格局</div>
+            <div class="global-grid">
+                <div class="global-card global">
+                    <div class="global-title">🌍 全球领先者</div>
+                    <div class="global-item">
+                        <div class="item-name">Neuralink（美国）</div>
+                        <div class="item-desc">1024通道柔性电极+手术机器人R1+全植入式N1芯片，已完成2例人体植入。马斯克生态赋能（xAI算法+特斯拉供应链），全球BCI估值标杆($80亿+)。</div>
+                    </div>
+                    <div class="global-item">
+                        <div class="item-name">Synchron（美国/澳大利亚）</div>
+                        <div class="item-desc">血管内支架电极Stentrode，无需开颅，已获FDA突破性器械认定。10例+患者可意念操控数字设备。被视作侵入式BCI最快商业化落地方案。</div>
+                    </div>
+                    <div class="global-item">
+                        <div class="item-name">Paradromics（美国）</div>
+                        <div class="item-desc">421通道大规模神经接口，采用专有CMOS芯片阵列技术。2025年获FDA突破性认定，主攻失语症患者语言功能恢复。</div>
+                    </div>
+                    <div class="global-item">
+                        <div class="item-name">Blackrock Neurotech（美国）</div>
+                        <div class="item-desc">Utah阵列电极发明者，已有30+年临床研究历史，是唯一有长期人体植入数据（10年+）的BCI电极平台。</div>
+                    </div>
+                </div>
+                <div class="global-card china">
+                    <div class="global-title">🇨🇳 中国力量</div>
+                    <div class="global-item">
+                        <div class="item-name">脑虎科技 NeuroXess</div>
+                        <div class="item-desc">上海，柔性脑机接口系统，自研高通量柔性电极+手术机器人，获红杉/蓝驰等顶级VC超10亿元融资。已完成动物实验，预计2026年启动临床试验。</div>
+                    </div>
+                    <div class="global-item">
+                        <div class="item-name">博睿康 Neuracle</div>
+                        <div class="item-desc">北京，中国非侵入式EEG龙头，高密度无线脑电系统获NMPA注册。清华-神经工程实验室孵化，产品出口40+国家。2025年启动半侵入式ECoG临床试验。</div>
+                    </div>
+                    <div class="global-item">
+                        <div class="item-name">阶梯医疗</div>
+                        <div class="item-desc">北京，半侵入式ECoG电极阵列，获高瓴/启明等数亿元融资。聚焦微创BCI系统，已完成多例临床前研究，中国Synchron对标。</div>
+                    </div>
+                    <div class="global-item">
+                        <div class="item-name">微灵医疗</div>
+                        <div class="item-desc">深圳，侵入式微电极阵列系统，团队来自中科院深圳先进院脑所。聚焦高密度柔性神经界面+闭环神经调控技术。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 核心标的 - 有技术壁垒+商业前景 -->
+        <div class="companies-section">
+            <div class="section-title">核心标的 · 技术壁垒 + 商业前景精选（A股+港股）</div>
+            <div class="section-subtitle">入选标准：在BCI产业链中拥有可验证的技术壁垒（专利/注册证/临床数据/团队背景），且具备可见的商业化路径</div>
+            <div class="company-grid">
+
+                <!-- 三博脑科 -->
+                <div class="company-card moat-high">
+                    <div class="moat-badge moat-5star">★★★★★ 壁垒极深</div>
+                    <div class="card-header">
+                        <span class="card-name">三博脑科</span>
+                        <span class="card-code">301293.SZ</span>
+                    </div>
+                    <span class="card-position position-surgery">神经外科临床平台 · 侵入式BCI手术入口</span>
+                    <div class="card-desc">国内顶级神经外科连锁专科医院集团，年手术量超万台。以功能神经外科（癫痫/DBS/功能区肿瘤）见长，拥有全国顶尖的立体定向和功能神经外科团队。是侵入式BCI从实验室走向临床的"最后一公里"关键平台。</div>
+                    <div class="card-binding"><strong>BCI核心逻辑：</strong>侵入式BCI植入手术必须由顶尖功能神经外科团队执行。三博脑科是中国最大的民营神经外科平台，与清华/天坛医院紧密合作，有望成为国内BCI临床验证首选合作医院。医疗服务的"守门人"角色使其在BCI产业链中具有不可替代性。</div>
+                    <div class="card-data-row">
+                        <span>年手术量<strong>>10,000台</strong></span>
+                        <span>功能神经外科占比<strong>核心科室</strong></span>
+                        <span>DBS手术经验<strong>丰富</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-mid">💰 毛利率35%+</span>
+                        <span class="f-tag growth-high">📈 高增长</span>
+                        <span class="f-tag profit">✓ 盈利</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">技术壁垒</div>
+                            <div class="rating-level">★★★ 极深</div>
+                            <div class="rating-reason">顶级神经外科团队稀缺，培训周期10年+，是侵入式BCI不可绕过的临床入口</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">商业前景</div>
+                            <div class="rating-level">★★★ 强</div>
+                            <div class="rating-reason">BCI手术服务费+术后管理，单例价值5万+，千例规模即数亿增量收入</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 翔宇医疗 -->
+                <div class="company-card moat-mid">
+                    <div class="moat-badge moat-4star">★★★★ 壁垒深</div>
+                    <div class="card-header">
+                        <span class="card-name">翔宇医疗</span>
+                        <span class="card-code">688626.SH</span>
+                    </div>
+                    <span class="card-position position-rehab">非侵入式BCI康复机器人 · 已商业化</span>
+                    <div class="card-desc">中国康复医疗器械龙头，产品覆盖康复评定、运动治疗、物理因子治疗等全系列。已推出脑机接口康复训练系统（基于运动想象EEG的上下肢康复机器人），获NMPA注册证，是国内BCI康复方向最早实现商业化的A股公司。</div>
+                    <div class="card-binding"><strong>BCI核心逻辑：</strong>非侵入式BCI康复是目前商业化确定性最高的方向。公司通过脑电采集+AI解码+运动执行一体化，为卒中后偏瘫患者提供主动康复训练。注册证壁垒+渠道网络(覆盖数千家医院)构成竞争护城河。</div>
+                    <div class="card-data-row">
+                        <span>BCI产品<strong>已获NMPA注册证</strong></span>
+                        <span>覆盖医院<strong>数千家</strong></span>
+                        <span>康复产品线<strong>行业最全</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-high">💰 毛利率65%+</span>
+                        <span class="f-tag growth-high">📈 高增长</span>
+                        <span class="f-tag profit">✓ 盈利</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">技术壁垒</div>
+                            <div class="rating-level">★★★ 强</div>
+                            <div class="rating-reason">BCI康复系统注册证壁垒+脑电采集与运动控制一体化技术积累</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">商业前景</div>
+                            <div class="rating-level">★★★ 强</div>
+                            <div class="rating-reason">康复器械千亿市场，BCI康复渗透率从0到10%带来巨大增量</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 伟思医疗 -->
+                <div class="company-card moat-mid">
+                    <div class="moat-badge moat-4star">★★★★ 壁垒深</div>
+                    <div class="card-header">
+                        <span class="card-name">伟思医疗</span>
+                        <span class="card-code">688580.SH</span>
+                    </div>
+                    <span class="card-position position-neuromod">经颅磁刺激(TMS)+神经调控 · 已商业化</span>
+                    <div class="card-desc">中国神经调控与康复器械龙头之一。核心产品经颅磁刺激仪(TMS)是BCI下游最成熟的神经调控技术，已广泛用于抑郁、失眠、卒中后康复。同时布局生物反馈、电刺激等产品线，具备脑电采集+刺激调控闭环能力。</div>
+                    <div class="card-binding"><strong>BCI核心逻辑：</strong>TMS属于BCI"输出端"——读取脑状态后进行精准磁刺激调控。抑郁症TMS治疗指南推荐等级逐年提升(已进入医保)，市场快速放量。公司拥有磁刺激仪全系列产品注册证，核心技术壁垒在于高精度定位导航系统+个体化治疗方案。</div>
+                    <div class="card-data-row">
+                        <span>TMS注册证<strong>全系列覆盖</strong></span>
+                        <span>抑郁症TMS<strong>已进医保</strong></span>
+                        <span>康复+精神科<strong>双适应症</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-high">💰 毛利率70%+</span>
+                        <span class="f-tag growth-mid">📈 稳健增长</span>
+                        <span class="f-tag profit">✓ 盈利</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">技术壁垒</div>
+                            <div class="rating-level">★★★ 强</div>
+                            <div class="rating-reason">磁刺激线圈/精准导航/个体化方案三重技术壁垒+注册证壁垒</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">商业前景</div>
+                            <div class="rating-level">★★★ 强</div>
+                            <div class="rating-reason">中国抑郁症患者超5000万，TMS渗透率<1%，百亿级潜在市场</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 冠昊生物 -->
+                <div class="company-card moat-mid">
+                    <div class="moat-badge moat-4star">★★★★ 壁垒深</div>
+                    <div class="card-header">
+                        <span class="card-name">冠昊生物</span>
+                        <span class="card-code">300238.SZ</span>
+                    </div>
+                    <span class="card-position position-material">神经外科植入材料 · 再生医学</span>
+                    <div class="card-desc">中国生物型植入材料龙头，核心产品生物型硬脑(脊)膜补片市占率领先。基于动物源脱细胞基质技术平台，布局人工硬脑膜、组织补片等神经外科高值耗材。侵入式BCI植入后的生物密封与保护是核心难题，公司材料技术具有天然延伸性。</div>
+                    <div class="card-binding"><strong>BCI核心逻辑：</strong>侵入式BCI电极植入后，颅骨密封和硬脑膜生物相容性封装是长期安全性的关键。公司的脱细胞基质材料技术可用于BCI植入物密封界面，是植入物"生物封装"的上游核心耗材。再生医学技术平台具有高壁垒，新进入者难以短期追赶。</div>
+                    <div class="card-data-row">
+                        <span>硬脑膜补片<strong>市占率领先</strong></span>
+                        <span>脱细胞基质平台<strong>核心技术</strong></span>
+                        <span>再生医学管线<strong>多产品布局</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-high">💰 毛利率80%+</span>
+                        <span class="f-tag growth-mid">📈 稳健增长</span>
+                        <span class="f-tag profit">✓ 盈利</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">技术壁垒</div>
+                            <div class="rating-level">★★☆ 中</div>
+                            <div class="rating-reason">脱细胞基质+生物材料加工壁垒，但BCI直接应用尚需验证</div>
+                        </div>
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">商业前景</div>
+                            <div class="rating-level">★★★ 强</div>
+                            <div class="rating-reason">侵入式BCI放量后，植入密封材料是刚需耗材，单例价值数千元</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 创新医疗 -->
+                <div class="company-card moat-mid">
+                    <div class="moat-badge moat-3star">★★★ 壁垒中</div>
+                    <div class="card-header">
+                        <span class="card-name">创新医疗</span>
+                        <span class="card-code">002173.SZ</span>
+                    </div>
+                    <span class="card-position position-device">侵入式BCI设备 · 参股博灵医疗</span>
+                    <div class="card-desc">通过参股杭州博灵医疗科技，布局侵入式脑机接口植入设备。博灵医疗专注微电极阵列BCI系统研发，已积累初步动物实验数据。母公司主营业务为综合医院管理（建华医院等），BCI是其战略转型方向。</div>
+                    <div class="card-binding"><strong>BCI核心逻辑：</strong>通过博灵医疗切入侵入式BCI赛道，是国内极少数直接布局植入式脑机接口硬件的A股标的。但需注意博灵医疗目前处于研发早期，距临床验证和商业化仍有较远距离，含较高的技术不确定性和时间风险。</div>
+                    <div class="card-data-row">
+                        <span>博灵医疗<strong>侵入式BCI设备</strong></span>
+                        <span>阶段<strong>研发/动物实验</strong></span>
+                        <span>母公司<strong>民营医院平台</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-low">💰 毛利率20%±</span>
+                        <span class="f-tag growth-low">📈 低增长</span>
+                        <span class="f-tag loss">⚠ 主业承压</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-early">
+                            <div class="rating-title">技术壁垒</div>
+                            <div class="rating-level">★☆☆ 早期</div>
+                            <div class="rating-reason">博灵医疗处于研发早期，技术壁垒尚未经过临床验证</div>
+                        </div>
+                        <div class="rating-card rating-watch">
+                            <div class="rating-title">商业前景</div>
+                            <div class="rating-level">★★☆ 远期期权</div>
+                            <div class="rating-reason">侵入式BCI空间大但路径长，需跟踪临床试验节点</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 博济医药 -->
+                <div class="company-card moat-mid">
+                    <div class="moat-badge moat-3star">★★★ 壁垒中</div>
+                    <div class="card-header">
+                        <span class="card-name">博济医药</span>
+                        <span class="card-code">300404.SZ</span>
+                    </div>
+                    <span class="card-position position-cro">BCI器械临床试验CRO · 注册服务</span>
+                    <div class="card-desc">国内临床CRO龙头之一，专注于创新药与医疗器械临床试验服务。在神经科学领域积累了丰富的临床研究经验（卒中/癫痫/帕金森等适应症），可为BCI器械提供从方案设计到NMPA注册的全流程CRO服务。</div>
+                    <div class="card-binding"><strong>BCI核心逻辑：</strong>BCI器械（尤其是侵入式III类器械）的临床试验是产业化的最大瓶颈之一。博济医药作为神经领域CRO龙头，有望受益于BCI器械临床试验需求爆发。相对于纯概念炒作标的，CRO的商业模式更确定（按项目收费），风险更低。</div>
+                    <div class="card-data-row">
+                        <span>神经领域CRO<strong>经验丰富</strong></span>
+                        <span>III类器械注册<strong>全流程服务</strong></span>
+                        <span>临床中心<strong>覆盖全国</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-mid">💰 毛利率40%+</span>
+                        <span class="f-tag growth-mid">📈 稳健增长</span>
+                        <span class="f-tag profit">✓ 盈利</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">技术壁垒</div>
+                            <div class="rating-level">★★☆ 中</div>
+                            <div class="rating-reason">III类器械CRO资质+神经领域项目经验壁垒，但非独占性</div>
+                        </div>
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">商业前景</div>
+                            <div class="rating-level">★★★ 强</div>
+                            <div class="rating-reason">BCI器械进入临床密集期→CRO订单增量确定，风险收益比佳</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 科大讯飞 -->
+                <div class="company-card moat-mid">
+                    <div class="moat-badge moat-4star">★★★★ 壁垒深</div>
+                    <div class="card-header">
+                        <span class="card-name">科大讯飞</span>
+                        <span class="card-code">002230.SZ</span>
+                    </div>
+                    <span class="card-position position-algorithm">AI+脑电信号解码算法</span>
+                    <div class="card-desc">中国AI龙头，在语音识别/NLP领域的深度学习积累可直接迁移至脑电信号解码。与中科院/中科大神经科学团队合作，探索基于Transformer架构的脑电信号端到端解码。讯飞星火大模型为BCI提供意图理解与语言生成的AI底座。</div>
+                    <div class="card-binding"><strong>BCI核心逻辑：</strong>大模型是BCI算法的Game Changer——传统脑电解码依赖手动特征工程，Transformer可实现原始信号→意图的端到端学习。讯飞在AI算法+大规模数据处理+GPU算力的积累使其在BCI"软件层"具有稀缺优势。但注意BCI仅是其AI版图中的小分支。</div>
+                    <div class="card-data-row">
+                        <span>星火大模型<strong>4.0 Turbo</strong></span>
+                        <span>脑电AI研究<strong>与中科院合作</strong></span>
+                        <span>算力规模<strong>万卡集群</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-mid">💰 毛利率42%+</span>
+                        <span class="f-tag growth-mid">📈 稳健增长</span>
+                        <span class="f-tag profit">✓ 扭亏为盈</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">技术壁垒</div>
+                            <div class="rating-level">★★★ 强</div>
+                            <div class="rating-reason">大模型+深度学习算法壁垒极深，但BCI非主业</div>
+                        </div>
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">商业前景</div>
+                            <div class="rating-level">★★☆ 中期</div>
+                            <div class="rating-reason">AI软件层价值大但商业模式待清晰，取决于BCI生态卡位</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 心玮医疗 -->
+                <div class="company-card moat-mid">
+                    <div class="moat-badge moat-4star">★★★★ 壁垒深</div>
+                    <div class="card-header">
+                        <span class="card-name">心玮医疗</span>
+                        <span class="card-code">06609.HK</span>
+                    </div>
+                    <span class="card-position position-surgery">神经介入器械 · 脑卒中全方案</span>
+                    <div class="card-desc">中国神经介入器械龙头，专注脑卒中预防和治疗全产品线：取栓支架、抽吸导管、动脉瘤栓塞、颈动脉支架等。神经介入是脑血管疾病最前沿的微创治疗技术，与BCI共享神经血管通路技术能力。</div>
+                    <div class="card-binding"><strong>BCI核心逻辑：</strong>Synchron的血管内BCI路径（通过颈静脉植入支架电极）证明神经介入技术可直接用于BCI。心玮在颅内导管/导丝/支架的深厚积累，理论上可延伸至血管内BCI电极递送。同时神经介入器械本身市场增速25%+，主业基本盘强劲。</div>
+                    <div class="card-data-row">
+                        <span>神经介入产品<strong>全品类覆盖</strong></span>
+                        <span>取栓支架<strong>国产领先</strong></span>
+                        <span>在研管线<strong>20+款</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-high">💰 毛利率65%+</span>
+                        <span class="f-tag growth-high">📈 高增长</span>
+                        <span class="f-tag loss">⚠ 尚未盈利</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">技术壁垒</div>
+                            <div class="rating-level">★★★ 强</div>
+                            <div class="rating-reason">神经介入器械设计/制造/临床壁垒极高，导管导丝Know-How稀缺</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">商业前景</div>
+                            <div class="rating-level">★★★ 强</div>
+                            <div class="rating-reason">神经介入百亿市场+CAGR 25%+，血管内BCI打开远期天花板</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 微创脑科学 -->
+                <div class="company-card moat-mid">
+                    <div class="moat-badge moat-3star">★★★ 壁垒中</div>
+                    <div class="card-header">
+                        <span class="card-name">微创脑科学</span>
+                        <span class="card-code">02172.HK</span>
+                    </div>
+                    <span class="card-position position-surgery">脑血管疾病治疗 · 神经介入平台</span>
+                    <div class="card-desc">微创医疗旗下神经科学平台，覆盖出血性+缺血性脑卒中全线产品。拥有密网支架(Tubridge)、弹簧圈等重磅产品，是国内神经介入产品线最完整的公司之一。</div>
+                    <div class="card-binding"><strong>BCI核心逻辑：</strong>与心玮医疗类似逻辑——神经介入技术能力可延伸至血管内BCI通路。微创集团体系的医疗器械产业化能力（从研发到NMPA注册到渠道）是其最大优势。但BCI非其核心战略方向，可视为神经介入主业的长期期权。</div>
+                    <div class="card-data-row">
+                        <span>产品线<strong>脑卒中全覆盖</strong></span>
+                        <span>Tubridge密网支架<strong>国内首创</strong></span>
+                        <span>集团平台<strong>微创医疗孵化</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-high">💰 毛利率70%+</span>
+                        <span class="f-tag growth-high">📈 高增长</span>
+                        <span class="f-tag profit">✓ 盈利</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">技术壁垒</div>
+                            <div class="rating-level">★★★ 强</div>
+                            <div class="rating-reason">神经介入器械壁垒+微创集团平台赋能</div>
+                        </div>
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">商业前景</div>
+                            <div class="rating-level">★★☆ 中期</div>
+                            <div class="rating-reason">主业增长确定，BCI为远期期权但非核心战略</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 佳禾智能 -->
+                <div class="company-card moat-mid">
+                    <div class="moat-badge moat-3star">★★★ 壁垒中</div>
+                    <div class="card-header">
+                        <span class="card-name">佳禾智能</span>
+                        <span class="card-code">300793.SZ</span>
+                    </div>
+                    <span class="card-position position-device">脑电波AI交互 · 智能穿戴</span>
+                    <div class="card-desc">智能声学+可穿戴设备ODM龙头，产品覆盖TWS耳机/智能音箱/AR眼镜等。布局基于脑电波(EEG)的AI人机交互技术——通过可穿戴设备采集脑电信号实现注意力/情绪识别，用于教育/游戏/健康监测等消费级场景。</div>
+                    <div class="card-binding"><strong>BCI核心逻辑：</strong>消费级BCI（注意力监测/睡眠优化/冥想辅助）是非侵入式BCI最快触达C端的路径。佳禾在可穿戴硬件设计+量产+成本控制方面的能力，使其成为消费级BCI硬件最有潜力的ODM/OEM厂商。但脑电AI算法的核心能力偏弱，需关注技术合作伙伴。</div>
+                    <div class="card-data-row">
+                        <span>可穿戴ODM<strong>行业龙头</strong></span>
+                        <span>脑电AI交互<strong>研发中</strong></span>
+                        <span>消费电子客户<strong>全球TOP品牌</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-low">💰 毛利率15%±</span>
+                        <span class="f-tag growth-mid">📈 稳健增长</span>
+                        <span class="f-tag profit">✓ 盈利</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-watch">
+                            <div class="rating-title">技术壁垒</div>
+                            <div class="rating-level">★★☆ 中</div>
+                            <div class="rating-reason">可穿戴硬件制造壁垒中等，脑电AI算法依赖外部合作</div>
+                        </div>
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">商业前景</div>
+                            <div class="rating-level">★★★ 强</div>
+                            <div class="rating-reason">消费级BCI市场空间大，ODM模式可实现低成本快速起量</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 商业前景排名 -->
+        <div class="prospect-section">
+            <div class="section-title">商业前景综合排名（短期 2 年 + 中期 5 年）</div>
+            <div class="section-subtitle">综合评估技术壁垒、商业化确定性、市场空间、竞争格局四个维度</div>
+            <div class="prospect-grid">
+                <div class="prospect-card">
+                    <div class="prospect-rank">01</div>
+                    <div class="prospect-name">翔宇医疗 · BCI康复机器人</div>
+                    <div class="prospect-code">688626.SH</div>
+                    <div class="prospect-reason"><strong>短期最确定。</strong>BCI康复已获注册证+覆盖数千家医院，千亿康复市场中BCI渗透率从<1%开始爬坡。技术壁垒(注册证+渠道)+商业确定性(政策驱动康复科建设)兼备，是BCI赛道中稀缺的"有业绩有故事"标的。</div>
+                </div>
+                <div class="prospect-card">
+                    <div class="prospect-rank">02</div>
+                    <div class="prospect-name">伟思医疗 · TMS神经调控</div>
+                    <div class="prospect-code">688580.SH</div>
+                    <div class="prospect-reason"><strong>短期第二确定。</strong>抑郁症/失眠TMS已进医保，渗透率极低(<1%)，5000万抑郁症患者对应百亿+市场。磁刺激+脑电反馈的技术闭环构建差异化竞争壁垒，经销商网络成熟。</div>
+                </div>
+                <div class="prospect-card">
+                    <div class="prospect-rank">03</div>
+                    <div class="prospect-name">三博脑科 · 临床平台</div>
+                    <div class="prospect-code">301293.SZ</div>
+                    <div class="prospect-reason"><strong>中期最大弹性。</strong>侵入式BCI唯一的A股"临床入口"标的。一旦Neuralink/脑虎科技等进入中国临床，三博是最佳合作医院。每例手术费+术后管理费5万+，千例即5亿增量收入。稀缺性极高。</div>
+                </div>
+                <div class="prospect-card">
+                    <div class="prospect-rank">04</div>
+                    <div class="prospect-name">博济医药 · BCI临床CRO</div>
+                    <div class="prospect-code">300404.SZ</div>
+                    <div class="prospect-reason"><strong>中期确定性+弹性。</strong>BCI器械III类临床试验需求将在2026-2028密集爆发。作为神经领域CRO龙头，按项目收费的商业模式清晰。风险收益比较好——BCI临床失败不影响CRO收入。</div>
+                </div>
+                <div class="prospect-card">
+                    <div class="prospect-rank">05</div>
+                    <div class="prospect-name">心玮医疗 · 神经介入</div>
+                    <div class="prospect-code">06609.HK</div>
+                    <div class="prospect-reason"><strong>中期双逻辑。</strong>取栓支架等主业CAGR 25%+，神经介入国产替代是确定性趋势。血管内BCI(Synchron路径)提供远期期权。港股估值折价是额外安全垫。</div>
+                </div>
+                <div class="prospect-card">
+                    <div class="prospect-rank">06</div>
+                    <div class="prospect-name">冠昊生物 · 植入材料</div>
+                    <div class="prospect-code">300238.SZ</div>
+                    <div class="prospect-reason"><strong>远期耗材逻辑。</strong>侵入式BCI放量后，植入密封材料是刚需高耗材。脱细胞基质技术平台具有延伸性。但BCI直接应用的临床验证周期较长。</div>
+                </div>
+                <div class="prospect-card">
+                    <div class="prospect-rank">07</div>
+                    <div class="prospect-name">科大讯飞 · AI算法</div>
+                    <div class="prospect-code">002230.SZ</div>
+                    <div class="prospect-reason"><strong>长期算法价值。</strong>大模型驱动的脑电解码是BCI核心技术方向。讯飞AI积累深厚但BCI占比极小，更适合作BCI生态中的"AI底座"而非纯BCI投资标的。</div>
+                </div>
+                <div class="prospect-card">
+                    <div class="prospect-rank">08</div>
+                    <div class="prospect-name">创新医疗 · 侵入式BCI</div>
+                    <div class="prospect-code">002173.SZ</div>
+                    <div class="prospect-reason"><strong>远期高风险高回报。</strong>博灵医疗处于研发早期，是A股最直接对标Neuralink的标的。但技术验证、临床审批、商业化均存在重大不确定性，仅适合风险承受能力极强的投资者。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 技术壁垒深度排序 -->
+        <div class="barrier-rank-section">
+            <div class="section-title">技术壁垒深度排序</div>
+            <div class="section-subtitle">按壁垒不可复制性评分：核心专利与唯一临床入口 > 注册证+多学科交叉 > 注册证+渠道 > 技术延伸 > 早期研发</div>
+            <div class="barrier-rank-table">
+                <div class="barrier-rank-row header-row">
+                    <div class="br-cell" style="text-align:center;">排名</div>
+                    <div class="br-cell">标的</div>
+                    <div class="br-cell" style="text-align:center;">壁垒评级</div>
+                    <div class="br-cell">壁垒类型</div>
+                    <div class="br-cell">壁垒简述</div>
+                </div>
+                <div class="barrier-rank-row">
+                    <div class="br-rank gold">01</div>
+                    <div><span class="br-name">三博脑科</span><span class="br-code">301293</span></div>
+                    <div class="br-stars star5">★★★★★</div>
+                    <div class="br-moat-type">神经外科临床入口 · 不可替代性</div>
+                    <div class="br-barrier-detail">侵入式BCI植入手术唯一执行者。顶级功能神经外科医生培养周期10年+，全国能实施此手术的中心不足50家。BCI设备可以迭代，但手术执行能力无法被技术替代，具有最强的不可绕过性。</div>
+                </div>
+                <div class="barrier-rank-row">
+                    <div class="br-rank silver">02</div>
+                    <div><span class="br-name">心玮医疗</span><span class="br-code">06609</span></div>
+                    <div class="br-stars star4">★★★★</div>
+                    <div class="br-moat-type">神经介入器械 · 多学科交叉</div>
+                    <div class="br-barrier-detail">颅内导管/导丝/支架的设计与制造涉及材料科学+精密加工+临床医学三重壁垒。血管内BCI(Synchron路径)对递送系统要求极高，心玮是国内极少数具备完整颅内介入器械产品线的公司。</div>
+                </div>
+                <div class="barrier-rank-row">
+                    <div class="br-rank bronze">03</div>
+                    <div><span class="br-name">微创脑科学</span><span class="br-code">02172</span></div>
+                    <div class="br-stars star4">★★★★</div>
+                    <div class="br-moat-type">神经介入器械 · 多学科交叉</div>
+                    <div class="br-barrier-detail">Tubridge密网支架为国内首创，出血性+缺血性脑卒中全线覆盖。微创集团体系提供从研发→注册→制造的完整产业化能力，血管内器械壁垒与心玮医疗在同一梯队。</div>
+                </div>
+                <div class="barrier-rank-row">
+                    <div class="br-rank">04</div>
+                    <div><span class="br-name">科大讯飞</span><span class="br-code">002230</span></div>
+                    <div class="br-stars star4">★★★★</div>
+                    <div class="br-moat-type">AI大模型算法 · 数据+算力</div>
+                    <div class="br-barrier-detail">Transformer架构+万卡算力集群+千亿参数大模型构成AI算法壁垒。脑电解码从"手工特征"走向"端到端学习"，讯飞的技术积累可迁移，但BCI非主业降低了壁垒的实际转化率。</div>
+                </div>
+                <div class="barrier-rank-row">
+                    <div class="br-rank">05</div>
+                    <div><span class="br-name">伟思医疗</span><span class="br-code">688580</span></div>
+                    <div class="br-stars star4">★★★★</div>
+                    <div class="br-moat-type">III类器械注册证+磁刺激技术</div>
+                    <div class="br-barrier-detail">TMS(经颅磁刺激仪)全系列NMPA注册证壁垒——新进入者完成同类产品的研发+临床+注册需要5-8年。磁线圈设计中的聚焦精度和深度控制需要大量工程积累，具有显著Know-How壁垒。</div>
+                </div>
+                <div class="barrier-rank-row">
+                    <div class="br-rank">06</div>
+                    <div><span class="br-name">翔宇医疗</span><span class="br-code">688626</span></div>
+                    <div class="br-stars star4">★★★★</div>
+                    <div class="br-moat-type">III类器械注册证+渠道网络</div>
+                    <div class="br-barrier-detail">BCI康复系统已获NMPA注册证，注册周期5年+的先行者优势。覆盖数千家医院的渠道壁垒——康复科终端替换成本高，品牌粘性强。脑电采集+运动控制的一体化技术积累难以短期复制。</div>
+                </div>
+                <div class="barrier-rank-row">
+                    <div class="br-rank">07</div>
+                    <div><span class="br-name">冠昊生物</span><span class="br-code">300238</span></div>
+                    <div class="br-stars star3">★★★</div>
+                    <div class="br-moat-type">生物材料平台 · 技术延伸性</div>
+                    <div class="br-barrier-detail">脱细胞基质技术平台的壁垒在于动物源材料处理工艺+免疫原性控制+规模化生产能力。虽可延伸至BCI植入密封，但BCI直接应用尚需验证，当前壁垒更多体现于神经外科补片主业而非BCI。</div>
+                </div>
+                <div class="barrier-rank-row">
+                    <div class="br-rank">08</div>
+                    <div><span class="br-name">博济医药</span><span class="br-code">300404</span></div>
+                    <div class="br-stars star3">★★★</div>
+                    <div class="br-moat-type">III类器械CRO服务资质</div>
+                    <div class="br-barrier-detail">神经领域III类器械临床试验的CRO资质壁垒——需要深厚的PI关系网络+方案设计经验+注册路径Know-How。但CRO服务业壁垒相对器械制造较低，行业竞争格局分散，不具备独占性。</div>
+                </div>
+                <div class="barrier-rank-row">
+                    <div class="br-rank">09</div>
+                    <div><span class="br-name">佳禾智能</span><span class="br-code">300793</span></div>
+                    <div class="br-stars star3">★★★</div>
+                    <div class="br-moat-type">消费电子ODM制造能力</div>
+                    <div class="br-barrier-detail">可穿戴设备ODM能力在于大规模制造良率+成本控制+供应链管理。消费级脑电头环的硬件壁垒较低（非医疗器械标准），核心壁垒在上游干电极和下游AI算法，ODM代工处于价值链中段。</div>
+                </div>
+                <div class="barrier-rank-row">
+                    <div class="br-rank">10</div>
+                    <div><span class="br-name">创新医疗</span><span class="br-code">002173</span></div>
+                    <div class="br-stars star3">★★★</div>
+                    <div class="br-moat-type">早期研发 · 待验证</div>
+                    <div class="br-barrier-detail">博灵医疗处于研发早期阶段，微电极阵列技术尚未经临床验证。目前的"壁垒"更多体现为方向卡位而非实质性技术护城河——需要在动物实验→临床→注册→商业化全路径证明后才能确认壁垒深度。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 风险提示 -->
+        <div class="risk-section">
+            <div class="section-title">风险提示</div>
+            <div class="risk-grid">
+                <div class="risk-card">
+                    <div class="risk-title">技术路线不确定性</div>
+                    <div class="risk-desc">BCI技术路线（侵入式/半侵入式/非侵入式）尚未收敛，任何路线的重大突破或失败都将影响不同标的的价值。非侵入式信号分辨率瓶颈、侵入式安全性争议是行业最大不确定性。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">临床审批与监管风险</div>
+                    <div class="risk-desc">侵入式BCI属于最高风险等级的III类有源植入器械，NMPA/FDA审批路径漫长（5-8年）。任何安全性事件（如植入感染/电极移位）都可能导致审批延迟甚至行业整体倒退。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">商业化进程远慢于预期</div>
+                    <div class="risk-desc">目前BCI产业整体处于"0到1"阶段，距大规模商业化可能还有5-10年。市场对BCI概念股给予的估值溢价可能随着时间推移和耐心消磨而缩水。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">伦理与社会接受度</div>
+                    <div class="risk-desc">脑数据是终极隐私。侵入式BCI涉及"读脑"的伦理争议可能引发严格监管。社会对"人机融合"的接受度是产业发展的最大变数之一。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">多数A股标的BCI纯正度不足</div>
+                    <div class="risk-desc">当前A股真正的纯正BCI标的极少。大多是通过原有业务间接关联BCI（康复/神外/CRO/材料），BCI业务在总营收中占比极小（多数<5%），不要将概念标签等同于实际业绩贡献。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">全球竞争加剧，国内壁垒可能被绕过</div>
+                    <div class="risk-desc">Neuralink/Synchron等全球巨头可能直接进入中国市场，国内初创企业（脑虎/博睿康）也可能通过IPO直接上市，届时现有A股概念标的的稀缺性将大幅下降。</div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>数据来源：各公司年报、NMPA注册数据库、学术论文(PubMed/arXiv)、行业研报、公开报道</p>
+            <p style="color:#5a6478;font-size:11px;">未上市公司信息（脑虎科技/博睿康/阶梯医疗/微灵医疗/Neuralink/Synchron）来源于公开融资新闻与学术发表，仅供参考</p>
+            <p class="disclaimer">⚠ 免责声明：本报告仅为公开资料整理与产业链梳理，不构成任何投资建议。脑机接口产业整体处于早期阶段，相关标的可能存在较大波动风险。股市有风险，投资需谨慎。</p>
+        </footer>
+    </div>
+</body>
+</html>
