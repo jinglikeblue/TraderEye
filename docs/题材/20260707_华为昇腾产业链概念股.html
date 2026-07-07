@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>华为昇腾产业链概念股 - A股产业链全景</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #0a0e17; color: #e0e6f0; line-height: 1.6; min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+        .header { text-align: center; margin-bottom: 48px; }
+        .header h1 { font-size: 36px; font-weight: 700;
+            background: linear-gradient(135deg, #ef4444, #f97316, #60a5fa, #a78bfa);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 12px; }
+        .header .subtitle { font-size: 16px; color: #8892a8; }
+        .header .topic-tags { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+        .header .topic-tag { font-size: 13px; padding: 5px 14px; border-radius: 20px; font-weight: 500; }
+        .topic-tag.domestic { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.25); }
+        .topic-tag.ai { background: rgba(96,165,250,0.15); color: #60a5fa; border: 1px solid rgba(96,165,250,0.25); }
+        .topic-tag.chip { background: rgba(52,211,153,0.15); color: #34d399; border: 1px solid rgba(52,211,153,0.25); }
+        .topic-tag.ascend { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); }
+        .topic-tag.server { background: rgba(167,139,250,0.15); color: #a78bfa; border: 1px solid rgba(167,139,250,0.25); }
+        .header .update-time { font-size: 13px; color: #5a6478; margin-top: 12px; }
+
+        .section-title { font-size: 22px; font-weight: 600; color: #c8d0e0;
+            margin-bottom: 24px; padding-left: 14px; border-left: 3px solid #ef4444; }
+        .section-subtitle { font-size: 14px; color: #5a6478; margin-top: -18px; margin-bottom: 24px; padding-left: 17px; }
+
+        /* 统计卡片 */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 16px; margin-bottom: 56px; }
+        .stat-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 12px; padding: 20px; }
+        .stat-card .stat-label { font-size: 13px; color: #5a6478; margin-bottom: 6px; }
+        .stat-card .stat-value { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+        .stat-card .stat-note { font-size: 12px; color: #5a6478; }
+        .stat-green .stat-value { color: #34d399; }
+        .stat-blue .stat-value { color: #60a5fa; }
+        .stat-purple .stat-value { color: #a78bfa; }
+        .stat-pink .stat-value { color: #f472b6; }
+        .stat-yellow .stat-value { color: #fbbf24; }
+        .stat-red .stat-value { color: #f87171; }
+        .stat-orange .stat-value { color: #f97316; }
+        .stat-cyan .stat-value { color: #22d3ee; }
+
+        /* 产业链流程图 */
+        .flow-section { margin-bottom: 56px; }
+        .flow-diagram { display: flex; align-items: stretch; gap: 0;
+            background: #111827; border-radius: 16px; border: 1px solid #1e293b; overflow: hidden; }
+        .flow-stage { flex: 1; padding: 28px 20px; position: relative; }
+        .flow-stage:not(:last-child)::after {
+            content: '→'; position: absolute; right: -14px; top: 50%;
+            transform: translateY(-50%); font-size: 28px; color: #4b5563; z-index: 2; }
+        .flow-stage:not(:last-child) { border-right: 1px solid #1e293b; }
+        .flow-stage .stage-label { font-size: 13px; font-weight: 600; letter-spacing: 1px;
+            margin-bottom: 12px; padding: 4px 12px; border-radius: 20px; display: inline-block; }
+        .flow-stage:nth-child(1) .stage-label { background: rgba(239,68,68,0.15); color: #ef4444; }
+        .flow-stage:nth-child(2) .stage-label { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .flow-stage:nth-child(3) .stage-label { background: rgba(167,139,250,0.15); color: #a78bfa; }
+        .flow-stage:nth-child(4) .stage-label { background: rgba(244,114,182,0.15); color: #f472b6; }
+        .flow-stage .stage-title { font-size: 18px; font-weight: 600; color: #e0e6f0; margin-bottom: 8px; }
+        .flow-stage .stage-desc { font-size: 13px; color: #8892a8; }
+        .flow-stage .stage-products { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+        .flow-stage .product-tag { font-size: 12px; padding: 3px 10px; border-radius: 12px;
+            background: rgba(255,255,255,0.06); color: #a0aec0;
+            border: 1px solid rgba(255,255,255,0.08); }
+
+        /* 催化/背景高亮 */
+        .highlight-box { background: linear-gradient(135deg, rgba(239,68,68,0.08), rgba(251,191,36,0.06));
+            border: 1px solid rgba(239,68,68,0.2); border-radius: 14px; padding: 24px 28px;
+            margin-bottom: 48px; }
+        .highlight-box .hl-title { font-size: 16px; font-weight: 600; color: #ef4444; margin-bottom: 12px; }
+        .highlight-box .hl-desc { font-size: 14px; color: #8892a8; line-height: 1.8; }
+
+        /* 公司卡片 */
+        .companies-section { margin-bottom: 48px; }
+        .company-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; }
+        .company-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; transition: border-color 0.2s, transform 0.2s; }
+        .company-card:hover { border-color: #374151; transform: translateY(-2px); }
+        .company-card .card-header { display: flex; justify-content: space-between;
+            align-items: flex-start; margin-bottom: 14px; }
+        .company-card .card-name { font-size: 18px; font-weight: 600; color: #e0e6f0; }
+        .company-card .card-code { font-size: 13px; font-weight: 500; padding: 3px 10px;
+            border-radius: 8px; background: rgba(239,68,68,0.12); color: #ef4444; white-space: nowrap; }
+        .company-card .card-position { font-size: 13px; padding: 3px 10px;
+            border-radius: 8px; display: inline-block; margin-bottom: 10px; }
+        .position-chip { background: rgba(52,211,153,0.12); color: #34d399; }
+        .position-server { background: rgba(96,165,250,0.12); color: #60a5fa; }
+        .position-power { background: rgba(251,191,36,0.12); color: #fbbf24; }
+        .position-thermal { background: rgba(244,114,182,0.12); color: #f472b6; }
+        .position-optical { background: rgba(167,139,250,0.12); color: #a78bfa; }
+        .position-network { background: rgba(22,211,238,0.12); color: #22d3ee; }
+        .position-ascend { background: rgba(239,68,68,0.12); color: #ef4444; }
+        .company-card .card-desc { font-size: 14px; color: #8892a8; line-height: 1.7; margin-bottom: 12px; }
+        .company-card .card-binding { font-size: 13px; color: #c8d0e0; padding: 10px 14px;
+            background: rgba(239,68,68,0.06); border-radius: 8px; border-left: 3px solid #ef4444;
+            margin-bottom: 10px; line-height: 1.6; }
+        .company-card .card-binding strong { color: #ef4444; }
+        .company-card .card-data-row { display: flex; flex-wrap: wrap; gap: 8px 18px;
+            font-size: 13px; color: #c8d0e0; padding: 10px 14px;
+            background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 3px solid #374151; }
+        .company-card .card-data-row strong { color: #e0e6f0; margin-left: 2px; }
+
+        /* 财务标签 */
+        .finance-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .f-tag { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 12px; display: flex; align-items: center; gap: 4px; }
+        .f-tag .tag-icon { font-size: 12px; }
+        .margin-high { background: rgba(52,211,153,0.12); color: #34d399; border: 1px solid rgba(52,211,153,0.2); }
+        .margin-mid { background: rgba(96,165,250,0.12); color: #60a5fa; border: 1px solid rgba(96,165,250,0.2); }
+        .margin-low { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.2); }
+        .growth-high { background: rgba(239,68,68,0.12); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); }
+        .growth-mid { background: rgba(249,115,22,0.12); color: #f97316; border: 1px solid rgba(249,115,22,0.2); }
+        .growth-low { background: rgba(202,138,4,0.12); color: #ca8a04; border: 1px solid rgba(202,138,4,0.2); }
+        .profit { background: rgba(147,197,253,0.12); color: #93c5fd; border: 1px solid rgba(147,197,253,0.2); }
+        .loss { background: rgba(248,113,113,0.12); color: #f87171; border: 1px solid rgba(248,113,113,0.2); }
+
+        /* 评级 */
+        .rating-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+        .rating-card { border-radius: 10px; padding: 10px 12px; border: 1px solid; background: rgba(255,255,255,0.03); }
+        .rating-title { font-size: 12px; color: #8892a8; margin-bottom: 4px; }
+        .rating-level { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .rating-reason { font-size: 12px; color: #8892a8; line-height: 1.5; }
+        .rating-strong { border-color: rgba(239,68,68,0.35); background: rgba(239,68,68,0.08); }
+        .rating-strong .rating-level { color: #ef4444; }
+        .rating-mid { border-color: rgba(96,165,250,0.35); background: rgba(96,165,250,0.08); }
+        .rating-mid .rating-level { color: #60a5fa; }
+        .rating-watch { border-color: rgba(251,191,36,0.35); background: rgba(251,191,36,0.08); }
+        .rating-watch .rating-level { color: #fbbf24; }
+        .rating-weak { border-color: rgba(248,113,113,0.35); background: rgba(248,113,113,0.06); }
+        .rating-weak .rating-level { color: #f87171; }
+
+        /* 国产AI芯片参数对比表 */
+        .compare-section { margin-bottom: 56px; }
+        .compare-table { width: 100%; border-collapse: collapse; background: #111827;
+            border: 1px solid #1e293b; border-radius: 12px; overflow: hidden; }
+        .compare-table th { background: rgba(239,68,68,0.1); color: #ef4444; font-size: 13px;
+            font-weight: 600; padding: 14px 16px; text-align: left; border-bottom: 1px solid #1e293b; }
+        .compare-table td { padding: 14px 16px; font-size: 13px; color: #8892a8;
+            border-bottom: 1px solid rgba(30,41,59,0.5); line-height: 1.5; }
+        .compare-table tr:last-child td { border-bottom: none; }
+        .compare-table .highlight-cell { color: #e0e6f0; font-weight: 500; }
+        .chip-red { color: #ef4444; font-weight: 600; }
+        .chip-blue { color: #60a5fa; font-weight: 600; }
+        .chip-green { color: #34d399; font-weight: 600; }
+        .chip-yellow { color: #fbbf24; font-weight: 600; }
+
+        /* 核心关注卡片 */
+        .focus-section { margin-bottom: 40px; }
+        .focus-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .focus-card { background: linear-gradient(135deg, #111827, #1a2332);
+            border: 1px solid #1e293b; border-radius: 14px; padding: 24px;
+            position: relative; overflow: hidden; }
+        .focus-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .focus-card:nth-child(1)::before { background: linear-gradient(90deg, #ef4444, #f97316); }
+        .focus-card:nth-child(2)::before { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+        .focus-card:nth-child(3)::before { background: linear-gradient(90deg, #a78bfa, #8b5cf6); }
+        .focus-card:nth-child(4)::before { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+        .focus-card:nth-child(5)::before { background: linear-gradient(90deg, #f472b6, #ec4899); }
+        .focus-card:nth-child(6)::before { background: linear-gradient(90deg, #f87171, #ef4444); }
+        .focus-card .focus-rank { font-size: 48px; font-weight: 800;
+            color: rgba(255,255,255,0.04); position: absolute; top: 8px; right: 16px; }
+        .focus-card .focus-name { font-size: 16px; font-weight: 600; color: #e0e6f0; margin-bottom: 4px; }
+        .focus-card .focus-tag { font-size: 12px; color: #8892a8; margin-bottom: 10px; }
+        .focus-card .focus-reason { font-size: 13px; color: #8892a8; line-height: 1.7; }
+
+        /* 关系图 */
+        .relation-section { margin-bottom: 56px; }
+        .relation-diagram { background: #111827; border: 1px solid #1e293b;
+            border-radius: 16px; padding: 32px; overflow-x: auto; }
+        .relation-group { margin-bottom: 20px; padding: 16px; border-radius: 12px; border: 1px solid; }
+        .relation-group:last-child { margin-bottom: 0; }
+        .relation-group.upstream { border-color: rgba(239,68,68,0.2); background: rgba(239,68,68,0.04); }
+        .relation-group.midstream { border-color: rgba(96,165,250,0.2); background: rgba(96,165,250,0.04); }
+        .relation-group.downstream { border-color: rgba(167,139,250,0.2); background: rgba(167,139,250,0.04); }
+        .relation-group.terminal { border-color: rgba(244,114,182,0.2); background: rgba(244,114,182,0.04); }
+        .relation-group-title { font-size: 13px; font-weight: 700; letter-spacing: 2px;
+            margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid; }
+        .relation-group.upstream .relation-group-title { color: #ef4444; border-color: rgba(239,68,68,0.2); }
+        .relation-group.midstream .relation-group-title { color: #60a5fa; border-color: rgba(96,165,250,0.2); }
+        .relation-group.downstream .relation-group-title { color: #a78bfa; border-color: rgba(167,139,250,0.2); }
+        .relation-group.terminal .relation-group-title { color: #f472b6; border-color: rgba(244,114,182,0.2); }
+        .relation-row { display: flex; align-items: center; margin-bottom: 12px; }
+        .relation-row:last-child { margin-bottom: 0; }
+        .relation-label { min-width: 100px; font-size: 14px; font-weight: 600;
+            color: #8892a8; flex-shrink: 0; }
+        .relation-items { display: flex; flex-wrap: wrap; gap: 10px; }
+        .relation-node { padding: 8px 16px; border-radius: 10px; font-size: 14px;
+            font-weight: 500; border: 1px solid; }
+        .relation-node.server { background: rgba(96,165,250,0.08);
+            border-color: rgba(96,165,250,0.25); color: #60a5fa; }
+        .relation-node.ascend { background: rgba(239,68,68,0.08);
+            border-color: rgba(239,68,68,0.25); color: #ef4444; }
+        .relation-node.pcb { background: rgba(118,185,0,0.08);
+            border-color: rgba(118,185,0,0.25); color: #76b900; }
+        .relation-node.opt { background: rgba(167,139,250,0.08);
+            border-color: rgba(167,139,250,0.25); color: #a78bfa; }
+        .relation-node.thermal { background: rgba(244,114,182,0.08);
+            border-color: rgba(244,114,182,0.25); color: #f472b6; }
+        .relation-node.power { background: rgba(251,191,36,0.08);
+            border-color: rgba(251,191,36,0.25); color: #fbbf24; }
+        .relation-node.network { background: rgba(22,211,238,0.08);
+            border-color: rgba(22,211,238,0.25); color: #22d3ee; }
+        .relation-node .node-code { font-size: 11px; opacity: 0.7; margin-left: 6px; }
+        .relation-arrow { text-align: center; color: #4b5563; font-size: 20px; padding: 4px 0; }
+
+        /* 风险提示 */
+        .risk-section { margin-bottom: 56px; }
+        .risk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+        .risk-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; border-left: 3px solid #f87171; }
+        .risk-card .risk-title { font-size: 16px; font-weight: 600; color: #f87171; margin-bottom: 8px; }
+        .risk-card .risk-desc { font-size: 14px; color: #8892a8; line-height: 1.7; }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            .header h1 { font-size: 26px; }
+            .flow-diagram { flex-direction: column; }
+            .flow-stage:not(:last-child)::after { content: '↓'; right: auto; bottom: -16px; top: auto;
+                left: 50%; transform: translateX(-50%); }
+            .flow-stage:not(:last-child) { border-right: none; border-bottom: 1px solid #1e293b; }
+            .company-grid { grid-template-columns: 1fr; }
+            .rating-row { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .focus-cards { grid-template-columns: 1fr; }
+            .risk-grid { grid-template-columns: 1fr; }
+            .compare-table { font-size: 12px; }
+            .compare-table th, .compare-table td { padding: 10px 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>华为昇腾产业链概念股</h1>
+            <div class="subtitle">覆盖昇腾950超节点/昇腾AI芯片/服务器OEM/PCB载板/互联芯片/算力租赁/光模块/液冷/电源全产业链</div>
+            <div class="topic-tags">
+                <span class="topic-tag domestic">国产替代 自主可控</span>
+                <span class="topic-tag ai">AI 人工智能</span>
+                <span class="topic-tag ascend">华为昇腾</span>
+                <span class="topic-tag server">算力服务器</span>
+                <span class="topic-tag chip">AI芯片</span>
+                <span class="topic-tag" style="background:rgba(239,68,68,0.2);color:#f87171;border:1px solid rgba(239,68,68,0.35);font-weight:700;">950超节点</span>
+            </div>
+            <div class="update-time">数据来源：东方财富、同花顺、公开报道、券商研报、华为全联接大会 | 整理时间：2026-07-07</div>
+        </div>
+
+        <!-- 核心概览 -->
+        <div class="overview-section">
+            <div class="section-title">华为昇腾市场概览</div>
+            <div class="stats-grid">
+                <div class="stat-card stat-red">
+                    <div class="stat-label">昇腾910B推理性能</div>
+                    <div class="stat-value">≈ A100</div>
+                    <div class="stat-note">昇腾910B在大模型推理场景性能对标A100，国产替代能力持续升级</div>
+                </div>
+                <div class="stat-card stat-blue">
+                    <div class="stat-label">国内智算中心规模(2026E)</div>
+                    <div class="stat-value">&gt;100座</div>
+                    <div class="stat-note">2025-2027年新建大型智算中心，昇腾芯片国产化率目标超50%</div>
+                </div>
+                <div class="stat-card stat-orange">
+                    <div class="stat-label">昇腾910C发布</div>
+                    <div class="stat-value">2026H2</div>
+                    <div class="stat-note">7nm增强版工艺，FP16算力达600+ TFLOPS，性能对标H100</div>
+                </div>
+                <div class="stat-card stat-purple">
+                    <div class="stat-label">华为服务器营收(2025)</div>
+                    <div class="stat-value">~¥500亿</div>
+                    <div class="stat-note">华为ICT产品业务中服务器收入约500亿元，同比+60%+</div>
+                </div>
+                <div class="stat-card stat-yellow">
+                    <div class="stat-label">国产AI服务器渗透率</div>
+                    <div class="stat-value">~30%</div>
+                    <div class="stat-note">2026年国产AI服务器占国内市场的30%，2028年目标达50%+</div>
+                </div>
+                <div class="stat-card stat-red">
+                    <div class="stat-label">昇腾950超节点</div>
+                    <div class="stat-value" style="color:#f87171;">64卡互联</div>
+                    <div class="stat-note">64张昇腾910C通过超节点架构互联，单节点算力超38 PFLOPS（FP16），对标NVIDIA DGX NVL72</div>
+                </div>
+                <div class="stat-card stat-pink">
+                    <div class="stat-label">A股昇腾生态标的</div>
+                    <div class="stat-value">11只</div>
+                    <div class="stat-note">新增PCB/载板(沪电/深南)+互联芯片(澜起) · 双满星精选覆盖全链条</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 产业链全景流程图 -->
+        <div class="flow-section">
+            <div class="section-title">产业链全景</div>
+            <div class="flow-diagram">
+                <div class="flow-stage">
+                    <span class="stage-label">上游</span>
+                    <div class="stage-title">昇腾AI芯片 + 互联芯片 + 光模块</div>
+                    <div class="stage-desc">华为海思昇腾910B/910C AI训练推理芯片、PCIe Retimer/CXL互联芯片、配套光模块/光器件</div>
+                    <div class="stage-products">
+                        <span class="product-tag">昇腾910B/910C</span>
+                        <span class="product-tag">PCIe Retimer</span>
+                        <span class="product-tag">CXL互联</span>
+                        <span class="product-tag">MindSpore/CANN</span>
+                        <span class="product-tag">光模块/光器件</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <span class="stage-label">中游</span>
+                    <div class="stage-title">950超节点 + OEM整机 + PCB</div>
+                    <div class="stage-desc">昇腾950超节点（64卡互联架构）、OEM整机组装（华鲲振宇/湘江鲲鹏等）、OAM/UBB超高层PCB、FC-BGA封装载板</div>
+                    <div class="stage-products">
+                        <span class="product-tag">950超节点</span>
+                        <span class="product-tag">28L+ OAM/UBB</span>
+                        <span class="product-tag">FC-BGA载板</span>
+                        <span class="product-tag">华鲲振宇</span>
+                        <span class="product-tag">湘江鲲鹏/鲲泰</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <span class="stage-label">下游</span>
+                    <div class="stage-title">算力租赁 + 液冷 + 电源</div>
+                    <div class="stage-desc">AI算力租赁服务、冷板式/浸没式液冷系统、HVDC/UPS电源基础设施</div>
+                    <div class="stage-products">
+                        <span class="product-tag">算力租赁</span>
+                        <span class="product-tag">冷板液冷</span>
+                        <span class="product-tag">CDU</span>
+                        <span class="product-tag">HVDC电源</span>
+                    </div>
+                </div>
+                <div class="flow-stage">
+                    <span class="stage-label">终端</span>
+                    <div class="stage-title">智算中心 + 大模型训推</div>
+                    <div class="stage-desc">政府/运营商/互联网智算中心部署、万亿参数大模型训练、国产化信创场景</div>
+                    <div class="stage-products">
+                        <span class="product-tag">智算中心</span>
+                        <span class="product-tag">万亿参数训练</span>
+                        <span class="product-tag">信创国产化</span>
+                        <span class="product-tag">行业AI应用</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 核心催化/背景 -->
+        <div class="highlight-box">
+            <div class="hl-title">核心驱动：美国出口管制持续升级 → 国产算力替代刚性需求</div>
+            <div class="hl-desc">
+                <strong style="color:#e0e6f0;">1. 出口管制持续加码：</strong> 美国对华AI芯片出口管制从2022年10月→2023年10月→2025年5月持续升级，NVIDIA H100/H200/B200/GB300均受限对华出口。国内互联网/运营商/政府智算中心无法采购海外高端GPU，转向国产方案。<br><br>
+                <strong style="color:#e0e6f0;">2. 昇腾950超节点——国产算力的"登月计划"：</strong> 华为推出的昇腾950超节点采用64张昇腾910C通过超节点架构高速互联，单节点FP16算力超38 PFLOPS，对标NVIDIA DGX NVL72。超节点内部通过超高带宽互联（HCCS/PCIe 5.0）实现GPU间高效通信，是支撑万亿参数大模型训练的核心算力基座。OAM/UBB超高层PCB（28L+）、FC-BGA封装载板、PCIe Retimer互联芯片等关键组件需求爆发。<br><br>
+                <strong style="color:#e0e6f0;">3. 信创+AI双重政策驱动：</strong> 信创三期明确要求党政+八大关键行业IT基础设施国产化率2027年达100%。AI智算中心国产芯片采购比例在地方审批中已成为硬性门槛。昇腾生态直接受益。<br><br>
+                <strong style="color:#e0e6f0;">4. 华为全栈生态壁垒：</strong> 昇腾提供从芯片（Ascend）→框架（MindSpore）→工具链（CANN）→平台（ModelArts）的全栈解决方案，客户迁移成本低，生态粘性极强。
+            </div>
+        </div>
+
+        <!-- ============ 公司卡片 ============ -->
+
+        <!-- 一、昇腾服务器OEM/整机 -->
+        <div class="companies-section">
+            <div class="section-title">一、昇腾服务器OEM/整机（中游核心）</div>
+            <div class="section-subtitle">华为昇腾服务器全部通过OEM合作伙伴出货，华鲲振宇/湘江鲲鹏/神州鲲泰是三大主力，直接受益于昇腾出货量爆发</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">高新发展</div>
+                        <div class="card-code">000628</div>
+                    </div>
+                    <span class="card-position position-ascend">昇腾服务器第一股</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong> 控股华鲲振宇70%股权，华鲲振宇是华为昇腾服务器核心总代理和整机组装商，市占率国内第一。<strong style="color:#f87171;">昇腾950超节点总装核心合作伙伴</strong>，承担超节点整机组装和系统集成。2025年华鲲振宇营收突破200亿元，同比+150%+。950超节点量产将带动单机价值量大幅提升（较传统8卡服务器10x+），是昇腾生态确定性最高的受益标的。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>昇腾服务器/950超节点</strong></span>
+                        <span>华鲲振宇市占 <strong>国内第一</strong></span>
+                        <span>客户 <strong>三大运营商/政府</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-low"><span class="tag-icon">💰</span>毛利率~12%</span>
+                        <span class="f-tag growth-high"><span class="tag-icon">📈</span>营收增速&gt;100%</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>规模盈利</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 最高</div>
+                            <div class="rating-reason">昇腾服务器国内市占率第一，华为核心总代理</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">910C放量+信创加速，营收翻倍可期</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">拓维信息</div>
+                        <div class="card-code">002261</div>
+                    </div>
+                    <span class="card-position position-ascend">湘江鲲鹏+昇腾</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong> 旗下湘江鲲鹏是华为昇腾+鲲鹏双生态核心合作伙伴，拥有"兆瀚"系列自主品牌服务器。<strong style="color:#f87171;">参与昇腾950超节点OEM组装</strong>，在湖南/贵州/甘肃等多地运营智算中心部署超节点集群。2025年昇腾服务器出货量同比+80%+，软硬一体解决方案提升产品附加值。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>"兆瀚"服务器/超节点</strong></span>
+                        <span>生态 <strong>鲲鹏+昇腾双线</strong></span>
+                        <span>业务 <strong>服务器+算力租赁</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利率~22%</span>
+                        <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~35%</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>持续盈利</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">华为双生态核心伙伴，智算中心运营优势</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">服务器+算力租赁双驱动，区域智算中心扩张</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">神州数码</div>
+                        <div class="card-code">000034</div>
+                    </div>
+                    <span class="card-position position-ascend">鲲鹏昇腾整机ODM</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong> 旗下"神州鲲泰"品牌服务器基于华为鲲鹏+昇腾芯片打造，是华为昇腾服务器重要ODM/OEM合作伙伴。<strong style="color:#f87171;">昇腾950超节点ODM供应商之一</strong>，承接超节点整机代工。2025年信创业务营收超100亿元，同比+60%+。IT分销网络覆盖全国，通过分销+整机ODM双路径深度绑定华为生态。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>鲲泰服务器/超节点ODM</strong></span>
+                        <span>业务 <strong>分销+整机ODM</strong></span>
+                        <span>覆盖 <strong>信创+企业市场</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-low"><span class="tag-icon">💰</span>毛利率~16%</span>
+                        <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~25%</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>持续盈利</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">华为鲲鹏+昇腾双赛道整机，全国分销网络</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">信创+分销双增，规模效应下净利率改善</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">软通动力</div>
+                        <div class="card-code">301236</div>
+                    </div>
+                    <span class="card-position position-ascend">华为IT核心服务商</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong> 华为核心IT服务和软件外包供应商，深度参与昇腾生态建设。2025年收购同方计算机后形成"软件服务+硬件整机"双轮驱动。<strong style="color:#f87171;">同方超强系列参与昇腾950超节点整机代工</strong>，2026年昇腾服务器营收目标50亿+。超节点系统集成和软件适配有望进一步提升参与深度。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>同方超强服务器/超节点</strong></span>
+                        <span>定位 <strong>软件+硬件双轮</strong></span>
+                        <span>覆盖 <strong>IT服务+整机制造</span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利率~25%</span>
+                        <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~20%</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>持续盈利</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">华为生态深度绑定，收购同方后双轮驱动</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">硬件业务从0到1，服务器营收目标50亿+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 二、算力租赁 -->
+        <div class="companies-section">
+            <div class="section-title">二、AI算力租赁（下游核心）</div>
+            <div class="section-subtitle">国产算力供不应求，昇腾服务器算力租赁成为稀缺资源，毛利率显著高于整机代工</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">中贝通信</div>
+                        <div class="card-code">603220</div>
+                    </div>
+                    <span class="card-position position-ascend">昇腾算力租赁</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong> 国内AI算力租赁领先企业，已部署超万张昇腾910B/910C AI加速卡，为互联网/科研/运营商提供算力租赁服务。算力租赁毛利率35%+，显著高于服务器整机代工。在手订单饱满，持续扩建武当/昆仑等智算中心集群。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>AI算力租赁</strong></span>
+                        <span>部署卡数 <strong>10,000+张</strong></span>
+                        <span>芯片 <strong>昇腾910B/910C</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利率~38%</span>
+                        <span class="f-tag growth-high"><span class="tag-icon">📈</span>算力营收增速&gt;100%</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>持续盈利</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">昇腾算力租赁供不应求，订单饱满</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">算力租赁毛利率高+规模扩张弹性大</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 三、光模块 -->
+        <div class="companies-section">
+            <div class="section-title">三、光模块/光器件（华为供应链）</div>
+            <div class="section-subtitle">华为智算中心集群内部互联和DCI互联需要大量高速光模块，国产光器件供应商直接受益</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">光迅科技</div>
+                        <div class="card-code">002281</div>
+                    </div>
+                    <span class="card-position position-optical">华为光模块核心供应商</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong> 国内光模块/光器件龙头，华为光模块核心供应商（华为占其营收约20-25%）。在华为国内智算中心光模块采购中份额领先，400G/800G光模块批量供货。同时布局硅光方案，在国产替代趋势下份额有望进一步提升。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>400G/800G光模块</strong></span>
+                        <span>客户 <strong>华为核心供应商</strong></span>
+                        <span>技术 <strong>硅光方案布局</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利率~30%</span>
+                        <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~25%</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>持续盈利</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">华为光模块核心供应商，份额稳定</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">华为智算中心扩张+国产替代双驱动</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 四、液冷/温控 -->
+        <div class="companies-section">
+            <div class="section-title">四、液冷/温控（功耗密度提升）</div>
+            <div class="section-subtitle">昇腾910C单卡功耗超400W，8卡服务器功耗超3kW，智算中心机柜需标配液冷方案</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">英维克</div>
+                        <div class="card-code">002837</div>
+                    </div>
+                    <span class="card-position position-thermal">液冷温控龙头</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong> 国内精密温控龙头，液冷CDU+冷板方案已进入华为昇腾智算中心供应链。昇腾910C单卡功耗超400W，8卡服务器功耗3kW+，液冷从可选变为必配。为国内三大运营商和政府智算中心提供全链条液冷温控方案。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>CDU+冷板液冷</strong></span>
+                        <span>客户 <strong>华为链/运营商</strong></span>
+                        <span>份额 <strong>国内第一</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利率~35%</span>
+                        <span class="f-tag growth-high"><span class="tag-icon">📈</span>营收增速~45%</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>持续盈利</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">液冷是智算中心标配，国内份额第一</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">液冷渗透率从&lt;10%→&gt;50%，市场空间5x+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 五、电源系统 -->
+        <div class="companies-section">
+            <div class="section-title">五、电源系统（算力基础设施底座）</div>
+            <div class="section-subtitle">智算中心单机柜功率从10kW→50kW+，UPS/HVDC电源系统全面升级，需求确定性高</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">科华数据</div>
+                        <div class="card-code">002335</div>
+                    </div>
+                    <span class="card-position position-power">UPS/HVDC龙头</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong> 国内UPS和HVDC电源龙头，大功率不间断电源在数据中心市场份额领先。HVDC高压直流电源效率更高、损耗更小，是智算中心标配方向。三大运营商和政企智算中心核心电源供应商，直接受益于昇腾智算中心大规模建设。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>大功率UPS/HVDC</strong></span>
+                        <span>客户 <strong>三大运营商/政企</strong></span>
+                        <span>地位 <strong>国内双龙头</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利率~35%</span>
+                        <span class="f-tag growth-low"><span class="tag-icon">📈</span>营收增速~18%</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>持续盈利</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">UPS/HVDC龙头，智算中心电源刚需</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">HVDC升级+智算中心大规模建设</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 六、PCB/封装载板（950超节点核心基板） -->
+        <div class="companies-section">
+            <div class="section-title">六、PCB/封装载板（950超节点核心基板）</div>
+            <div class="section-subtitle">昇腾950超节点OAM/UBB基板层数提升至28L+，单节点PCB价值量是传统8卡服务器的5-8倍。FC-BGA封装载板是超节点芯片封装不可或缺的基板材料</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">沪电股份</div>
+                        <div class="card-code">002463</div>
+                    </div>
+                    <span class="card-position position-pcb">AI服务器PCB龙头</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong> 国内高端PCB龙头，<strong style="color:#f87171;">昇腾950超节点OAM/UBB基板核心供应商</strong>。950超节点OAM基板层数提升至28L+，对极低损耗CCL材料要求极高。单台超节点PCB价值量是传统8卡服务器的5-8倍，价量齐升逻辑清晰。同时是英伟达AI服务器PCB核心供应商，技术能力已获全球头部客户验证。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>OAM/UBB超高层PCB</strong></span>
+                        <span>层数 <strong>28L+</strong></span>
+                        <span>客户 <strong>华为昇腾链/英伟达链</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利率~32%</span>
+                        <span class="f-tag growth-high"><span class="tag-icon">📈</span>营收增速~40%</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>持续盈利</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">950超节点OAM/UBB基板核心供应商，技术壁垒高</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">超节点PCB价值量5-8x，量价齐升弹性大</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">深南电路</div>
+                        <div class="card-code">002916</div>
+                    </div>
+                    <span class="card-position position-pcb">PCB+FC-BGA封装载板</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong> 国内PCB+封装基板双龙头，AI服务器高多层板和FC-BGA封装基板同步受益。<strong style="color:#f87171;">950超节点芯片先进封装需要的FC-BGA载板国内唯一量产厂商</strong>。昇腾910C采用2.5D/3D先进封装，FC-BGA基板单颗芯片价值量大幅提升。IC载板国产化稀缺标的，AI+存储双赛道受益。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>AI服务器PCB/FC-BGA</strong></span>
+                        <span>地位 <strong>国内载板唯一量产</strong></span>
+                        <span>壁垒 <strong>载板精密度</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利率~26%</span>
+                        <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~25%</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>持续盈利</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">FC-BGA载板国内唯一量产，超节点需求刚需</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">载板国产化弹性大，AI+存储双受益</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 七、高速互联芯片（950超节点关键芯片） -->
+        <div class="companies-section">
+            <div class="section-title">七、高速互联芯片（950超节点关键芯片）</div>
+            <div class="section-subtitle">950超节点64卡互联需要大量PCIe 5.0 Retimer/CXL互联芯片保障信号完整性，是超节点内部通信的"神经系统"</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">澜起科技</div>
+                        <div class="card-code">688008</div>
+                    </div>
+                    <span class="card-position position-chip">PCIe Retimer/互联芯片</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong> 全球DDR5内存接口芯片龙头，同时布局PCIe Retimer、CXL互联芯片。<strong style="color:#f87171;">昇腾950超节点64卡高速互联架构需要大量PCIe 5.0 Retimer芯片保障信号完整性</strong>。超节点内部GPU-GPU通信距离延长、信号衰减加剧，Retimer芯片从"可选"变为"必配"。PCIe 6.0 Retimer已布局，单超节点Retimer用量大幅增加。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>PCIe 5.0 Retimer/CXL</strong></span>
+                        <span>地位 <strong>全球DDR5龙头</strong></span>
+                        <span>壁垒 <strong>高速互联接口</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-high"><span class="tag-icon">💰</span>毛利率~55%</span>
+                        <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~35%</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>持续盈利</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">受益确定性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">PCIe Retimer是超节点互联刚需芯片</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">弹性空间</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">单超节点Retimer用量大幅增加+国产替代双驱动</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 国产AI芯片参数对比表 -->
+        <div class="compare-section">
+            <div class="section-title">国产AI训练/推理芯片参数对比</div>
+            <div class="section-subtitle">华为昇腾系列 vs 国内竞品 vs 英伟达（受限产品对比参考）</div>
+            <div class="compare-table-wrapper" style="overflow-x:auto;">
+                <table class="compare-table">
+                    <thead>
+                        <tr>
+                            <th>芯片型号</th>
+                            <th>厂商</th>
+                            <th>制程</th>
+                            <th>FP16算力</th>
+                            <th>INT8算力</th>
+                            <th>显存</th>
+                            <th>功耗</th>
+                            <th>生态</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="highlight-cell">昇腾910C</td>
+                            <td>华为海思</td>
+                            <td>7nm+</td>
+                            <td class="chip-green">~600 TFLOPS</td>
+                            <td class="chip-green">~1200 TOPS</td>
+                            <td>96GB HBM2E</td>
+                            <td>~450W</td>
+                            <td>MindSpore/CANN</td>
+                        </tr>
+                        <tr>
+                            <td class="highlight-cell">昇腾910B</td>
+                            <td>华为海思</td>
+                            <td>7nm</td>
+                            <td class="chip-green">~400 TFLOPS</td>
+                            <td>~800 TOPS</td>
+                            <td>64GB HBM2E</td>
+                            <td>~310W</td>
+                            <td>MindSpore/CANN</td>
+                        </tr>
+                        <tr>
+                            <td class="highlight-cell">寒武纪思元590</td>
+                            <td>寒武纪</td>
+                            <td>7nm</td>
+                            <td class="chip-blue">~256 TFLOPS</td>
+                            <td>~512 TOPS</td>
+                            <td>32GB HBM2</td>
+                            <td>~250W</td>
+                            <td>寒武纪平台</td>
+                        </tr>
+                        <tr>
+                            <td class="highlight-cell">海光深算二号</td>
+                            <td>海光信息</td>
+                            <td>7nm</td>
+                            <td class="chip-blue">~200 TFLOPS</td>
+                            <td>~400 TOPS</td>
+                            <td>32GB HBM2</td>
+                            <td>~300W</td>
+                            <td>兼容CUDA</td>
+                        </tr>
+                        <tr style="opacity:0.5;">
+                            <td style="color:#5a6478;">NVIDIA H100 参考</td>
+                            <td style="color:#5a6478;">英伟达</td>
+                            <td style="color:#5a6478;">4nm</td>
+                            <td style="color:#5a6478;">~990 TFLOPS</td>
+                            <td style="color:#5a6478;">~1979 TOPS</td>
+                            <td style="color:#5a6478;">80GB HBM3</td>
+                            <td style="color:#5a6478;">700W</td>
+                            <td style="color:#5a6478;">CUDA生态</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="font-size:12px;color:#5a6478;margin-top:8px;">注：灰底为英伟达受限产品，仅作性能参考对比。实际算力因场景/精度/框架不同存在差异。</p>
+        </div>
+
+        <!-- 财务指标速览表 -->
+        <div class="compare-section">
+            <div class="section-title">产业链核心标的财务指标速览</div>
+            <div class="section-subtitle">基于2025年年报/2026年一季度公开数据（近似值）</div>
+            <div class="compare-table-wrapper" style="overflow-x:auto;">
+                <table class="compare-table">
+                    <thead>
+                        <tr>
+                            <th>产业链环节</th>
+                            <th>公司</th>
+                            <th>毛利率</th>
+                            <th>净利率</th>
+                            <th>营收增速</th>
+                            <th>利润增速</th>
+                            <th>盈利特征</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="4" style="color:#ef4444;font-weight:600;">昇腾服务器OEM</td>
+                            <td>高新发展</td>
+                            <td style="color:#fbbf24;">~12%</td>
+                            <td style="color:#fbbf24;">~2%</td>
+                            <td style="color:#ef4444;">&gt;100%</td>
+                            <td style="color:#ef4444;">&gt;150%</td>
+                            <td style="color:#8892a8;">薄利走量，规模效应逐步体现</td>
+                        </tr>
+                        <tr>
+                            <td>拓维信息</td>
+                            <td style="color:#60a5fa;">~22%</td>
+                            <td style="color:#fbbf24;">~4%</td>
+                            <td style="color:#f97316;">~35%</td>
+                            <td style="color:#f97316;">~30%</td>
+                            <td style="color:#8892a8;">软硬一体，毛利率高于纯整机</td>
+                        </tr>
+                        <tr>
+                            <td>神州数码</td>
+                            <td style="color:#fbbf24;">~16%</td>
+                            <td style="color:#fbbf24;">~3%</td>
+                            <td style="color:#f97316;">~25%</td>
+                            <td style="color:#f97316;">~22%</td>
+                            <td style="color:#8892a8;">分销+整机，规模驱动利润</td>
+                        </tr>
+                        <tr>
+                            <td>软通动力</td>
+                            <td style="color:#60a5fa;">~25%</td>
+                            <td style="color:#fbbf24;">~5%</td>
+                            <td style="color:#f97316;">~20%</td>
+                            <td style="color:#ca8a04;">~15%</td>
+                            <td style="color:#8892a8;">软件为基，硬件并购后并表增厚</td>
+                        </tr>
+                        <tr>
+                            <td style="color:#a78bfa;font-weight:600;">算力租赁</td>
+                            <td>中贝通信</td>
+                            <td style="color:#60a5fa;">~38%</td>
+                            <td style="color:#60a5fa;">~12%</td>
+                            <td style="color:#ef4444;">&gt;100%</td>
+                            <td style="color:#ef4444;">&gt;80%</td>
+                            <td style="color:#8892a8;">高毛利，算力租赁供不应求</td>
+                        </tr>
+                        <tr>
+                            <td style="color:#a78bfa;font-weight:600;">光模块</td>
+                            <td>光迅科技</td>
+                            <td style="color:#60a5fa;">~30%</td>
+                            <td style="color:#fbbf24;">~8%</td>
+                            <td style="color:#f97316;">~25%</td>
+                            <td style="color:#f97316;">~28%</td>
+                            <td style="color:#8892a8;">华为供应链核心，稳健增长</td>
+                        </tr>
+                        <tr>
+                            <td style="color:#f472b6;font-weight:600;">液冷温控</td>
+                            <td>英维克</td>
+                            <td style="color:#60a5fa;">~35%</td>
+                            <td style="color:#60a5fa;">~10%</td>
+                            <td style="color:#ef4444;">~45%</td>
+                            <td style="color:#ef4444;">&gt;50%</td>
+                            <td style="color:#8892a8;">液冷渗透率跃升，毛利率稳中有升</td>
+                        </tr>
+                        <tr>
+                            <td style="color:#fbbf24;font-weight:600;">电源系统</td>
+                            <td>科华数据</td>
+                            <td style="color:#60a5fa;">~35%</td>
+                            <td style="color:#60a5fa;">~9%</td>
+                            <td style="color:#ca8a04;">~18%</td>
+                            <td style="color:#f97316;">~22%</td>
+                            <td style="color:#8892a8;">电源刚需，智算中心建设稳增</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2" style="color:#34d399;font-weight:600;">PCB/封装载板</td>
+                            <td>沪电股份</td>
+                            <td style="color:#60a5fa;">~32%</td>
+                            <td style="color:#60a5fa;">~11%</td>
+                            <td style="color:#ef4444;">~40%</td>
+                            <td style="color:#ef4444;">~55%</td>
+                            <td style="color:#8892a8;">超节点PCB量价齐升，技术壁垒高</td>
+                        </tr>
+                        <tr>
+                            <td>深南电路</td>
+                            <td style="color:#60a5fa;">~26%</td>
+                            <td style="color:#fbbf24;">~7%</td>
+                            <td style="color:#f97316;">~25%</td>
+                            <td style="color:#f97316;">~30%</td>
+                            <td style="color:#8892a8;">FC-BGA载板唯一量产，国产替代弹性</td>
+                        </tr>
+                        <tr>
+                            <td style="color:#22d3ee;font-weight:600;">高速互联芯片</td>
+                            <td>澜起科技</td>
+                            <td style="color:#34d399;">~55%</td>
+                            <td style="color:#60a5fa;">~20%</td>
+                            <td style="color:#f97316;">~35%</td>
+                            <td style="color:#f97316;">~40%</td>
+                            <td style="color:#8892a8;">高毛利芯片设计，超节点Retimer放量</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="font-size:12px;color:#5a6478;margin-top:8px;">注：财务数据为近似值，基于2025年年报/2026年Q1公开披露数据整理，标签中带~前缀表示近似值。</p>
+        </div>
+
+        <!-- 产业链关系图 -->
+        <div class="relation-section">
+            <div class="section-title">华为昇腾产业链 A股标的映射</div>
+            <div class="relation-diagram">
+                <!-- 上游 -->
+                <div class="relation-group upstream">
+                    <div class="relation-group-title">⬆ 上游 — 昇腾AI芯片 + 互联芯片 + 光模块</div>
+                    <div class="relation-row">
+                        <div class="relation-label">AI芯片</div>
+                        <div class="relation-items">
+                            <span class="relation-node ascend" style="background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.3);color:#ef4444;">华为海思昇腾<span style="font-size:11px;opacity:0.7;margin-left:6px;">（未上市）</span></span>
+                        </div>
+                    </div>
+                    <div class="relation-arrow">→ 互联芯片 →</div>
+                    <div class="relation-row">
+                        <div class="relation-label">高速互联</div>
+                        <div class="relation-items">
+                            <div class="relation-node chip">澜起科技(PCIe Retimer)<span class="node-code">688008</span></div>
+                        </div>
+                    </div>
+                    <div class="relation-arrow">→ 光模块/光器件 →</div>
+                    <div class="relation-row">
+                        <div class="relation-label">光模块</div>
+                        <div class="relation-items">
+                            <div class="relation-node opt">光迅科技<span class="node-code">002281</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 中游 -->
+                <div class="relation-group midstream">
+                    <div class="relation-group-title">⬇ 中游 — 950超节点OEM + PCB/载板</div>
+                    <div class="relation-row">
+                        <div class="relation-label">OEM合作伙伴</div>
+                        <div class="relation-items">
+                            <div class="relation-node server">高新发展(华鲲振宇)<span class="node-code">000628</span></div>
+                            <div class="relation-node server">拓维信息(湘江鲲鹏)<span class="node-code">002261</span></div>
+                            <div class="relation-node server">神州数码(神州鲲泰)<span class="node-code">000034</span></div>
+                            <div class="relation-node server">软通动力(同方超强)<span class="node-code">301236</span></div>
+                        </div>
+                    </div>
+                    <div class="relation-arrow">→ PCB/封装载板 →</div>
+                    <div class="relation-row">
+                        <div class="relation-label">PCB/载板</div>
+                        <div class="relation-items">
+                            <div class="relation-node pcb">沪电股份(OAM/UBB)<span class="node-code">002463</span></div>
+                            <div class="relation-node pcb">深南电路(FC-BGA)<span class="node-code">002916</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 下游 -->
+                <div class="relation-group downstream">
+                    <div class="relation-group-title">⬇ 下游 — 算力租赁 → 液冷 → 电源</div>
+                    <div class="relation-row">
+                        <div class="relation-label">算力租赁</div>
+                        <div class="relation-items">
+                            <div class="relation-node server">中贝通信<span class="node-code">603220</span></div>
+                        </div>
+                    </div>
+                    <div class="relation-arrow">→ 液冷/散热 →</div>
+                    <div class="relation-row">
+                        <div class="relation-label">液冷温控</div>
+                        <div class="relation-items">
+                            <div class="relation-node thermal">英维克<span class="node-code">002837</span></div>
+                        </div>
+                    </div>
+                    <div class="relation-arrow">→ 电源系统 →</div>
+                    <div class="relation-row">
+                        <div class="relation-label">电源系统</div>
+                        <div class="relation-items">
+                            <div class="relation-node power">科华数据<span class="node-code">002335</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 核心关注维度 -->
+        <div class="focus-section">
+            <div class="section-title">核心关注维度</div>
+            <div class="focus-cards">
+                <div class="focus-card">
+                    <div class="focus-rank">01</div>
+                    <div class="focus-name">昇腾950超节点量产进度</div>
+                    <div class="focus-tag">最关键催化变量</div>
+                    <div class="focus-reason">昇腾950超节点（64卡互联，FP16算力38+ PFLOPS）是华为对标NVIDIA DGX NVL72的旗舰产品，其量产进度直接影响全产业链受益程度。高新发展/拓维信息等OEM承担超节点总装，沪电股份/深南电路供应OAM/UBB基板和FC-BGA载板，澜起科技供应PCIe Retimer互联芯片。超节点单机价值量是传统8卡服务器的10x+，是产业链弹性最大变量。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">02</div>
+                    <div class="focus-name">美国出口管制政策</div>
+                    <div class="focus-tag">最大弹性驱动</div>
+                    <div class="focus-reason">美国对华AI芯片出口管制持续升级是昇腾产业链最大的需求驱动力。高端GPU对华可获性每收紧一次，国内智算中心向昇腾方案迁移加速一次。2026年若管制进一步加码，昇腾生态渗透率将加速提升。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">03</div>
+                    <div class="focus-name">信创国产化率达标节奏</div>
+                    <div class="focus-tag">政策硬性约束</div>
+                    <div class="focus-reason">信创三期要求2027年党政+八大关键行业IT基础设施国产化率100%。AI智算中心国产芯片采购比例已成为地方智算中心审批的硬性门槛。昇腾作为国产AI芯片首选方案，在运营商/政府/金融等领域渗透率加速提升。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">04</div>
+                    <div class="focus-name">华为生态扩圈速度</div>
+                    <div class="focus-tag">产业生态壁垒</div>
+                    <div class="focus-reason">昇腾从芯片→框架→工具链→平台的全栈生态是核心壁垒。MindSpore/CANN生态适配的主流模型数量（2025年超200个）和开发者数量持续增长。OEM合作伙伴从硬件组装向"硬件+服务"转型提升附加值。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">05</div>
+                    <div class="focus-name">通用GPU vs 昇腾性能差距</div>
+                    <div class="focus-tag">技术追赶速度</div>
+                    <div class="focus-reason">昇腾910B在训练场景与A100仍有差距（约60-80%性能），在推理场景接近。910C目标性能追赶H100。若技术差距缩窄速度超预期，将大幅加速国产替代进程。需持续关注MLPerf等第三方基准测试结果。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">06</div>
+                    <div class="focus-name">智算中心建设地方财政</div>
+                    <div class="focus-tag">需求端支撑</div>
+                    <div class="focus-reason">国内智算中心建设主要由地方政府+运营商主导，地方财政状况影响建设节奏。2026年百城智算中心建设计划若因财政压力放缓，将影响昇腾服务器出货量。需跟踪各地智算中心招标进度和政府预算安排。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 风险提示 -->
+        <div class="risk-section">
+            <div class="section-title">核心风险提示</div>
+            <div class="risk-grid">
+                <div class="risk-card">
+                    <div class="risk-title">昇腾芯片性能不及预期</div>
+                    <div class="risk-desc">昇腾910C量产时间和性能指标存在不确定性。若芯片良率/算力/功耗等核心指标不及预期，将影响智算中心客户采购意愿和国产替代进度。同时华为代工产能受制于7nm产能分配，可能影响出货量。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">美国管制政策松动风险</div>
+                    <div class="risk-desc">若中美关系缓和或美国放松对华AI芯片出口管制，海外高端GPU可获性恢复，将削弱昇腾的替代刚需逻辑。OEM伙伴的出货量预期可能承压。需持续跟踪出口管制政策变化。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">OEM竞争格局恶化</div>
+                    <div class="risk-desc">华为昇腾服务器OEM合作伙伴持续扩编（从早期3-4家到目前8-10家），单家份额可能被稀释。服务器整机组装行业门槛低、毛利率薄，价格战可能压缩利润空间。同质化竞争风险显著。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">华为自研整机挤压</div>
+                    <div class="risk-desc">华为自身Atlas系列服务器也在推广，若华为加大自研整机出货比例，可能挤压OEM合作伙伴份额。华为与合作OEM厂的利益分配机制变化可能影响供应链格局。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">技术路线切换风险</div>
+                    <div class="risk-desc">AI芯片技术路线快速演进（GPU→ASIC→存内计算），若出现新的算力架构或计算范式，可能改变当前昇腾主导的国产AI算力格局。同时英伟达CUDA生态壁垒极高，昇腾生态迁移成本仍存。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">昇腾950超节点技术风险</div>
+                    <div class="risk-desc">超节点是华为首次在超大规模GPU互联架构上的尝试，64卡高速互联的信号完整性、散热、功耗管理等技术挑战极大。若超节点互联性能不及预期或量产延期，将影响OEM/PCB/互联芯片等全产业链的业绩预期兑现。对标NVIDIA DGX NVL72的成功并不代表昇腾超节点方案同样成熟。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">概念炒作与估值风险</div>
+                    <div class="risk-desc">华为昇腾是当前A股国产替代最强主题之一，相关标的估值处于历史高位，充分反映了乐观预期。大多OEM标的毛利率极低（10-16%），营收增长≠利润增长，需警惕业绩兑现与预期差距带来的估值回归风险。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p style="text-align:center;color:#8892a8;font-size:0.8em;padding:30px 0 10px;border-top:1px solid #1e293b;margin-top:40px">
+                数据来源：东方财富、同花顺、公开报道、券商研报、华为全联接大会、各公司公告 | 整理时间：2026-07-07
+            </p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em;margin-top:6px">
+                本报告综合整理自华为昇腾生态公开资料、上市公司公告及券商研报，标的均与华为昇腾产业链存在深度业务关联，仅为产业链公开资料整理与梳理，不构成任何投资建议。
+            </p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em;margin-top:6px">
+                股市有风险，投资需谨慎。
+            </p>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function walkText(node) {
+                if (node.nodeType === 3) {
+                    var text = node.textContent;
+                    if (text.indexOf('华为') !== -1) {
+                        var span = document.createElement('span');
+                        span.innerHTML = text.replace(/华为/g, '<span style="background:linear-gradient(120deg,rgba(239,68,68,0.2) 0%,rgba(239,68,68,0.08) 100%);padding:0 3px;border-radius:3px;color:#f87171;font-weight:700;">华为</span>');
+                        node.parentNode.replaceChild(span, node);
+                    } else if (text.indexOf('昇腾') !== -1) {
+                        var span = document.createElement('span');
+                        span.innerHTML = text.replace(/昇腾/g, '<span style="background:linear-gradient(120deg,rgba(251,191,36,0.2) 0%,rgba(251,191,36,0.08) 100%);padding:0 3px;border-radius:3px;color:#fbbf24;font-weight:700;">昇腾</span>');
+                        node.parentNode.replaceChild(span, node);
+                    }
+                } else if (node.nodeType === 1 && !/^(script|style|textarea)$/i.test(node.tagName)) {
+                    for (var i = 0; i < node.childNodes.length; i++) {
+                        walkText(node.childNodes[i]);
+                    }
+                }
+            }
+            walkText(document.body);
+        });
+    </script>
+</body>
+</html>
