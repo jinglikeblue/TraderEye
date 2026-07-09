@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>国产GPU竞争格局 · 沐曦/摩尔线程双龙同框 · A股全景对标</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #0a0e17; color: #e0e6f0; line-height: 1.6; min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+        .header { text-align: center; margin-bottom: 48px; }
+        .header h1 { font-size: 36px; font-weight: 700;
+            background: linear-gradient(135deg, #f97316, #ef4444, #8b5cf6, #06b6d4, #22c55e);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 12px; }
+        .header .subtitle { font-size: 16px; color: #8892a8; }
+        .header .topic-tags { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+        .header .topic-tag { font-size: 13px; padding: 5px 14px; border-radius: 20px; font-weight: 500; }
+        .topic-tag.gpu { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.25); }
+        .topic-tag.dcu { background: rgba(52,211,153,0.15); color: #34d399; border: 1px solid rgba(52,211,153,0.25); }
+        .topic-tag.npu { background: rgba(167,139,250,0.15); color: #a78bfa; border: 1px solid rgba(167,139,250,0.25); }
+        .topic-tag.ip { background: rgba(139,92,246,0.15); color: #8b5cf6; border: 1px solid rgba(139,92,246,0.25); }
+        .topic-tag.ecos { background: rgba(6,182,212,0.15); color: #06b6d4; border: 1px solid rgba(6,182,212,0.25); }
+        .topic-tag.ascend { background: rgba(249,115,22,0.15); color: #f97316; border: 1px solid rgba(249,115,22,0.25); }
+        .topic-tag.overseas { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.25); }
+        .header .update-time { font-size: 13px; color: #5a6478; margin-top: 12px; }
+
+        .section-title { font-size: 22px; font-weight: 600; color: #c8d0e0;
+            margin-bottom: 24px; padding-left: 14px; border-left: 3px solid #f97316; }
+        .section-subtitle { font-size: 14px; color: #5a6478; margin-top: -18px; margin-bottom: 24px; padding-left: 17px; }
+
+        /* 统计卡片 */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 16px; margin-bottom: 56px; }
+        .stat-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 12px; padding: 20px; }
+        .stat-card .stat-label { font-size: 13px; color: #5a6478; margin-bottom: 6px; }
+        .stat-card .stat-value { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+        .stat-card .stat-note { font-size: 12px; color: #5a6478; }
+        .stat-red .stat-value { color: #ef4444; }
+        .stat-orange .stat-value { color: #f97316; }
+        .stat-green .stat-value { color: #34d399; }
+        .stat-purple .stat-value { color: #8b5cf6; }
+        .stat-cyan .stat-value { color: #06b6d4; }
+        .stat-yellow .stat-value { color: #fbbf24; }
+        .stat-blue .stat-value { color: #3b82f6; }
+
+        /* 阵营分组 */
+        .segment-section { margin-bottom: 56px; }
+        .segment-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+        @media (max-width: 900px) { .segment-grid { grid-template-columns: 1fr; } }
+        .segment-card { background: #111827; border: 1px solid #1e293b; border-radius: 16px; padding: 28px 24px; position: relative; overflow: hidden; }
+        .segment-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+        .segment-card.tier-a::before { background: linear-gradient(90deg, #ef4444, #f97316); }
+        .segment-card.tier-b::before { background: linear-gradient(90deg, #06b6d4, #22d3ee); }
+        .segment-card.tier-c::before { background: linear-gradient(90deg, #22c55e, #34d399); }
+        .segment-card .seg-badge { display: inline-flex; align-items: center; gap: 6px;
+            font-size: 13px; font-weight: 700; letter-spacing: 1px; padding: 5px 14px;
+            border-radius: 20px; margin-bottom: 14px; }
+        .segment-card.tier-a .seg-badge { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.25); }
+        .segment-card.tier-b .seg-badge { background: rgba(6,182,212,0.15); color: #06b6d4; border: 1px solid rgba(6,182,212,0.25); }
+        .segment-card.tier-c .seg-badge { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.25); }
+        .segment-card .seg-subtitle { font-size: 14px; font-weight: 600; color: #c8d0e0; margin-bottom: 6px; }
+        .segment-card .seg-count { font-size: 12px; color: #5a6478; margin-bottom: 16px; }
+        .segment-card .seg-companies { display: flex; flex-direction: column; gap: 8px; }
+        .segment-card .seg-company { display: flex; align-items: center; gap: 10px;
+            padding: 8px 12px; border-radius: 10px; background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06); transition: border-color 0.2s; }
+        .segment-card .seg-company:hover { border-color: rgba(255,255,255,0.15); }
+        .segment-card .seg-company-icon { width: 30px; height: 30px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 700; flex-shrink: 0; }
+        .segment-card.tier-a .seg-company-icon { background: rgba(239,68,68,0.12); color: #ef4444; }
+        .segment-card.tier-b .seg-company-icon { background: rgba(6,182,212,0.12); color: #06b6d4; }
+        .segment-card.tier-c .seg-company-icon { background: rgba(34,197,94,0.12); color: #22c55e; }
+        .segment-card .seg-company-info { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+        .segment-card .seg-company-name { font-size: 13px; font-weight: 600; color: #e0e6f0; }
+        .segment-card .seg-company-code { font-size: 11px; color: #5a6478; }
+        .segment-card .seg-company-role { font-size: 11px; color: #8892a8; }
+
+        /* 公司卡片 */
+        .companies-section { margin-bottom: 48px; }
+        .company-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 20px; }
+        .company-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; transition: border-color 0.2s, transform 0.2s; }
+        .company-card:hover { border-color: #374151; transform: translateY(-2px); }
+        .company-card .card-header { display: flex; justify-content: space-between; align-items: baseline;
+            margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #1e293b; }
+        .company-card .card-name { font-size: 20px; font-weight: 700; color: #e0e6f0; }
+        .company-card .card-code { font-size: 13px; color: #5a6478; font-family: 'SF Mono', 'Consolas', monospace; }
+        .company-card .card-position { display: inline-block; font-size: 12px; padding: 3px 10px;
+            border-radius: 10px; margin-bottom: 12px; }
+        .position-chip { background: rgba(239,68,68,0.15); color: #ef4444; }
+        .position-ecos { background: rgba(6,182,212,0.15); color: #06b6d4; }
+        .position-ip { background: rgba(139,92,246,0.15); color: #8b5cf6; }
+        .position-legacy { background: rgba(52,211,153,0.15); color: #34d399; }
+        .position-cpu { background: rgba(249,115,22,0.15); color: #f97316; }
+        .company-card .card-binding { font-size: 13px; color: #a0aec0; margin-bottom: 12px; line-height: 1.7; }
+        .company-card .card-binding strong { color: #e0e6f0; }
+        .company-card .card-data-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;
+            padding: 12px; background: rgba(255,255,255,0.02); border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.05); }
+        .company-card .card-data-row span { font-size: 12px; color: #8892a8; }
+        .company-card .card-data-row strong { color: #e0e6f0; font-weight: 600; }
+        .finance-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+        .f-tag { font-size: 11px; padding: 3px 9px; border-radius: 10px; display: inline-flex; align-items: center; gap: 3px; }
+        .f-tag .tag-icon { font-size: 10px; }
+        .f-tag.margin-high { background: rgba(52,211,153,0.15); color: #34d399; }
+        .f-tag.growth-high { background: rgba(249,115,22,0.15); color: #f97316; }
+        .f-tag.profit { background: rgba(34,197,94,0.15); color: #22c55e; }
+        .f-tag.loss { background: rgba(239,68,68,0.15); color: #ef4444; }
+        .f-tag.new-listing { background: rgba(139,92,246,0.15); color: #8b5cf6; }
+        .rating-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .rating-card { padding: 10px 12px; border-radius: 8px;
+            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
+        .rating-card .rating-title { font-size: 11px; color: #5a6478; margin-bottom: 3px; }
+        .rating-card .rating-level { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+        .rating-card .rating-reason { font-size: 11px; color: #8892a8; line-height: 1.4; }
+        .rating-card.rating-strong .rating-level { color: #34d399; }
+        .rating-card.rating-mid .rating-level { color: #fbbf24; }
+        .rating-card.rating-weak .rating-level { color: #a0aec0; }
+
+        /* 对比表 */
+        .compare-section { margin-bottom: 56px; }
+        .compare-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid #1e293b; }
+        .compare-table { width: 100%; border-collapse: collapse; background: #111827; min-width: 800px; }
+        .compare-table th { background: rgba(249,115,22,0.1); color: #f97316; font-size: 13px;
+            font-weight: 600; padding: 14px 16px; text-align: left; border-bottom: 1px solid #1e293b; white-space: nowrap; }
+        .compare-table td { padding: 14px 16px; font-size: 13px; color: #8892a8;
+            border-bottom: 1px solid rgba(30,41,59,0.5); line-height: 1.5; }
+        .compare-table tr:last-child td { border-bottom: none; }
+        .compare-table .col-name { color: #e0e6f0; font-weight: 600; white-space: nowrap; }
+        .compare-table .col-code { color: #5a6478; font-family: 'SF Mono', 'Consolas', monospace; font-size: 12px; white-space: nowrap; }
+        .compare-table .tag-hot { display: inline-block; background: rgba(239,68,68,0.15); color: #ef4444; font-size: 11px; padding: 2px 8px; border-radius: 8px; }
+        .compare-table .tag-safe { display: inline-block; background: rgba(52,211,153,0.15); color: #34d399; font-size: 11px; padding: 2px 8px; border-radius: 8px; }
+        .compare-table .tag-mid { display: inline-block; background: rgba(251,191,36,0.15); color: #fbbf24; font-size: 11px; padding: 2px 8px; border-radius: 8px; }
+        .compare-table .tag-cold { display: inline-block; background: rgba(160,174,192,0.12); color: #a0aec0; font-size: 11px; padding: 2px 8px; border-radius: 8px; }
+
+        /* 核心焦点 */
+        .focus-section { margin-bottom: 40px; }
+        .focus-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .focus-card { background: linear-gradient(135deg, #111827, #1a2332);
+            border: 1px solid #1e293b; border-radius: 14px; padding: 24px;
+            position: relative; overflow: hidden; }
+        .focus-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .focus-card:nth-child(1)::before { background: linear-gradient(90deg, #ef4444, #dc2626); }
+        .focus-card:nth-child(2)::before { background: linear-gradient(90deg, #f97316, #ea580c); }
+        .focus-card:nth-child(3)::before { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
+        .focus-card:nth-child(4)::before { background: linear-gradient(90deg, #22c55e, #16a34a); }
+        .focus-card:nth-child(5)::before { background: linear-gradient(90deg, #06b6d4, #0891b2); }
+        .focus-card:nth-child(6)::before { background: linear-gradient(90deg, #eab308, #ca8a04); }
+        .focus-card .focus-rank { font-size: 48px; font-weight: 800;
+            color: rgba(255,255,255,0.04); position: absolute; top: 8px; right: 16px; }
+        .focus-card .focus-name { font-size: 16px; font-weight: 600; color: #e0e6f0; margin-bottom: 4px; }
+        .focus-card .focus-tag { font-size: 12px; color: #8892a8; margin-bottom: 10px; }
+        .focus-card .focus-reason { font-size: 13px; color: #8892a8; line-height: 1.7; }
+
+        /* 未上市阵营（一级市场） */
+        .private-section { margin-bottom: 56px; }
+        .private-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+        .private-card { background: #111827; border: 1px solid #1e293b; border-radius: 14px;
+            padding: 20px 22px; border-left: 3px solid #8b5cf6; }
+        .private-card .p-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+        .private-card .p-name { font-size: 17px; font-weight: 700; color: #e0e6f0; }
+        .private-card .p-stage { font-size: 11px; color: #8b5cf6; padding: 2px 8px; border-radius: 10px; background: rgba(139,92,246,0.12); }
+        .private-card .p-tag { font-size: 12px; color: #8892a8; margin-bottom: 10px; }
+        .private-card .p-desc { font-size: 13px; color: #a0aec0; line-height: 1.7; }
+
+        /* 风险提示 */
+        .risk-section { margin-bottom: 56px; }
+        .risk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+        .risk-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; border-left: 3px solid #f87171; }
+        .risk-card .risk-title { font-size: 16px; font-weight: 600; color: #f87171; margin-bottom: 8px; }
+        .risk-card .risk-desc { font-size: 14px; color: #8892a8; line-height: 1.7; }
+
+        footer { text-align: center; color: #475569; font-size: 12px; margin-top: 40px; padding: 24px 0 20px; border-top: 1px solid #1e293b; }
+        footer a { color: #60a5fa; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>国产GPU竞争格局全景</h1>
+            <div class="subtitle">摩尔线程/沐曦股份双龙同框 · 8只A股标的+6家一级市场竞对+3家国际对标 · 出口管制+国产替代双主线</div>
+            <div class="topic-tags">
+                <span class="topic-tag gpu">全功能GPU</span>
+                <span class="topic-tag dcu">DCU加速卡</span>
+                <span class="topic-tag npu">AI ASIC</span>
+                <span class="topic-tag ip">GPU IP授权</span>
+                <span class="topic-tag ecos">CUDA兼容</span>
+                <span class="topic-tag ascend">昇腾生态</span>
+                <span class="topic-tag overseas">国际对标</span>
+            </div>
+            <div class="update-time">整理时间：2026-07-09 | 数据来源：公司公告、招股说明书、券商研报、公开报道</div>
+        </div>
+
+        <!-- 核心概览 -->
+        <div class="overview-section">
+            <div class="section-title">国产GPU赛道市场概览</div>
+            <div class="stats-grid">
+                <div class="stat-card stat-red">
+                    <div class="stat-label">中国AI GPU/加速卡市场（2026E）</div>
+                    <div class="stat-value">¥900亿</div>
+                    <div class="stat-note">出口管制后国产替代加速，规模3年翻倍</div>
+                </div>
+                <div class="stat-card stat-orange">
+                    <div class="stat-label">国产GPU出货量占比</div>
+                    <div class="stat-value">~35%</div>
+                    <div class="stat-note">2024年&lt;20%，H20/B20受限后快速抬升</div>
+                </div>
+                <div class="stat-card stat-purple">
+                    <div class="stat-label">A股GPU标的数量</div>
+                    <div class="stat-value">8家</div>
+                    <div class="stat-note">GPGPU2家+DCU1家+ASIC1家+IP1家+图形1家+CPU一体1家+其他</div>
+                </div>
+                <div class="stat-card stat-cyan">
+                    <div class="stat-label">Pre-IPO一级市场竞对</div>
+                    <div class="stat-value">6家</div>
+                    <div class="stat-note">壁仞/燧原/天数智芯/华为/平头哥/昆仑芯</div>
+                </div>
+                <div class="stat-card stat-green">
+                    <div class="stat-label">科创板GPU次新股</div>
+                    <div class="stat-value">2家</div>
+                    <div class="stat-note">摩尔线程(2025.11)+沐曦股份(2025.12)</div>
+                </div>
+                <div class="stat-card stat-yellow">
+                    <div class="stat-label">CUDA兼容代码迁移成本</div>
+                    <div class="stat-value">&lt;15%</div>
+                    <div class="stat-note">沐曦MXMACA/摩尔MUSIFY/海光ROCm均已实现</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 三大阵营分组 -->
+        <div class="segment-section">
+            <div class="section-title">A股8只GPU标的 · 三大技术阵营</div>
+            <div class="section-subtitle">按芯片架构与商业模式划分：全功能GPU/GPGPU/AI ASIC/DCU/GPU IP/CPU一体化/图形GPU</div>
+            <div class="segment-grid">
+                <!-- 第一阵营：GPGPU / 全功能GPU -->
+                <div class="segment-card tier-a">
+                    <span class="seg-badge">🥇 第一阵营 · GPGPU/全功能GPU</span>
+                    <div class="seg-subtitle">对标NVIDIA H100/H20 · CUDA兼容 · 大模型训练主战场</div>
+                    <div class="seg-count">共 3 只标的</div>
+                    <div class="seg-companies">
+                        <div class="seg-company">
+                            <div class="seg-company-icon">摩</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">摩尔线程-U</span>
+                                <span class="seg-company-code">688795</span>
+                            </div>
+                            <span class="seg-company-role">全功能GPU（图形+计算）</span>
+                        </div>
+                        <div class="seg-company">
+                            <div class="seg-company-icon">沐</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">沐曦股份-U</span>
+                                <span class="seg-company-code">688802</span>
+                            </div>
+                            <span class="seg-company-role">GPGPU训推一体（C550）</span>
+                        </div>
+                        <div class="seg-company">
+                            <div class="seg-company-icon">海</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">海光信息</span>
+                                <span class="seg-company-code">688041</span>
+                            </div>
+                            <span class="seg-company-role">DCU加速卡（深算3号）</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 第二阵营：AI ASIC / GPU IP -->
+                <div class="segment-card tier-b">
+                    <span class="seg-badge">🥈 第二阵营 · AI ASIC/GPU IP</span>
+                    <div class="seg-subtitle">垂直算子加速 · 生态开放 · 推理场景为主</div>
+                    <div class="seg-count">共 2 只标的</div>
+                    <div class="seg-companies">
+                        <div class="seg-company">
+                            <div class="seg-company-icon">寒</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">寒武纪-U</span>
+                                <span class="seg-company-code">688256</span>
+                            </div>
+                            <span class="seg-company-role">AI ASIC（思元370/590）</span>
+                        </div>
+                        <div class="seg-company">
+                            <div class="seg-company-icon">芯</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">芯原股份</span>
+                                <span class="seg-company-code">688521</span>
+                            </div>
+                            <span class="seg-company-role">GPU IP授权（Vivante）</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 第三阵营：CPU/图形/信创 -->
+                <div class="segment-card tier-c">
+                    <span class="seg-badge">🥉 第三阵营 · 图形GPU/信创一体</span>
+                    <div class="seg-subtitle">图形渲染 · 信创市场 · 军工+党政</div>
+                    <div class="seg-count">共 3 只标的</div>
+                    <div class="seg-companies">
+                        <div class="seg-company">
+                            <div class="seg-company-icon">景</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">景嘉微</span>
+                                <span class="seg-company-code">300474</span>
+                            </div>
+                            <span class="seg-company-role">国产图形GPU老兵</span>
+                        </div>
+                        <div class="seg-company">
+                            <div class="seg-company-icon">龙</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">龙芯中科</span>
+                                <span class="seg-company-code">688047</span>
+                            </div>
+                            <span class="seg-company-role">CPU+自研GPGPU核</span>
+                        </div>
+                        <div class="seg-company">
+                            <div class="seg-company-icon">兆</div>
+                            <div class="seg-company-info">
+                                <span class="seg-company-name">兆易创新</span>
+                                <span class="seg-company-code">603986</span>
+                            </div>
+                            <span class="seg-company-role">MCU+GPU IP（外延）</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 一、第一阵营 深度对比 -->
+        <div class="companies-section">
+            <div class="section-title">一、第一阵营深度 · GPGPU/全功能GPU 三巨头</div>
+            <div class="section-subtitle">摩尔线程/沐曦股份/海光信息 · 直接对标NVIDIA H100/H20/B100 · 训练侧主战场</div>
+            <div class="company-grid">
+                <!-- 摩尔线程 -->
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">摩尔线程-U</div>
+                        <div class="card-code">688795</div>
+                    </div>
+                    <span class="card-position position-chip">全功能GPU（图形+计算双栈）</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>国内唯一同时具备<strong>图形渲染+AI计算</strong>能力的国产GPU上市公司。MUSA自研架构+MUSIFY工具链实现CUDA代码近乎无损迁移，夸娥智算集群已支持千卡/万卡级训练。全功能双栈路线在游戏PC+信创+AI训练三大场景均有卡位。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>MTT S80/S4000/S5000</strong></span>
+                        <span>集群 <strong>夸娥千卡/万卡</strong></span>
+                        <span>软件栈 <strong>MUSA + MUSIFY</strong></span>
+                        <span>IPO <strong>2025-11-14</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag loss"><span class="tag-icon">⚠</span>持续亏损</span>
+                        <span class="f-tag new-listing"><span class="tag-icon">★</span>科创板次新</span>
+                        <span class="f-tag growth-high"><span class="tag-icon">📈</span>营收高增</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">卡位独特性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">A股唯一图形+计算双栈GPU</div>
+                        </div>
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">盈利兑现</div>
+                            <div class="rating-level">★★ 中</div>
+                            <div class="rating-reason">研发投入巨大，短期难盈利</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 沐曦股份 -->
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">沐曦股份-U</div>
+                        <div class="card-code">688802</div>
+                    </div>
+                    <span class="card-position position-chip">GPGPU训推一体</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>科创板<strong>GPU第一股</strong>（按招股募资口径），曦云C500/C550训练卡FP16算力对标H100/H20级别，曦思N260推理卡专攻大模型推理。MXMACA软件栈兼容CUDA生态，已适配主流大模型训练框架。客户覆盖三大运营商、头部云厂商与多家科研机构。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>曦云C500/C550 + 曦思N260</strong></span>
+                        <span>集群 <strong>曦源整机/曦谷集群</strong></span>
+                        <span>软件栈 <strong>MXMACA</strong></span>
+                        <span>IPO <strong>2025-12-17</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag loss"><span class="tag-icon">⚠</span>持续亏损</span>
+                        <span class="f-tag new-listing"><span class="tag-icon">★</span>科创板次新</span>
+                        <span class="f-tag growth-high"><span class="tag-icon">📈</span>订单快速放量</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">训练卡对标</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">C550算力已接近H100/H20</div>
+                        </div>
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">生态成熟度</div>
+                            <div class="rating-level">★★ 中</div>
+                            <div class="rating-reason">MXMACA迁移成本低，生态仍在建设</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 海光信息 -->
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">海光信息</div>
+                        <div class="card-code">688041</div>
+                    </div>
+                    <span class="card-position position-chip">DCU加速卡+CPU双龙头</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>国产x86 CPU+深算DCU双赛道龙头。深算3号已量产，兼容CUDA生态（ROCm），是国产AI芯片中<strong>迁移成本最低+盈利能力最强</strong>的选择。信创+AI双赛道受益，客户覆盖金融/运营商/政府核心场景。中科曙光作为大股东提供整机与算力落地闭环。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>深算1号/2号/3号</strong></span>
+                        <span>生态 <strong>兼容ROCm/CUDA</strong></span>
+                        <span>盈利 <strong>持续盈利</strong></span>
+                        <span>后盾 <strong>中科曙光+中科院</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-high"><span class="tag-icon">💰</span>毛利率~60%</span>
+                        <span class="f-tag growth-high"><span class="tag-icon">📈</span>净利增速稳健</span>
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>持续盈利</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">生态成熟度</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">CUDA兼容+客户成熟，商业闭环最完整</div>
+                        </div>
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">现金流</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">CPU+DCU双引擎，自我造血能力强</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 二、第二阵营 -->
+        <div class="companies-section">
+            <div class="section-title">二、第二阵营 · AI ASIC + GPU IP</div>
+            <div class="section-subtitle">垂直算子加速 + IP授权模式，与通用GPU错位竞争</div>
+            <div class="company-grid">
+                <!-- 寒武纪 -->
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">寒武纪-U</div>
+                        <div class="card-code">688256</div>
+                    </div>
+                    <span class="card-position position-chip">AI ASIC（NPU）云边端全栈</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>国产AI ASIC领军者，思元370/590系列聚焦推理场景，与通用GPU错位竞争。云端+边缘+终端全栈布局，724TOPS INT8算力对标英伟达A100。业绩爆发式增长（扣非净利+304.63%），是国产AI芯片<strong>业绩兑现最好</strong>的标的。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>思元370/590</strong></span>
+                        <span>路线 <strong>ASIC/NPU</strong></span>
+                        <span>下游 <strong>推理+边缘+终端</strong></span>
+                        <span>业绩 <strong>扣非+304.63%</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag margin-high"><span class="tag-icon">💰</span>毛利率高</span>
+                        <span class="f-tag growth-high"><span class="tag-icon">📈</span>业绩拐点确立</span>
+                        <span class="f-tag new-listing"><span class="tag-icon">★</span>PE 212倍</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-strong">
+                            <div class="rating-title">业绩弹性</div>
+                            <div class="rating-level">★★★ 高</div>
+                            <div class="rating-reason">扭亏为盈趋势明确</div>
+                        </div>
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">生态壁垒</div>
+                            <div class="rating-level">★★ 中</div>
+                            <div class="rating-reason">ASIC路线通用性弱于GPGPU</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 芯原股份 -->
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">芯原股份</div>
+                        <div class="card-code">688521</div>
+                    </div>
+                    <span class="card-position position-ip">GPU IP授权 + AI IP</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>国内最大的芯片设计IP授权商，Vivante GPU IP在国内被众多SoC设计公司采用。近年发力AIGC/NPU IP授权，与国产GPU厂商形成<strong>互补而非直接竞争</strong>的关系（部分厂商甚至采购其IP）。IP模式弱周期，受晶圆厂扩产直接拉动。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>Vivante GPU IP + NPU IP</strong></span>
+                        <span>模式 <strong>IP授权 + 设计服务</strong></span>
+                        <span>客户 <strong>SoC设计公司/晶圆厂</strong></span>
+                        <span>估值 <strong>科创板设计IP龙头</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag loss"><span class="tag-icon">⚠</span>阶段性亏损</span>
+                        <span class="f-tag growth-high"><span class="tag-icon">📈</span>AIGC IP高增</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">卡位差异</div>
+                            <div class="rating-level">★★ 中</div>
+                            <div class="rating-reason">IP授权非直接对标</div>
+                        </div>
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">受益路径</div>
+                            <div class="rating-level">★★ 中</div>
+                            <div class="rating-reason">通过下游SoC放量间接受益</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 三、第三阵营 -->
+        <div class="companies-section">
+            <div class="section-title">三、第三阵营 · 图形GPU / 信创一体化</div>
+            <div class="section-subtitle">聚焦图形渲染、党政军工、信创PC场景，与AI训练主战场差异化</div>
+            <div class="company-grid">
+                <!-- 景嘉微 -->
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">景嘉微</div>
+                        <div class="card-code">300474</div>
+                    </div>
+                    <span class="card-position position-legacy">国产图形GPU老兵</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>A股<strong>最早</strong>的国产GPU概念股，JM系列图形GPU长期在军工/党政领域独占。JM9系列瞄准中高端图形市场，JM11规划切入AI训推。缺点是AI计算侧生态弱、算力落后一代，主要靠信创市场慢周期兑现。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>JM5/7/9系列 · JM11规划</strong></span>
+                        <span>场景 <strong>军工+党政+信创PC</strong></span>
+                        <span>竞争位 <strong>老牌图形GPU</strong></span>
+                        <span>AI进度 <strong>相对滞后</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag profit"><span class="tag-icon">✓</span>持续盈利</span>
+                        <span class="f-tag growth-high"><span class="tag-icon">📈</span>信创订单驱动</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">图形GPU卡位</div>
+                            <div class="rating-level">★★ 中</div>
+                            <div class="rating-reason">军工信创稳定，AI侧弱</div>
+                        </div>
+                        <div class="rating-card rating-weak">
+                            <div class="rating-title">AI弹性</div>
+                            <div class="rating-level">★ 低</div>
+                            <div class="rating-reason">JM11推进节奏是关键变量</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 龙芯中科 -->
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">龙芯中科</div>
+                        <div class="card-code">688047</div>
+                    </div>
+                    <span class="card-position position-cpu">CPU + 自研GPGPU核</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>国产CPU龙头，3A6000/3A7000处理器已集成自研GPGPU核，主打CPU+GPU一体化SoC方案。GPU算力面向轻量级AI推理与图形，无法直接与H100级别竞争，主战场仍是信创PC/服务器。中长期看好LoongArch生态成熟后的一体化AI SoC。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>3A6000/3A7000 + LG系列</strong></span>
+                        <span>架构 <strong>LoongArch自主指令集</strong></span>
+                        <span>场景 <strong>信创PC/服务器</strong></span>
+                        <span>AI定位 <strong>轻量级推理</strong></span>
+                    </div>
+                    <div class="finance-tags">
+                        <span class="f-tag loss"><span class="tag-icon">⚠</span>阶段性亏损</span>
+                        <span class="f-tag growth-high"><span class="tag-icon">📈</span>信创订单驱动</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating-card rating-weak">
+                            <div class="rating-title">AI训练</div>
+                            <div class="rating-level">★ 低</div>
+                            <div class="rating-reason">GPU算力较弱，不直接对标</div>
+                        </div>
+                        <div class="rating-card rating-mid">
+                            <div class="rating-title">CPU一体化</div>
+                            <div class="rating-level">★★ 中</div>
+                            <div class="rating-reason">CPU+GPU+软件栈自主可控</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 四、Pre-IPO / 一级市场竞对 -->
+        <div class="private-section">
+            <div class="section-title">四、Pre-IPO 一级市场竞对 · 未上市但真实抢单</div>
+            <div class="section-subtitle">这6家是A股GPU标的的真实竞对，其融资/上市/中标节奏直接影响A股估值</div>
+            <div class="private-grid">
+                <div class="private-card">
+                    <div class="p-head">
+                        <span class="p-name">华为昇腾</span>
+                        <span class="p-stage">母公司未上市</span>
+                    </div>
+                    <div class="p-tag">昇腾910B/910C/950 · 最大竞争者</div>
+                    <div class="p-desc">出货规模全国第一，性能对标H100/H200。母公司未上市，A股通过<strong>昇腾产业链</strong>（OEM、PCB、光模块、电源、液冷）间接映射。是国产GPU阵营最大的"体外"压力源。</div>
+                </div>
+                <div class="private-card">
+                    <div class="p-head">
+                        <span class="p-name">壁仞科技</span>
+                        <span class="p-stage">科创板辅导</span>
+                    </div>
+                    <div class="p-tag">BR100/BR104 · 训练卡直接对标H100</div>
+                    <div class="p-desc">7nm通用GPU BR100单卡FP16算力2 PFLOPS，与H100同代。已完成多轮融资估值超150亿，上市窗口临近。若成功上市将是<strong>沐曦/摩尔线程最强直接竞对</strong>。</div>
+                </div>
+                <div class="private-card">
+                    <div class="p-head">
+                        <span class="p-name">燧原科技</span>
+                        <span class="p-stage">上市辅导中</span>
+                    </div>
+                    <div class="p-tag">云燧T20/i20 · 训推双栈</div>
+                    <div class="p-desc">腾讯系AI芯片公司，T20训练卡+i20推理卡形成完整产品线。腾讯云是最大客户与股东，商业闭环较优。上市进度快于壁仞，估值超100亿。</div>
+                </div>
+                <div class="private-card">
+                    <div class="p-head">
+                        <span class="p-name">天数智芯</span>
+                        <span class="p-stage">一级融资</span>
+                    </div>
+                    <div class="p-tag">天垓/智铠系列 · 训练+推理</div>
+                    <div class="p-desc">上海国资背景，天垓100训练卡已量产。走类NVIDIA全栈路线（芯片+服务器+软件），已完成D轮融资准备科创板申报。</div>
+                </div>
+                <div class="private-card">
+                    <div class="p-head">
+                        <span class="p-name">阿里平头哥</span>
+                        <span class="p-stage">阿里内部</span>
+                    </div>
+                    <div class="p-tag">含光800/含光810 · 阿里云自用</div>
+                    <div class="p-desc">阿里巴巴自研AI推理芯片，主要自用于阿里云百炼平台。理论上不对外销售，但对市场需求存在<strong>结构性挤压</strong>——阿里少采购一颗英伟达/沐曦，市场就少一份需求。</div>
+                </div>
+                <div class="private-card">
+                    <div class="p-head">
+                        <span class="p-name">百度昆仑芯</span>
+                        <span class="p-stage">百度分拆</span>
+                    </div>
+                    <div class="p-tag">昆仑芯P800 · 百度智能云自用</div>
+                    <div class="p-desc">从百度体系分拆，昆仑芯P800已进入第三代量产。同样以内部消化为主（百度智能云+文心一言），对第三方GPU厂商构成需求侧挤压。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 五、国际对标 -->
+        <div class="companies-section">
+            <div class="section-title">五、国际对标 · 估值锚 + 技术标杆</div>
+            <div class="section-subtitle">全球GPU格局定价基准，A股GPU估值须参考</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">NVIDIA</div>
+                        <div class="card-code">NVDA.US</div>
+                    </div>
+                    <span class="card-position position-chip">全球AI训练绝对霸主</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>H100/H200/B100/GB200构成AI训练金字塔顶端，全球市占超85%。CUDA生态是所有国产GPU的<strong>参照系与迁移目标</strong>。当NVDA出货高增，说明AI需求真实；当出口管制升级，国产GPU即时受益。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>H100/H200/B100/GB200</strong></span>
+                        <span>生态 <strong>CUDA（护城河）</strong></span>
+                        <span>市值 <strong>全球最大芯片股</strong></span>
+                        <span>联动 <strong>正相关（除出口限制）</strong></span>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">AMD</div>
+                        <div class="card-code">AMD.US</div>
+                    </div>
+                    <span class="card-position position-chip">MI300X/MI325X · 训推兼顾</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>MI300X/MI325X是NVIDIA唯一有威胁的挑战者，ROCm软件栈也是<strong>海光DCU的直接参考</strong>。AMD在AI GPU的市占提升，直接证明"非CUDA也能商业化"，对沐曦/摩尔线程构成积极案例。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>MI300X/MI325X/MI350</strong></span>
+                        <span>生态 <strong>ROCm（开源）</strong></span>
+                        <span>市占 <strong>AI GPU 全球第二</strong></span>
+                        <span>联动 <strong>海光信息直接映射</strong></span>
+                    </div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">Intel</div>
+                        <div class="card-code">INTC.US</div>
+                    </div>
+                    <span class="card-position position-chip">Gaudi 3 · 加速追赶</span>
+                    <div class="card-binding"><strong>核心逻辑：</strong>Gaudi 3专攻推理性价比，与国产ASIC路线（寒武纪）相似。Intel押注推理侧差异化竞争，若成功验证市场，将证明<strong>"非通用GPU"路线也有大市场</strong>，利好寒武纪等ASIC厂商。</div>
+                    <div class="card-data-row">
+                        <span>核心产品 <strong>Gaudi 3 · Falcon Shores</strong></span>
+                        <span>生态 <strong>OneAPI（开源）</strong></span>
+                        <span>路线 <strong>推理性价比</strong></span>
+                        <span>联动 <strong>寒武纪逻辑相似</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 综合对比表 -->
+        <div class="compare-section">
+            <div class="section-title">六、A股8只GPU标的横向对比</div>
+            <div class="section-subtitle">按技术路线、生态成熟度、盈利能力、估值水平多维度对比</div>
+            <div class="compare-wrap">
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>公司</th>
+                        <th>代码</th>
+                        <th>技术路线</th>
+                        <th>软件栈</th>
+                        <th>旗舰产品</th>
+                        <th>盈利状态</th>
+                        <th>直接对标</th>
+                        <th>市场热度</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="col-name">摩尔线程-U</td>
+                        <td class="col-code">688795.SH</td>
+                        <td>全功能GPU</td>
+                        <td>MUSA + MUSIFY</td>
+                        <td>MTT S5000</td>
+                        <td>亏损</td>
+                        <td>NVIDIA RTX + H系列</td>
+                        <td><span class="tag-hot">极高</span></td>
+                    </tr>
+                    <tr>
+                        <td class="col-name">沐曦股份-U</td>
+                        <td class="col-code">688802.SH</td>
+                        <td>GPGPU训推一体</td>
+                        <td>MXMACA（兼容CUDA）</td>
+                        <td>曦云C550</td>
+                        <td>亏损</td>
+                        <td>NVIDIA H100/H20</td>
+                        <td><span class="tag-hot">极高</span></td>
+                    </tr>
+                    <tr>
+                        <td class="col-name">海光信息</td>
+                        <td class="col-code">688041.SH</td>
+                        <td>DCU（类GPU）</td>
+                        <td>DTK（类ROCm）</td>
+                        <td>深算3号</td>
+                        <td>持续盈利</td>
+                        <td>AMD MI300X</td>
+                        <td><span class="tag-hot">极高</span></td>
+                    </tr>
+                    <tr>
+                        <td class="col-name">寒武纪-U</td>
+                        <td class="col-code">688256.SH</td>
+                        <td>AI ASIC（NPU）</td>
+                        <td>Cambricon Neuware</td>
+                        <td>思元590</td>
+                        <td>扭亏拐点</td>
+                        <td>Intel Gaudi 3</td>
+                        <td><span class="tag-hot">极高</span></td>
+                    </tr>
+                    <tr>
+                        <td class="col-name">芯原股份</td>
+                        <td class="col-code">688521.SH</td>
+                        <td>GPU IP授权</td>
+                        <td>Vivante SDK</td>
+                        <td>Vivante GC/NPU IP</td>
+                        <td>阶段亏损</td>
+                        <td>Imagination Tech</td>
+                        <td><span class="tag-mid">中</span></td>
+                    </tr>
+                    <tr>
+                        <td class="col-name">景嘉微</td>
+                        <td class="col-code">300474.SZ</td>
+                        <td>图形GPU</td>
+                        <td>自研图形栈</td>
+                        <td>JM9系列</td>
+                        <td>持续盈利</td>
+                        <td>老一代AMD/NV图形</td>
+                        <td><span class="tag-mid">中</span></td>
+                    </tr>
+                    <tr>
+                        <td class="col-name">龙芯中科</td>
+                        <td class="col-code">688047.SH</td>
+                        <td>CPU集成GPU核</td>
+                        <td>LoongArch生态</td>
+                        <td>3A6000/3A7000</td>
+                        <td>阶段亏损</td>
+                        <td>Intel/AMD PC APU</td>
+                        <td><span class="tag-safe">稳</span></td>
+                    </tr>
+                    <tr>
+                        <td class="col-name">兆易创新</td>
+                        <td class="col-code">603986.SH</td>
+                        <td>MCU + GPU IP外延</td>
+                        <td>ARM + 第三方</td>
+                        <td>GD32系列MCU</td>
+                        <td>持续盈利</td>
+                        <td>STMicro / Nordic</td>
+                        <td><span class="tag-cold">弱相关</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+
+        <!-- 核心焦点 -->
+        <div class="focus-section">
+            <div class="section-title">七、核心焦点标的 · 6大关注点</div>
+            <div class="section-subtitle">按不同投资偏好推荐关注顺序</div>
+            <div class="focus-cards">
+                <div class="focus-card">
+                    <div class="focus-rank">01</div>
+                    <div class="focus-name">沐曦股份-U (688802)</div>
+                    <div class="focus-tag">技术弹性最强</div>
+                    <div class="focus-reason">科创板GPU第一股，C550训练卡对标H100，MXMACA迁移成本低。次新股+题材纯正双属性，情绪敏感度最高。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">02</div>
+                    <div class="focus-name">摩尔线程-U (688795)</div>
+                    <div class="focus-tag">卡位独特性最强</div>
+                    <div class="focus-reason">A股唯一图形+计算双栈GPU，与沐曦形成双龙头联动。游戏PC+AI+信创三场景可切换，估值想象空间大。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">03</div>
+                    <div class="focus-name">海光信息 (688041)</div>
+                    <div class="focus-tag">现金流最稳</div>
+                    <div class="focus-reason">CPU+DCU双引擎持续盈利，深算3号已量产。生态最成熟（CUDA兼容），是国产GPU中防守性最强的标的。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">04</div>
+                    <div class="focus-name">寒武纪-U (688256)</div>
+                    <div class="focus-tag">业绩兑现最好</div>
+                    <div class="focus-reason">扣非净利+304.63%验证AI ASIC商业化，思元590已进入头部客户。业绩+题材双击，是国产AI芯片盈利典范。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">05</div>
+                    <div class="focus-name">中科曙光 (603019)</div>
+                    <div class="focus-tag">海光信息重叠受益</div>
+                    <div class="focus-reason">海光信息大股东（持股~28%），DCU销量放量直接反映到财务表。AI服务器整机第一梯队，间接享受GPU景气。</div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">06</div>
+                    <div class="focus-name">工业富联 (601138)</div>
+                    <div class="focus-tag">AI服务器代工龙头</div>
+                    <div class="focus-reason">AI服务器代工全球龙头，客户覆盖英伟达+国产GPU双阵营。国产GPU出货放量直接拉动其AI服务器营收。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 风险提示 -->
+        <div class="risk-section">
+            <div class="section-title">八、风险提示</div>
+            <div class="risk-grid">
+                <div class="risk-card">
+                    <div class="risk-title">⚠ 出口管制反转风险</div>
+                    <div class="risk-desc">若美方放松H20/B20出口限制，国产GPU替代节奏将大幅放缓，估值承压。历史上H800/H20管制放松都引起板块调整。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">⚠ Pre-IPO竞对上市</div>
+                    <div class="risk-desc">壁仞、燧原、天数智芯若集中上市，将稀释科创板GPU板块估值溢价，短期分流资金。参考2020-2021年半导体次新股大规模上市后的估值收敛。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">⚠ 大厂自研挤压</div>
+                    <div class="risk-desc">阿里平头哥、百度昆仑芯、字节Seed持续加大自研，云厂商采购份额可能被内部消化，压缩沐曦/摩尔线程等第三方厂商的市场空间。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">⚠ 华为昇腾一家独大</div>
+                    <div class="risk-desc">若昇腾950/960持续放量并挤占其他国产GPU订单，可能形成"国产GPU即昇腾"的市场认知，边缘化其他厂商。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">⚠ 估值透支风险</div>
+                    <div class="risk-desc">科创板GPU次新股估值已透支多年增长（沐曦IPO首日+143%），若2026年半年报业绩未达预期，可能触发大幅回调。</div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">⚠ 制程/HBM供应约束</div>
+                    <div class="risk-desc">先进制程晶圆代工与HBM存储受出口管制影响，即使芯片设计能力具备，产能爬坡仍受制于上游供应链。</div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>本报告仅供研究参考，不构成投资建议 · 数据整理时间：2026-07-09</p>
+            <p style="margin-top:6px;">FinanceAgent 题材研究 · <a href="index.html">返回题材导航</a></p>
+        </footer>
+    </div>
+</body>
+</html>

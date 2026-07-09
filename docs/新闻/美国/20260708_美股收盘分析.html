@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美股收盘分析 | 2026年07月07日</title>
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #111827;
+            --bg-card: #1a2332;
+            --bg-card-hover: #1f2b3d;
+            --border: #2a3a4e;
+            --text-primary: #e8edf5;
+            --text-secondary: #8a9bb5;
+            --text-muted: #5a6b82;
+            --accent-red: #ef4444;
+            --accent-green: #22c55e;
+            --accent-blue: #3b82f6;
+            --accent-amber: #f59e0b;
+            --accent-purple: #a855f7;
+            --accent-cyan: #06b6d4;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .header {
+            background: linear-gradient(135deg, #1a1a3a 0%, #1a2a4a 50%, #0d1a2a 100%);
+            border: 1px solid var(--border); border-radius: 16px; padding: 32px 36px;
+            margin-bottom: 24px; position: relative; overflow: hidden;
+        }
+        .header::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at 30% 50%, rgba(239,68,68,0.08) 0%, transparent 60%),
+                        radial-gradient(ellipse at 70% 40%, rgba(34,197,94,0.05) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .header-flag { font-size: 28px; margin-bottom: 4px; position: relative; }
+        .header-title { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 6px; position: relative; }
+        .header-subtitle { font-size: 15px; color: var(--text-secondary); position: relative; line-height: 1.6; }
+        .header-date {
+            display: inline-flex; align-items: center; gap: 8px; margin-top: 12px;
+            padding: 6px 14px; background: rgba(59,130,246,0.10);
+            border: 1px solid rgba(59,130,246,0.25); border-radius: 8px;
+            font-size: 13px; color: #93c5fd; position: relative;
+        }
+        .nav-link {
+            display: inline-block; padding: 10px 20px; background: var(--bg-card);
+            border: 1px solid var(--border); border-radius: 8px; color: var(--accent-blue);
+            text-decoration: none; font-size: 14px; margin-bottom: 24px; transition: all .2s;
+        }
+        .nav-link:hover { background: rgba(59,130,246,0.1); border-color: var(--accent-blue); }
+        .index-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 28px; }
+        .index-card {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+            padding: 24px; transition: transform .2s, box-shadow .2s;
+        }
+        .index-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+        .index-card.up { border-left: 4px solid var(--accent-green); }
+        .index-card.down { border-left: 4px solid var(--accent-red); }
+        .index-card .label { font-size: 13px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .index-card .value { font-size: 32px; font-weight: 700; margin-bottom: 4px; }
+        .index-card .change { font-size: 18px; font-weight: 600; }
+        .index-card .change.up { color: var(--accent-green); }
+        .index-card .change.down { color: var(--accent-red); }
+        .section-title {
+            font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 16px;
+            padding-bottom: 12px; border-bottom: 2px solid var(--border);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .section-title .icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .section-title .icon.idx { background: rgba(59,130,246,0.2); color: #60a5fa; }
+        .section-title .icon.sec { background: rgba(168,85,247,0.2); color: #c084fc; }
+        .section-title .icon.stk { background: rgba(34,197,94,0.2); color: #4ade80; }
+        .section-title .icon.reason { background: rgba(6,182,212,0.2); color: #22d3ee; }
+        .section-title .icon.news { background: rgba(245,158,11,0.2); color: #fbbf24; }
+        .sector-table {
+            width: 100%; border-collapse: separate; border-spacing: 0; margin-bottom: 28px;
+            background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border);
+        }
+        .sector-table thead th {
+            background: rgba(59,130,246,0.08); padding: 14px 18px; text-align: left;
+            font-size: 13px; font-weight: 600; color: var(--text-secondary);
+            text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid var(--border);
+        }
+        .sector-table tbody td { padding: 14px 18px; border-bottom: 1px solid rgba(42,58,78,0.5); font-size: 14px; }
+        .sector-table tbody tr:last-child td { border-bottom: none; }
+        .sector-table tbody tr:hover { background: var(--bg-card-hover); }
+        .sector-table .rank { width: 50px; font-weight: 700; color: var(--text-muted); }
+        .sector-table .sector-name { font-weight: 600; color: var(--text-primary); }
+        .sector-table .change-val { font-weight: 700; }
+        .sector-table .change-val.up { color: var(--accent-green); }
+        .sector-table .change-val.down { color: var(--accent-red); }
+        .sector-table .driver { color: var(--text-secondary); font-size: 13px; }
+        .stock-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; margin-bottom: 28px; }
+        .stock-card {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+            padding: 18px; transition: transform .2s, box-shadow .2s, border-color .2s; cursor: default;
+        }
+        .stock-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.25); border-color: rgba(59,130,246,0.3); }
+        .stock-card .stock-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+        .stock-card .stock-name { font-size: 16px; font-weight: 700; color: #fff; }
+        .stock-card .stock-name-en { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+        .stock-card .stock-change { font-size: 18px; font-weight: 800; white-space: nowrap; }
+        .stock-card .stock-change.up { color: var(--accent-green); }
+        .stock-card .stock-change.down { color: var(--accent-red); }
+        .stock-card .stock-theme { display: inline-block; padding: 3px 10px; background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2); border-radius: 6px; font-size: 12px; color: #93c5fd; }
+        .stock-card .stock-code { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+        .reason-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; margin-bottom: 28px; }
+        .reason-card {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+            padding: 20px; position: relative; overflow: hidden;
+        }
+        .reason-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent-cyan); }
+        .reason-card .reason-num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: rgba(6,182,212,0.15); border-radius: 8px; font-size: 14px; font-weight: 700; color: #22d3ee; margin-bottom: 8px; }
+        .reason-card .reason-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+        .reason-card .reason-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+        .reason-card .reason-tag { display: inline-block; margin-top: 10px; padding: 3px 10px; background: rgba(6,182,212,0.1); border: 1px solid rgba(6,182,212,0.2); border-radius: 6px; font-size: 11px; color: #67e8f9; }
+        .reason-card.warn::before { background: var(--accent-amber); }
+        .reason-card.warn .reason-num { background: rgba(245,158,11,0.15); color: #fbbf24; }
+        .reason-card.warn .reason-tag { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.2); color: #fcd34d; }
+        .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 14px; margin-bottom: 28px; }
+        .news-card { display: flex; align-items: center; gap: 14px; padding: 16px 18px;
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px;
+            text-decoration: none; color: inherit; transition: all .2s ease; }
+        .news-card:hover { transform: translateY(-2px); border-color: #334155; background: var(--bg-card-hover); }
+        .news-index { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+            color: #fbbf24; background: rgba(251,191,36,0.12); font-weight: 700; font-size: 13px; flex-shrink: 0; }
+        .news-body { flex: 1; min-width: 0; }
+        .news-title { color: var(--text-primary); font-size: 14px; font-weight: 500; line-height: 1.45; }
+        .news-meta { color: var(--text-muted); font-size: 12px; margin-top: 5px; }
+        .footer { text-align: center; color: var(--text-muted); font-size: 12px; padding: 20px 0; border-top: 1px solid var(--border); margin-top: 12px; }
+        .disclaimer { color: var(--text-muted); font-size: 12px; text-align: center; margin-top: 8px; }
+        .market-map { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+        .heat-map {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px;
+        }
+        .heat-map h3 { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 16px; }
+        .heat-bars { display: flex; flex-direction: column; gap: 8px; }
+        .heat-bar-row { display: flex; align-items: center; gap: 10px; }
+        .heat-bar-label { width: 90px; font-size: 12px; color: var(--text-secondary); text-align: right; flex-shrink: 0; }
+        .heat-bar-track { flex: 1; height: 20px; background: rgba(255,255,255,0.03); border-radius: 4px; position: relative; overflow: hidden; }
+        .heat-bar-fill { height: 100%; border-radius: 4px; position: absolute; top: 0; }
+        .heat-bar-fill.up { background: var(--accent-green); left: 50%; }
+        .heat-bar-fill.down { background: var(--accent-red); right: 50%; }
+        .heat-bar-val { width: 60px; font-size: 13px; font-weight: 700; text-align: left; flex-shrink: 0; }
+        .heat-bar-val.up { color: var(--accent-green); }
+        .heat-bar-val.down { color: var(--accent-red); }
+        .center-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: rgba(255,255,255,0.1); z-index: 1; }
+        @media (max-width: 768px) {
+            .container { padding: 12px; }
+            .header { padding: 20px; }
+            .header-title { font-size: 22px; }
+            .index-card .value { font-size: 26px; }
+            .stock-grid { grid-template-columns: 1fr; }
+            .reason-grid { grid-template-columns: 1fr; }
+            .news-grid { grid-template-columns: 1fr; }
+            .market-map { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <div class="header">
+            <div class="header-flag">🇺🇸</div>
+            <div class="header-title">美股收盘分析</div>
+            <div class="header-subtitle">2026年07月07日 · 纳指大跌 1.16% · 半导体惨遭血洗 AMD -6.5% · 能源板块逆势领涨 +2.8%<br>市场风格剧烈切换——资金从高估值科技/半导体疯狂涌向能源与防御板块</div>
+            <div class="header-date">📅 2026年07月07日 收盘总结 · 数据更新时间：2026-07-08 07:50 CST</div>
+        </div>
+
+        <a class="nav-link" href="index.html">← 返回导航</a>
+
+        <!-- 主要指数 -->
+        <div class="section-title">
+            <span class="icon idx">📈</span>
+            主要指数
+        </div>
+        <div class="index-grid">
+            <div class="index-card down">
+                <div class="label">道琼斯工业指数</div>
+                <div class="value">52,925.15</div>
+                <div class="change down">▼ -0.25%</div>
+                <div style="margin-top:4px;font-size:13px;color:var(--text-secondary)">高 53,289.30 / 低 52,774.17 / 昨收 53,060.10</div>
+            </div>
+            <div class="index-card down">
+                <div class="label">纳斯达克综合指数</div>
+                <div class="value">25,818.69</div>
+                <div class="change down">▼ -1.16%</div>
+                <div style="margin-top:4px;font-size:13px;color:var(--text-secondary)">高 26,010.02 / 低 25,684.15 / 昨收 26,121.16</div>
+            </div>
+            <div class="index-card down">
+                <div class="label">标普500指数</div>
+                <div class="value">7,503.85</div>
+                <div class="change down">▼ -0.45%</div>
+                <div style="margin-top:4px;font-size:13px;color:var(--text-secondary)">高 7,536.06 / 低 7,478.63 / 昨收 7,537.43</div>
+            </div>
+            <div class="index-card down">
+                <div class="label">纳斯达克100 (QQQ)</div>
+                <div class="value">709.43</div>
+                <div class="change down">▼ -1.85%</div>
+                <div style="margin-top:4px;font-size:13px;color:var(--text-secondary)">高 716.35 / 低 704.90 / 昨收 722.82</div>
+            </div>
+            <div class="index-card down">
+                <div class="label">罗素2000 (IWM)</div>
+                <div class="value">296.19</div>
+                <div class="change down">▼ -0.91%</div>
+                <div style="margin-top:4px;font-size:13px;color:var(--text-secondary)">高 299.97 / 低 295.18 / 昨收 298.90</div>
+            </div>
+        </div>
+
+        <!-- 板块表现 -->
+        <div class="section-title">
+            <span class="icon sec">📊</span>
+            板块表现（SPDR ETF 实时数据）
+        </div>
+        <table class="sector-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>板块</th>
+                    <th>涨跌幅</th>
+                    <th>核心驱动</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="rank">1</td>
+                    <td class="sector-name">🔋 能源 (XLE)</td>
+                    <td class="change-val up">▲ +2.84%</td>
+                    <td class="driver">油价反弹，资金涌入能源避险，XLE放量4100万手</td>
+                </tr>
+                <tr>
+                    <td class="rank">2</td>
+                    <td class="sector-name">💊 医疗保健 (XLV)</td>
+                    <td class="change-val up">▲ +1.53%</td>
+                    <td class="driver">防御性配置需求强劲，板块创近期新高</td>
+                </tr>
+                <tr>
+                    <td class="rank">3</td>
+                    <td class="sector-name">🏠 房地产 (XLRE)</td>
+                    <td class="change-val up">▲ +1.35%</td>
+                    <td class="driver">国债收益率回落预期支撑REITs反弹</td>
+                </tr>
+                <tr>
+                    <td class="rank">4</td>
+                    <td class="sector-name">🏪 必需消费 (XLP)</td>
+                    <td class="change-val up">▲ +0.90%</td>
+                    <td class="driver">防御轮动资金流入，宝洁等消费巨头走强</td>
+                </tr>
+                <tr>
+                    <td class="rank">5</td>
+                    <td class="sector-name">⚡ 公用事业 (XLU)</td>
+                    <td class="change-val up">▲ +0.88%</td>
+                    <td class="driver">低波动偏好升温，电力股获避险资金青睐</td>
+                </tr>
+                <tr>
+                    <td class="rank">6</td>
+                    <td class="sector-name">📡 通讯服务 (XLC)</td>
+                    <td class="change-val up">▲ +0.73%</td>
+                    <td class="driver">Meta +2.55% 强势拉动板块，但谷歌仅微涨</td>
+                </tr>
+                <tr>
+                    <td class="rank">7</td>
+                    <td class="sector-name">🏦 金融 (XLF)</td>
+                    <td class="change-val down">▼ -0.16%</td>
+                    <td class="driver">利率前景不明，银行股窄幅震荡</td>
+                </tr>
+                <tr>
+                    <td class="rank">8</td>
+                    <td class="sector-name">🛍️ 可选消费 (XLY)</td>
+                    <td class="change-val down">▼ -0.53%</td>
+                    <td class="driver">特斯拉 -4.02% 拖累严重，亚马逊微涨不足以对冲</td>
+                </tr>
+                <tr>
+                    <td class="rank">9</td>
+                    <td class="sector-name">🏗️ 原材料 (XLB)</td>
+                    <td class="change-val down">▼ -0.90%</td>
+                    <td class="driver">商品价格承压，矿业化工股走弱</td>
+                </tr>
+                <tr>
+                    <td class="rank">10</td>
+                    <td class="sector-name">🏭 工业 (XLI)</td>
+                    <td class="change-val down">▼ -1.71%</td>
+                    <td class="driver">经济放缓担忧升温，周期性工业股遭抛售</td>
+                </tr>
+                <tr>
+                    <td class="rank">11</td>
+                    <td class="sector-name">💻 科技 (XLK)</td>
+                    <td class="change-val down">▼ -2.39%</td>
+                    <td class="driver">AMD/半导体暴跌拖累，软件股分化但无力回天</td>
+                </tr>
+                <tr>
+                    <td class="rank">—</td>
+                    <td class="sector-name" style="color:#f87171;">🔴 半导体 (SMH)</td>
+                    <td class="change-val down">▼ -3.78%</td>
+                    <td class="driver">AI算力板块遭集中抛售，成交量异常放大至1461万手</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 板块热力图 -->
+        <div class="section-title">
+            <span class="icon sec">🔥</span>
+            板块涨跌热力图
+        </div>
+        <div class="market-map">
+            <div class="heat-map">
+                <h3>📈 领涨板块</h3>
+                <div class="heat-bars">
+                    <div class="heat-bar-row">
+                        <div class="heat-bar-label">能源 XLE</div>
+                        <div class="heat-bar-track">
+                            <div class="center-line"></div>
+                            <div class="heat-bar-fill up" style="width:14.2%"></div>
+                        </div>
+                        <div class="heat-bar-val up">+2.84%</div>
+                    </div>
+                    <div class="heat-bar-row">
+                        <div class="heat-bar-label">医疗 XLV</div>
+                        <div class="heat-bar-track">
+                            <div class="center-line"></div>
+                            <div class="heat-bar-fill up" style="width:7.65%"></div>
+                        </div>
+                        <div class="heat-bar-val up">+1.53%</div>
+                    </div>
+                    <div class="heat-bar-row">
+                        <div class="heat-bar-label">房地产 XLRE</div>
+                        <div class="heat-bar-track">
+                            <div class="center-line"></div>
+                            <div class="heat-bar-fill up" style="width:6.75%"></div>
+                        </div>
+                        <div class="heat-bar-val up">+1.35%</div>
+                    </div>
+                    <div class="heat-bar-row">
+                        <div class="heat-bar-label">必需消费 XLP</div>
+                        <div class="heat-bar-track">
+                            <div class="center-line"></div>
+                            <div class="heat-bar-fill up" style="width:4.5%"></div>
+                        </div>
+                        <div class="heat-bar-val up">+0.90%</div>
+                    </div>
+                    <div class="heat-bar-row">
+                        <div class="heat-bar-label">公用事业 XLU</div>
+                        <div class="heat-bar-track">
+                            <div class="center-line"></div>
+                            <div class="heat-bar-fill up" style="width:4.4%"></div>
+                        </div>
+                        <div class="heat-bar-val up">+0.88%</div>
+                    </div>
+                </div>
+            </div>
+            <div class="heat-map">
+                <h3>📉 领跌板块</h3>
+                <div class="heat-bars">
+                    <div class="heat-bar-row">
+                        <div class="heat-bar-label">半导体 SMH</div>
+                        <div class="heat-bar-track">
+                            <div class="center-line"></div>
+                            <div class="heat-bar-fill down" style="width:18.9%"></div>
+                        </div>
+                        <div class="heat-bar-val down">-3.78%</div>
+                    </div>
+                    <div class="heat-bar-row">
+                        <div class="heat-bar-label">科技 XLK</div>
+                        <div class="heat-bar-track">
+                            <div class="center-line"></div>
+                            <div class="heat-bar-fill down" style="width:11.95%"></div>
+                        </div>
+                        <div class="heat-bar-val down">-2.39%</div>
+                    </div>
+                    <div class="heat-bar-row">
+                        <div class="heat-bar-label">工业 XLI</div>
+                        <div class="heat-bar-track">
+                            <div class="center-line"></div>
+                            <div class="heat-bar-fill down" style="width:8.55%"></div>
+                        </div>
+                        <div class="heat-bar-val down">-1.71%</div>
+                    </div>
+                    <div class="heat-bar-row">
+                        <div class="heat-bar-label">原材料 XLB</div>
+                        <div class="heat-bar-track">
+                            <div class="center-line"></div>
+                            <div class="heat-bar-fill down" style="width:4.5%"></div>
+                        </div>
+                        <div class="heat-bar-val down">-0.90%</div>
+                    </div>
+                    <div class="heat-bar-row">
+                        <div class="heat-bar-label">可选消费 XLY</div>
+                        <div class="heat-bar-track">
+                            <div class="center-line"></div>
+                            <div class="heat-bar-fill down" style="width:2.65%"></div>
+                        </div>
+                        <div class="heat-bar-val down">-0.53%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 热门个股 -->
+        <div class="section-title">
+            <span class="icon stk">⭐</span>
+            热门个股
+        </div>
+        <div class="stock-grid">
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">Meta Platforms</div>
+                        <div class="stock-name-en">Meta</div>
+                    </div>
+                    <div class="stock-change up">▲ +2.55%</div>
+                </div>
+                <span class="stock-theme" style="background:rgba(34,197,94,0.12);border-color:rgba(34,197,94,0.25);color:#4ade80;">🔥 今日最强</span>
+                <div class="stock-code">META · $615.58</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">亚马逊</div>
+                        <div class="stock-name-en">Amazon</div>
+                    </div>
+                    <div class="stock-change up">▲ +0.75%</div>
+                </div>
+                <span class="stock-theme">📦 电商/云计算</span>
+                <div class="stock-code">AMZN · $245.98</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">英伟达</div>
+                        <div class="stock-name-en">NVIDIA</div>
+                    </div>
+                    <div class="stock-change up">▲ +0.71%</div>
+                </div>
+                <span class="stock-theme">🤖 AI算力龙头</span>
+                <div class="stock-code">NVDA · $196.93</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">微软</div>
+                        <div class="stock-name-en">Microsoft</div>
+                    </div>
+                    <div class="stock-change up">▲ +0.54%</div>
+                </div>
+                <span class="stock-theme">💡 AI/云计算</span>
+                <div class="stock-code">MSFT · $388.84</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">谷歌-A</div>
+                        <div class="stock-name-en">Alphabet</div>
+                    </div>
+                    <div class="stock-change up">▲ +0.16%</div>
+                </div>
+                <span class="stock-theme">🌐 搜索/广告</span>
+                <div class="stock-code">GOOGL · $367.03</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">苹果</div>
+                        <div class="stock-name-en">Apple</div>
+                    </div>
+                    <div class="stock-change down">▼ -0.64%</div>
+                </div>
+                <span class="stock-theme">📱 消费电子</span>
+                <div class="stock-code">AAPL · $310.66</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">博通</div>
+                        <div class="stock-name-en">Broadcom</div>
+                    </div>
+                    <div class="stock-change down">▼ -0.83%</div>
+                </div>
+                <span class="stock-theme">📡 网络芯片</span>
+                <div class="stock-code">AVGO · $370.78</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">京东</div>
+                        <div class="stock-name-en">JD.com</div>
+                    </div>
+                    <div class="stock-change down">▼ -1.08%</div>
+                </div>
+                <span class="stock-theme">🛒 电商</span>
+                <div class="stock-code">JD · $26.49</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">拼多多</div>
+                        <div class="stock-name-en">PDD</div>
+                    </div>
+                    <div class="stock-change down">▼ -1.44%</div>
+                </div>
+                <span class="stock-theme">🛍️ 电商出海</span>
+                <div class="stock-code">PDD · $82.53</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name">特斯拉</div>
+                        <div class="stock-name-en">Tesla</div>
+                    </div>
+                    <div class="stock-change down">▼ -4.02%</div>
+                </div>
+                <span class="stock-theme" style="background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.25);color:#f87171;">⚠️ 重挫</span>
+                <div class="stock-code">TSLA · $402.90</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div>
+                        <div class="stock-name" style="color:#f87171;">超威半导体</div>
+                        <div class="stock-name-en">AMD</div>
+                    </div>
+                    <div class="stock-change down">▼ -6.51%</div>
+                </div>
+                <span class="stock-theme" style="background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.25);color:#f87171;">🚨 暴跌</span>
+                <div class="stock-code">AMD · $516.11</div>
+            </div>
+        </div>
+
+        <!-- 市场分析 -->
+        <div class="section-title">
+            <span class="icon reason">💡</span>
+            市场分析：资金大轮动——弃科技、买能源
+        </div>
+        <div class="reason-grid">
+            <div class="reason-card warn">
+                <div class="reason-num">1</div>
+                <div class="reason-title">半导体板块遭血洗：AMD -6.51% 领跌，SMH -3.78%</div>
+                <div class="reason-desc">AMD收盘 $516.11，单日暴跌6.51%，居费城半导体指数成分股跌幅榜首。SMH半导体ETF同步重挫3.78%，成交量放大至1461万手（显著高于20日均量）。博通 -0.83%、NVDA虽勉强收涨0.71%但盘中一度跌至 $191.14。AI算力板块面临估值重估压力，资金明显撤退。</div>
+                <span class="reason-tag">半导体屠杀</span>
+            </div>
+            <div class="reason-card warn">
+                <div class="reason-num">2</div>
+                <div class="reason-title">特斯拉暴跌 -4.02%，新能源车板块承压</div>
+                <div class="reason-desc">特斯拉收盘 $402.90，日内最高 $419.56 后持续走低，收于日内低点附近。跌破 $410 整数关口，跌幅远超大盘均值。交付数据后的获利回吐、或市场对竞争加剧的担忧导致卖压集中释放。</div>
+                <span class="reason-tag">龙头重挫</span>
+            </div>
+            <div class="reason-card">
+                <div class="reason-num">3</div>
+                <div class="reason-title">Meta 逆势大涨 +2.55%，AI应用赛道获追捧</div>
+                <div class="reason-desc">Meta收盘 $615.58，盘中一度触及 $625.37。在科技股普跌的背景下，Meta成为少数逆势大涨的大型科技股。市场看好其AI广告变现能力及Threads用户增长，资金从半导体硬件轮动至AI应用层。</div>
+                <span class="reason-tag">AI应用领涨</span>
+            </div>
+            <div class="reason-card">
+                <div class="reason-num">4</div>
+                <div class="reason-title">能源板块 XLE +2.84%，防御轮动信号明确</div>
+                <div class="reason-desc">能源ETF XLE飙涨2.84%，为今日最强板块。成交量4100万手大幅放量。医疗XLV +1.53%、房地产XLRE +1.35%同步走强。资金从高估值科技/半导体切换至能源、防御板块的特征极为明显——这是典型的 "risk-off" 轮动格局。</div>
+                <span class="reason-tag">Risk-Off 轮动</span>
+            </div>
+            <div class="reason-card">
+                <div class="reason-num">5</div>
+                <div class="reason-title">纳指 -1.16% vs 道指仅 -0.25%：科技股承压大于传统蓝筹</div>
+                <div class="reason-desc">纳斯达克综合指数跌幅（-1.16%）是道指（-0.25%）的4.6倍。QQQ纳指100 ETF更跌1.85%，中小盘罗素2000跌0.91%。板块极度分化：科技XLK -2.39%、工业XLI -1.71%，而防御性板块普涨。市场宽度极差，上涨板块主要集中在防御端。</div>
+                <span class="reason-tag">极度分化</span>
+            </div>
+            <div class="reason-card">
+                <div class="reason-num">6</div>
+                <div class="reason-title">中概股承压：拼多多 -1.44%、京东 -1.08%</div>
+                <div class="reason-desc">拼多多收 $82.53 跌1.44%，京东 $26.49 跌1.08%，均跑输大盘。中概股整体受市场风险偏好回落影响，且缺乏独立催化剂支撑。中概电商估值持续受中美关系不确定性压制。</div>
+                <span class="reason-tag">中概走弱</span>
+            </div>
+        </div>
+
+        <!-- 重要新闻 -->
+        <div class="section-title">
+            <span class="icon news">📰</span>
+            今日重要新闻
+        </div>
+        <div class="news-grid">
+            <div class="news-card">
+                <div class="news-index">1</div>
+                <div class="news-body">
+                    <div class="news-title">AMD股价重挫6.5%，AI芯片竞争格局引发市场担忧</div>
+                    <div class="news-meta">AMD领跌费城半导体指数，市场对AI GPU市场份额及定价能力产生疑虑，资金加速撤离半导体板块</div>
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-index">2</div>
+                <div class="news-body">
+                    <div class="news-title">能源板块大涨2.8%，国际油价反弹推动资金轮动</div>
+                    <div class="news-meta">XLE能源ETF创近期最大单日涨幅，原油价格走强叠加避险需求，能源股成为今日最强避风港</div>
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-index">3</div>
+                <div class="news-body">
+                    <div class="news-title">Meta逆市大涨逾2.5%，AI广告变现逻辑持续发酵</div>
+                    <div class="news-meta">Meta股价突破615美元，Threads用户增长及AI推荐算法提升广告转化率获华尔街认可</div>
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-index">4</div>
+                <div class="news-body">
+                    <div class="news-title">特斯拉跌破410美元，交付超预期后获利盘涌出</div>
+                    <div class="news-meta">尽管Q2交付数据超预期，特斯拉日内高开低走重挫4%，市场对下半年利润率展望趋于谨慎</div>
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-index">5</div>
+                <div class="news-body">
+                    <div class="news-title">市场风格剧烈切换：科技-2.4% vs 防御板块普涨</div>
+                    <div class="news-meta">医疗XLV +1.5%、房地产XLRE +1.4%、公用事业XLU +0.9%，本轮risk-off轮动幅度为近两周最大</div>
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-index">6</div>
+                <div class="news-body">
+                    <div class="news-title">美联储7月FOMC会议临近，市场对降息节奏预期分歧加大</div>
+                    <div class="news-meta">本周多位联储官员讲话将提供政策线索，市场对9月降息幅度的定价存在分歧，风险资产承压</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 关键数据速览 -->
+        <div class="section-title">
+            <span class="icon idx">📋</span>
+            关键数据速览
+        </div>
+        <table class="sector-table">
+            <thead>
+                <tr><th>指标</th><th>数值</th><th>备注</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>涨跌比（标普500）</td><td style="color:#f87171;">偏空</td><td>能源/防御板块涨 vs 科技/工业跌</td></tr>
+                <tr><td>VIX 恐慌指数</td><td>—</td><td>预计走高，反映避险情绪升温</td></tr>
+                <tr><td>成交量</td><td style="color:#fbbf24;">半导体放量</td><td>SMH成交1461万手，显著高于20日均量</td></tr>
+                <tr><td>板块轮动信号</td><td style="color:#fbbf24;">Risk-Off</td><td>资金从高beta科技切向低波动防御板块</td></tr>
+                <tr><td>费城半导体指数</td><td style="color:#f87171;">-3.78%</td><td>SMH为近期最大单日跌幅之一</td></tr>
+                <tr><td>Mag-7 表现</td><td>4涨3跌</td><td>META/AMZN/NVDA/MSFT涨 vs TSLA/AAPL/GOOGL跌</td></tr>
+            </tbody>
+        </table>
+
+        <div class="footer">
+            <p>生成时间：2026-07-08 07:50 CST</p>
+            <p style="margin-top:4px;color:var(--text-muted);">数据来源：新浪财经（指数/板块ETF）、东方财富（个股行情）、SPDR（板块ETF实时数据）</p>
+            <p class="disclaimer">⚠️ 仅为数据整理与分析，不构成任何投资建议。股市有风险，投资需谨慎。</p>
+        </div>
+
+    </div>
+</body>
+</html>

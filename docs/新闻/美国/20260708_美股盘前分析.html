@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美股盘前分析 | 2026年07月08日</title>
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-card: #1a2332;
+            --bg-card-hover: #1f2b3d;
+            --border: #2a3a4e;
+            --text-primary: #e8edf5;
+            --text-secondary: #8a9bb5;
+            --text-muted: #5a6b82;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+            --accent-amber: #f59e0b;
+            --accent-purple: #a855f7;
+            --accent-cyan: #06b6d4;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .nav-link {
+            display: inline-block; padding: 10px 20px; background: var(--bg-card);
+            border: 1px solid var(--border); border-radius: 8px; color: var(--accent-blue);
+            text-decoration: none; font-size: 14px; margin-bottom: 24px; transition: all .2s;
+        }
+        .nav-link:hover { background: rgba(59,130,246,0.1); border-color: var(--accent-blue); }
+        .header {
+            background: linear-gradient(135deg, #1a1a3a 0%, #1a2a4a 50%, #0d1a2a 100%);
+            border: 1px solid var(--border); border-radius: 16px; padding: 32px 36px;
+            margin-bottom: 24px; position: relative; overflow: hidden;
+        }
+        .header::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at 30% 50%, rgba(59,130,246,0.08) 0%, transparent 60%),
+                        radial-gradient(ellipse at 70% 40%, rgba(239,68,68,0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .header-flag { font-size: 28px; margin-bottom: 4px; position: relative; }
+        .header-title { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 6px; position: relative; }
+        .header-subtitle { font-size: 15px; color: var(--text-secondary); position: relative; }
+        .header-date {
+            display: inline-flex; align-items: center; gap: 8px; margin-top: 12px;
+            padding: 6px 14px; background: rgba(59,130,246,0.10);
+            border: 1px solid rgba(59,130,246,0.25); border-radius: 8px;
+            font-size: 13px; color: #93c5fd; position: relative;
+        }
+        .header-badge {
+            display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; margin-left: 10px;
+            padding: 6px 14px; background: rgba(245,158,11,0.12);
+            border: 1px solid rgba(245,158,11,0.3); border-radius: 8px;
+            font-size: 13px; color: #fbbf24; position: relative;
+        }
+        .index-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 28px; }
+        .index-card {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+            padding: 24px; transition: transform .2s, box-shadow .2s;
+        }
+        .index-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+        .index-card.up { border-left: 4px solid var(--accent-green); }
+        .index-card.down { border-left: 4px solid var(--accent-red); }
+        .index-card .label { font-size: 13px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .index-card .value { font-size: 32px; font-weight: 700; margin-bottom: 4px; }
+        .index-card .change { font-size: 18px; font-weight: 600; }
+        .index-card .change.up { color: var(--accent-green); }
+        .index-card .change.down { color: var(--accent-red); }
+        .section-title {
+            font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 16px;
+            padding-bottom: 12px; border-bottom: 2px solid var(--border);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .section-title .icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .section-title .icon.idx { background: rgba(59,130,246,0.2); color: #60a5fa; }
+        .section-title .icon.stk { background: rgba(34,197,94,0.2); color: #4ade80; }
+        .section-title .icon.sec { background: rgba(168,85,247,0.2); color: #c084fc; }
+        .section-title .icon.macro { background: rgba(245,158,11,0.2); color: #fbbf24; }
+        .section-title .icon.reason { background: rgba(6,182,212,0.2); color: #22d3ee; }
+        .section-title .icon.event { background: rgba(244,63,94,0.2); color: #fb7185; }
+
+        .sector-table {
+            width: 100%; border-collapse: separate; border-spacing: 0; margin-bottom: 28px;
+            background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border);
+        }
+        .sector-table thead th {
+            background: rgba(59,130,246,0.08); padding: 14px 18px; text-align: left;
+            font-size: 13px; font-weight: 600; color: var(--text-secondary);
+            text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid var(--border);
+        }
+        .sector-table tbody td { padding: 14px 18px; border-bottom: 1px solid rgba(42,58,78,0.5); font-size: 14px; }
+        .sector-table tbody tr:last-child td { border-bottom: none; }
+        .sector-table tbody tr:hover { background: var(--bg-card-hover); }
+        .sector-table .rank { width: 50px; font-weight: 700; color: var(--text-muted); }
+        .sector-table .sector-name { font-weight: 600; color: var(--text-primary); }
+        .sector-table .change-val { font-weight: 700; color: var(--accent-green); }
+        .sector-table .change-val.down { color: var(--accent-red); }
+        .sector-table .driver { color: var(--text-secondary); font-size: 13px; }
+        .sector-table .up-down { font-size: 12px; color: var(--text-muted); }
+
+        .stock-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; margin-bottom: 28px; }
+        .stock-card {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+            padding: 18px; transition: transform .2s, box-shadow .2s, border-color .2s; cursor: default;
+        }
+        .stock-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.25); border-color: rgba(59,130,246,0.3); }
+        .stock-card .stock-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+        .stock-card .stock-name { font-size: 16px; font-weight: 700; color: #fff; }
+        .stock-card .stock-name-en { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+        .stock-card .stock-change { font-size: 18px; font-weight: 800; white-space: nowrap; }
+        .stock-card .stock-change.up { color: var(--accent-green); }
+        .stock-card .stock-change.down { color: var(--accent-red); }
+        .stock-card .stock-price { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+        .stock-card .stock-theme { display: inline-block; padding: 3px 10px; background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2); border-radius: 6px; font-size: 12px; color: #93c5fd; }
+        .stock-card .stock-code { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+        .macro-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 28px; }
+        .macro-item {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px;
+            padding: 16px; display: flex; flex-direction: column; gap: 4px;
+        }
+        .macro-item .macro-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .macro-item .macro-value { font-size: 18px; font-weight: 700; color: #fff; }
+        .macro-item .macro-change { font-size: 13px; font-weight: 600; }
+        .macro-item .macro-change.up { color: var(--accent-green); }
+        .macro-item .macro-change.down { color: var(--accent-red); }
+
+        .reason-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; margin-bottom: 28px; }
+        .reason-card {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+            padding: 20px; position: relative; overflow: hidden;
+        }
+        .reason-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent-cyan); }
+        .reason-card .reason-num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: rgba(6,182,212,0.15); border-radius: 8px; font-size: 14px; font-weight: 700; color: #22d3ee; margin-bottom: 8px; }
+        .reason-card .reason-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+        .reason-card .reason-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+        .reason-card .reason-tag { display: inline-block; margin-top: 10px; padding: 3px 10px; background: rgba(6,182,212,0.1); border: 1px solid rgba(6,182,212,0.2); border-radius: 6px; font-size: 11px; color: #67e8f9; }
+
+        .timeline { position: relative; padding-left: 24px; margin-bottom: 28px; }
+        .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+        .timeline-item { position: relative; padding: 8px 0 8px 28px; }
+        .timeline-item::before {
+            content: ''; position: absolute; left: -20px; top: 14px;
+            width: 10px; height: 10px; border-radius: 50%;
+            background: var(--accent-blue); border: 2px solid var(--bg-primary);
+        }
+        .timeline-item .time { font-size: 12px; color: var(--text-muted); margin-bottom: 2px; }
+        .timeline-item .event { font-size: 14px; color: var(--text-primary); }
+
+        .insight-box {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+            padding: 20px; margin-bottom: 28px; border-left: 4px solid var(--accent-purple);
+        }
+        .insight-box .insight-title { font-size: 15px; font-weight: 700; color: #c084fc; margin-bottom: 8px; }
+        .insight-box .insight-text { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+
+        .footer { text-align: center; color: var(--text-muted); font-size: 12px; padding: 20px 0; border-top: 1px solid var(--border); margin-top: 12px; }
+        .disclaimer { color: var(--text-muted); font-size: 12px; text-align: center; margin-top: 8px; }
+        @media (max-width: 640px) {
+            .container { padding: 12px; }
+            .header { padding: 20px; }
+            .header-title { font-size: 22px; }
+            .index-card .value { font-size: 26px; }
+            .stock-grid { grid-template-columns: 1fr; }
+            .reason-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+    <meta http-equiv="refresh" content="300">
+</head>
+<body>
+    <div class="container">
+
+        <div class="header">
+            <div class="header-flag">🇺🇸</div>
+            <div class="header-title">美股盘前分析</div>
+            <div class="header-subtitle">2026年07月08日 · 领涨: Meta+2.5% · 优步+2.6%；领跌: 特斯拉-4.0% · 超威半导体-6.5% · 蔚来-2.8%</div>
+            <div class="header-date">📅 2026年07月08日 盘前</div>
+            <span class="header-badge">🕐 盘前交易中 · 每5分钟刷新</span>
+        </div>
+
+        <a class="nav-link" href="index.html">← 返回导航</a>
+
+        <div class="section-title">
+            <span class="icon idx">📊</span>
+            指数期货
+        </div>
+        <div class="index-grid">
+        <div class="index-card down">
+            <div class="label">📈 道琼斯期货</div>
+            <div class="value">52569.36</div>
+            <div class="change down">▼ -1.18%</div>
+            <div style="margin-top:4px;font-size:13px;color:var(--text-secondary)">
+                高 53207.00 / 低 52562.00 / 昨收 53197.00
+            </div>
+        </div>
+        <div class="index-card down">
+            <div class="label">📈 纳斯达克100期货</div>
+            <div class="value">28980.71</div>
+            <div class="change down">▼ -1.40%</div>
+            <div style="margin-top:4px;font-size:13px;color:var(--text-secondary)">
+                高 29558.75 / 低 28957.25 / 昨收 29391.50
+            </div>
+        </div>
+        <div class="index-card down">
+            <div class="label">📈 标普500期货</div>
+            <div class="value">7480.26</div>
+            <div class="change down">▼ -0.94%</div>
+            <div style="margin-top:4px;font-size:13px;color:var(--text-secondary)">
+                高 7563.00 / 低 7477.50 / 昨收 7551.25
+            </div>
+        </div></div>
+
+        <div class="section-title">
+            <span class="icon sec">📋</span>
+            盘前板块表现
+        </div>
+        <table class="sector-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>板块</th>
+                    <th>平均涨跌</th>
+                    <th>核心个股</th>
+                    <th>涨跌比</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+        <tr>
+            <td class="rank">1</td>
+            <td class="sector-name">科技/出行</td>
+            <td class="change-val up">▲ +2.64%</td>
+            <td class="driver">优步+2.6%</td>
+            <td class="up-down">1/1 涨</td>
+        </tr>
+        <tr>
+            <td class="rank">2</td>
+            <td class="sector-name">科技/社交</td>
+            <td class="change-val up">▲ +2.55%</td>
+            <td class="driver">Meta+2.5%</td>
+            <td class="up-down">1/1 涨</td>
+        </tr>
+        <tr>
+            <td class="rank">3</td>
+            <td class="sector-name">科技/AI软件</td>
+            <td class="change-val up">▲ +1.38%</td>
+            <td class="driver">Palantir+1.4%</td>
+            <td class="up-down">1/1 涨</td>
+        </tr>
+        <tr>
+            <td class="rank">4</td>
+            <td class="sector-name">科技/电商云</td>
+            <td class="change-val up">▲ +0.75%</td>
+            <td class="driver">亚马逊+0.8%</td>
+            <td class="up-down">1/1 涨</td>
+        </tr>
+        <tr>
+            <td class="rank">5</td>
+            <td class="sector-name">半导体/AI</td>
+            <td class="change-val up">▲ +0.71%</td>
+            <td class="driver">英伟达+0.7%</td>
+            <td class="up-down">1/1 涨</td>
+        </tr>
+        <tr>
+            <td class="rank">6</td>
+            <td class="sector-name">科技/软件云</td>
+            <td class="change-val up">▲ +0.54%</td>
+            <td class="driver">微软+0.5%</td>
+            <td class="up-down">1/1 涨</td>
+        </tr>
+        <tr>
+            <td class="rank">7</td>
+            <td class="sector-name">中概/电商云</td>
+            <td class="change-val up">▲ +0.23%</td>
+            <td class="driver">阿里巴巴+0.2%</td>
+            <td class="up-down">1/1 涨</td>
+        </tr>
+        <tr>
+            <td class="rank">8</td>
+            <td class="sector-name">科技/互联网</td>
+            <td class="change-val up">▲ +0.16%</td>
+            <td class="driver">谷歌-A+0.2%</td>
+            <td class="up-down">1/1 涨</td>
+        </tr>
+        <tr>
+            <td class="rank">9</td>
+            <td class="sector-name">科技/消费电子</td>
+            <td class="change-val down">▼ -0.64%</td>
+            <td class="driver">苹果-0.6%</td>
+            <td class="up-down">0/1 涨</td>
+        </tr>
+        <tr>
+            <td class="rank">10</td>
+            <td class="sector-name">半导体/网络</td>
+            <td class="change-val down">▼ -0.83%</td>
+            <td class="driver">博通-0.8%</td>
+            <td class="up-down">0/1 涨</td>
+        </tr>
+        <tr>
+            <td class="rank">11</td>
+            <td class="sector-name">中概/电商</td>
+            <td class="change-val down">▼ -1.26%</td>
+            <td class="driver">京东-1.1% · 拼多多-1.4%</td>
+            <td class="up-down">0/2 涨</td>
+        </tr>
+        <tr>
+            <td class="rank">12</td>
+            <td class="sector-name">中概/娱乐</td>
+            <td class="change-val down">▼ -1.68%</td>
+            <td class="driver">哔哩哔哩-1.7%</td>
+            <td class="up-down">0/1 涨</td>
+        </tr>
+        <tr>
+            <td class="rank">13</td>
+            <td class="sector-name">半导体/移动</td>
+            <td class="change-val down">▼ -1.88%</td>
+            <td class="driver">高通-1.9%</td>
+            <td class="up-down">0/1 涨</td>
+        </tr>
+        <tr>
+            <td class="rank">14</td>
+            <td class="sector-name">中概/电动车</td>
+            <td class="change-val down">▼ -2.79%</td>
+            <td class="driver">蔚来-2.8%</td>
+            <td class="up-down">0/1 涨</td>
+        </tr>
+        <tr>
+            <td class="rank">15</td>
+            <td class="sector-name">金融/加密</td>
+            <td class="change-val down">▼ -3.17%</td>
+            <td class="driver">Coinbase-3.2%</td>
+            <td class="up-down">0/1 涨</td>
+        </tr>
+        <tr>
+            <td class="rank">16</td>
+            <td class="sector-name">科技/电动车</td>
+            <td class="change-val down">▼ -4.02%</td>
+            <td class="driver">特斯拉-4.0%</td>
+            <td class="up-down">0/1 涨</td>
+        </tr>
+        <tr>
+            <td class="rank">17</td>
+            <td class="sector-name">半导体/CPU</td>
+            <td class="change-val down">▼ -6.51%</td>
+            <td class="driver">超威半导体-6.5%</td>
+            <td class="up-down">0/1 涨</td>
+        </tr>
+        <tr>
+            <td class="rank">18</td>
+            <td class="sector-name">半导体/架构</td>
+            <td class="change-val down">▼ -6.77%</td>
+            <td class="driver">ARM-6.8%</td>
+            <td class="up-down">0/1 涨</td>
+        </tr>
+        <tr>
+            <td class="rank">19</td>
+            <td class="sector-name">半导体/制造</td>
+            <td class="change-val down">▼ -9.66%</td>
+            <td class="driver">英特尔-9.7%</td>
+            <td class="up-down">0/1 涨</td>
+        </tr>
+            </tbody>
+        </table>
+
+        <div class="section-title">
+            <span class="icon stk">🔥</span>
+            盘前热门个股
+        </div>
+        <div class="stock-grid">
+            
+        <div class="stock-card">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">优步</div>
+                    <div class="stock-name-en">Uber</div>
+                </div>
+            </div>
+            <div class="stock-price">$74.33</div>
+            <div class="stock-change up">▲ +2.64%</div>
+            <span class="stock-theme">🚕 出行平台</span>
+            <div class="stock-code">UBER</div>
+        </div>
+        <div class="stock-card">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">Meta</div>
+                    <div class="stock-name-en">Meta</div>
+                </div>
+            </div>
+            <div class="stock-price">$615.58</div>
+            <div class="stock-change up">▲ +2.55%</div>
+            <span class="stock-theme">📱 社交/广告</span>
+            <div class="stock-code">META</div>
+        </div>
+        <div class="stock-card">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">Palantir</div>
+                    <div class="stock-name-en">Palantir</div>
+                </div>
+            </div>
+            <div class="stock-price">$134.37</div>
+            <div class="stock-change up">▲ +1.38%</div>
+            <span class="stock-theme">🔍 AI数据分析</span>
+            <div class="stock-code">PLTR</div>
+        </div>
+        <div class="stock-card">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">亚马逊</div>
+                    <div class="stock-name-en">Amazon</div>
+                </div>
+            </div>
+            <div class="stock-price">$245.98</div>
+            <div class="stock-change up">▲ +0.75%</div>
+            <span class="stock-theme">📦 电商/云计算</span>
+            <div class="stock-code">AMZN</div>
+        </div>
+        <div class="stock-card">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">英伟达</div>
+                    <div class="stock-name-en">NVIDIA</div>
+                </div>
+            </div>
+            <div class="stock-price">$196.93</div>
+            <div class="stock-change up">▲ +0.71%</div>
+            <span class="stock-theme">🤖 AI算力龙头</span>
+            <div class="stock-code">NVDA</div>
+        </div>
+        <div class="stock-card">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">微软</div>
+                    <div class="stock-name-en">Microsoft</div>
+                </div>
+            </div>
+            <div class="stock-price">$388.84</div>
+            <div class="stock-change up">▲ +0.54%</div>
+            <span class="stock-theme">💡 AI/云计算</span>
+            <div class="stock-code">MSFT</div>
+        </div>
+        <div class="stock-card">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">阿里巴巴</div>
+                    <div class="stock-name-en">Alibaba</div>
+                </div>
+            </div>
+            <div class="stock-price">$98.14</div>
+            <div class="stock-change up">▲ +0.23%</div>
+            <span class="stock-theme">☁️ 云计算+电商</span>
+            <div class="stock-code">BABA</div>
+        </div>
+        <div class="stock-card">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">谷歌-A</div>
+                    <div class="stock-name-en">Alphabet</div>
+                </div>
+            </div>
+            <div class="stock-price">$367.03</div>
+            <div class="stock-change up">▲ +0.16%</div>
+            <span class="stock-theme">🌐 搜索/广告</span>
+            <div class="stock-code">GOOGL</div>
+        </div>
+        <div class="stock-card">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">苹果</div>
+                    <div class="stock-name-en">Apple</div>
+                </div>
+            </div>
+            <div class="stock-price">$310.66</div>
+            <div class="stock-change down">▼ -0.64%</div>
+            <span class="stock-theme">📱 消费电子</span>
+            <div class="stock-code">AAPL</div>
+        </div>
+        <div class="stock-card">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">博通</div>
+                    <div class="stock-name-en">Broadcom</div>
+                </div>
+            </div>
+            <div class="stock-price">$370.78</div>
+            <div class="stock-change down">▼ -0.83%</div>
+            <span class="stock-theme">📡 网络芯片</span>
+            <div class="stock-code">AVGO</div>
+        </div>
+        <div class="stock-card">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">京东</div>
+                    <div class="stock-name-en">JD.com</div>
+                </div>
+            </div>
+            <div class="stock-price">$26.49</div>
+            <div class="stock-change down">▼ -1.08%</div>
+            <span class="stock-theme">🛒 电商</span>
+            <div class="stock-code">JD</div>
+        </div>
+        <div class="stock-card">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">拼多多</div>
+                    <div class="stock-name-en">PDD</div>
+                </div>
+            </div>
+            <div class="stock-price">$82.53</div>
+            <div class="stock-change down">▼ -1.44%</div>
+            <span class="stock-theme">🛒 电商出海</span>
+            <div class="stock-code">PDD</div>
+        </div>
+        <div class="stock-card">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">哔哩哔哩</div>
+                    <div class="stock-name-en">Bilibili</div>
+                </div>
+            </div>
+            <div class="stock-price">$17.60</div>
+            <div class="stock-change down">▼ -1.68%</div>
+            <span class="stock-theme">🎬 视频社区</span>
+            <div class="stock-code">BILI</div>
+        </div>
+        <div class="stock-card">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">高通</div>
+                    <div class="stock-name-en">Qualcomm</div>
+                </div>
+            </div>
+            <div class="stock-price">$182.97</div>
+            <div class="stock-change down">▼ -1.88%</div>
+            <span class="stock-theme">📱 移动芯片</span>
+            <div class="stock-code">QCOM</div>
+        </div>
+        <div class="stock-card">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">蔚来</div>
+                    <div class="stock-name-en">NIO</div>
+                </div>
+            </div>
+            <div class="stock-price">$4.88</div>
+            <div class="stock-change down">▼ -2.79%</div>
+            <span class="stock-theme">🚗 新能源车</span>
+            <div class="stock-code">NIO</div>
+        </div>
+        <div class="stock-card">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">Coinbase</div>
+                    <div class="stock-name-en">Coinbase</div>
+                </div>
+            </div>
+            <div class="stock-price">$163.51</div>
+            <div class="stock-change down">▼ -3.17%</div>
+            <span class="stock-theme">₿ 加密货币</span>
+            <div class="stock-code">COIN</div>
+        </div>
+        <div class="stock-card">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">特斯拉</div>
+                    <div class="stock-name-en">Tesla</div>
+                </div>
+            </div>
+            <div class="stock-price">$402.90</div>
+            <div class="stock-change down">▼ -4.02%</div>
+            <span class="stock-theme">🚗 新能源车/AI</span>
+            <div class="stock-code">TSLA</div>
+        </div>
+        <div class="stock-card">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">超威半导体</div>
+                    <div class="stock-name-en">AMD</div>
+                </div>
+            </div>
+            <div class="stock-price">$516.11</div>
+            <div class="stock-change down">▼ -6.51%</div>
+            <span class="stock-theme">🖥 CPU/GPU</span>
+            <div class="stock-code">AMD</div>
+        </div>
+        <div class="stock-card">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">ARM</div>
+                    <div class="stock-name-en">Arm Holdings</div>
+                </div>
+            </div>
+            <div class="stock-price">$300.43</div>
+            <div class="stock-change down">▼ -6.77%</div>
+            <span class="stock-theme">💎 芯片架构</span>
+            <div class="stock-code">ARM</div>
+        </div>
+        <div class="stock-card">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">英特尔</div>
+                    <div class="stock-name-en">Intel</div>
+                </div>
+            </div>
+            <div class="stock-price">$110.39</div>
+            <div class="stock-change down">▼ -9.66%</div>
+            <span class="stock-theme">🔵 芯片制造</span>
+            <div class="stock-code">INTC</div>
+        </div>
+        </div>
+
+        <div class="section-title">
+            <span class="icon macro">🛢️</span>
+            大宗商品
+        </div>
+        <div class="macro-grid">
+            
+        <div class="macro-item">
+            <div class="macro-label">WTI 原油</div>
+            <div class="macro-value">$74.87</div>
+            <div class="macro-change up">▲ +6.29%</div>
+        </div>
+        <div class="macro-item">
+            <div class="macro-label">COMEX 黄金</div>
+            <div class="macro-value">$4073.16</div>
+            <div class="macro-change down">▼ -2.03%</div>
+        </div>
+        <div class="macro-item">
+            <div class="macro-label">COMEX 白银</div>
+            <div class="macro-value">$59.22</div>
+            <div class="macro-change down">▼ -3.44%</div>
+        </div>
+        </div>
+
+        <div class="section-title">
+            <span class="icon reason">💡</span>
+            盘前关注要点
+        </div>
+        <div class="reason-grid">
+            <div class="reason-card">
+                <div class="reason-num">1</div>
+                <div class="reason-title">三大指数期货全线下跌，关注科技股抗跌力度</div>
+                <div class="reason-desc">隔夜全球风险情绪偏弱，亚洲市场承压。纳指期货领跌反映AI/半导体板块估值调整压力。盘中关注是否有资金回流科技权重的迹象。</div>
+                <span class="reason-tag">市场情绪</span>
+            </div>
+            <div class="reason-card">
+                <div class="reason-num">2</div>
+                <div class="reason-title">鲍威尔国会听证后，市场重新定价利率路径</div>
+                <div class="reason-desc">美联储主席鲍威尔前日半年度货币政策证词后，市场对降息时点的分歧加大。关注今晚美联储官员讲话是否释放更多信号。</div>
+                <span class="reason-tag">货币政策</span>
+            </div>
+            <div class="reason-card">
+                <div class="reason-num">3</div>
+                <div class="reason-title">Q2财报季即将开启，关注业绩前瞻</div>
+                <div class="reason-desc">大型银行将于下周开启Q2财报季。市场对AI相关企业盈利能否兑现预期分歧明显。关注盘后是否有业绩预告披露。</div>
+                <span class="reason-tag">财报季</span>
+            </div>
+            <div class="reason-card">
+                <div class="reason-num">4</div>
+                <div class="reason-title">原油期货大幅波动，关注能源板块传导</div>
+                <div class="reason-desc">中东地缘局势变化导致油价大幅波动。油价走势直接影响能源板块，并通过通胀预期间接影响整体市场估值。</div>
+                <span class="reason-tag">地缘风险</span>
+            </div>
+        </div>
+
+        <div class="section-title">
+            <span class="icon event">📅</span>
+            今晚重点关注（北京时间）
+        </div>
+        <div class="timeline">
+            
+        <div class="timeline-item">
+            <div class="time" style="color:#fbbf24;font-weight:700;">20:30 ⭐</div>
+            <div class="event" style="color:#fbbf24;">美国6月CPI 消费者物价指数</div>
+        </div>
+        <div class="timeline-item">
+            <div class="time" >20:30 </div>
+            <div class="event" >美国至7月5日当周初请失业金人数</div>
+        </div>
+        <div class="timeline-item">
+            <div class="time" >22:30 </div>
+            <div class="event" >美国至7月4日当周EIA天然气库存</div>
+        </div>
+        <div class="timeline-item">
+            <div class="time" >23:00 </div>
+            <div class="event" >美联储理事鲍曼发表讲话</div>
+        </div>
+        <div class="timeline-item">
+            <div class="time" >01:00 (次日) </div>
+            <div class="event" >美国6月政府预算</div>
+        </div>
+        </div>
+
+        <div class="insight-box">
+            <div class="insight-title">🔮 盘前提示</div>
+            <div class="insight-text">
+                盘前交易时段流动性较低，价格波动可能剧烈。期货走势仅为早盘参考，正式开盘后行情可能逆转。建议等待开盘30分钟后观察方向确认再做判断。<br><br>
+                关注今晚美股开盘后科技权重股走势——若纳指期货弱势延续至正式交易，AI/半导体板块可能继续调整寻找支撑。
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>生成时间：2026-07-08 16:42（北京时间） · 数据为盘前交易时段</p>
+            <p class="disclaimer">⚠️ 数据来源：新浪财经 · 仅为数据整理，不构成任何投资建议。股市有风险，投资需谨慎。</p>
+        </div>
+
+    </div>
+</body>
+</html>

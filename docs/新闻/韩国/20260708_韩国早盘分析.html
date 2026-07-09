@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>韩国股市早盘分析 | 2026年07月08日</title>
+    <style>:root {
+    --bg-primary: #0a0e17;
+    --bg-secondary: #111827;
+    --bg-card: #1a2332;
+    --bg-card-hover: #1f2b3d;
+    --border: #2a3a4e;
+    --text-primary: #e8edf5;
+    --text-secondary: #8a9bb5;
+    --text-muted: #5a6b82;
+    --accent-red: #ef4444;
+    --accent-green: #22c55e;
+    --accent-blue: #3b82f6;
+    --accent-amber: #f59e0b;
+    --accent-purple: #a855f7;
+    --accent-cyan: #06b6d4;
+    --accent-rose: #f43f5e;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; min-height: 100vh;
+}
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+.header {
+    background: linear-gradient(135deg, #1a2a1a 0%, #1a2a3a 50%, #1a1a2a 100%);
+    border: 1px solid var(--border); border-radius: 16px; padding: 32px 36px;
+    margin-bottom: 24px; position: relative; overflow: hidden;
+}
+.header::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 25% 50%, rgba(59,130,246,0.08) 0%, transparent 55%),
+                radial-gradient(ellipse at 75% 50%, rgba(34,197,94,0.06) 0%, transparent 55%);
+    pointer-events: none;
+}
+.header-flag { font-size: 28px; margin-bottom: 4px; position: relative; }
+.header-title { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 6px; position: relative; }
+.header-subtitle { font-size: 15px; color: var(--text-secondary); position: relative; }
+.header-date {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 12px;
+    padding: 6px 14px; background: rgba(59,130,246,0.10);
+    border: 1px solid rgba(59,130,246,0.25); border-radius: 8px;
+    font-size: 13px; color: #93c5fd; position: relative;
+}
+.header-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; background: rgba(34,197,94,0.12);
+    border: 1px solid rgba(34,197,94,0.25); border-radius: 6px;
+    font-size: 12px; color: #86efac; font-weight: 600; margin-left: 10px;
+}
+.nav-link {
+    display: inline-block; padding: 10px 20px; background: var(--bg-card);
+    border: 1px solid var(--border); border-radius: 8px; color: var(--accent-blue);
+    text-decoration: none; font-size: 14px; margin-bottom: 24px; transition: all .2s;
+}
+.nav-link:hover { background: rgba(59,130,246,0.1); border-color: var(--accent-blue); }
+.section-title {
+    font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 16px;
+    padding-bottom: 12px; border-bottom: 2px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+}
+.section-title .icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+.section-title .icon.idx { background: rgba(59,130,246,0.2); color: #60a5fa; }
+.section-title .icon.mega { background: rgba(239,68,68,0.2); color: #f87171; }
+.section-title .icon.us { background: rgba(34,197,94,0.2); color: #4ade80; }
+.section-title .icon.event { background: rgba(245,158,11,0.2); color: #fbbf24; }
+.section-title .icon.risk { background: rgba(239,68,68,0.2); color: #f87171; }
+.section-title .icon.outlook { background: rgba(6,182,212,0.2); color: #22d3ee; }
+.index-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 28px; }
+.index-card {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 24px; transition: transform .2s, box-shadow .2s;
+}
+.index-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+.index-card.up { border-left: 4px solid var(--accent-green); }
+.index-card.down { border-left: 4px solid var(--accent-red); }
+.index-card .label { font-size: 13px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.index-card .value { font-size: 32px; font-weight: 700; margin-bottom: 4px; }
+.index-card .change { font-size: 18px; font-weight: 600; }
+.index-card .change.up { color: var(--accent-green); }
+.index-card .change.down { color: var(--accent-red); }
+.index-card .sub-info { font-size: 13px; color: var(--text-muted); margin-top: 6px; }
+.us-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 28px; }
+.us-card {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 18px; text-align: center;
+}
+.us-card .label { font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; }
+.us-card .value { font-size: 22px; font-weight: 700; }
+.us-card .change { font-size: 14px; font-weight: 600; margin-top: 4px; }
+.us-card .change.up { color: var(--accent-green); }
+.us-card .change.down { color: var(--accent-red); }
+.mega-table {
+    width: 100%; border-collapse: separate; border-spacing: 0; margin-bottom: 28px;
+    background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border);
+}
+.mega-table thead th {
+    background: rgba(239,68,68,0.05); padding: 14px 18px; text-align: left;
+    font-size: 13px; font-weight: 600; color: var(--text-secondary);
+    text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid var(--border);
+}
+.mega-table tbody td { padding: 14px 18px; border-bottom: 1px solid rgba(42,58,78,0.5); font-size: 14px; }
+.mega-table tbody tr:last-child td { border-bottom: none; }
+.mega-table tbody tr:hover { background: var(--bg-card-hover); }
+.mega-table .stock-col { font-weight: 700; color: #fff; }
+.mega-table .stock-col .en { font-weight: 400; font-size: 12px; color: var(--text-muted); }
+.mega-table .change-col { font-weight: 700; }
+.mega-table .change-col.up { color: var(--accent-green); }
+.mega-table .change-col.down { color: var(--accent-red); }
+.mega-table .note-col { color: var(--text-secondary); font-size: 13px; }
+.event-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; margin-bottom: 28px; }
+.event-card {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 18px; position: relative; overflow: hidden;
+}
+.event-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; }
+.event-card.macro::before { background: var(--accent-blue); }
+.event-card.semi::before { background: var(--accent-red); }
+.event-card.fx::before { background: var(--accent-amber); }
+.event-card.flow::before { background: var(--accent-purple); }
+.event-card.risk::before { background: var(--accent-rose); }
+.event-card .event-tag {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 600; margin-bottom: 8px;
+}
+.event-card.macro .event-tag { background: rgba(59,130,246,0.15); color: #60a5fa; }
+.event-card.semi .event-tag { background: rgba(239,68,68,0.15); color: #f87171; }
+.event-card.fx .event-tag { background: rgba(245,158,11,0.15); color: #fbbf24; }
+.event-card.flow .event-tag { background: rgba(168,85,247,0.15); color: #c084fc; }
+.event-card.risk .event-tag { background: rgba(244,63,94,0.15); color: #fb7185; }
+.event-card .event-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.event-card .event-desc { font-size: 13px; color: var(--text-secondary); }
+.signal-box {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 20px; margin-bottom: 28px;
+}
+.signal-row { display: flex; align-items: center; gap: 14px; padding: 10px 0; border-bottom: 1px solid rgba(42,58,78,0.4); }
+.signal-row:last-child { border-bottom: none; }
+.signal-icon { font-size: 20px; width: 36px; text-align: center; }
+.signal-label { font-size: 14px; color: var(--text-secondary); min-width: 80px; }
+.signal-value { font-size: 14px; font-weight: 600; flex: 1; }
+.signal-value.bull { color: var(--accent-green); }
+.signal-value.bear { color: var(--accent-red); }
+.signal-value.neutral { color: var(--accent-amber); }
+.risk-list { list-style: none; padding: 0; }
+.risk-list li {
+    padding: 10px 14px; margin-bottom: 8px;
+    background: rgba(239,68,68,0.04); border: 1px solid rgba(239,68,68,0.15);
+    border-radius: 8px; font-size: 13px; color: var(--text-secondary);
+    display: flex; align-items: flex-start; gap: 10px;
+}
+.risk-list li::before { content: 'a0e0f'; flex-shrink: 0; }
+.footer { text-align: center; color: var(--text-muted); font-size: 12px; padding: 20px 0; border-top: 1px solid var(--border); margin-top: 12px; }
+.disclaimer { color: var(--text-muted); font-size: 12px; text-align: center; margin-top: 8px; }
+@media (max-width: 640px) {
+    .container { padding: 12px; }
+    .header { padding: 20px; }
+    .header-title { font-size: 22px; }
+    .index-card .value { font-size: 26px; }
+}
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-flag">🇰🇷</div>
+            <div class="header-title">韩国股市 · 早盘分析</div>
+            <div class="header-subtitle">2026年07月08日（周三） · KOSPI温和上涨+0.50% · KOSDAQ-1.73% · 隔夜美股-0.45%</div>
+            <div class="header-date">📅 2026年07月08日 · 周三 · 实时数据 · 熔断后首个交易日</div>
+        </div>
+        <a class="nav-link" href="index.html">← 返回导航</a>
+
+        <div class="section-title">
+            <span class="icon idx">📈</span>
+            韩国主要指数
+        </div>
+        <div class="index-grid">
+        <div class="index-card up">
+            <div class="label">KOSPI</div>
+            <div class="value">7,694.42</div>
+            <div class="change up">▲ +0.50%</div>
+            <div class="sub-info">高 7,791.66 / 低 7,352.89 / 昨收 7,656.31</div>
+        </div>
+        <div class="index-card down">
+            <div class="label">KOSDAQ</div>
+            <div class="value">816.85</div>
+            <div class="change down">▼ -1.73%</div>
+            <div class="sub-info">高 823.33 / 低 805.47 / 昨收 831.23</div>
+        </div></div>
+
+        <div class="section-title">
+            <span class="icon us">🇺🇸</span>
+            隔夜美股表现（参考）
+        </div>
+        <div class="us-grid">
+        <div class="us-card">
+            <div class="label">S&P 500</div>
+            <div class="value">7,503.85</div>
+            <div class="change down">▼ -0.45%</div>
+        </div>
+        <div class="us-card">
+            <div class="label">纳斯达克</div>
+            <div class="value">25,818.69</div>
+            <div class="change down">▼ -1.16%</div>
+        </div>
+        <div class="us-card">
+            <div class="label">道琼斯</div>
+            <div class="value">52,925.15</div>
+            <div class="change down">▼ -0.25%</div>
+        </div></div>
+        <div style="font-size:13px;color:var(--text-muted);margin:-20px 0 24px 0;">美股表现对韩国早盘有重要引导作用</div>
+
+        <div class="section-title">
+            <span class="icon mega">💰</span>
+            核心权重股 · 开盘表现
+        </div>
+        <table class="mega-table">
+            <thead>
+                <tr>
+                    <th>股票</th>
+                    <th>最新价</th>
+                    <th>涨跌幅</th>
+                    <th>主题</th>
+                </tr>
+            </thead>
+            <tbody>
+        <tr>
+            <td class="stock-col">三星电子<div class="en">(005930)</div></td>
+            <td style="font-weight:700;font-family:monospace">₩294,500</td>
+            <td class="change-col down">▼ -0.51%</td>
+            <td class="note-col">半导体/消费电子</td>
+        </tr>
+        <tr>
+            <td class="stock-col">SK海力士<div class="en">(000660)</div></td>
+            <td style="font-weight:700;font-family:monospace">₩2,304,000</td>
+            <td class="change-col up">▲ +4.68%</td>
+            <td class="note-col">HBM/AI存储</td>
+        </tr>
+        <tr>
+            <td class="stock-col">LG新能源<div class="en">(373220)</div></td>
+            <td style="font-weight:700;font-family:monospace">₩324,500</td>
+            <td class="change-col down">▼ -2.26%</td>
+            <td class="note-col">动力电池</td>
+        </tr>
+        <tr>
+            <td class="stock-col">三星生物<div class="en">(207940)</div></td>
+            <td style="font-weight:700;font-family:monospace">₩1,400,000</td>
+            <td class="change-col down">▼ -1.55%</td>
+            <td class="note-col">CDMO/生物制药</td>
+        </tr>
+        <tr>
+            <td class="stock-col">起亚<div class="en">(000270)</div></td>
+            <td style="font-weight:700;font-family:monospace">₩160,900</td>
+            <td class="change-col up">▲ +4.68%</td>
+            <td class="note-col">汽车制造</td>
+        </tr>
+        <tr>
+            <td class="stock-col">KB金融集团<div class="en">(105560)</div></td>
+            <td style="font-weight:700;font-family:monospace">₩175,000</td>
+            <td class="change-col up">▲ +1.04%</td>
+            <td class="note-col">银行/金融</td>
+        </tr>
+        <tr>
+            <td class="stock-col">赛尔群<div class="en">(068270)</div></td>
+            <td style="font-weight:700;font-family:monospace">₩182,600</td>
+            <td class="change-col up">▲ +2.47%</td>
+            <td class="note-col">生物仿制药</td>
+        </tr>
+        <tr>
+            <td class="stock-col">POSCO控股<div class="en">(005490)</div></td>
+            <td style="font-weight:700;font-family:monospace">₩314,500</td>
+            <td class="change-col down">▼ -0.32%</td>
+            <td class="note-col">钢铁/二次电池材料</td>
+        </tr>
+        <tr>
+            <td class="stock-col">NAVER<div class="en">(035420)</div></td>
+            <td style="font-weight:700;font-family:monospace">₩196,500</td>
+            <td class="change-col down">▼ -0.35%</td>
+            <td class="note-col">互联网/AI</td>
+        </tr>
+        <tr>
+            <td class="stock-col">Kakao<div class="en">(035720)</div></td>
+            <td style="font-weight:700;font-family:monospace">₩34,750</td>
+            <td class="change-col down">▼ -1.84%</td>
+            <td class="note-col">社交/金融科技</td>
+        </tr>
+        <tr>
+            <td class="stock-col">三星SDI<div class="en">(006400)</div></td>
+            <td style="font-weight:700;font-family:monospace">₩430,500</td>
+            <td class="change-col down">▼ -3.26%</td>
+            <td class="note-col">二次电池</td>
+        </tr></tbody>
+        </table>
+
+        <div class="section-title">
+            <span class="icon event">📋</span>
+            今日关注事件
+        </div>
+        <div class="event-grid">
+        <div class="event-card risk">
+            <span class="event-tag">风险事件</span>
+            <div class="event-title">昨日熔断后恢复交易</div>
+            <div class="event-desc">KOSPI -8.37%、KOSDAQ -7.69%触发熔断，关注今日是否能企稳反弹</div>
+        </div>
+        <div class="event-card macro">
+            <span class="event-tag">宏观数据</span>
+            <div class="event-title">隔夜美股表现</div>
+            <div class="event-desc">美股是否受韩国暴跌影响？关注S&P 500和费城半导体走势</div>
+        </div>
+        <div class="event-card flow">
+            <span class="event-tag">资金流向</span>
+            <div class="event-title">韩国监管层应对措施</div>
+            <div class="event-desc">关注韩国金融服务委员会是否出台市场稳定措施</div>
+        </div>
+        <div class="event-card semi">
+            <span class="event-tag">半导体</span>
+            <div class="event-title">三星电子Q2业绩后续解读</div>
+            <div class="event-desc">Q2营业利润89.4万亿韩元(+1810%)，但利好出尽引发暴跌，关注机构重新评估</div>
+        </div>
+        <div class="event-card fx">
+            <span class="event-tag">汇率</span>
+            <div class="event-title">韩元汇率走势</div>
+            <div class="event-desc">USD/KRW 1,555水平为2017年以来新低，关注央行是否干预</div>
+        </div>
+        <div class="event-card flow">
+            <span class="event-tag">资金流向</span>
+            <div class="event-title">外资是否回流</div>
+            <div class="event-desc">昨日外资净卖出2,401亿韩元，今日是否回流抄底是市场方向关键</div>
+        </div></div>
+
+        <div class="section-title">
+            <span class="icon idx">📊</span>
+            早盘技术信号
+        </div>
+        <div class="signal-box">
+            <div class="signal-row">
+                <span class="signal-icon">🇰🇷</span>
+                <span class="signal-label">KOSPI 信号</span>
+                <span class="signal-value neutral">中性</span>
+                <span style="font-size:13px;color:var(--text-muted)">
+                    当前涨跌 +0.50% · 7,694
+                </span>
+            </div>
+            <div class="signal-row">
+                <span class="signal-icon">🇺🇸</span>
+                <span class="signal-label">隔夜美股信号</span>
+                <span class="signal-value neutral">中性</span>
+                <span style="font-size:13px;color:var(--text-muted)">
+                    S&P 500 -0.45% · 7,504
+                </span>
+            </div>
+            <div class="signal-row">
+                <span class="signal-icon">💱</span>
+                <span class="signal-label">韩元/美元</span>
+                <span class="signal-value neutral">关注中</span>
+                <span style="font-size:13px;color:var(--text-muted)">昨日 USD/KRW 1,555 · 2017年来新低 · 关注央行干预</span>
+            </div>
+            <div class="signal-row">
+                <span class="signal-icon">🏭</span>
+                <span class="signal-label">半导体板块</span>
+                <span class="signal-value bull">偏多 ↑ (均+2.1%)</span>
+                <span style="font-size:13px;color:var(--text-muted)">三星/SK海力士方向决定指数基调</span>
+            </div>
+        </div>
+
+        <div class="section-title">
+            <span class="icon outlook">🎯</span>
+            今日展望
+        </div>
+        <div class="signal-box" style="border-left:4px solid var(--accent-cyan);">
+            <div style="font-size:14px;color:var(--text-secondary);line-height:1.8;">
+                <p>📌 <strong style="color:#fff;">熔断后首日</strong> 昨日KOSPI暴跌8.37%触发熔断、KOSDAQ跌7.69%触发侧车停盘。今日关注是否出现技术性反弹，以及监管层是否有稳定市场的表态。</p>
+                <p>📌 <strong style="color:#fff;">KOSPI</strong> 昨日收于7,477，跌破7800/7600两道关口。今日若不能站稳7,600上方，技术面继续恶化。关注7,694附近的资金博弈。</p>
+                <p>📌 <strong style="color:#fff;">三星Q2业绩</strong> 营业利润89.4万亿韩元(+1810%)，但利好出尽引发暴跌。机构是否重新评估合理估值将决定半导体板块方向。</p>
+                <p>📌 <strong style="color:#fff;">外资动向</strong> 昨日外资净卖出2,401亿韩元，散户逆势买入3,045亿。今日外资是否回流抄底，或者继续恐慌出逃，是市场方向的关键变量。</p>
+                <p>📌 <strong style="color:#fff;">韩元压力</strong> USD/KRW 1,555为2017年以来新低。韩元快速贬值加大外资出逃动力，关注韩国央行是否入市干预。</p>
+                <p>📌 <strong style="color:#fff;">隔夜美股</strong> 下跌，可能继续压制韩国早盘。</p>
+            </div>
+        </div>
+
+        <div class="section-title">
+            <span class="icon risk">⚠️</span>
+            风险提示
+        </div>
+        <ul class="risk-list">
+            <li>熔断后市场情绪尚未稳定，盘中仍可能出现剧烈波动</li>
+            <li>韩元若继续贬值，将加速外资撤离，形成负反馈循环</li>
+            <li>三星"利好出尽"引发暴跌，AI存储上行周期是否已到顶需重新评估</li>
+            <li>期货/期权到期叠加暴跌，市场波动率可能持续高企</li>
+            <li>若KOSPI无法收回7,600上方，技术面将进一步恶化</li>
+        </ul>
+
+        <div class="footer">
+            <p>生成时间：2026-07-08 09:10</p>
+            <p class="disclaimer">数据来源：Naver Finance · 仅为数据整理，不构成任何投资建议。股市有风险，投资需谨慎。</p>
+        </div>
+    </div>
+</body>
+</html>
