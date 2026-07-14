@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>2027年AI供应链紧缺分析 | 受益A股标的</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+:root{--bg:#0a0e17;--bg-card:#111827;--bg-card-hover:#1a2235;--border:#1e2d45;--text:#e2e8f0;--text-muted:#8899aa;--accent:#f59e0b;--accent2:#3b82f6;--green:#10b981;--red:#ef4444;--purple:#8b5cf6;--radius:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans SC',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.75}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(245,158,11,0.05)0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(59,130,246,0.04)0%,transparent 50%),radial-gradient(ellipse at 50% 80%,rgba(139,92,246,0.04)0%,transparent 50%);pointer-events:none;z-index:0}
+.container{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 24px}
+.top-bar{border-bottom:1px solid var(--border);padding:12px 24px;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(12px);position:sticky;top:0;z-index:100;background:rgba(10,14,23,0.85)}
+.top-bar .breadcrumb{font-size:.85rem;color:var(--text-muted)}
+.top-bar .breadcrumb a{color:var(--accent2);text-decoration:none}
+.top-bar .breadcrumb span{color:var(--text)}
+.top-bar .date{font-size:.85rem;color:var(--text-muted)}
+.header{padding:60px 0 40px;text-align:center;border-bottom:1px solid var(--border);margin-bottom:40px}
+.header .tag{display:inline-block;font-size:.8rem;padding:4px 16px;border-radius:100px;background:rgba(245,158,11,0.12);color:var(--accent);letter-spacing:3px;margin-bottom:16px}
+.header h1{font-size:2.4rem;font-weight:900;background:linear-gradient(135deg,#f1f5f9,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}
+.header .subtitle{color:var(--text-muted);font-size:1.05rem;max-width:700px;margin:0 auto;line-height:1.8}
+.header .meta-row{display:flex;justify-content:center;gap:32px;margin-top:24px;flex-wrap:wrap}
+.meta-item{text-align:center}
+.meta-item .m-label{font-size:.75rem;color:var(--text-muted);letter-spacing:2px}
+.meta-item .m-value{font-size:1.4rem;font-weight:700;color:var(--accent)}
+.overview-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:48px}
+@media(max-width:768px){.overview-grid{grid-template-columns:repeat(2,1fr)}}
+.overview-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;transition:.25s}
+.overview-card:hover{border-color:var(--accent);background:var(--bg-card-hover)}
+.overview-card .ov-value{font-size:1.8rem;font-weight:900;background:linear-gradient(135deg,#f59e0b,#f97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.overview-card .ov-label{font-size:.8rem;color:var(--text-muted);margin-top:4px}
+.executive-summary{background:linear-gradient(135deg,rgba(59,130,246,0.06),rgba(139,92,246,0.06));border:1px solid var(--border);border-radius:var(--radius);padding:32px;margin-bottom:48px}
+.executive-summary h2{font-size:1.2rem;font-weight:700;margin-bottom:16px;color:var(--accent)}
+.executive-summary p{color:var(--text-muted);font-size:.95rem;margin-bottom:10px}
+.section-title{font-size:1.6rem;font-weight:700;margin:56px 0 28px;display:flex;align-items:center;gap:12px}
+.section-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;font-size:1rem;font-weight:800}
+.num-1{background:rgba(239,68,68,0.15);color:var(--red)}
+.num-2{background:rgba(245,158,11,0.15);color:var(--accent)}
+.num-3{background:rgba(16,185,129,0.15);color:var(--green)}
+.analysis-block{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:32px;overflow:hidden;transition:.3s}
+.analysis-block:hover{border-color:rgba(245,158,11,0.3)}
+.ab-header{padding:20px 28px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.ab-header .ab-title{font-size:1.25rem;font-weight:700}
+.ab-header .ab-eng{font-size:.8rem;color:var(--text-muted);margin-top:4px}
+.ab-header .severity{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.severity-dots{display:flex;gap:4px}
+.severity-dot{width:10px;height:10px;border-radius:50%}
+.severity-dot.fill{background:var(--red)}
+.severity-dot.fill-high{background:var(--accent)}
+.severity-dot.empty{background:var(--border)}
+.severity-label{font-size:.8rem;font-weight:600}
+.s-critical{color:var(--red)}
+.s-very-high{color:var(--accent)}
+.s-high{color:var(--accent2)}
+.ab-body{padding:28px}
+.ab-body h3{font-size:1rem;font-weight:700;color:var(--text);margin:24px 0 12px}
+.ab-body h3:first-child{margin-top:0}
+.ab-body p{color:var(--text-muted);font-size:.92rem;margin-bottom:12px}
+.ab-body ul{list-style:none;padding:0;margin:0 0 16px}
+.ab-body ul li{padding:6px 0 6px 24px;position:relative;color:var(--text-muted);font-size:.92rem}
+.ab-body ul li::before{content:'\25B8';position:absolute;left:4px;color:var(--accent);font-size:.75rem;top:7px}
+.stock-table{width:100%;border-collapse:collapse;margin-top:20px;font-size:.9rem}
+.stock-table th{padding:10px 14px;text-align:left;border-bottom:2px solid var(--border);color:var(--text-muted);font-weight:500;font-size:.78rem;letter-spacing:1px}
+.stock-table td{padding:12px 14px;border-bottom:1px solid var(--border)}
+.stock-table tr:hover td{background:rgba(59,130,246,0.03)}
+.stock-name{font-weight:600;color:var(--text)}
+.stock-code{color:var(--text-muted);font-size:.82rem}
+.stock-reason{color:var(--text-muted);font-size:.85rem;line-height:1.5;max-width:420px}
+.stock-tier{display:inline-block;font-size:.72rem;padding:2px 10px;border-radius:100px;font-weight:600}
+.tier-core{background:rgba(245,158,11,0.12);color:var(--accent)}
+.tier-key{background:rgba(59,130,246,0.12);color:var(--accent2)}
+.tier-related{background:rgba(139,92,246,0.12);color:var(--purple)}
+.highlight-box{background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.15);border-radius:8px;padding:16px 20px;margin:16px 0;font-size:.9rem;color:var(--accent)}
+.highlight-box strong{color:var(--text)}
+.source-block{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;margin-top:48px}
+.source-block h3{font-size:1.1rem;font-weight:700;margin-bottom:16px}
+.source-block ol{padding-left:20px;color:var(--text-muted);font-size:.88rem;line-height:2}
+.source-block ol li::marker{color:var(--accent2)}
+.disclaimer{text-align:center;color:#475569;font-size:.78rem;margin-top:48px;padding:32px 0;border-top:1px solid var(--border);line-height:1.8}
+.disclaimer strong{color:var(--text-muted)}
+.summary-matrix{overflow-x:auto;margin:32px 0}
+.summary-matrix table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:900px}
+.summary-matrix th{padding:12px 14px;text-align:left;border-bottom:2px solid var(--border);color:var(--text-muted);font-weight:600;font-size:.78rem;letter-spacing:1px;background:rgba(17,24,39,0.6)}
+.summary-matrix th.center{text-align:center}
+.summary-matrix td{padding:12px 14px;border-bottom:1px solid var(--border)}
+.summary-matrix td.center{text-align:center}
+.summary-matrix tr:hover td{background:rgba(59,130,246,0.03)}
+.val-critical{color:var(--red)}
+.val-warn{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="top-bar">
+<div class="breadcrumb"><a href="../index.html">业绩分析</a> &rsaquo; <span>AI供应链紧缺分析2027</span></div>
+<div class="date">报告日期：2026-06-23</div>
+</div>
+<div class="container">
+<div class="header">
+<div class="tag">深度研究 &middot; 前瞻研判</div>
+<h1>2027年AI供应链紧缺环节分析</h1>
+<p class="subtitle">聚焦 8 大紧缺环节——从 HBM 高带宽内存到 AI 数据中心电力基础设施，逐一拆解供需瓶颈成因，筛选直接受益的 A 股上市公司标的</p>
+<div class="meta-row">
+<div class="meta-item"><div class="m-label">覆盖环节</div><div class="m-value">8</div></div>
+<div class="meta-item"><div class="m-label">分析标的</div><div class="m-value">40+</div></div>
+<div class="meta-item"><div class="m-label">极高/高紧缺</div><div class="m-value">5/3</div></div>
+<div class="meta-item"><div class="m-label">全球AI Capex(2027)</div><div class="m-value">$200B+</div></div>
+</div>
+</div>
+
+<div class="overview-grid">
+<div class="overview-card"><div class="ov-value">$200B+</div><div class="ov-label">2027全球AI Capex预估</div></div>
+<div class="overview-card"><div class="ov-value">3-5&times;</div><div class="ov-label">CoWoS需求/供给比</div></div>
+<div class="overview-card"><div class="ov-value">50%+</div><div class="ov-label">HBM产能缺口</div></div>
+<div class="overview-card"><div class="ov-value">15-20GW</div><div class="ov-label">新增AI数据中心用电</div></div>
+</div>
+
+<div class="executive-summary">
+<h2>&#9654; 核心结论</h2>
+<p>2027 年 AI 大模型进入万卡&rarr;十万卡集群部署周期，Scaling Law 仍然成立但受到物理基础设施约束。全球 AI Capex 预计突破 2000 亿美元（微软/谷歌/Meta/亚马逊四家合计），叠加中国信创AI算力替代加速，供应链面临"结构+周期"双重紧缺。</p>
+<p><strong>紧缺最严重的两个环节是 CoWoS 先进封装和 HBM 高带宽内存</strong>——两者均为台积电/SK海力士/三星高度垄断，扩产周期 18-24 个月，远滞后于 AI 芯片出货增速（年增 50-80%）。<strong>中国确定性受益路径</strong>围绕三条主线：(1) 国产先进封装及设备/材料替代；(2) 光模块/光互连出口受益全球AI网络升级；(3) AI数据中心电力与散热基础设施。</p>
+</div>
+
+<div class="section-title"><span class="section-num num-3">&equiv;</span>2027年AI供应链紧缺矩阵总览</div>
+<div class="analysis-block"><div class="ab-body">
+<div class="summary-matrix"><table>
+<thead><tr><th>环节</th><th class="center">紧缺评级</th><th class="center">供给缺口预估</th><th class="center">扩产周期</th><th>核心瓶颈</th><th>A股核心受益方向</th></tr></thead>
+<tbody>
+<tr><td class="stock-name">1. HBM高带宽内存</td><td class="center"><span class="s-critical">&starf; 极高</span></td><td class="center val-critical">50-60%</td><td class="center">18-24月</td><td>TSV堆叠良率、HBM4晶粒尺寸翻倍</td><td>封装设备、先进材料、存储设计</td></tr>
+<tr><td class="stock-name">2. CoWoS先进封装</td><td class="center"><span class="s-critical">&starf; 极高</span></td><td class="center val-critical">3-5倍需求/产能</td><td class="center">18-24月</td><td>台积电独占、中介层精度、设备短缺</td><td>先进封装、封装设备、ABF载板</td></tr>
+<tr><td class="stock-name">3. ABF载板</td><td class="center"><span class="s-critical">&starf; 极高</span></td><td class="center val-critical">40-50%</td><td class="center">12-18月</td><td>大尺寸高层数良率、ABF膜被日商垄断</td><td>ABF载板制造、上游材料</td></tr>
+<tr><td class="stock-name">4. 光模块/光互连</td><td class="center"><span class="s-very-high">&starf; 很高</span></td><td class="center val-warn">3-5倍速率迭代压力</td><td class="center">6-12月</td><td>EML/DSP芯片供应、CPO良率</td><td>光模块、光器件、光芯片</td></tr>
+<tr><td class="stock-name">5. AI芯片</td><td class="center"><span class="s-very-high">&starf; 很高</span></td><td class="center val-warn">高端受限/中端不足</td><td class="center">N/A</td><td>美对华出口管制、代工产能分配</td><td>国产GPU、AI推理芯片</td></tr>
+<tr><td class="stock-name">6. 液冷散热</td><td class="center"><span class="s-high">&starf; 高</span></td><td class="center val-warn">30-40%渗透缺口</td><td class="center">6-12月</td><td>冷板微通道加工、CDU产能</td><td>液冷方案、精密温控</td></tr>
+<tr><td class="stock-name">7. 服务器电源管理</td><td class="center"><span class="s-high">&starf; 高</span></td><td class="center val-warn">功率密度翻倍压力</td><td class="center">9-12月</td><td>SiC/GaN功率器件、高功率PSU</td><td>服务器电源、功率半导体</td></tr>
+<tr><td class="stock-name">8. AI数据中心电力</td><td class="center"><span class="s-high">&starf; 高</span></td><td class="center val-warn">15-20GW新增</td><td class="center">24-48月</td><td>电网接入审批、变压器/开关柜产能</td><td>配电设备、UPS、柴发/燃气轮机</td></tr>
+</tbody></table></div>
+</div></div>
+
+<div class="section-title"><span class="section-num num-1">1</span>HBM 高带宽内存</div>
+<div class="analysis-block">
+<div class="ab-header">
+<div class="ab-left"><div class="ab-title">HBM4 世代：供需缺口最大的单一半导体品类</div><div class="ab-eng">High Bandwidth Memory &middot; HBM3E &rarr; HBM4</div></div>
+<div class="severity"><div class="severity-dots"><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot empty"></span></div><span class="severity-label s-critical">极高紧缺</span></div>
+</div>
+<div class="ab-body">
+
+<h3>&#9654; 紧缺成因</h3>
+<p><strong>需求侧：</strong>2027 年 NVIDIA Rubin Ultra（预计2026H2发布）、AMD MI400 系列 GPU 普遍搭载 HBM4，单 GPU HBM 容量从 H200 的 141GB 跃升至 288-384GB。每颗 GPU 的 HBM 用量增 2-3 倍，同时 GPU 出货量年增 50%+。行业预测 2027 年全球 HBM 需求约 35-40 亿 GB，而 SK 海力士+三星+美光三家总产能约 15-18 亿 GB，<strong>缺口 50%+</strong>。</p>
+<p><strong>供给侧：</strong>HBM4 采用 12-16 层 TSV 堆叠，晶粒尺寸较 HBM3E 翻倍，单晶圆产出减半。TSV 工艺良率在 16 层堆叠时陡降至 60-70%。SK 海力士 M15X 工厂 2025Q4 量产，三星平泽 P4 线 2026H1 投产，但爬坡至满产需 12-18 个月，<strong>2027 年仍处产能爬坡期</strong>。</p>
+<ul>
+<li>HBM 占 DRAM 总产能的比例从 2024 年 5% 升至 2027 年 20%+，挤占传统 DDR5 产能</li>
+<li>HBM4 采用混合键合（Hybrid Bonding）路线，设备精度要求亚微米级</li>
+<li>中国被排除在 HBM 出口许可之外（美2023.10出口管制），无法直接采购 HBM2E+</li>
+</ul>
+<p style="color:var(--text-muted);font-size:.85rem;">逻辑主线：中国无法参与 HBM 成品供应链，<strong>受益点在 HBM 封装设备/材料替代和国产 HBM 研发链</strong>。</p>
+<table class="stock-table">
+<thead><tr><th style="width:140px">标的</th><th style="width:80px">层级</th><th>受益逻辑</th></tr></thead>
+<tbody><tr><td><span class="stock-name">北方华创</span><br><span class="stock-code">002371.SZ</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">HBM TSV 深硅刻蚀/薄膜沉积设备唯一国产平台。HBM 堆叠层数增加直接拉动 TSV 刻蚀设备需求（每增加4层约增30%刻蚀步骤）</td></tr>
+<tr><td><span class="stock-name">中微公司</span><br><span class="stock-code">688012.SH</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">TSV 深孔刻蚀设备（Primo TSV）已进入客户端验证。HBM4 16层堆叠意味着16层 TSV 通孔，刻蚀设备价值量占 HBM 前道设备 25%+</td></tr>
+<tr><td><span class="stock-name">拓荆科技</span><br><span class="stock-code">688072.SH</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">TSV 介质层薄膜沉积（PECVD）。HBM 堆叠层间需高质量 SiO2 介质层</td></tr>
+<tr><td><span class="stock-name">华海清科</span><br><span class="stock-code">688120.SH</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">HBM 堆叠后晶圆减薄 CMP 设备。封装要求晶圆减薄至 30-50μm，国内唯一12英寸CMP商用供应商</td></tr>
+<tr><td><span class="stock-name">雅克科技</span><br><span class="stock-code">002409.SZ</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">HBM TSV 填孔材料（前驱体）。收购 UP Chemical 后成为 SK 海力士 HBM 前驱体核心供应商</td></tr>
+<tr><td><span class="stock-name">通富微电</span><br><span class="stock-code">002156.SZ</span></td><td><span class="stock-tier tier-related">相关</span></td><td class="stock-reason">与长鑫存储合作开发 HBM 封装方案。合肥通富布局 2.5D/3D 封装</td></tr>
+</tbody>
+</table>
+<div class="highlight-box"><strong>关键判断：</strong>HBM4 2027 年全球供需缺口 50%+。中国受益弹性最大的环节是<strong>HBM 封装设备（刻蚀/CVD/CMP）和前驱体材料</strong>——这是国产替代确定性最强的方向。</div>
+</div>
+</div>
+
+<div class="section-title"><span class="section-num num-1">2</span>先进封装 CoWoS</div>
+<div class="analysis-block">
+<div class="ab-header">
+<div class="ab-left"><div class="ab-title">CoWoS-L/CoWoS-S：AI芯片的物理天花板</div><div class="ab-eng">Chip-on-Wafer-on-Substrate &middot; TSMC 独占90%+产能</div></div>
+<div class="severity"><div class="severity-dots"><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot empty"></span></div><span class="severity-label s-critical">极高紧缺</span></div>
+</div>
+<div class="ab-body">
+
+<h3>&#9654; 紧缺成因</h3>
+<p><strong>需求侧：</strong>台积电2025Q2法说会披露，AI加速器客户的CoWoS需求较2024年增长3倍以上，2026年产能翻倍后仍不足需求60%。2027年Rubin Ultra芯片面积进一步增大（3-4个计算Die + 8-12个HBM4），单芯片所需CoWoS中介层面积增大 1.5-2 倍，<strong>需求/产能比可能扩大至5:1</strong>。</p>
+<p><strong>供给侧三大约束：</strong>(1) 硅中介层加工精度要求&lt;0.5μm；(2) CoWoS-L的LSI桥接芯片良率仅60-70%；(3) 台积电封装厂选址条件苛刻，2027年台中/嘉义/熊本新厂产能爬坡不确定。</p>
+<ul>
+<li>台积电2025年底CoWoS月产能约8万片（等效12英寸），2027年目标15-16万片</li>
+<li>NVIDIA单客户预计需要8-10万片/月（Rubin Ultra投产），其他客户争抢剩余产能</li>
+<li>非台积电阵营（三星I-Cube、Intel EMIB）2027年合计产能不足台积电20%</li>
+</ul>
+<p style="color:var(--text-muted);font-size:.85rem;">逻辑主线：中国大陆 CoWoS 产能建设加速，<strong>受益环节在先进封装产线设备、ABF 载板、先进封装材料</strong>。</p>
+<table class="stock-table">
+<thead><tr><th style="width:140px">标的</th><th style="width:80px">层级</th><th>受益逻辑</th></tr></thead>
+<tbody><tr><td><span class="stock-name">长电科技</span><br><span class="stock-code">600584.SH</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">中国大陆最大封测厂商。XDFOI 2.5D/3D 平台对标 CoWoS，已量产4nm芯片封装，有望承担国产AI芯片先进封装主要份额</td></tr>
+<tr><td><span class="stock-name">通富微电</span><br><span class="stock-code">002156.SZ</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">AMD 主力封测合作伙伴，承接 MI300/MI400 系列先进封装，积累丰富2.5D封装量产经验</td></tr>
+<tr><td><span class="stock-name">华峰测控</span><br><span class="stock-code">688200.SH</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">先进封装测试设备。2.5D/3D封装测试复杂度远高于传统封装，单芯片测试设备价值量增3-5倍</td></tr>
+<tr><td><span class="stock-name">长川科技</span><br><span class="stock-code">300604.SZ</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">数字测试机+分选机。8300系列数字测试机对标泰瑞达Ultraflex</td></tr>
+<tr><td><span class="stock-name">精测电子</span><br><span class="stock-code">300567.SZ</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">半导体量测检测设备。中介层微凸块缺陷检测是CoWoS良率关键瓶颈</td></tr>
+<tr><td><span class="stock-name">安集科技</span><br><span class="stock-code">688019.SH</span></td><td><span class="stock-tier tier-related">相关</span></td><td class="stock-reason">CMP抛光液+清洗液。国内唯一进入台积电供应链的CMP材料商</td></tr>
+</tbody>
+</table>
+<div class="highlight-box"><strong>关键判断：</strong>2027年CoWoS缺口是AI产业链"最刚性"的物理约束——台积电扩产速度跟不上需求爆发。<strong>长电科技是确定性最强的受益标的</strong>。</div>
+</div>
+</div>
+
+<div class="section-title"><span class="section-num num-2">3</span>光模块 / 光互连</div>
+<div class="analysis-block">
+<div class="ab-header">
+<div class="ab-left"><div class="ab-title">800G→1.6T→CPO：速率迭代驱动供给紧张</div><div class="ab-eng">Optical Transceiver &middot; Optical Interconnect &middot; CPO &middot; LPO</div></div>
+<div class="severity"><div class="severity-dots"><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot empty"></span></div><span class="severity-label s-very-high">很高紧缺</span></div>
+</div>
+<div class="ab-body">
+
+<h3>&#9654; 紧缺成因</h3>
+<p><strong>需求侧：</strong>AI集群从万卡向10万卡+扩展，GPU:光模块配比从H100时代的1:1升至B300/Rubin时代的1:2.5-3.5。LightCounting预测2027年全球AI用光模块市场$140-180亿（2025年约$70亿），其中<strong>1.6T占比超60%</strong>。NVIDIA NVLink 7采用光互联替代铜缆的趋势在2027年启动。</p>
+<p><strong>供给三大瓶颈：</strong>(1) 200G EML激光器芯片目前仅Lumentum/三菱/住友/博通4家规模量产，2027年需求可能超1.2亿通道而产能约6000-8000万；(2) 1.6T DSP芯片由Marvell/Broadcom双寡头，产能规划保守；(3) CPO硅光共封装量产良率仅40-50%。</p>
+<p style="color:var(--text-muted);font-size:.85rem;">逻辑主线：中国光模块厂商全球份额 40%+，<strong>是最直接的受益方向</strong>——800G/1.6T 光模块量价齐升。</p>
+<table class="stock-table">
+<thead><tr><th style="width:140px">标的</th><th style="width:80px">层级</th><th>受益逻辑</th></tr></thead>
+<tbody><tr><td><span class="stock-name">中际旭创</span><br><span class="stock-code">300308.SZ</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">全球最大800G光模块供应商，1.6T已送样NVIDIA/Google。2027年1.6T收入占比预计超50%</td></tr>
+<tr><td><span class="stock-name">天孚通信</span><br><span class="stock-code">300394.SZ</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">全球光器件龙头，FAU/光引擎/MT-FA等无源器件全球份额超40%。CPO光引擎核心受益</td></tr>
+<tr><td><span class="stock-name">新易盛</span><br><span class="stock-code">300502.SZ</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">海外收入占比超80%，800G批量出货，1.6T送样。受益北美云厂商光模块升级周期</td></tr>
+<tr><td><span class="stock-name">源杰科技</span><br><span class="stock-code">688498.SH</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">国产光芯片稀缺标的。100G EML已量产，200G EML在研，国产替代空间巨大（国产化率&lt;5%）</td></tr>
+<tr><td><span class="stock-name">长光华芯</span><br><span class="stock-code">688048.SH</span></td><td><span class="stock-tier tier-related">相关</span></td><td class="stock-reason">高功率激光芯片向光通信芯片延伸，布局硅光芯片ELS光源</td></tr>
+<tr><td><span class="stock-name">光迅科技</span><br><span class="stock-code">002281.SZ</span></td><td><span class="stock-tier tier-related">相关</span></td><td class="stock-reason">央企光通信一体化厂商，800G光模块+光芯片自研能力</td></tr>
+</tbody>
+</table>
+<div class="highlight-box"><strong>关键判断：</strong>2027年1.6T光模块放量是确定性最高的赛道。<strong>中际旭创+天孚通信</strong>组合受益最直接。光芯片（200G EML）是下一个国产替代突破口。</div>
+</div>
+</div>
+
+<div class="section-title"><span class="section-num num-2">4</span>AI 芯片</div>
+<div class="analysis-block">
+<div class="ab-header">
+<div class="ab-left"><div class="ab-title">高端受限+中端不足：中国AI芯片的结构性缺口</div><div class="ab-eng">AI Accelerator &middot; GPU &middot; ASIC &middot; 国产替代</div></div>
+<div class="severity"><div class="severity-dots"><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot empty"></span><span class="severity-dot empty"></span></div><span class="severity-label s-very-high">很高紧缺</span></div>
+</div>
+<div class="ab-body">
+
+<h3>&#9654; 紧缺成因</h3>
+<p><strong>需求侧：</strong>2027年中国AI算力总需求预计1000-1500 EFLOPS（2025年约400 EFLOPS），叠加信创AI替代要求（政府/央企AI训练集群国产化率目标50%+），国产AI芯片需求增长3-4倍。国内互联网大厂+三大运营商2027年合计AI Capex预计超4000亿人民币。</p>
+<p><strong>供给侧最大瓶颈：</strong>先进制程代工受限——华为昇腾910C产能受SMIC N+2良率影响，月产不足5万颗。寒武纪思元590只能依赖SMIC有限产能。NVIDIA H200/B200对华出口受限，存量A800/H800算力不足新一代需求的30%。</p>
+<p style="color:var(--text-muted);font-size:.85rem;">直接受益于国产替代缺口的<strong>AI芯片设计厂商</strong>和<strong>AI芯片代工/封测链</strong>。</p>
+<table class="stock-table">
+<thead><tr><th style="width:140px">标的</th><th style="width:80px">层级</th><th>受益逻辑</th></tr></thead>
+<tbody><tr><td><span class="stock-name">海光信息</span><br><span class="stock-code">688041.SH</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">国产x86兼容AI DCU（深算系列）。深算二号FP64算力对标A100，信创AI服务器首选</td></tr>
+<tr><td><span class="stock-name">寒武纪</span><br><span class="stock-code">688256.SH</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">思元系列AI训练/推理芯片。运营商/政府AI算力集采核心入围厂商</td></tr>
+<tr><td><span class="stock-name">澜起科技</span><br><span class="stock-code">688008.SH</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">AI芯片配套：PCIe Retimer（GPU互联关键芯片）+ MXC内存扩展控制器</td></tr>
+<tr><td><span class="stock-name">龙芯中科</span><br><span class="stock-code">688047.SH</span></td><td><span class="stock-tier tier-related">相关</span></td><td class="stock-reason">自主指令集CPU+AI加速IP。信创PC/服务器CPU供应商</td></tr>
+<tr><td><span class="stock-name">景嘉微</span><br><span class="stock-code">300474.SZ</span></td><td><span class="stock-tier tier-related">相关</span></td><td class="stock-reason">国产GPU先行者，JM9系列进入信创名录</td></tr>
+</tbody>
+</table>
+<div class="highlight-box"><strong>关键判断：</strong>中国AI芯片结构性缺口长期存在，<strong>海光信息（信创确定性）+寒武纪（AI算力弹性）</strong>是最核心的两个标的。</div>
+</div>
+</div>
+
+<div class="section-title"><span class="section-num num-2">5</span>服务器电源管理</div>
+<div class="analysis-block">
+<div class="ab-header">
+<div class="ab-left"><div class="ab-title">GPU功率密度翻倍：供电架构被迫重构</div><div class="ab-eng">Server Power &middot; SiC/GaN &middot; Power Management IC</div></div>
+<div class="severity"><div class="severity-dots"><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot empty"></span><span class="severity-dot empty"></span></div><span class="severity-label s-high">高紧缺</span></div>
+</div>
+<div class="ab-body">
+
+<h3>&#9654; 紧缺成因</h3>
+<p>单GPU功耗从H100的700W升至B300的1200W、Rubin Ultra预计1500-1800W，单机架功耗从40kW升至120-150kW。传统12V供电架构无法满足&gt;100kW/机架需求，必须升级为<strong>48V直供+板级电压调节</strong>（Vicor分比式电源架构）。高端服务器电源管理IC和SiC功率器件国产化率&lt;20%。</p>
+
+<table class="stock-table">
+<thead><tr><th style="width:140px">标的</th><th style="width:80px">层级</th><th>受益逻辑</th></tr></thead>
+<tbody><tr><td><span class="stock-name">麦格米特</span><br><span class="stock-code">002851.SZ</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">AI服务器电源模块供应商。已进入NVIDIA供应链（GB300配套电源），48V直供方案核心受益</td></tr>
+<tr><td><span class="stock-name">欧陆通</span><br><span class="stock-code">300870.SZ</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">服务器电源国内龙头，高功率电源（3kW-5.5kW）批量出货</td></tr>
+<tr><td><span class="stock-name">斯达半导</span><br><span class="stock-code">603290.SH</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">国产IGBT/SiC模块龙头。SiC功率器件在服务器电源中渗透率2027年预计从5%升至20%+</td></tr>
+<tr><td><span class="stock-name">天岳先进</span><br><span class="stock-code">688234.SH</span></td><td><span class="stock-tier tier-related">相关</span></td><td class="stock-reason">SiC衬底国内龙头，上游受益服务器电源SiC化趋势</td></tr>
+</tbody>
+</table>
+<div class="highlight-box"><strong>关键判断：</strong><strong>麦格米特</strong>是唯一已进入NVIDIA AI服务器电源供应链的A股标的，确定性最高。</div>
+</div>
+</div>
+
+<div class="section-title"><span class="section-num num-2">6</span>液冷散热</div>
+<div class="analysis-block">
+<div class="ab-header">
+<div class="ab-left"><div class="ab-title">风冷极限已至：120kW/机架驱动液冷渗透率跃升</div><div class="ab-eng">Liquid Cooling &middot; Cold Plate &middot; Immersion &middot; CDU</div></div>
+<div class="severity"><div class="severity-dots"><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot empty"></span><span class="severity-dot empty"></span></div><span class="severity-label s-high">高紧缺</span></div>
+</div>
+<div class="ab-body">
+
+<h3>&#9654; 紧缺成因</h3>
+<p>单机架120kW热密度已远超风冷极限（约30-40kW），2027年新建AI数据中心液冷渗透率预计超60%（2025年约25%）。单GW级AI数据中心对应液冷方案价值量约5-8亿元。供给瓶颈在<strong>精密加工产能</strong>——冷板微通道加工（翅片间距&lt;0.3mm）需要高精度CNC/激光焊接，CDU需精密温控±0.5℃，国内具备大规模交付能力的厂商不超过5家。</p>
+
+<table class="stock-table">
+<thead><tr><th style="width:140px">标的</th><th style="width:80px">层级</th><th>受益逻辑</th></tr></thead>
+<tbody><tr><td><span class="stock-name">英维克</span><br><span class="stock-code">002837.SZ</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">国内精密温控龙头，冷板式/浸没式液冷全套方案。已进入字节跳动/腾讯/阿里供应商名录</td></tr>
+<tr><td><span class="stock-name">高澜股份</span><br><span class="stock-code">300499.SZ</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">电力电子冷却龙头，拓展数据中心液冷。冷板液冷CDU核心供应商</td></tr>
+<tr><td><span class="stock-name">申菱环境</span><br><span class="stock-code">301018.SZ</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">数据中心温控/液冷方案供应商，华为数据中心液冷合作伙伴</td></tr>
+<tr><td><span class="stock-name">曙光数创</span><br><span class="stock-code">872808.BJ</span></td><td><span class="stock-tier tier-related">相关</span></td><td class="stock-reason">中科曙光旗下液冷子公司，浸没式液冷先行者，超算/智算中心液冷经验领先</td></tr>
+</tbody>
+</table>
+<div class="highlight-box"><strong>关键判断：</strong>液冷是AI数据中心确定性最强的增量赛道。<strong>英维克</strong>是国内龙头，冷板+浸没全覆盖。</div>
+</div>
+</div>
+
+<div class="section-title"><span class="section-num num-1">7</span>ABF 载板</div>
+<div class="analysis-block">
+<div class="ab-header">
+<div class="ab-left"><div class="ab-title">AI芯片封装基板瓶颈：大尺寸+高层数+细线路</div><div class="ab-eng">Ajinomoto Build-up Film Substrate &middot; IC Substrate</div></div>
+<div class="severity"><div class="severity-dots"><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot empty"></span></div><span class="severity-label s-critical">极高紧缺</span></div>
+</div>
+<div class="ab-body">
+
+<h3>&#9654; 紧缺成因</h3>
+<p><strong>需求侧：</strong>AI GPU芯片需要大尺寸（100&times;100mm+）和高层数（14-20层）ABF载板。单颗AI GPU所需ABF载板面积是普通CPU的5-8倍，价值量$50-120（普通CPU约$10-20）。2027年AI用ABF载板市场规模约$80-100亿。</p>
+<p><strong>供给侧三大瓶颈：</strong>(1) 大尺寸ABF载板（&gt;100mm）良率仅60-70%；(2) <strong>ABF膜材料由味之素（Ajinomoto）垄断90%+份额</strong>，扩产决策保守（2027年产能增长预计仅30%）；(3) 全球有效产能集中在日本Ibiden/Shinko和台湾Unimicron/南亚，大陆厂商份额&lt;5%。</p>
+<p style="color:var(--text-muted);font-size:.85rem;">受益路径：<strong>ABF载板国产替代+上游材料</strong>。</p>
+<table class="stock-table">
+<thead><tr><th style="width:140px">标的</th><th style="width:80px">层级</th><th>受益逻辑</th></tr></thead>
+<tbody><tr><td><span class="stock-name">深南电路</span><br><span class="stock-code">002916.SZ</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">中国大陆唯一具备FC-BGA（ABF载板）量产能力的厂商。广州基地2027年计划扩至6万片/月</td></tr>
+<tr><td><span class="stock-name">兴森科技</span><br><span class="stock-code">002436.SZ</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">ABF载板新进入者，珠海基地聚焦FC-BGA载板，弹性在于从0到1突破</td></tr>
+<tr><td><span class="stock-name">生益科技</span><br><span class="stock-code">600183.SH</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">高频高速覆铜板（CCL）龙头。ABF载板上游核心材料，可提供低CTE/高Tg覆铜板</td></tr>
+</tbody>
+</table>
+<div class="highlight-box"><strong>关键判断：</strong>ABF载板是中国大陆半导体材料国产化率最低的环节之一（&lt;5%），<strong>深南电路+兴森科技</strong>的突破具有战略意义。ABF膜（味之素垄断）和高端CCL（生益科技）是上游受益方向。</div>
+</div>
+</div>
+
+<div class="section-title"><span class="section-num num-2">8</span>AI 数据中心电力基础设施</div>
+<div class="analysis-block">
+<div class="ab-header">
+<div class="ab-left"><div class="ab-title">15-20GW新增电力需求：电网接入成为最大瓶颈</div><div class="ab-eng">Data Center Power &middot; Grid &middot; Transformer &middot; UPS &middot; Diesel/Gas</div></div>
+<div class="severity"><div class="severity-dots"><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot empty"></span><span class="severity-dot empty"></span></div><span class="severity-label s-high">高紧缺</span></div>
+</div>
+<div class="ab-body">
+
+<h3>&#9654; 紧缺成因</h3>
+<p><strong>需求侧：</strong>IEA预测2027年全球数据中心用电量900-1100TWh（2025年约500TWh），其中AI贡献增量约300-400TWh，折合新增装机需求15-20GW。单GW AI数据中心电力基础设施价值量约30-40亿元。</p>
+<p><strong>核心短缺依次：</strong>(1) <strong>电网接入审批</strong>：北美/欧洲主要AI枢纽排队2-4年；(2) <strong>变压器</strong>：大容量干式变压器交期已从6个月延长至18-24个月；(3) <strong>高压开关柜</strong>：SF6替代方案产能不足；(4) <strong>备用电源</strong>：大功率柴油发电机组和燃气轮机供不应求。</p>
+
+<table class="stock-table">
+<thead><tr><th style="width:140px">标的</th><th style="width:80px">层级</th><th>受益逻辑</th></tr></thead>
+<tbody><tr><td><span class="stock-name">科华数据</span><br><span class="stock-code">002335.SZ</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">UPS国内龙头+数据中心电力总包。AI数据中心UPS功率升级，单GW对应UPS价值量约2-3亿元</td></tr>
+<tr><td><span class="stock-name">金盘科技</span><br><span class="stock-code">688676.SH</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">干式变压器国内龙头，出口欧美数据中心。海外变压器供需缺口最大（交期18-24个月）</td></tr>
+<tr><td><span class="stock-name">科士达</span><br><span class="stock-code">002518.SZ</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">UPS/精密空调国内头部厂商。受益AI数据中心UPS需求放量</td></tr>
+<tr><td><span class="stock-name">思源电气</span><br><span class="stock-code">002028.SZ</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">高压开关/电力电子设备龙头。GIS/SVG/开关柜是数据中心配电核心设备</td></tr>
+<tr><td><span class="stock-name">东方电气</span><br><span class="stock-code">600875.SH</span></td><td><span class="stock-tier tier-related">相关</span></td><td class="stock-reason">燃气轮机国产替代。数据中心备用/调峰电源燃气轮机需求爆发</td></tr>
+<tr><td><span class="stock-name">润泽科技</span><br><span class="stock-code">300442.SZ</span></td><td><span class="stock-tier tier-related">相关</span></td><td class="stock-reason">AIDC运营商。环京/长三角布局超大规模数据中心</td></tr>
+</tbody>
+</table>
+<div class="highlight-box"><strong>关键判断：</strong>三阶段受益逻辑——(1)短期建安：变压器/开关柜/UPS；(2)中期供电瓶颈：燃气轮机/储能；(3)长期运营：IDC运营商。<strong>金盘科技（变压器出口）+科华数据（UPS+总包）</strong>弹性最大。</div>
+</div>
+</div>
+
+<div class="section-title"><span class="section-num num-3">&star;</span>综合推荐：2027 AI 供应链 TOP 15 受益标的</div>
+<div class="analysis-block"><div class="ab-body">
+<p style="margin-bottom:20px;">综合紧缺程度、受益弹性、竞争格局和确定性，筛选出以下 <strong>15 只核心受益 A 股标的</strong>：</p>
+<div class="summary-matrix"><table>
+<thead><tr><th style="width:36px">#</th><th>标的</th><th>代码</th><th>所属环节</th><th class="center">紧缺评级</th><th>核心逻辑一句话</th></tr></thead>
+<tbody><tr><td>1</td><td class="stock-name">中际旭创</td><td class="stock-code">300308</td><td>光模块</td><td class="center s-critical">极高</td><td style="color:var(--text-muted);">全球 1.6T 光模块龙头，直接受益 AI 网络升级</td></tr>
+<tr><td>2</td><td class="stock-name">长电科技</td><td class="stock-code">600584</td><td>先进封装</td><td class="center s-critical">极高</td><td style="color:var(--text-muted);">国内 CoWoS 替代方案核心承担者</td></tr>
+<tr><td>3</td><td class="stock-name">深南电路</td><td class="stock-code">002916</td><td>ABF载板</td><td class="center s-critical">极高</td><td style="color:var(--text-muted);">大陆唯一 FC-BGA 载板量产厂商</td></tr>
+<tr><td>4</td><td class="stock-name">北方华创</td><td class="stock-code">002371</td><td>HBM/封装设备</td><td class="center s-critical">极高</td><td style="color:var(--text-muted);">HBM TSV 设备国产唯一平台</td></tr>
+<tr><td>5</td><td class="stock-name">天孚通信</td><td class="stock-code">300394</td><td>光器件/CPO</td><td class="center s-very-high">很高</td><td style="color:var(--text-muted);">光引擎全球龙头，CPO 核心受益</td></tr>
+<tr><td>6</td><td class="stock-name">海光信息</td><td class="stock-code">688041</td><td>AI芯片</td><td class="center s-very-high">很高</td><td style="color:var(--text-muted);">国产 AI DCU，信创替代确定性最强</td></tr>
+<tr><td>7</td><td class="stock-name">麦格米特</td><td class="stock-code">002851</td><td>服务器电源</td><td class="center s-very-high">很高</td><td style="color:var(--text-muted);">NVIDIA AI 服务器电源直接供应商</td></tr>
+<tr><td>8</td><td class="stock-name">英维克</td><td class="stock-code">002837</td><td>液冷散热</td><td class="center s-high">高</td><td style="color:var(--text-muted);">AI 数据中心液冷龙头，冷板+浸没全覆盖</td></tr>
+<tr><td>9</td><td class="stock-name">金盘科技</td><td class="stock-code">688676</td><td>电力基础设施</td><td class="center s-high">高</td><td style="color:var(--text-muted);">干式变压器出口龙头，海外数据中心受益</td></tr>
+<tr><td>10</td><td class="stock-name">通富微电</td><td class="stock-code">002156</td><td>先进封装</td><td class="center s-critical">极高</td><td style="color:var(--text-muted);">AMD 主力封测伙伴，2.5D 封装量产经验丰富</td></tr>
+<tr><td>11</td><td class="stock-name">华峰测控</td><td class="stock-code">688200</td><td>封装设备</td><td class="center s-critical">极高</td><td style="color:var(--text-muted);">先进封装测试设备，价值量随封装复杂度倍增</td></tr>
+<tr><td>12</td><td class="stock-name">寒武纪</td><td class="stock-code">688256</td><td>AI芯片</td><td class="center s-very-high">很高</td><td style="color:var(--text-muted);">国产 AI 训练/推理芯片核心标的</td></tr>
+<tr><td>13</td><td class="stock-name">生益科技</td><td class="stock-code">600183</td><td>ABF材料</td><td class="center s-critical">极高</td><td style="color:var(--text-muted);">高端覆铜板龙头，ABF 载板上游核心材料</td></tr>
+<tr><td>14</td><td class="stock-name">科华数据</td><td class="stock-code">002335</td><td>电力基础设施</td><td class="center s-high">高</td><td style="color:var(--text-muted);">UPS+数据中心电力总包，AI数据中心电力核心</td></tr>
+<tr><td>15</td><td class="stock-name">雅克科技</td><td class="stock-code">002409</td><td>HBM材料</td><td class="center s-critical">极高</td><td style="color:var(--text-muted);">HBM 前驱体材料，SK 海力士核心供应商</td></tr>
+</tbody>
+</table></div>
+</div></div>
+
+<div class="source-block">
+<h3>&#9654; 主要数据来源与参考</h3>
+<ol>
+<li><strong>台积电 (TSMC)</strong> — 2025Q1/Q2 法说会纪要，CoWoS 产能规划及客户需求展望</li>
+<li><strong>SEMI</strong> — World Fab Forecast Report (2025H1)；Global Semiconductor Equipment Market Statistics</li>
+<li><strong>SK hynix</strong> — 2025Q1 Earnings Call, HBM4 roadmap & M15X fab expansion timeline</li>
+<li><strong>Samsung Electronics</strong> — 2025Q1 Earnings Call, Pyeongtaek P4 HBM production update</li>
+<li><strong>NVIDIA</strong> — GTC 2025/2026 Keynote, Rubin/Rubin Ultra platform architecture disclosure</li>
+<li><strong>LightCounting</strong> — Optical Communications Market Forecast Report (2025Q2 update)</li>
+<li><strong>IEA</strong> — World Energy Outlook 2025; Data Centres and AI Electricity Consumption Analysis</li>
+<li><strong>TrendForce</strong> — HBM Market Analysis 2025-2027; AI Server Supply Chain Tracker</li>
+<li><strong>味之素 (Ajinomoto)</strong> — ABF Film production expansion plan (FY2025-2027)</li>
+<li><strong>中国信通院</strong> — 《中国算力发展指数白皮书 (2025)》</li>
+<li><strong>国盛证券</strong> — 《AI 算力供应链深度：从 HBM 到先进封装》(2025.12)</li>
+<li><strong>天风证券</strong> — 《AIDC 电力基础设施：液冷与供配电新周期》(2026.01)</li>
+<li><strong>中金公司</strong> — 《先进封装与 ABF 载板：国产化破局之年》(2026.03)</li>
+<li><strong>中信证券</strong> — 《AI 光模块行业深度：1.6T 时代中国厂商全球竞争力》(2026.02)</li>
+</ol>
+<p style="color:var(--text-muted);font-size:.8rem;margin-top:12px;">注：以上来源为行业公开信息综合整理，部分供需数据为多家机构预测区间的中位数估计，并非精确值。具体以各机构原版报告为准。</p>
+</div>
+
+<div class="disclaimer">
+<strong>免责声明</strong><br>
+本报告仅为行业研究视角下的 AI 供应链供需格局分析和受益标的梳理，<strong>不构成任何投资建议</strong>。<br>
+所有供需缺口预测基于当前可获取的公开信息和合理假设，存在不确定性。<br>
+个股标的仅为行业受益逻辑分析，不构成买卖推荐。投资有风险，入市需谨慎。<br><br>
+&copy; 2026-06-23 &middot; AI 供应链紧缺分析 &middot; 仅限研究参考
+</div>
+
+</div>
+</body>
+</html>

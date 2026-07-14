@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>证券板块 - A股公司清单与产业链关系</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #0a0e17; color: #e0e6f0; line-height: 1.6; min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+        .header { text-align: center; margin-bottom: 48px; }
+        .header h1 { font-size: 36px; font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa, #34d399, #f472b6);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 12px; }
+        .header .subtitle { font-size: 16px; color: #8892a8; }
+        .header .update-time { font-size: 13px; color: #5a6478; margin-top: 8px; }
+
+        .section-title { font-size: 22px; font-weight: 600; color: #c8d0e0;
+            margin-bottom: 24px; padding-left: 14px; border-left: 3px solid #60a5fa; }
+
+        /* 统计卡片 */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 16px; margin-bottom: 56px; }
+        .stat-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 12px; padding: 20px; }
+        .stat-card .stat-label { font-size: 13px; color: #5a6478; margin-bottom: 6px; }
+        .stat-card .stat-value { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+        .stat-card .stat-note { font-size: 12px; color: #5a6478; }
+        .stat-green .stat-value { color: #34d399; }
+        .stat-blue .stat-value { color: #60a5fa; }
+        .stat-pink .stat-value { color: #f472b6; }
+        .stat-yellow .stat-value { color: #fbbf24; }
+        .stat-purple .stat-value { color: #a78bfa; }
+        .stat-red .stat-value { color: #f87171; }
+
+        /* 流程图 */
+        .flow-section { margin-bottom: 56px; }
+        .flow-diagram { display: flex; align-items: stretch; gap: 0;
+            background: #111827; border-radius: 16px; border: 1px solid #1e293b; overflow: hidden; }
+        .flow-stage { flex: 1; padding: 28px 20px; position: relative; }
+        .flow-stage:not(:last-child)::after {
+            content: '→'; position: absolute; right: -14px; top: 50%;
+            transform: translateY(-50%); font-size: 28px; color: #4b5563; z-index: 2; }
+        .flow-stage:not(:last-child) { border-right: 1px solid #1e293b; }
+        .flow-stage .stage-label { font-size: 13px; font-weight: 600; letter-spacing: 1px;
+            margin-bottom: 12px; padding: 4px 12px; border-radius: 20px; display: inline-block; }
+        .flow-upstream .stage-label { background: rgba(16,185,129,0.15); color: #34d399; }
+        .flow-midstream .stage-label { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .flow-downstream .stage-label { background: rgba(244,114,182,0.15); color: #f472b6; }
+        .flow-end .stage-label { background: rgba(251,191,36,0.15); color: #fbbf24; }
+        .flow-stage .stage-title { font-size: 18px; font-weight: 600; color: #e0e6f0; margin-bottom: 8px; }
+        .flow-stage .stage-desc { font-size: 13px; color: #8892a8; }
+        .flow-stage .stage-products { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+        .flow-stage .product-tag { font-size: 12px; padding: 3px 10px; border-radius: 12px;
+            background: rgba(255,255,255,0.06); color: #a0aec0;
+            border: 1px solid rgba(255,255,255,0.08); }
+
+        /* 公司卡片 */
+        .companies-section { margin-bottom: 48px; }
+        .company-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; }
+        .company-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; transition: border-color 0.2s, transform 0.2s; }
+        .company-card:hover { border-color: #374151; transform: translateY(-2px); }
+        .company-card .card-header { display: flex; justify-content: space-between;
+            align-items: flex-start; margin-bottom: 14px; }
+        .company-card .card-name { font-size: 18px; font-weight: 600; color: #e0e6f0; }
+        .company-card .card-code { font-size: 13px; font-weight: 500; padding: 3px 10px;
+            border-radius: 8px; background: rgba(96,165,250,0.12); color: #60a5fa; white-space: nowrap; }
+        .company-card .card-position { font-size: 13px; padding: 3px 10px;
+            border-radius: 8px; display: inline-block; margin-bottom: 10px; }
+        .position-upstream { background: rgba(16,185,129,0.12); color: #34d399; }
+        .position-midstream { background: rgba(96,165,250,0.12); color: #60a5fa; }
+        .position-downstream { background: rgba(244,114,182,0.12); color: #f472b6; }
+        .company-card .card-desc { font-size: 14px; color: #8892a8; line-height: 1.7; margin-bottom: 12px; }
+        .company-card .card-data-row { display: flex; flex-wrap: wrap; gap: 8px 18px;
+            font-size: 13px; color: #c8d0e0; padding: 10px 14px;
+            background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 3px solid #374151; }
+        .company-card .card-data-row strong { color: #e0e6f0; margin-left: 2px; }
+        .rating-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+        .rating-card { border-radius: 10px; padding: 10px 12px; border: 1px solid; background: rgba(255,255,255,0.03); }
+        .rating-title { font-size: 12px; color: #8892a8; margin-bottom: 4px; }
+        .rating-level { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .rating-reason { font-size: 12px; color: #8892a8; line-height: 1.5; }
+        .rating-strong { border-color: rgba(52,211,153,0.35); background: rgba(16,185,129,0.08); }
+        .rating-strong .rating-level { color: #34d399; }
+        .rating-mid { border-color: rgba(96,165,250,0.35); background: rgba(96,165,250,0.08); }
+        .rating-mid .rating-level { color: #60a5fa; }
+        .rating-watch { border-color: rgba(251,191,36,0.35); background: rgba(251,191,36,0.08); }
+        .rating-watch .rating-level { color: #fbbf24; }
+        .rating-weak { border-color: rgba(248,113,113,0.35); background: rgba(248,113,113,0.06); }
+        .rating-weak .rating-level { color: #f87171; }
+        .rating-guide { margin-bottom: 56px; }
+
+        /* 关系图 */
+        .relation-section { margin-bottom: 56px; }
+        .relation-diagram { background: #111827; border: 1px solid #1e293b;
+            border-radius: 16px; padding: 32px; overflow-x: auto; }
+        .relation-row { display: flex; align-items: center; margin-bottom: 16px; }
+        .relation-row:last-child { margin-bottom: 0; }
+        .relation-label { min-width: 85px; font-size: 14px; font-weight: 600;
+            color: #8892a8; flex-shrink: 0; }
+        .relation-items { display: flex; flex-wrap: wrap; gap: 10px; }
+        .relation-node { padding: 8px 16px; border-radius: 10px; font-size: 14px;
+            font-weight: 500; border: 1px solid; }
+        .relation-node.upstream { background: rgba(16,185,129,0.08);
+            border-color: rgba(16,185,129,0.25); color: #34d399; }
+        .relation-node.midstream { background: rgba(96,165,250,0.08);
+            border-color: rgba(96,165,250,0.25); color: #60a5fa; }
+        .relation-node.downstream { background: rgba(244,114,182,0.08);
+            border-color: rgba(244,114,182,0.25); color: #f472b6; }
+        .relation-node.end { background: rgba(251,191,36,0.08);
+            border-color: rgba(251,191,36,0.25); color: #fbbf24; }
+        .relation-arrow { text-align: center; color: #4b5563; font-size: 20px; padding: 4px 0; }
+        .relation-node .node-code { font-size: 11px; opacity: 0.7; margin-left: 6px; }
+
+        /* 核心关注 */
+        .focus-section { margin-bottom: 40px; }
+        .focus-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .focus-card { background: linear-gradient(135deg, #111827, #1a2332);
+            border: 1px solid #1e293b; border-radius: 14px; padding: 24px;
+            position: relative; overflow: hidden; }
+        .focus-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .focus-card:nth-child(1)::before { background: linear-gradient(90deg, #34d399, #10b981); }
+        .focus-card:nth-child(2)::before { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+        .focus-card:nth-child(3)::before { background: linear-gradient(90deg, #a78bfa, #8b5cf6); }
+        .focus-card:nth-child(4)::before { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+        .focus-card:nth-child(5)::before { background: linear-gradient(90deg, #f472b6, #ec4899); }
+        .focus-card:nth-child(6)::before { background: linear-gradient(90deg, #f87171, #ef4444); }
+        .focus-card .focus-rank { font-size: 48px; font-weight: 800;
+            color: rgba(255,255,255,0.04); position: absolute; top: 8px; right: 16px; }
+        .focus-card .focus-name { font-size: 18px; font-weight: 600; color: #e0e6f0; margin-bottom: 4px; }
+        .focus-card .focus-code { font-size: 13px; color: #60a5fa; margin-bottom: 10px; }
+        .focus-card .focus-reason { font-size: 14px; color: #8892a8; line-height: 1.7; }
+
+        /* 逻辑卡片 */
+        .logic-section { margin-bottom: 56px; }
+        .logic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+        .logic-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; }
+        .logic-card .logic-icon { font-size: 28px; margin-bottom: 12px; }
+        .logic-card .logic-title { font-size: 17px; font-weight: 600; color: #e0e6f0; margin-bottom: 8px; }
+        .logic-card .logic-desc { font-size: 14px; color: #8892a8; line-height: 1.7; }
+        .logic-card .logic-tag { display: inline-block; font-size: 12px; padding: 2px 10px;
+            border-radius: 8px; margin-top: 10px; margin-right: 6px; }
+        .tag-green { background: rgba(16,185,129,0.12); color: #34d399; }
+        .tag-blue { background: rgba(96,165,250,0.12); color: #60a5fa; }
+        .tag-pink { background: rgba(244,114,182,0.12); color: #f472b6; }
+        .tag-yellow { background: rgba(251,191,36,0.12); color: #fbbf24; }
+        .tag-red { background: rgba(248,113,113,0.12); color: #f87171; }
+
+        /* 表格 */
+        .table-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid #1e293b; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9em; min-width: 500px; }
+        thead th { background: #111827; color: #8892a8; font-weight: 500;
+            padding: 12px 14px; text-align: center; white-space: nowrap;
+            border-bottom: 2px solid #1e293b; position: sticky; top: 0; }
+        tbody td { padding: 10px 14px; border-bottom: 1px solid #1e293b; text-align: center; }
+        tbody tr:hover { background: rgba(255,255,255,0.03); }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            .header h1 { font-size: 26px; }
+            .flow-diagram { flex-direction: column; }
+            .flow-stage:not(:last-child)::after { content: '↓'; right: auto; bottom: -16px; top: auto;
+                left: 50%; transform: translateX(-50%); }
+            .flow-stage:not(:last-child) { border-right: none; border-bottom: 1px solid #1e293b; }
+            .company-grid { grid-template-columns: 1fr; }
+            .rating-row { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .focus-cards { grid-template-columns: 1fr; }
+            .logic-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>证券板块</h1>
+            <div class="subtitle">A股相关公司清单与产业链关系 · 覆盖头部券商、互联网券商、中小券商、金融科技四大细分领域</div>
+            <div class="update-time">数据更新时间：2026-06-23 11:13 | 数据来源：东方财富</div>
+        </div>
+
+        <!-- 行业供需概览 -->
+        <div class="overview-section">
+            <div class="section-title">行业供需概览</div>
+            <div class="stats-grid"><div class="stat-card stat-green">
+        <div class="stat-label">市场日均成交额</div>
+        <div class="stat-value">1.5~2万亿</div>
+        <div class="stat-note">2026年A股日均成交维持高位，直接增厚券商经纪+两融收入</div>
+    </div>
+    <div class="stat-card stat-blue">
+        <div class="stat-label">IPO + 再融资规模</div>
+        <div class="stat-value">持续回暖</div>
+        <div class="stat-note">注册制全面深化，股权融资常态化，投行收入确定性提升</div>
+    </div>
+    <div class="stat-card stat-pink">
+        <div class="stat-label">券商Q1业绩</div>
+        <div class="stat-value">显著增长</div>
+        <div class="stat-note">市场活跃度提升+自营弹性释放，头部券商Q1净利普遍+30%+</div>
+    </div>
+    <div class="stat-card stat-yellow">
+        <div class="stat-label">两融余额</div>
+        <div class="stat-value">1.8~2万亿</div>
+        <div class="stat-note">杠杆资金活跃，券商利息收入+佣金双重受益</div>
+    </div>
+    <div class="stat-card stat-purple">
+        <div class="stat-label">机构核心判断</div>
+        <div class="stat-value">戴维斯双击</div>
+        <div class="stat-note">市场活跃+制度改革+估值底部，券商板块有望迎来业绩与估值共振</div>
+    </div></div>
+        </div>
+
+        <!-- 实时行情概览 -->
+        <div class="overview-section">
+            <div class="section-title">今日实时行情概览</div>
+            <div class="stats-grid"><div class="stat-card stat-green">
+        <div class="stat-label">今日平均涨跌</div>
+        <div class="stat-value">+1.28%</div>
+        <div class="stat-note">覆盖 20 只核心标的</div>
+    </div>
+    <div class="stat-card stat-blue">
+        <div class="stat-label">上涨 / 下跌家数</div>
+        <div class="stat-value">13 / 6</div>
+        <div class="stat-note">上涨占比 68%</div>
+    </div>
+    <div class="stat-card stat-pink">
+        <div class="stat-label">总成交额</div>
+        <div class="stat-value">599.16亿</div>
+        <div class="stat-note">板块资金活跃度</div>
+    </div>
+    <div class="stat-card stat-yellow">
+        <div class="stat-label">总市值</div>
+        <div class="stat-value">2.81万亿</div>
+        <div class="stat-note">七大细分领域合计</div>
+    </div>
+    <div class="stat-card stat-purple">
+        <div class="stat-label">强势股TOP1</div>
+        <div class="stat-value">天风证券 +8.6%</div>
+        <div class="stat-note">今日涨幅最大标的</div>
+    </div></div>
+        </div>
+
+        <!-- 核心驱动逻辑 -->
+        <div class="logic-section">
+        <div class="section-title">核心驱动逻辑</div>
+        <div class="logic-grid">
+            <div class="logic-card">
+                <div class="logic-icon">📈</div>
+                <div class="logic-title">需求端：市场交投活跃+注册制改革+财富管理大时代</div>
+                <div class="logic-desc">2026年A股日均成交额维持1.5~2万亿高位，两融余额稳定于1.8~2万亿。全面注册制深化+科创板+北交所扩容，股权融资常态化带来投行收入确定性增长。居民财富搬家+养老金入市，券商财富管理转型加速。</div>
+                <span class="logic-tag tag-green">日均成交2万亿</span>
+                <span class="logic-tag tag-blue">注册制深化</span>
+                <span class="logic-tag tag-pink">财富管理</span>
+            </div>
+            <div class="logic-card">
+                <div class="logic-icon">🏛️</div>
+                <div class="logic-title">政策端：资本市场改革开放+并购重组松绑</div>
+                <div class="logic-desc">新"国九条"推动资本市场高质量发展，加强投资端改革+引入长期资金。并购重组政策友好期+行业集中度提升趋势明确，头部券商有望通过并购做大做强。金融科技投入持续增加，券商IT系统国产化替代加速推进。</div>
+                <span class="logic-tag tag-green">新国九条</span>
+                <span class="logic-tag tag-blue">并购松绑</span>
+                <span class="logic-tag tag-pink">IT国产化</span>
+            </div>
+            <div class="logic-card">
+                <div class="logic-icon">💎</div>
+                <div class="logic-title">利润端：估值历史底部+业绩弹性释放=戴维斯双击</div>
+                <div class="logic-desc">当前券商板块PB约1.2~1.5倍，处于近5年30%以下分位，估值安全边际充足。市场活跃度回升带动经纪+两融+自营业绩全面改善，头部券商2026Q1净利普遍+30%以上。交易活跃叠加制度改革，板块有望迎来业绩与估值共振修复。</div>
+                <span class="logic-tag tag-green">PB 1.2~1.5x</span>
+                <span class="logic-tag tag-blue">净利+30%</span>
+                <span class="logic-tag tag-pink">戴维斯双击</span>
+            </div>
+        </div>
+    </div>
+
+        <!-- 产业链全景 -->
+        <div class="flow-section">
+        <div class="section-title">产业链全景</div>
+        <div class="flow-diagram">
+            <div class="flow-stage flow-upstream">
+                <span class="stage-label">上游</span>
+                <div class="stage-title">金融IT与基础设施</div>
+                <div class="stage-desc">券商核心交易系统、行情软件、金融信息终端的研发与运营。恒生电子、通达信等为券商提供底层技术底座，是资本市场基础设施。</div>
+                <div class="stage-products">
+                    <span class="product-tag">核心交易系统</span>
+                    <span class="product-tag">行情终端</span>
+                    <span class="product-tag">金融数据库</span>
+                    <span class="product-tag">风控系统</span>
+                </div>
+            </div>
+            <div class="flow-stage flow-midstream">
+                <span class="stage-label">中游</span>
+                <div class="stage-title">持牌券商与互联网券商</div>
+                <div class="stage-desc">持有证券牌照的综合性券商和互联网券商，提供经纪、投行、资管、自营、信用等全牌照服务，是资本市场核心中介。</div>
+                <div class="stage-products">
+                    <span class="product-tag">经纪业务</span>
+                    <span class="product-tag">投行业务</span>
+                    <span class="product-tag">资管业务</span>
+                    <span class="product-tag">自营投资</span>
+                    <span class="product-tag">两融业务</span>
+                </div>
+            </div>
+            <div class="flow-stage flow-downstream">
+                <span class="stage-label">下游</span>
+                <div class="stage-title">财富管理与投资服务</div>
+                <div class="stage-desc">面向零售客户和高净值客户的财富管理、基金代销、投资顾问、资产配置等增值服务。券商向综合财富管理机构转型，收费模式从佣金向管理费迁移。</div>
+                <div class="stage-products">
+                    <span class="product-tag">基金代销</span>
+                    <span class="product-tag">投顾服务</span>
+                    <span class="product-tag">私募FOF</span>
+                    <span class="product-tag">衍生品服务</span>
+                </div>
+            </div>
+            <div class="flow-stage flow-end">
+                <span class="stage-label">终端</span>
+                <div class="stage-title">市场参与者</div>
+                <div class="stage-desc">个人投资者、公募/私募基金、保险资金、社保基金、养老金、QFII/北向资金等各类市场投资者，通过券商通道参与资本市场投资。</div>
+                <div class="stage-products">
+                    <span class="product-tag">个人投资者</span>
+                    <span class="product-tag">公募基金</span>
+                    <span class="product-tag">保险资金</span>
+                    <span class="product-tag">外资QFII</span>
+                    <span class="product-tag">养老金</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- 买入评级说明 -->
+        <div class="rating-guide">
+        <div class="section-title">买入评级说明</div>
+        <div class="logic-grid">
+            <div class="logic-card">
+                <div class="logic-title">★★★ ★★☆ ★☆☆ ☆☆☆</div>
+                <div class="logic-desc">高关注 → 关注 → 观望 → 暂缓。基于成交额、市值、估值、涨跌幅综合打分排序，供快速扫描参考。</div>
+                <span class="logic-tag tag-green">★★★</span><span class="logic-tag tag-blue">★★☆</span><span class="logic-tag tag-yellow">★☆☆</span><span class="logic-tag tag-red">☆☆☆</span>
+            </div>
+            <div class="logic-card">
+                <div class="logic-title">左侧 / 右侧</div>
+                <div class="logic-desc">左侧偏低吸（看回调幅度+估值），右侧偏趋势确认（看涨跌幅+成交活跃度）。两侧独立评分，可能得出不同星级。</div>
+                <span class="logic-tag tag-green">低吸</span><span class="logic-tag tag-blue">趋势</span>
+            </div>
+        </div>
+    </div>
+
+        <!-- 公司清单 -->
+        <h2 class="section-title" style="margin-top:56px">核心标的一览（按细分领域）</h2>
+        <div class="companies-section">
+            <div class="section-title">头部券商</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">中信建投</div>
+                    <div class="card-code">601066</div>
+                </div>
+                <span class="card-position position-upstream">头部券商</span>
+                <div class="card-desc">投行实力突出，科创板+北交所IPO承销家数行业前三。研究+机构服务协同效应显著，受益注册制改革深化。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>28.70</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+4.78%</span></span>
+                    <span>成交 <strong>33.58亿</strong></span>
+                    <span>PE <strong>15.2</strong></span>
+                    <span>市值 <strong>2226.17亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">广发证券</div>
+                    <div class="card-code">000776</div>
+                </div>
+                <span class="card-position position-upstream">头部券商</span>
+                <div class="card-desc">粤港澳大湾区龙头券商，投行+财富管理双驱动。公募基金子公司广发基金+易方达贡献稳定利润，权益市场回暖弹性标的。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>23.43</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+3.22%</span></span>
+                    <span>成交 <strong>46.49亿</strong></span>
+                    <span>PE <strong>9.7</strong></span>
+                    <span>市值 <strong>1833.36亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">招商证券</div>
+                    <div class="card-code">600999</div>
+                </div>
+                <span class="card-position position-upstream">头部券商</span>
+                <div class="card-desc">招商局旗下大型券商，机构客户服务能力突出。托管外包+衍生品业务行业领先，PB业务具备差异化优势。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>20.19</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+2.75%</span></span>
+                    <span>成交 <strong>28.67亿</strong></span>
+                    <span>PE <strong>13.4</strong></span>
+                    <span>市值 <strong>1755.83亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">华泰证券</div>
+                    <div class="card-code">601688</div>
+                </div>
+                <span class="card-position position-upstream">头部券商</span>
+                <div class="card-desc">科技驱动型头部券商，涨乐财富通APP月活行业领先。并购重组+科创板保荐实力突出，2026Q1业绩受益市场成交量放大，机构+零售双轮驱动。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>21.49</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.94%</span></span>
+                    <span>成交 <strong>34.81亿</strong></span>
+                    <span>PE <strong>10.1</strong></span>
+                    <span>市值 <strong>1939.87亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-strong">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">中金公司</div>
+                    <div class="card-code">601995</div>
+                </div>
+                <span class="card-position position-upstream">头部券商</span>
+                <div class="card-desc">投行贵族，高端客户+机构客户资源深厚。IPO+并购重组头部投行地位稳固，财富管理聚焦高净值人群。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>35.65</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.59%</span></span>
+                    <span>成交 <strong>13.08亿</strong></span>
+                    <span>PE <strong>12.0</strong></span>
+                    <span>市值 <strong>1720.92亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-strong">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">申万宏源</div>
+                    <div class="card-code">000166</div>
+                </div>
+                <span class="card-position position-upstream">头部券商</span>
+                <div class="card-desc">央企券商，合并后综合实力跻身行业前三。研究所影响力行业领先，机构分仓收入靠前，自营弹性较大。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>4.64</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.22%</span></span>
+                    <span>成交 <strong>5.75亿</strong></span>
+                    <span>PE <strong>12.3</strong></span>
+                    <span>市值 <strong>1161.85亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">中国银河</div>
+                    <div class="card-code">601881</div>
+                </div>
+                <span class="card-position position-upstream">头部券商</span>
+                <div class="card-desc">老牌大型券商，经纪业务基础雄厚，营业部网络覆盖全国。自营投资弹性大，受益权益市场回暖业绩弹性显著。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>13.03</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-0.08%</span></span>
+                    <span>成交 <strong>9.05亿</strong></span>
+                    <span>PE <strong>10.7</strong></span>
+                    <span>市值 <strong>1424.75亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-strong">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">国泰君安</div>
+                    <div class="card-code">601211</div>
+                </div>
+                <span class="card-position position-upstream">头部券商</span>
+                <div class="card-desc">上海国资旗下头部券商，FICC+衍生品业务行业领先。2026Q1业绩受益市场活跃，机构+企业+零售三轮驱动。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>18.11</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-0.22%</span></span>
+                    <span>成交 <strong>22.11亿</strong></span>
+                    <span>PE <strong>12.5</strong></span>
+                    <span>市值 <strong>3192.60亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-strong">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">中信证券</div>
+                    <div class="card-code">600030</div>
+                </div>
+                <span class="card-position position-upstream">头部券商</span>
+                <div class="card-desc">综合券商绝对龙头，投行+经纪+资管+自营全牌照布局。投行IPO承销规模连续多年行业第一，财富管理转型领先，机构业务护城河深厚。受益资本市场改革+交易活跃度提升。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>28.57</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-0.24%</span></span>
+                    <span>成交 <strong>76.14亿</strong></span>
+                    <span>PE <strong>10.4</strong></span>
+                    <span>市值 <strong>4234.23亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-strong">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">海通证券</div>
+                    <div class="card-code">600837</div>
+                </div>
+                <span class="card-position position-upstream">头部券商</span>
+                <div class="card-desc">上海大型券商，国际业务布局领先。海通国际为香港头部中资券商，受益港股回暖+跨境业务复苏。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>—</strong></span>
+                    <span>涨跌 —</span>
+                    <span>成交 <strong>—</strong></span>
+                    <span>PE <strong>—</strong></span>
+                    <span>市值 <strong>—</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">信号不足</div>
+    </div><div class="rating-card rating-weak">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">信号不足</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">互联网券商</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">同花顺</div>
+                    <div class="card-code">300033</div>
+                </div>
+                <span class="card-position position-midstream">互联网券商</span>
+                <div class="card-desc">AI+金融信息龙头，iFinD金融终端深度绑定机构客户。爱问财+AI投顾产品商业化加速，市场活跃度提升直接带动增值服务收入。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>250.52</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+1.55%</span></span>
+                    <span>成交 <strong>77.37亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">184.2</span></strong></span>
+                    <span>市值 <strong>1885.51亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">东方财富</div>
+                    <div class="card-code">300059</div>
+                </div>
+                <span class="card-position position-midstream">互联网券商</span>
+                <div class="card-desc">互联网券商标杆，天天基金+东方财富网流量入口稳固。经纪+两融市占率持续提升，2026Q1业绩受益市场活跃度超预期，证券+基金+资讯全生态闭环。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>21.16</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.91%</span></span>
+                    <span>成交 <strong>167.36亿</strong></span>
+                    <span>PE <strong>22.4</strong></span>
+                    <span>市值 <strong>3347.98亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-strong">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">指南针</div>
+                    <div class="card-code">300803</div>
+                </div>
+                <span class="card-position position-midstream">互联网券商</span>
+                <div class="card-desc">证券投顾软件龙头，付费用户基数大+粘性强。并购网信证券后经纪牌照补齐，形成软件+券商生态，流量变现空间可期。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>103.65</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-1.85%</span></span>
+                    <span>成交 <strong>36.64亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">142.1</span></strong></span>
+                    <span>市值 <strong>632.05亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 低吸区间</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 尚未转强</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">中小券商</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">天风证券</div>
+                    <div class="card-code">601162</div>
+                </div>
+                <span class="card-position position-downstream">中小券商</span>
+                <div class="card-desc">研究所+投行为特色的中型券商，新财富分析师数量行业前列。市场情绪回暖时弹性显著，自营+经纪双重受益。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>3.67</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+8.58%</span></span>
+                    <span>成交 <strong>16.20亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">41345.2</span></strong></span>
+                    <span>市值 <strong>369.72亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">成交活跃 / 短线涨幅偏大</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 强势但需防追高</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">华林证券</div>
+                    <div class="card-code">002945</div>
+                </div>
+                <span class="card-position position-downstream">中小券商</span>
+                <div class="card-desc">中小型券商，科技金融转型推进中。流通市值小，股性活跃，市场交易放量期间弹性标的。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>14.74</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+1.66%</span></span>
+                    <span>成交 <strong>2.15亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">106.1</span></strong></span>
+                    <span>市值 <strong>397.98亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">涨幅温和</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">方正证券</div>
+                    <div class="card-code">601901</div>
+                </div>
+                <span class="card-position position-downstream">中小券商</span>
+                <div class="card-desc">平安集团旗下券商，整合推进带来协同效应。区域经纪业务根基扎实，投行+资管双线并进。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>7.07</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.86%</span></span>
+                    <span>成交 <strong>7.44亿</strong></span>
+                    <span>PE <strong>9.8</strong></span>
+                    <span>市值 <strong>582.01亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">锦龙股份</div>
+                    <div class="card-code">000712</div>
+                </div>
+                <span class="card-position position-downstream">中小券商</span>
+                <div class="card-desc">控股中山证券+参股东莞证券，受益区域券商业绩弹性。市值小、股性活跃，是券商行情中典型的高弹性标的。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>9.61</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.10%</span></span>
+                    <span>成交 <strong>2.88亿</strong></span>
+                    <span>PE <strong><span style="color:#8892a8">-137.2</span></strong></span>
+                    <span>市值 <strong>86.11亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">利润为负 / 涨幅温和</div>
+    </div><div class="rating-card rating-weak">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">利润为负 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">国联证券</div>
+                    <div class="card-code">601456</div>
+                </div>
+                <span class="card-position position-downstream">中小券商</span>
+                <div class="card-desc">无锡国资委旗下券商，并购民生证券推进中。区域经济发达+客户基础扎实，合并后综合实力有望跃升。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>9.43</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-0.95%</span></span>
+                    <span>成交 <strong>4.65亿</strong></span>
+                    <span>PE <strong>27.0</strong></span>
+                    <span>市值 <strong>535.68亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-strong">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">金融科技与服务</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">财富趋势</div>
+                    <div class="card-code">688318</div>
+                </div>
+                <span class="card-position position-downstream">金融科技与服务</span>
+                <div class="card-desc">通达信金融终端开发商，券商行情交易软件市占率较高。受益券商IT投入增长+全面注册制推进，国产化替代打开第二增长曲线。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>84.14</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+1.54%</span></span>
+                    <span>成交 <strong>7.38亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">218.4</span></strong></span>
+                    <span>市值 <strong>301.70亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 涨幅温和</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">恒生电子</div>
+                    <div class="card-code">600570</div>
+                </div>
+                <span class="card-position position-downstream">金融科技与服务</span>
+                <div class="card-desc">国内金融IT绝对龙头，券商核心交易系统市占率超80%。资管新规+注册制改革+全面数字化三重驱动，是资本市场基础设施建设的核心受益标的。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>23.55</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-0.08%</span></span>
+                    <span>成交 <strong>7.42亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">80.3</span></strong></span>
+                    <span>市值 <strong>445.95亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 低吸区间</div>
+    </div><div class="rating-card rating-weak">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">流动性尚可 / 尚未转强</div>
+    </div></div>
+            </div></div>
+        </div>
+
+        <!-- 板块涨跌统计 -->
+        <div class="companies-section">
+            <div class="section-title">各细分板块涨跌统计</div>
+            <div class="table-wrapper">
+                <table><thead><tr>
+                    <th>细分板块</th><th>标的数</th><th>平均涨跌幅</th><th>上涨</th><th>下跌</th><th>总成交额</th><th>总市值</th>
+                </tr></thead><tbody><tr>
+            <td style="text-align:left;font-weight:500">头部券商</td>
+            <td>10</td>
+            <td><span style="display:inline-block;width:5.315555555555555px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+1.33%</td>
+            <td style="color:#34d399">6</td>
+            <td style="color:#f87171">3</td>
+            <td>269.68亿</td>
+            <td>1.95万亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">互联网券商</td>
+            <td>3</td>
+            <td><span style="display:inline-block;width:0.8133333333333331px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+0.20%</td>
+            <td style="color:#34d399">2</td>
+            <td style="color:#f87171">1</td>
+            <td>281.37亿</td>
+            <td>5865.54亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">中小券商</td>
+            <td>5</td>
+            <td><span style="display:inline-block;width:8.2px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+2.05%</td>
+            <td style="color:#34d399">4</td>
+            <td style="color:#f87171">1</td>
+            <td>33.31亿</td>
+            <td>1971.49亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">金融科技与服务</td>
+            <td>2</td>
+            <td><span style="display:inline-block;width:2.92px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+0.73%</td>
+            <td style="color:#34d399">1</td>
+            <td style="color:#f87171">1</td>
+            <td>14.80亿</td>
+            <td>747.65亿</td>
+        </tr><tr style="background:#111827;border-top:2px solid #374151">
+        <td style="text-align:left"><strong>全板块合计</strong></td>
+        <td><strong>20</strong></td>
+        <td><strong>+1.28%</strong></td>
+        <td style="color:#34d399"><strong>13</strong></td>
+        <td style="color:#f87171"><strong>6</strong></td>
+        <td><strong>599.16亿</strong></td>
+        <td><strong>2.81万亿</strong></td>
+    </tr></tbody></table>
+            </div>
+        </div>
+
+        <!-- 强势股/弱势股 -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px">
+            <div>
+                <div class="section-title">强势股 TOP5</div>
+                <div class="table-wrapper">
+                    <table><thead><tr><th>名称</th><th>代码</th><th>最新价</th><th>涨跌幅</th><th>成交额</th><th>板块</th></tr></thead>
+                    <tbody><tr>
+                <td style="text-align:left;font-weight:500">天风证券</td>
+                <td style="color:#60a5fa">601162</td>
+                <td style="font-family:monospace">3.67</td>
+                <td><span style="color:#34d399;font-weight:600">+8.58%</span></td>
+                <td style="font-family:monospace">16.20亿</td>
+                <td>中小券商</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">中信建投</td>
+                <td style="color:#60a5fa">601066</td>
+                <td style="font-family:monospace">28.70</td>
+                <td><span style="color:#34d399;font-weight:600">+4.78%</span></td>
+                <td style="font-family:monospace">33.58亿</td>
+                <td>头部券商</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">广发证券</td>
+                <td style="color:#60a5fa">000776</td>
+                <td style="font-family:monospace">23.43</td>
+                <td><span style="color:#34d399;font-weight:600">+3.22%</span></td>
+                <td style="font-family:monospace">46.49亿</td>
+                <td>头部券商</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">招商证券</td>
+                <td style="color:#60a5fa">600999</td>
+                <td style="font-family:monospace">20.19</td>
+                <td><span style="color:#34d399;font-weight:600">+2.75%</span></td>
+                <td style="font-family:monospace">28.67亿</td>
+                <td>头部券商</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">华林证券</td>
+                <td style="color:#60a5fa">002945</td>
+                <td style="font-family:monospace">14.74</td>
+                <td><span style="color:#34d399;font-weight:600">+1.66%</span></td>
+                <td style="font-family:monospace">2.15亿</td>
+                <td>中小券商</td>
+            </tr></tbody></table>
+                </div>
+            </div>
+            <div>
+                <div class="section-title">弱势股 TOP5</div>
+                <div class="table-wrapper">
+                    <table><thead><tr><th>名称</th><th>代码</th><th>最新价</th><th>涨跌幅</th><th>成交额</th><th>板块</th></tr></thead>
+                    <tbody><tr>
+                <td style="text-align:left;font-weight:500">指南针</td>
+                <td style="color:#60a5fa">300803</td>
+                <td style="font-family:monospace">103.65</td>
+                <td><span style="color:#f87171;font-weight:600">-1.85%</span></td>
+                <td style="font-family:monospace">36.64亿</td>
+                <td>互联网券商</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">国联证券</td>
+                <td style="color:#60a5fa">601456</td>
+                <td style="font-family:monospace">9.43</td>
+                <td><span style="color:#f87171;font-weight:600">-0.95%</span></td>
+                <td style="font-family:monospace">4.65亿</td>
+                <td>中小券商</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">中信证券</td>
+                <td style="color:#60a5fa">600030</td>
+                <td style="font-family:monospace">28.57</td>
+                <td><span style="color:#f87171;font-weight:600">-0.24%</span></td>
+                <td style="font-family:monospace">76.14亿</td>
+                <td>头部券商</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">国泰君安</td>
+                <td style="color:#60a5fa">601211</td>
+                <td style="font-family:monospace">18.11</td>
+                <td><span style="color:#f87171;font-weight:600">-0.22%</span></td>
+                <td style="font-family:monospace">22.11亿</td>
+                <td>头部券商</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">恒生电子</td>
+                <td style="color:#60a5fa">600570</td>
+                <td style="font-family:monospace">23.55</td>
+                <td><span style="color:#f87171;font-weight:600">-0.08%</span></td>
+                <td style="font-family:monospace">7.42亿</td>
+                <td>金融科技与服务</td>
+            </tr></tbody></table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 产业链关系图 -->
+        <div class="relation-section">
+        <div class="section-title">产业链上下游关系</div>
+        <div class="relation-diagram">
+            <div class="relation-row">
+                <div class="relation-label">金融IT</div>
+                <div class="relation-items">
+                    <div class="relation-node upstream">恒生电子<span class="node-code">核心交易系统</span></div>
+                    <div class="relation-node upstream">财富趋势<span class="node-code">通达信终端</span></div>
+                </div>
+            </div>
+            <div class="relation-arrow">→ 系统/终端/数据 →</div>
+            <div class="relation-row">
+                <div class="relation-label">头部券商</div>
+                <div class="relation-items">
+                    <div class="relation-node midstream">中信证券<span class="node-code">综合龙头</span></div>
+                    <div class="relation-node midstream">华泰证券<span class="node-code">科技驱动</span></div>
+                    <div class="relation-node midstream">国泰君安<span class="node-code">FICC领先</span></div>
+                    <div class="relation-node midstream">中金公司<span class="node-code">投行贵族</span></div>
+                    <div class="relation-node midstream">广发证券<span class="node-code">大湾区龙头</span></div>
+                </div>
+            </div>
+            <div class="relation-arrow">→ 流量/金融信息/券商服务 →</div>
+            <div class="relation-row">
+                <div class="relation-label">互联网券商</div>
+                <div class="relation-items">
+                    <div class="relation-node midstream">东方财富<span class="node-code">流量+牌照</span></div>
+                    <div class="relation-node midstream">同花顺<span class="node-code">AI+信息</span></div>
+                    <div class="relation-node midstream">指南针<span class="node-code">投顾+券商</span></div>
+                </div>
+            </div>
+            <div class="relation-arrow">→ 弹性/并购/区域 →</div>
+            <div class="relation-row">
+                <div class="relation-label">中小券商</div>
+                <div class="relation-items">
+                    <div class="relation-node downstream">锦龙股份<span class="node-code">高弹性标的</span></div>
+                    <div class="relation-node downstream">天风证券<span class="node-code">研究所驱动</span></div>
+                    <div class="relation-node downstream">国联证券<span class="node-code">并购整合</span></div>
+                    <div class="relation-node downstream">方正证券<span class="node-code">平安协同</span></div>
+                </div>
+            </div>
+            <div class="relation-arrow">→ 服务终端 →</div>
+            <div class="relation-row">
+                <div class="relation-label">市场参与者</div>
+                <div class="relation-items">
+                    <div class="relation-node end">个人投资者</div>
+                    <div class="relation-node end">公募基金</div>
+                    <div class="relation-node end">保险/社保</div>
+                    <div class="relation-node end">外资机构</div>
+                    <div class="relation-node end">企业融资</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- 核心关注标的 -->
+        <div class="focus-section">
+        <div class="section-title">核心关注标的</div>
+        <div class="focus-cards">
+            <div class="focus-card">
+                <div class="focus-rank">01</div>
+                <div class="focus-name">中信证券</div>
+                <div class="focus-code">600030</div>
+                <div class="focus-reason">综合券商绝对龙头，投行IPO承销规模连续多年行业第一，财富管理转型领先。PB估值处历史中低位，是券商板块核心锚点标的，机构业务护城河深厚。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">02</div>
+                <div class="focus-name">东方财富</div>
+                <div class="focus-code">300059</div>
+                <div class="focus-reason">互联网券商标杆，天天基金+东方财富网流量入口稳固。经纪+两融市占率持续提升，证券+基金+资讯全生态闭环。市场活跃度提升核心受益标的，成长性优于传统券商。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">03</div>
+                <div class="focus-name">华泰证券</div>
+                <div class="focus-code">601688</div>
+                <div class="focus-reason">科技驱动型头部券商，涨乐财富通APP月活行业领先。并购重组+科创板保荐实力突出，机构+零售双轮驱动，市场成交量放大弹性显著。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">04</div>
+                <div class="focus-name">同花顺</div>
+                <div class="focus-code">300033</div>
+                <div class="focus-reason">AI+金融信息龙头，iFinD金融终端深度绑定机构客户。爱问财+AI投顾商业化加速，市场活跃度提升直接带动增值服务收入增长，弹性优于传统券商。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">05</div>
+                <div class="focus-name">恒生电子</div>
+                <div class="focus-code">600570</div>
+                <div class="focus-reason">国内金融IT绝对龙头，券商核心交易系统市占率超80%。资管新规+注册制改革+全面数字化三重驱动力，是资本市场基础设施建设的核心受益标的，确定性较高。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">06</div>
+                <div class="focus-name">国联证券</div>
+                <div class="focus-code">601456</div>
+                <div class="focus-reason">并购民生证券推进中，合并后综合实力有望跃升至行业中游以上。区域经济发达+客户基础扎实，中小券商中并购逻辑最清晰的标的。</div>
+            </div>
+        </div>
+    </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p style="text-align:center;color:#8892a8;font-size:0.8em;padding:30px 0 10px;border-top:1px solid #1e293b;margin-top:40px">行情数据来源：东方财富 | 静态行业数据参考：上市公司公告、公开研报与公开报道 | 生成时间：2026-06-23 11:13</p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em">静态描述为公开资料整理，部分市占率、需求预测、价格判断采用机构预测口径，仅供研究参考。</p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em;margin-top:6px">左侧/右侧买入评级仅基于当前行情、成交额、市值与估值的规则化排序，不构成具体买卖建议。</p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em;margin-top:6px">本报告仅为数据整理，不构成任何投资建议。股市有风险，投资需谨慎。</p>
+        </div>
+    </div>
+</body>
+</html>

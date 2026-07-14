@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>尾盘资金抢筹分析 · 2026年07月02日</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+        background: #0a0e17; color: #e2e8f0; line-height: 1.6; padding: 20px;
+        max-width: 1300px; margin: 0 auto;
+    }
+
+    /* 头部 */
+    .header { text-align: center; padding: 30px 0 20px; border-bottom: 1px solid #1e293b; margin-bottom: 24px; }
+    .header h1 {
+        font-size: 28px;
+        background: linear-gradient(135deg, #f59e0b, #ef4444, #ec4899);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        margin-bottom: 8px;
+    }
+    .header .subtitle { color: #94a3b8; font-size: 14px; }
+    .header .update-time { font-size: 12px; color: #64748b; margin-top: 6px; }
+
+    /* 概览区 */
+    .overview { margin-bottom: 28px; }
+    .overview-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+
+    /* 大盘指数卡 */
+    .index-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-bottom: 20px; }
+    .index-card {
+        background: #111827; border: 1px solid #1e293b; border-radius: 10px;
+        padding: 14px 16px; text-align: center;
+    }
+    .index-card .idx-name { font-size: 12px; color: #64748b; margin-bottom: 4px; }
+    .index-card .idx-price { font-size: 20px; font-weight: 700; }
+    .index-card .idx-change { font-size: 13px; margin-top: 2px; }
+
+    .stat-card {
+        background: #111827; border: 1px solid #1e293b; border-radius: 8px;
+        padding: 14px; text-align: center;
+    }
+    .stat-card .stat-label { font-size: 12px; color: #64748b; margin-bottom: 4px; }
+    .stat-card .stat-value { font-size: 22px; font-weight: 700; margin-bottom: 2px; }
+    .stat-card .stat-note { font-size: 11px; color: #94a3b8; margin-top: 4px; }
+
+    .text-red { color: #ef4444; }
+    .text-green { color: #22c55e; }
+    .text-gray { color: #64748b; }
+    .text-yellow { color: #eab308; }
+    .text-orange { color: #f97316; }
+
+    /* 得分进度条 */
+    .score-bar-wrap {
+        height: 22px; background: #0f172a; border-radius: 6px;
+        position: relative; overflow: hidden; min-width: 60px;
+    }
+    .score-bar-fill { height: 100%; border-radius: 6px; opacity: 0.75; }
+    .score-bar-text {
+        position: absolute; left: 6px; top: 50%; transform: translateY(-50%);
+        font-size: 12px; color: #e2e8f0; font-weight: 700;
+    }
+
+    /* 榜单表格 */
+    .section { margin-bottom: 32px; }
+    .section h2, .section-title {
+        font-size: 20px; margin-bottom: 16px; padding-bottom: 8px;
+        border-bottom: 1px solid #1e293b; color: #e2e8f0;
+    }
+
+    .table-wrapper { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead th {
+        background: #111827; color: #94a3b8; font-weight: 600;
+        padding: 10px 8px; text-align: center; border-bottom: 2px solid #1e293b;
+        white-space: nowrap; font-size: 12px;
+    }
+    tbody td {
+        padding: 10px 8px; text-align: center; border-bottom: 1px solid #1e293b;
+        white-space: nowrap;
+    }
+    tbody tr:hover { background: rgba(59,130,246,0.05); }
+
+    .rank-1, .rank-2, .rank-3 { font-weight: 700; }
+    .rank-1 td:first-child { color: #f59e0b; }
+    .rank-2 td:first-child { color: #94a3b8; }
+    .rank-3 td:first-child { color: #cd7f32; }
+
+    .score-high { color: #22c55e; font-weight: 700; }
+    .score-mid { color: #60a5fa; font-weight: 700; }
+    .score-low { color: #f59e0b; }
+
+    .signal-badge {
+        display: inline-block; padding: 2px 8px; border-radius: 4px;
+        font-size: 11px; font-weight: 600;
+    }
+    .badge-strong { background: rgba(34,197,94,0.15); color: #22c55e; }
+    .badge-active { background: rgba(96,165,250,0.15); color: #60a5fa; }
+    .badge-watch { background: rgba(245,158,11,0.15); color: #f59e0b; }
+
+    /* 板块热点 */
+    .hot-sectors { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 16px; }
+    .hot-sector-card {
+        background: #111827; border: 1px solid #1e293b; border-radius: 8px;
+        padding: 12px 14px;
+    }
+    .hot-sector-card .hs-name { font-size: 13px; color: #e2e8f0; font-weight: 600; margin-bottom: 4px; }
+    .hot-sector-card .hs-count { font-size: 11px; color: #94a3b8; }
+    .hot-sector-card .hs-flow { font-size: 12px; margin-top: 4px; }
+
+    /* 筛选说明 */
+    .filter-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .filter-badge {
+        padding: 4px 12px; border-radius: 20px; font-size: 12px;
+        background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2);
+        color: #93c5fd;
+    }
+
+    /* 资金流信号强度标签 */
+    .level-tag {
+        display: inline-block; padding: 3px 10px; border-radius: 12px;
+        font-size: 11px; font-weight: 600;
+    }
+    .level-strong { background: rgba(239,68,68,0.15); color: #f87171; }
+    .level-good { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .level-moderate { background: rgba(96,165,250,0.15); color: #93c5fd; }
+
+    .footer {
+        margin-top: 32px; padding: 20px 0;
+        border-top: 1px solid #1e293b; text-align: center;
+        color: #64748b; font-size: 12px;
+    }
+    .footer .disclaimer { color: #eab308; margin-top: 8px; font-weight: 500; }
+
+    @media (max-width: 768px) {
+        .overview-cards, .index-cards { grid-template-columns: repeat(2, 1fr); }
+        body { padding: 12px; }
+        .header h1 { font-size: 22px; }
+        table { font-size: 11px; }
+    }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🔍 尾盘资金抢筹分析</h1>
+        <div class="subtitle">A股尾盘主力资金异动监测 · 2026年07月02日</div>
+        <div class="update-time">生成时间：2026-07-02 20:42:14 | 数据来源：东方财富</div>
+    </div>
+
+    <div class="overview">
+        <h2 class="section-title">大盘环境</h2>
+        <div class="index-cards">
+            <div class="index-card">
+                <div class="idx-name">上证指数</div>
+                <div class="idx-price">4028.90</div>
+                <div class="idx-change text-green">-2.03%%</div>
+            </div>
+            <div class="index-card">
+                <div class="idx-name">深证成指</div>
+                <div class="idx-price">15498.81</div>
+                <div class="idx-change text-green">-3.85%%</div>
+            </div>
+            <div class="index-card">
+                <div class="idx-name">创业板指</div>
+                <div class="idx-price">4017.27</div>
+                <div class="idx-change text-green">-5.71%%</div>
+            </div>
+            <div class="index-card">
+                <div class="idx-name">科创50</div>
+                <div class="idx-price">1987.29</div>
+                <div class="idx-change text-green">-7.70%%</div>
+            </div>
+            <div class="index-card">
+                <div class="idx-name">北证50</div>
+                <div class="idx-price">1266.22</div>
+                <div class="idx-change text-red">+0.10%%</div>
+            </div></div>
+
+        <h2 class="section-title">筛选概览</h2>
+        <div class="overview-cards">
+            <div class="stat-card" style="border-color: rgba(59,130,246,0.3)">
+                <div class="stat-label">全市场标的</div>
+                <div class="stat-value" style="color:#3b82f6">4200</div>
+                <div class="stat-note">含ST/停牌</div>
+            </div>
+            <div class="stat-card" style="border-color: rgba(34,197,94,0.3)">
+                <div class="stat-label">抢筹信号标的</div>
+                <div class="stat-value" style="color:#22c55e">10</div>
+                <div class="stat-note">通过筛选条件</div>
+            </div>
+            <div class="stat-card" style="border-color: rgba(245,158,11,0.3)">
+                <div class="stat-label">平均得分</div>
+                <div class="stat-value" style="color:#f59e0b">86.2</div>
+                <div class="stat-note">综合评分 / 100</div>
+            </div>
+            <div class="stat-card" style="border-color: rgba(168,85,247,0.3)">
+                <div class="stat-label">分析时段</div>
+                <div class="stat-value" style="color:#a855f7;font-size:16px">14:30-15:00</div>
+                <div class="stat-note">尾盘资金抢筹窗口</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="filter-badges">
+            <span class="filter-badge">主力净流入 &gt; 0</span>
+            <span class="filter-badge">涨幅 0.5%~9.5%</span>
+            <span class="filter-badge">量比 &ge; 1.0</span>
+            <span class="filter-badge">换手率 1.0%~25.0%</span>
+            <span class="filter-badge">排除ST股</span>
+        </div>
+    </div>
+    <div class="section">
+        <h2>📊 尾盘抢筹榜单 TOP10</h2>
+        <p style="font-size:13px;color:#64748b;margin-bottom:12px">
+            综合评分 = 主力流入强度(40%) + 尾盘拉升特征(30%) + 量价配合(15%) + 资金结构(15%)
+            + 换手率奖惩 + 涨幅奖惩
+        </p>
+        <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th><th>名称</th><th>代码</th><th>行业板块</th><th>涨跌幅</th>
+                    <th>主力净流入</th><th>流入强度</th><th>成交额</th>
+                    <th>换手率</th><th>量比</th><th>资金结构</th><th>综合得分</th>
+                </tr>
+            </thead>
+            <tbody>
+        <tr class="rank-1">
+            <td>1</td>
+            <td style="text-align:left;font-weight:600">章源钨业</td>
+            <td style="color:#94a3b8">002378</td>
+            <td style="text-align:left;color:#94a3b8;font-size:12px">小金属</td>
+            <td class="text-red">+7.69%</td>
+            <td class="text-red">7.95亿</td>
+            <td class="text-red">18.4%</td>
+            <td>43.14亿</td>
+            <td>10.3%</td>
+            <td>1.66</td>
+            <td><span class="level-tag level-strong">主力买散户卖</span></td>
+            <td>
+    <div class="score-bar-wrap">
+        <div class="score-bar-fill" style="width:88%;background:#22c55e"></div>
+        <span class="score-bar-text">88.5</span>
+    </div></td>
+        </tr>
+        <tr class="rank-2">
+            <td>2</td>
+            <td style="text-align:left;font-weight:600">方正科技</td>
+            <td style="color:#94a3b8">600601</td>
+            <td style="text-align:left;color:#94a3b8;font-size:12px">元件</td>
+            <td class="text-red">+6.80%</td>
+            <td class="text-red">13.36亿</td>
+            <td class="text-red">17.3%</td>
+            <td>77.32亿</td>
+            <td>12.6%</td>
+            <td>1.86</td>
+            <td><span class="level-tag level-strong">主力买散户卖</span></td>
+            <td>
+    <div class="score-bar-wrap">
+        <div class="score-bar-fill" style="width:87%;background:#22c55e"></div>
+        <span class="score-bar-text">86.8</span>
+    </div></td>
+        </tr>
+        <tr class="rank-3">
+            <td>3</td>
+            <td style="text-align:left;font-weight:600">柳    工</td>
+            <td style="color:#94a3b8">000528</td>
+            <td style="text-align:left;color:#94a3b8;font-size:12px">工程机械</td>
+            <td class="text-red">+4.53%</td>
+            <td class="text-red">7204万</td>
+            <td class="text-red">14.9%</td>
+            <td>4.84亿</td>
+            <td>3.0%</td>
+            <td>1.79</td>
+            <td><span class="level-tag level-good">资金共振</span></td>
+            <td>
+    <div class="score-bar-wrap">
+        <div class="score-bar-fill" style="width:86%;background:#22c55e"></div>
+        <span class="score-bar-text">86.3</span>
+    </div></td>
+        </tr>
+        <tr class="">
+            <td>4</td>
+            <td style="text-align:left;font-weight:600">普洛药业</td>
+            <td style="color:#94a3b8">000739</td>
+            <td style="text-align:left;color:#94a3b8;font-size:12px">化学制药</td>
+            <td class="text-red">+3.20%</td>
+            <td class="text-red">3554万</td>
+            <td class="text-red">8.3%</td>
+            <td>4.29亿</td>
+            <td>2.1%</td>
+            <td>1.83</td>
+            <td><span class="level-tag level-good">资金共振</span></td>
+            <td>
+    <div class="score-bar-wrap">
+        <div class="score-bar-fill" style="width:86%;background:#22c55e"></div>
+        <span class="score-bar-text">86.3</span>
+    </div></td>
+        </tr>
+        <tr class="">
+            <td>5</td>
+            <td style="text-align:left;font-weight:600">科源制药</td>
+            <td style="color:#94a3b8">301281</td>
+            <td style="text-align:left;color:#94a3b8;font-size:12px">化学制药</td>
+            <td class="text-red">+3.13%</td>
+            <td class="text-red">3492万</td>
+            <td class="text-red">8.3%</td>
+            <td>4.23亿</td>
+            <td>10.3%</td>
+            <td>1.61</td>
+            <td><span class="level-tag level-good">资金共振</span></td>
+            <td>
+    <div class="score-bar-wrap">
+        <div class="score-bar-fill" style="width:86%;background:#22c55e"></div>
+        <span class="score-bar-text">86.2</span>
+    </div></td>
+        </tr>
+        <tr class="">
+            <td>6</td>
+            <td style="text-align:left;font-weight:600">巍华新材</td>
+            <td style="color:#94a3b8">603310</td>
+            <td style="text-align:left;color:#94a3b8;font-size:12px">化学制品</td>
+            <td class="text-red">+5.16%</td>
+            <td class="text-red">688万</td>
+            <td class="text-red">4.8%</td>
+            <td>1.43亿</td>
+            <td>4.6%</td>
+            <td>3.03</td>
+            <td><span class="level-tag level-strong">主力买散户卖</span></td>
+            <td>
+    <div class="score-bar-wrap">
+        <div class="score-bar-fill" style="width:86%;background:#22c55e"></div>
+        <span class="score-bar-text">86.0</span>
+    </div></td>
+        </tr>
+        <tr class="">
+            <td>7</td>
+            <td style="text-align:left;font-weight:600">林平发展</td>
+            <td style="color:#94a3b8">603284</td>
+            <td style="text-align:left;color:#94a3b8;font-size:12px">造纸</td>
+            <td class="text-red">+2.45%</td>
+            <td class="text-red">1198万</td>
+            <td class="text-red">26.0%</td>
+            <td>4604万</td>
+            <td>6.7%</td>
+            <td>1.23</td>
+            <td><span class="level-tag level-good">资金共振</span></td>
+            <td>
+    <div class="score-bar-wrap">
+        <div class="score-bar-fill" style="width:86%;background:#22c55e"></div>
+        <span class="score-bar-text">85.7</span>
+    </div></td>
+        </tr>
+        <tr class="">
+            <td>8</td>
+            <td style="text-align:left;font-weight:600">同力股份</td>
+            <td style="color:#94a3b8">920599</td>
+            <td style="text-align:left;color:#94a3b8;font-size:12px">工程机械</td>
+            <td class="text-red">+4.20%</td>
+            <td class="text-red">2096万</td>
+            <td class="text-red">17.2%</td>
+            <td>1.22亿</td>
+            <td>2.0%</td>
+            <td>2.03</td>
+            <td><span class="level-tag level-good">资金共振</span></td>
+            <td>
+    <div class="score-bar-wrap">
+        <div class="score-bar-fill" style="width:86%;background:#22c55e"></div>
+        <span class="score-bar-text">85.6</span>
+    </div></td>
+        </tr>
+        <tr class="">
+            <td>9</td>
+            <td style="text-align:left;font-weight:600">梅花生物</td>
+            <td style="color:#94a3b8">600873</td>
+            <td style="text-align:left;color:#94a3b8;font-size:12px">化学制品</td>
+            <td class="text-red">+5.60%</td>
+            <td class="text-red">2224万</td>
+            <td class="text-red">6.6%</td>
+            <td>3.35亿</td>
+            <td>1.5%</td>
+            <td>1.42</td>
+            <td><span class="level-tag level-good">资金共振</span></td>
+            <td>
+    <div class="score-bar-wrap">
+        <div class="score-bar-fill" style="width:85%;background:#22c55e"></div>
+        <span class="score-bar-text">85.4</span>
+    </div></td>
+        </tr>
+        <tr class="">
+            <td>10</td>
+            <td style="text-align:left;font-weight:600">泰禾股份</td>
+            <td style="color:#94a3b8">301665</td>
+            <td style="text-align:left;color:#94a3b8;font-size:12px">农化制品</td>
+            <td class="text-red">+2.11%</td>
+            <td class="text-red">398万</td>
+            <td class="text-red">6.3%</td>
+            <td>6363万</td>
+            <td>2.8%</td>
+            <td>1.25</td>
+            <td><span class="level-tag level-good">资金共振</span></td>
+            <td>
+    <div class="score-bar-wrap">
+        <div class="score-bar-fill" style="width:85%;background:#22c55e"></div>
+        <span class="score-bar-text">85.4</span>
+    </div></td>
+        </tr></tbody>
+        </table>
+        </div>
+    </div>
+    <div class="section">
+        <h2>🎯 抢筹标的行业分布</h2>
+        <div class="hot-sectors">
+        <div class="hot-sector-card">
+            <div class="hs-name">化学制品</div>
+            <div class="hs-count">2 只标的 · 均分 85.7</div>
+            <div class="hs-flow text-red">主力合计 2913万</div>
+        </div>
+        <div class="hot-sector-card">
+            <div class="hs-name">工程机械</div>
+            <div class="hs-count">2 只标的 · 均分 86.0</div>
+            <div class="hs-flow text-red">主力合计 9300万</div>
+        </div>
+        <div class="hot-sector-card">
+            <div class="hs-name">化学制药</div>
+            <div class="hs-count">2 只标的 · 均分 86.2</div>
+            <div class="hs-flow text-red">主力合计 7046万</div>
+        </div>
+        <div class="hot-sector-card">
+            <div class="hs-name">农化制品</div>
+            <div class="hs-count">1 只标的 · 均分 85.4</div>
+            <div class="hs-flow text-red">主力合计 398万</div>
+        </div>
+        <div class="hot-sector-card">
+            <div class="hs-name">元件</div>
+            <div class="hs-count">1 只标的 · 均分 86.8</div>
+            <div class="hs-flow text-red">主力合计 13.36亿</div>
+        </div>
+        <div class="hot-sector-card">
+            <div class="hs-name">小金属</div>
+            <div class="hs-count">1 只标的 · 均分 88.5</div>
+            <div class="hs-flow text-red">主力合计 7.95亿</div>
+        </div>
+        <div class="hot-sector-card">
+            <div class="hs-name">造纸</div>
+            <div class="hs-count">1 只标的 · 均分 85.7</div>
+            <div class="hs-flow text-red">主力合计 1198万</div>
+        </div></div>
+    </div>
+    <div class="section">
+        <h2>🏭 行业板块资金流向</h2>
+        
+        <div class="table-card" style="margin-bottom:16px">
+            <h3 style="color:#22c55e;font-size:15px;margin-bottom:10px">🔥 资金净流入板块 TOP10</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>#</th><th>板块</th><th>涨跌幅</th><th>主力净流入</th></tr></thead>
+                    <tbody>
+            <tr>
+                <td>1</td>
+                <td style="text-align:left">风力发电</td>
+                <td class="text-green">-1.06%</td>
+                <td class="text-red">58.46亿</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td style="text-align:left">有色金属</td>
+                <td class="text-green">-0.13%</td>
+                <td class="text-red">39.34亿</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td style="text-align:left">电力</td>
+                <td class="text-green">-1.21%</td>
+                <td class="text-red">37.29亿</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td style="text-align:left">公用事业</td>
+                <td class="text-green">-0.97%</td>
+                <td class="text-red">35.64亿</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td style="text-align:left">汽车</td>
+                <td class="text-red">+0.69%</td>
+                <td class="text-red">33.79亿</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td style="text-align:left">传媒</td>
+                <td class="text-red">+0.75%</td>
+                <td class="text-red">32.19亿</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td style="text-align:left">贵金属</td>
+                <td class="text-red">+4.21%</td>
+                <td class="text-red">28.47亿</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td style="text-align:left">汽车零部件</td>
+                <td class="text-red">+0.78%</td>
+                <td class="text-red">26.13亿</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td style="text-align:left">黄金</td>
+                <td class="text-red">+5.25%</td>
+                <td class="text-red">24.97亿</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td style="text-align:left">铜</td>
+                <td class="text-red">+0.87%</td>
+                <td class="text-red">18.65亿</td>
+            </tr></tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="table-card">
+            <h3 style="color:#ef4444;font-size:15px;margin-bottom:10px">❄️ 资金净流出板块 TOP10</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>#</th><th>板块</th><th>涨跌幅</th><th>主力净流入</th></tr></thead>
+                    <tbody>
+            <tr>
+                <td>1</td>
+                <td style="text-align:left">电子</td>
+                <td class="text-green">-4.47%</td>
+                <td class="text-green">-831.74亿</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td style="text-align:left">半导体</td>
+                <td class="text-green">-5.51%</td>
+                <td class="text-green">-484.31亿</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td style="text-align:left">数字芯片设计</td>
+                <td class="text-green">-5.03%</td>
+                <td class="text-green">-224.06亿</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td style="text-align:left">通信</td>
+                <td class="text-green">-3.62%</td>
+                <td class="text-green">-207.09亿</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td style="text-align:left">通信设备</td>
+                <td class="text-green">-4.42%</td>
+                <td class="text-green">-200.60亿</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td style="text-align:left">元件</td>
+                <td class="text-green">-5.95%</td>
+                <td class="text-green">-146.15亿</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td style="text-align:left">通信网络设备及器件</td>
+                <td class="text-green">-5.31%</td>
+                <td class="text-green">-141.74亿</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td style="text-align:left">印制电路板</td>
+                <td class="text-green">-5.58%</td>
+                <td class="text-green">-108.33亿</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td style="text-align:left">消费电子零部件及组装</td>
+                <td class="text-green">-3.67%</td>
+                <td class="text-green">-104.42亿</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td style="text-align:left">消费电子</td>
+                <td class="text-green">-3.48%</td>
+                <td class="text-green">-102.95亿</td>
+            </tr></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <h2>📖 信号解读说明</h2>
+        <div style="background:#111827;border:1px solid #1e293b;border-radius:10px;padding:20px;font-size:13px;color:#94a3b8;line-height:1.8">
+            <p><strong style="color:#22c55e">● 强抢筹信号（≥75分）：</strong>
+            主力流入强度高、尾盘推升明显、资金结构健康。短线大概率延续强势，可关注次日开盘表现。</p>
+
+            <p style="margin-top:8px"><strong style="color:#60a5fa">● 中等信号（60-74分）：</strong>
+            主力有流入但强度一般，或资金结构不够理想。需结合板块热度与个股基本面综合判断。</p>
+
+            <p style="margin-top:8px"><strong style="color:#f59e0b">● 弱信号（40-59分）：</strong>
+            主力流入较弱，可能仅是跟风买入或被动流入。追高风险较大，建议观望。</p>
+
+            <p style="margin-top:14px;color:#64748b">
+            ⚠️ <strong>重要提示：</strong>尾盘抢筹是短线指标，受市场情绪、消息面、大盘走势等多因素影响。
+            高分不保证次日一定上涨，低分也可能出现独立行情。请结合以下维度综合判断：
+            ① 所属板块是否处于上升趋势 ② 个股是否有利好催化 ③ 大盘整体强弱 ④ 历史抢筹信号胜率
+            </p>
+        </div>
+    </div>
+    <div class="footer">
+        <p>生成时间：2026-07-02 20:42:14</p>
+        <p>数据来源：东方财富 | 资金流向为基于大中小单分类的估算值，可能与实际存在偏差</p>
+        <p class="disclaimer">⚠️ 仅为数据整理分析，不构成任何投资建议。股市有风险，投资需谨慎。</p>
+    </div>
+</body>
+</html>

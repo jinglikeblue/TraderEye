@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>钼金属板块 - A股公司清单与产业链关系</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #0a0e17; color: #e0e6f0; line-height: 1.6; min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+        .header { text-align: center; margin-bottom: 48px; }
+        .header h1 { font-size: 36px; font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa, #34d399, #f472b6);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 12px; }
+        .header .subtitle { font-size: 16px; color: #8892a8; }
+        .header .update-time { font-size: 13px; color: #5a6478; margin-top: 8px; }
+
+        .section-title { font-size: 22px; font-weight: 600; color: #c8d0e0;
+            margin-bottom: 24px; padding-left: 14px; border-left: 3px solid #60a5fa; }
+
+        /* 统计卡片 */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 16px; margin-bottom: 56px; }
+        .stat-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 12px; padding: 20px; }
+        .stat-card .stat-label { font-size: 13px; color: #5a6478; margin-bottom: 6px; }
+        .stat-card .stat-value { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+        .stat-card .stat-note { font-size: 12px; color: #5a6478; }
+        .stat-green .stat-value { color: #34d399; }
+        .stat-blue .stat-value { color: #60a5fa; }
+        .stat-pink .stat-value { color: #f472b6; }
+        .stat-yellow .stat-value { color: #fbbf24; }
+        .stat-purple .stat-value { color: #a78bfa; }
+        .stat-red .stat-value { color: #f87171; }
+
+        /* 流程图 */
+        .flow-section { margin-bottom: 56px; }
+        .flow-diagram { display: flex; align-items: stretch; gap: 0;
+            background: #111827; border-radius: 16px; border: 1px solid #1e293b; overflow: hidden; }
+        .flow-stage { flex: 1; padding: 28px 20px; position: relative; }
+        .flow-stage:not(:last-child)::after {
+            content: '→'; position: absolute; right: -14px; top: 50%;
+            transform: translateY(-50%); font-size: 28px; color: #4b5563; z-index: 2; }
+        .flow-stage:not(:last-child) { border-right: 1px solid #1e293b; }
+        .flow-stage .stage-label { font-size: 13px; font-weight: 600; letter-spacing: 1px;
+            margin-bottom: 12px; padding: 4px 12px; border-radius: 20px; display: inline-block; }
+        .flow-upstream .stage-label { background: rgba(16,185,129,0.15); color: #34d399; }
+        .flow-midstream .stage-label { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .flow-downstream .stage-label { background: rgba(244,114,182,0.15); color: #f472b6; }
+        .flow-end .stage-label { background: rgba(251,191,36,0.15); color: #fbbf24; }
+        .flow-stage .stage-title { font-size: 18px; font-weight: 600; color: #e0e6f0; margin-bottom: 8px; }
+        .flow-stage .stage-desc { font-size: 13px; color: #8892a8; }
+        .flow-stage .stage-products { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+        .flow-stage .product-tag { font-size: 12px; padding: 3px 10px; border-radius: 12px;
+            background: rgba(255,255,255,0.06); color: #a0aec0;
+            border: 1px solid rgba(255,255,255,0.08); }
+
+        /* 公司卡片 */
+        .companies-section { margin-bottom: 48px; }
+        .company-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; }
+        .company-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; transition: border-color 0.2s, transform 0.2s; }
+        .company-card:hover { border-color: #374151; transform: translateY(-2px); }
+        .company-card .card-header { display: flex; justify-content: space-between;
+            align-items: flex-start; margin-bottom: 14px; }
+        .company-card .card-name { font-size: 18px; font-weight: 600; color: #e0e6f0; }
+        .company-card .card-code { font-size: 13px; font-weight: 500; padding: 3px 10px;
+            border-radius: 8px; background: rgba(96,165,250,0.12); color: #60a5fa; white-space: nowrap; }
+        .company-card .card-position { font-size: 13px; padding: 3px 10px;
+            border-radius: 8px; display: inline-block; margin-bottom: 10px; }
+        .position-upstream { background: rgba(16,185,129,0.12); color: #34d399; }
+        .position-midstream { background: rgba(96,165,250,0.12); color: #60a5fa; }
+        .position-downstream { background: rgba(244,114,182,0.12); color: #f472b6; }
+        .company-card .card-desc { font-size: 14px; color: #8892a8; line-height: 1.7; margin-bottom: 12px; }
+        .company-card .card-data-row { display: flex; flex-wrap: wrap; gap: 8px 18px;
+            font-size: 13px; color: #c8d0e0; padding: 10px 14px;
+            background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 3px solid #374151; }
+        .company-card .card-data-row strong { color: #e0e6f0; margin-left: 2px; }
+        .rating-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+        .rating-card { border-radius: 10px; padding: 10px 12px; border: 1px solid; background: rgba(255,255,255,0.03); }
+        .rating-title { font-size: 12px; color: #8892a8; margin-bottom: 4px; }
+        .rating-level { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .rating-reason { font-size: 12px; color: #8892a8; line-height: 1.5; }
+        .rating-strong { border-color: rgba(52,211,153,0.35); background: rgba(16,185,129,0.08); }
+        .rating-strong .rating-level { color: #34d399; }
+        .rating-mid { border-color: rgba(96,165,250,0.35); background: rgba(96,165,250,0.08); }
+        .rating-mid .rating-level { color: #60a5fa; }
+        .rating-watch { border-color: rgba(251,191,36,0.35); background: rgba(251,191,36,0.08); }
+        .rating-watch .rating-level { color: #fbbf24; }
+        .rating-weak { border-color: rgba(248,113,113,0.35); background: rgba(248,113,113,0.06); }
+        .rating-weak .rating-level { color: #f87171; }
+        .rating-guide { margin-bottom: 56px; }
+
+        /* 关系图 */
+        .relation-section { margin-bottom: 56px; }
+        .relation-diagram { background: #111827; border: 1px solid #1e293b;
+            border-radius: 16px; padding: 32px; overflow-x: auto; }
+        .relation-row { display: flex; align-items: center; margin-bottom: 16px; }
+        .relation-row:last-child { margin-bottom: 0; }
+        .relation-label { min-width: 85px; font-size: 14px; font-weight: 600;
+            color: #8892a8; flex-shrink: 0; }
+        .relation-items { display: flex; flex-wrap: wrap; gap: 10px; }
+        .relation-node { padding: 8px 16px; border-radius: 10px; font-size: 14px;
+            font-weight: 500; border: 1px solid; }
+        .relation-node.upstream { background: rgba(16,185,129,0.08);
+            border-color: rgba(16,185,129,0.25); color: #34d399; }
+        .relation-node.midstream { background: rgba(96,165,250,0.08);
+            border-color: rgba(96,165,250,0.25); color: #60a5fa; }
+        .relation-node.downstream { background: rgba(244,114,182,0.08);
+            border-color: rgba(244,114,182,0.25); color: #f472b6; }
+        .relation-node.end { background: rgba(251,191,36,0.08);
+            border-color: rgba(251,191,36,0.25); color: #fbbf24; }
+        .relation-arrow { text-align: center; color: #4b5563; font-size: 20px; padding: 4px 0; }
+        .relation-node .node-code { font-size: 11px; opacity: 0.7; margin-left: 6px; }
+
+        /* 核心关注 */
+        .focus-section { margin-bottom: 40px; }
+        .focus-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .focus-card { background: linear-gradient(135deg, #111827, #1a2332);
+            border: 1px solid #1e293b; border-radius: 14px; padding: 24px;
+            position: relative; overflow: hidden; }
+        .focus-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .focus-card:nth-child(1)::before { background: linear-gradient(90deg, #34d399, #10b981); }
+        .focus-card:nth-child(2)::before { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+        .focus-card:nth-child(3)::before { background: linear-gradient(90deg, #a78bfa, #8b5cf6); }
+        .focus-card:nth-child(4)::before { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+        .focus-card:nth-child(5)::before { background: linear-gradient(90deg, #f472b6, #ec4899); }
+        .focus-card:nth-child(6)::before { background: linear-gradient(90deg, #f87171, #ef4444); }
+        .focus-card .focus-rank { font-size: 48px; font-weight: 800;
+            color: rgba(255,255,255,0.04); position: absolute; top: 8px; right: 16px; }
+        .focus-card .focus-name { font-size: 18px; font-weight: 600; color: #e0e6f0; margin-bottom: 4px; }
+        .focus-card .focus-code { font-size: 13px; color: #60a5fa; margin-bottom: 10px; }
+        .focus-card .focus-reason { font-size: 14px; color: #8892a8; line-height: 1.7; }
+
+        /* 逻辑卡片 */
+        .logic-section { margin-bottom: 56px; }
+        .logic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+        .logic-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; }
+        .logic-card .logic-icon { font-size: 28px; margin-bottom: 12px; }
+        .logic-card .logic-title { font-size: 17px; font-weight: 600; color: #e0e6f0; margin-bottom: 8px; }
+        .logic-card .logic-desc { font-size: 14px; color: #8892a8; line-height: 1.7; }
+        .logic-card .logic-tag { display: inline-block; font-size: 12px; padding: 2px 10px;
+            border-radius: 8px; margin-top: 10px; margin-right: 6px; }
+        .tag-green { background: rgba(16,185,129,0.12); color: #34d399; }
+        .tag-blue { background: rgba(96,165,250,0.12); color: #60a5fa; }
+        .tag-pink { background: rgba(244,114,182,0.12); color: #f472b6; }
+        .tag-yellow { background: rgba(251,191,36,0.12); color: #fbbf24; }
+        .tag-red { background: rgba(248,113,113,0.12); color: #f87171; }
+
+        /* 表格 */
+        .table-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid #1e293b; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9em; min-width: 500px; }
+        thead th { background: #111827; color: #8892a8; font-weight: 500;
+            padding: 12px 14px; text-align: center; white-space: nowrap;
+            border-bottom: 2px solid #1e293b; position: sticky; top: 0; }
+        tbody td { padding: 10px 14px; border-bottom: 1px solid #1e293b; text-align: center; }
+        tbody tr:hover { background: rgba(255,255,255,0.03); }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            .header h1 { font-size: 26px; }
+            .flow-diagram { flex-direction: column; }
+            .flow-stage:not(:last-child)::after { content: '↓'; right: auto; bottom: -16px; top: auto;
+                left: 50%; transform: translateX(-50%); }
+            .flow-stage:not(:last-child) { border-right: none; border-bottom: 1px solid #1e293b; }
+            .company-grid { grid-template-columns: 1fr; }
+            .rating-row { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .focus-cards { grid-template-columns: 1fr; }
+            .logic-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>钼金属板块</h1>
+            <div class="subtitle">A股相关公司清单与产业链关系 · 覆盖钼矿采选、钼冶炼化工、钼金属合金三大细分领域</div>
+            <div class="update-time">数据更新时间：2026-06-12 13:26 | 数据来源：东方财富</div>
+        </div>
+
+        <!-- 行业供需概览 -->
+        <div class="overview-section">
+            <div class="section-title">行业供需概览</div>
+            <div class="stats-grid"><div class="stat-card stat-green">
+        <div class="stat-label">钼精矿价格</div>
+        <div class="stat-value">3500~3800</div>
+        <div class="stat-note">元/吨度（45%品位），高位窄幅震荡，供给刚性支撑</div>
+    </div>
+    <div class="stat-card stat-blue">
+        <div class="stat-label">全球钼供需</div>
+        <div class="stat-value">紧平衡</div>
+        <div class="stat-note">年产量约27万吨，需求约28万吨，缺口趋势扩大</div>
+    </div>
+    <div class="stat-card stat-pink">
+        <div class="stat-label">钼铁价格</div>
+        <div class="stat-value">25~26万</div>
+        <div class="stat-note">元/吨（60%Mo），钢铁合金化需求稳健</div>
+    </div>
+    <div class="stat-card stat-yellow">
+        <div class="stat-label">中国特钢产量</div>
+        <div class="stat-value">+8%YoY</div>
+        <div class="stat-note">高端制造升级驱动钼需求持续增长</div>
+    </div>
+    <div class="stat-card stat-purple">
+        <div class="stat-label">机构核心判断</div>
+        <div class="stat-value">供给刚性</div>
+        <div class="stat-note">钼矿品位下降+环保约束，供给端偏紧格局短期难改</div>
+    </div></div>
+        </div>
+
+        <!-- 实时行情概览 -->
+        <div class="overview-section">
+            <div class="section-title">今日实时行情概览</div>
+            <div class="stats-grid"><div class="stat-card stat-green">
+        <div class="stat-label">今日平均涨跌</div>
+        <div class="stat-value">+5.65%</div>
+        <div class="stat-note">覆盖 8 只核心标的</div>
+    </div>
+    <div class="stat-card stat-blue">
+        <div class="stat-label">上涨 / 下跌家数</div>
+        <div class="stat-value">7 / 1</div>
+        <div class="stat-note">上涨占比 88%</div>
+    </div>
+    <div class="stat-card stat-pink">
+        <div class="stat-label">总成交额</div>
+        <div class="stat-value">472.50亿</div>
+        <div class="stat-note">板块资金活跃度</div>
+    </div>
+    <div class="stat-card stat-yellow">
+        <div class="stat-label">总市值</div>
+        <div class="stat-value">1.65万亿</div>
+        <div class="stat-note">七大细分领域合计</div>
+    </div>
+    <div class="stat-card stat-purple">
+        <div class="stat-label">强势股TOP1</div>
+        <div class="stat-value">洛阳钼业 +10.0%</div>
+        <div class="stat-note">今日涨幅最大标的</div>
+    </div></div>
+        </div>
+
+        <!-- 核心驱动逻辑 -->
+        <div class="logic-section">
+        <div class="section-title">核心驱动逻辑</div>
+        <div class="logic-grid">
+            <div class="logic-card">
+                <div class="logic-icon">🏗️</div>
+                <div class="logic-title">需求端：高端制造+能源转型+军工三重驱动</div>
+                <div class="logic-desc">钼80%需求来自钢铁合金化。中国特钢产量年增8%、风电+核电+高铁特钢需求持续释放、航空航天高温合金放量，三重驱动下2026年全球钼需求预计突破29万吨（+5%YoY）。印度+东南亚工业化形成增量需求。</div>
+                <span class="logic-tag tag-green">特钢+8%</span>
+                <span class="logic-tag tag-blue">风电+LNG</span>
+                <span class="logic-tag tag-pink">高温合金</span>
+            </div>
+            <div class="logic-card">
+                <div class="logic-icon">⛏️</div>
+                <div class="logic-title">供给端：品位下降+环保约束，供给刚性突出</div>
+                <div class="logic-desc">全球钼矿品位从0.3%降至0.1%，开采成本持续攀升。国内环保限产严格，新增矿山审批几乎停滞。铜矿副产钼占全球45%，铜矿资本开支放缓直接制约钼供给增量。预计2026年全球钼供给缺口扩大至1-2万吨。</div>
+                <span class="logic-tag tag-green">品位下降</span>
+                <span class="logic-tag tag-blue">环保限产</span>
+                <span class="logic-tag tag-pink">供给缺口</span>
+            </div>
+            <div class="logic-card">
+                <div class="logic-icon">📊</div>
+                <div class="logic-title">利润端：钼价高位+成本优势=利润高弹性</div>
+                <div class="logic-desc">钼精矿现金成本约1500-2000元/吨度，当前价格3500-3800元/吨度下行业毛利率超50%。洛阳钼业、金钼股份成本优势突出。钼价每涨10%，纯钼标的利润弹性约15%。2025年板块扣非净利普遍增长30%+，估值仍处历史中低位。</div>
+                <span class="logic-tag tag-green">毛利率50%+</span>
+                <span class="logic-tag tag-blue">净利+30%</span>
+                <span class="logic-tag tag-pink">估值偏低</span>
+            </div>
+        </div>
+    </div>
+
+        <!-- 产业链全景 -->
+        <div class="flow-section">
+        <div class="section-title">产业链全景</div>
+        <div class="flow-diagram">
+            <div class="flow-stage flow-upstream">
+                <span class="stage-label">上游</span>
+                <div class="stage-title">钼矿采选</div>
+                <div class="stage-desc">原生钼矿+铜钼伴生矿的开采与选矿，产出钼精矿（45%Mo）。资源品位与开采成本决定企业竞争力，是钼价上行周期弹性最大的环节。</div>
+                <div class="stage-products">
+                    <span class="product-tag">钼精矿</span>
+                    <span class="product-tag">铜钼伴生矿</span>
+                    <span class="product-tag">辉钼矿</span>
+                    <span class="product-tag">钨钼矿</span>
+                </div>
+            </div>
+            <div class="flow-stage flow-midstream">
+                <span class="stage-label">中游</span>
+                <div class="stage-title">钼冶炼与化工</div>
+                <div class="stage-desc">钼精矿焙烧→氧化钼→钼铁（钢铁添加剂），以及钼酸铵、钼酸钠等化工产品。钼铁是最大消费形式，占钼消费75%以上。</div>
+                <div class="stage-products">
+                    <span class="product-tag">钼铁</span>
+                    <span class="product-tag">氧化钼</span>
+                    <span class="product-tag">钼酸铵</span>
+                    <span class="product-tag">钼酸钠</span>
+                    <span class="product-tag">二硫化钼</span>
+                </div>
+            </div>
+            <div class="flow-stage flow-downstream">
+                <span class="stage-label">下游</span>
+                <div class="stage-title">钼金属与合金</div>
+                <div class="stage-desc">钼粉→钼条/钼板/钼丝等金属制品，钼溅射靶材（半导体薄膜），钼基合金（TZM等）用于航空航天与军工高温部件。</div>
+                <div class="stage-products">
+                    <span class="product-tag">钼金属制品</span>
+                    <span class="product-tag">钼溅射靶材</span>
+                    <span class="product-tag">钼基合金</span>
+                    <span class="product-tag">TZM合金</span>
+                </div>
+            </div>
+            <div class="flow-stage flow-end">
+                <span class="stage-label">终端</span>
+                <div class="stage-title">应用场景</div>
+                <div class="stage-desc">管线钢/不锈钢/工具钢（钢铁冶金）、风电装备、核电装备、航空航天高温合金、半导体薄膜、石油化工催化剂等。</div>
+                <div class="stage-products">
+                    <span class="product-tag">特钢冶金</span>
+                    <span class="product-tag">风电装备</span>
+                    <span class="product-tag">核电装备</span>
+                    <span class="product-tag">航空航天</span>
+                    <span class="product-tag">半导体</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- 买入评级说明 -->
+        <div class="rating-guide">
+        <div class="section-title">买入评级说明</div>
+        <div class="logic-grid">
+            <div class="logic-card">
+                <div class="logic-title">★★★ ★★☆ ★☆☆ ☆☆☆</div>
+                <div class="logic-desc">高关注 → 关注 → 观望 → 暂缓。基于成交额、市值、估值、涨跌幅综合打分排序，供快速扫描参考。</div>
+                <span class="logic-tag tag-green">★★★</span><span class="logic-tag tag-blue">★★☆</span><span class="logic-tag tag-yellow">★☆☆</span><span class="logic-tag tag-red">☆☆☆</span>
+            </div>
+            <div class="logic-card">
+                <div class="logic-title">左侧 / 右侧</div>
+                <div class="logic-desc">左侧偏低吸（看回调幅度+估值），右侧偏趋势确认（看涨跌幅+成交活跃度）。两侧独立评分，可能得出不同星级。</div>
+                <span class="logic-tag tag-green">低吸</span><span class="logic-tag tag-blue">趋势</span>
+            </div>
+        </div>
+    </div>
+
+        <!-- 公司清单 -->
+        <h2 class="section-title" style="margin-top:56px">核心标的一览（按细分领域）</h2>
+        <div class="companies-section">
+            <div class="section-title">钼矿与钼精矿</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">洛阳钼业</div>
+                    <div class="card-code">603993</div>
+                </div>
+                <span class="card-position position-upstream">钼矿与钼精矿</span>
+                <div class="card-desc">全球钼资源绝对龙头，钼产量全球前三，钨钼铜钴金多金属矿业巨头。TFM铜钴矿+澳洲钼矿双轮驱动，钼价高位运行利润弹性巨大。2025年钼产量约2.8万吨。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>19.11</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+10.02%</span></span>
+                    <span>成交 <strong>69.15亿</strong></span>
+                    <span>PE <strong>13.2</strong></span>
+                    <span>市值 <strong>4088.45亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">金钼股份</div>
+                    <div class="card-code">601958</div>
+                </div>
+                <span class="card-position position-upstream">钼矿与钼精矿</span>
+                <div class="card-desc">A股最纯正钼标的，全球钼精矿产量最大企业之一，年产钼精矿约2.3万吨。钼铁+钼化工+钼金属制品全产业链布局，钼价每上涨10%利润弹性约15%。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>25.52</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+10.00%</span></span>
+                    <span>成交 <strong>3.00亿</strong></span>
+                    <span>PE <strong>22.8</strong></span>
+                    <span>市值 <strong>823.43亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">吉翔股份</div>
+                    <div class="card-code">603399</div>
+                </div>
+                <span class="card-position position-upstream">钼矿与钼精矿</span>
+                <div class="card-desc">钼精矿+钼铁冶炼一体化企业，位于陕西渭南钼矿资源富集区。钼价上行周期盈利弹性释放，产能持续扩张。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>20.45</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+6.62%</span></span>
+                    <span>成交 <strong>26.01亿</strong></span>
+                    <span>PE <strong>19.8</strong></span>
+                    <span>市值 <strong>104.76亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 估值相对可控 / 短线涨幅偏大</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 估值相对可控 / 强势但需防追高</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">钼冶炼与化工</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">中钨高新</div>
+                    <div class="card-code">000657</div>
+                </div>
+                <span class="card-position position-midstream">钼冶炼与化工</span>
+                <div class="card-desc">钨钼制品龙头，硬质合金+钨钼材料双主业。下游覆盖切削工具、矿山工具、耐磨零件，受益钼价高位+制造业升级需求。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>82.20</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+5.45%</span></span>
+                    <span>成交 <strong>96.13亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">50.8</span></strong></span>
+                    <span>市值 <strong>1873.01亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值偏高但可跟踪</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值偏高但可跟踪</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">厦门钨业</div>
+                    <div class="card-code">600549</div>
+                </div>
+                <span class="card-position position-midstream">钼冶炼与化工</span>
+                <div class="card-desc">钨钼双主业稀有金属龙头，钼精矿年产量约1万吨。新能源材料（正极+稀土永磁）+硬质合金双轮驱动，钨钼协同优势显著。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>67.32</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-0.18%</span></span>
+                    <span>成交 <strong>79.60亿</strong></span>
+                    <span>PE <strong>24.1</strong></span>
+                    <span>市值 <strong>1068.76亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-strong">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">钼金属与合金</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">紫金矿业</div>
+                    <div class="card-code">601899</div>
+                </div>
+                <span class="card-position position-downstream">钼金属与合金</span>
+                <div class="card-desc">中国最大矿业企业之一，铜金钼多金属巨头。西藏巨龙铜矿等大型矿山副产钼精矿，钼产量已进入全球前五，矿端利润弹性突出。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>29.19</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+6.81%</span></span>
+                    <span>成交 <strong>113.11亿</strong></span>
+                    <span>PE <strong>9.7</strong></span>
+                    <span>市值 <strong>7761.83亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">章源钨业</div>
+                    <div class="card-code">002378</div>
+                </div>
+                <span class="card-position position-downstream">钼金属与合金</span>
+                <div class="card-desc">赣南钨钼矿山+冶炼一体化企业，钨钼资源禀赋丰富。受益钨钼价格双升周期，全产业链协同效应显现。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>35.57</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+5.77%</span></span>
+                    <span>成交 <strong>57.08亿</strong></span>
+                    <span>PE <strong>28.0</strong></span>
+                    <span>市值 <strong>427.34亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 估值相对可控 / 短线涨幅偏大</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 估值相对可控 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">西部材料</div>
+                    <div class="card-code">002149</div>
+                </div>
+                <span class="card-position position-downstream">钼金属与合金</span>
+                <div class="card-desc">稀有金属材料龙头，钼加工材+钛材+锆材多线布局。钼溅射靶材+钼合金制品受益半导体与光伏需求爆发，航空航天用钼合金前景广阔。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>62.31</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.68%</span></span>
+                    <span>成交 <strong>28.41亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">826.9</span></strong></span>
+                    <span>市值 <strong>304.21亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 温和转强</div>
+    </div></div>
+            </div></div>
+        </div>
+
+        <!-- 板块涨跌统计 -->
+        <div class="companies-section">
+            <div class="section-title">各细分板块涨跌统计</div>
+            <div class="table-wrapper">
+                <table><thead><tr>
+                    <th>细分板块</th><th>标的数</th><th>平均涨跌幅</th><th>上涨</th><th>下跌</th><th>总成交额</th><th>总市值</th>
+                </tr></thead><tbody><tr>
+            <td style="text-align:left;font-weight:500">钼矿与钼精矿</td>
+            <td>3</td>
+            <td><span style="display:inline-block;width:35.52px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+8.88%</td>
+            <td style="color:#34d399">3</td>
+            <td style="color:#f87171">0</td>
+            <td>98.16亿</td>
+            <td>5016.65亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">钼冶炼与化工</td>
+            <td>2</td>
+            <td><span style="display:inline-block;width:10.540000000000001px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+2.64%</td>
+            <td style="color:#34d399">1</td>
+            <td style="color:#f87171">1</td>
+            <td>175.73亿</td>
+            <td>2941.78亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">钼金属与合金</td>
+            <td>3</td>
+            <td><span style="display:inline-block;width:17.679999999999996px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+4.42%</td>
+            <td style="color:#34d399">3</td>
+            <td style="color:#f87171">0</td>
+            <td>198.61亿</td>
+            <td>8493.38亿</td>
+        </tr><tr style="background:#111827;border-top:2px solid #374151">
+        <td style="text-align:left"><strong>全板块合计</strong></td>
+        <td><strong>8</strong></td>
+        <td><strong>+5.65%</strong></td>
+        <td style="color:#34d399"><strong>7</strong></td>
+        <td style="color:#f87171"><strong>1</strong></td>
+        <td><strong>472.50亿</strong></td>
+        <td><strong>1.65万亿</strong></td>
+    </tr></tbody></table>
+            </div>
+        </div>
+
+        <!-- 强势股/弱势股 -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px">
+            <div>
+                <div class="section-title">强势股 TOP5</div>
+                <div class="table-wrapper">
+                    <table><thead><tr><th>名称</th><th>代码</th><th>最新价</th><th>涨跌幅</th><th>成交额</th><th>板块</th></tr></thead>
+                    <tbody><tr>
+                <td style="text-align:left;font-weight:500">洛阳钼业</td>
+                <td style="color:#60a5fa">603993</td>
+                <td style="font-family:monospace">19.11</td>
+                <td><span style="color:#34d399;font-weight:600">+10.02%</span></td>
+                <td style="font-family:monospace">69.15亿</td>
+                <td>钼矿与钼精矿</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">金钼股份</td>
+                <td style="color:#60a5fa">601958</td>
+                <td style="font-family:monospace">25.52</td>
+                <td><span style="color:#34d399;font-weight:600">+10.00%</span></td>
+                <td style="font-family:monospace">3.00亿</td>
+                <td>钼矿与钼精矿</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">紫金矿业</td>
+                <td style="color:#60a5fa">601899</td>
+                <td style="font-family:monospace">29.19</td>
+                <td><span style="color:#34d399;font-weight:600">+6.81%</span></td>
+                <td style="font-family:monospace">113.11亿</td>
+                <td>钼金属与合金</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">吉翔股份</td>
+                <td style="color:#60a5fa">603399</td>
+                <td style="font-family:monospace">20.45</td>
+                <td><span style="color:#34d399;font-weight:600">+6.62%</span></td>
+                <td style="font-family:monospace">26.01亿</td>
+                <td>钼矿与钼精矿</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">章源钨业</td>
+                <td style="color:#60a5fa">002378</td>
+                <td style="font-family:monospace">35.57</td>
+                <td><span style="color:#34d399;font-weight:600">+5.77%</span></td>
+                <td style="font-family:monospace">57.08亿</td>
+                <td>钼金属与合金</td>
+            </tr></tbody></table>
+                </div>
+            </div>
+            <div>
+                <div class="section-title">弱势股 TOP5</div>
+                <div class="table-wrapper">
+                    <table><thead><tr><th>名称</th><th>代码</th><th>最新价</th><th>涨跌幅</th><th>成交额</th><th>板块</th></tr></thead>
+                    <tbody><tr>
+                <td style="text-align:left;font-weight:500">厦门钨业</td>
+                <td style="color:#60a5fa">600549</td>
+                <td style="font-family:monospace">67.32</td>
+                <td><span style="color:#f87171;font-weight:600">-0.18%</span></td>
+                <td style="font-family:monospace">79.60亿</td>
+                <td>钼冶炼与化工</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">西部材料</td>
+                <td style="color:#60a5fa">002149</td>
+                <td style="font-family:monospace">62.31</td>
+                <td><span style="color:#34d399;font-weight:600">+0.68%</span></td>
+                <td style="font-family:monospace">28.41亿</td>
+                <td>钼金属与合金</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">中钨高新</td>
+                <td style="color:#60a5fa">000657</td>
+                <td style="font-family:monospace">82.20</td>
+                <td><span style="color:#34d399;font-weight:600">+5.45%</span></td>
+                <td style="font-family:monospace">96.13亿</td>
+                <td>钼冶炼与化工</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">章源钨业</td>
+                <td style="color:#60a5fa">002378</td>
+                <td style="font-family:monospace">35.57</td>
+                <td><span style="color:#34d399;font-weight:600">+5.77%</span></td>
+                <td style="font-family:monospace">57.08亿</td>
+                <td>钼金属与合金</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">吉翔股份</td>
+                <td style="color:#60a5fa">603399</td>
+                <td style="font-family:monospace">20.45</td>
+                <td><span style="color:#34d399;font-weight:600">+6.62%</span></td>
+                <td style="font-family:monospace">26.01亿</td>
+                <td>钼矿与钼精矿</td>
+            </tr></tbody></table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 产业链关系图 -->
+        <div class="relation-section">
+        <div class="section-title">产业链上下游关系</div>
+        <div class="relation-diagram">
+            <div class="relation-row">
+                <div class="relation-label">钼矿采选</div>
+                <div class="relation-items">
+                    <div class="relation-node upstream">洛阳钼业<span class="node-code">全球钼龙头</span></div>
+                    <div class="relation-node upstream">金钼股份<span class="node-code">纯钼标的</span></div>
+                    <div class="relation-node upstream">吉翔股份<span class="node-code">钼矿+钼铁</span></div>
+                </div>
+            </div>
+            <div class="relation-arrow">→ 钼精矿 → 氧化钼 → 钼铁 / 钼化工 →</div>
+            <div class="relation-row">
+                <div class="relation-label">钼冶炼加工</div>
+                <div class="relation-items">
+                    <div class="relation-node midstream">金钼股份<span class="node-code">钼铁+化工</span></div>
+                    <div class="relation-node midstream">厦门钨业<span class="node-code">钨钼冶炼</span></div>
+                    <div class="relation-node midstream">紫金矿业<span class="node-code">铜钼副产</span></div>
+                    <div class="relation-node midstream">章源钨业<span class="node-code">钨钼矿冶</span></div>
+                </div>
+            </div>
+            <div class="relation-arrow">→ 钼粉 → 钼金属制品 / 钼合金 / 靶材 →</div>
+            <div class="relation-row">
+                <div class="relation-label">钼金属制品</div>
+                <div class="relation-items">
+                    <div class="relation-node downstream">西部材料<span class="node-code">钼加工材</span></div>
+                    <div class="relation-node downstream">中钨高新<span class="node-code">钨钼制品</span></div>
+                    <div class="relation-node downstream">金钼股份<span class="node-code">钼金属</span></div>
+                </div>
+            </div>
+            <div class="relation-arrow">→ 终端应用 →</div>
+            <div class="relation-row">
+                <div class="relation-label">终端应用</div>
+                <div class="relation-items">
+                    <div class="relation-node end">特钢/不锈钢</div>
+                    <div class="relation-node end">风电装备</div>
+                    <div class="relation-node end">核电装备</div>
+                    <div class="relation-node end">航空航天</div>
+                    <div class="relation-node end">半导体靶材</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- 核心关注标的 -->
+        <div class="focus-section">
+        <div class="section-title">核心关注标的</div>
+        <div class="focus-cards">
+            <div class="focus-card">
+                <div class="focus-rank">01</div>
+                <div class="focus-name">洛阳钼业</div>
+                <div class="focus-code">603993</div>
+                <div class="focus-reason">全球钼资源龙头，钼产量全球前三，钨钼铜钴金多金属布局。TFM铜钴矿+澳洲钼矿双轮驱动，钼价高位运行利润弹性极大。2025年钼产量约2.8万吨。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">02</div>
+                <div class="focus-name">金钼股份</div>
+                <div class="focus-code">601958</div>
+                <div class="focus-reason">A股最纯正钼标的，全球钼精矿产量最大企业之一。钼铁+钼化工+钼金属制品全产业链布局，钼价每上涨10%利润弹性约15%，是钼价上行最直接受益方。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">03</div>
+                <div class="focus-name">紫金矿业</div>
+                <div class="focus-code">601899</div>
+                <div class="focus-reason">中国矿业巨头，铜金钼多金属生产商。西藏巨龙铜矿等世界级矿山副产钼精矿，钼产量已进入全球前五，矿端利润弹性显著。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">04</div>
+                <div class="focus-name">厦门钨业</div>
+                <div class="focus-code">600549</div>
+                <div class="focus-reason">钨钼双主业稀有金属龙头，钼精矿年产约1万吨。新能源材料+硬质合金双轮驱动，钨钼协同优势显著，估值具备修复空间。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">05</div>
+                <div class="focus-name">西部材料</div>
+                <div class="focus-code">002149</div>
+                <div class="focus-reason">稀有金属材料龙头，钼溅射靶材受益半导体需求回暖，航空航天用钼合金前景广阔。下游高端制造材料国产替代核心标的。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">06</div>
+                <div class="focus-name">中钨高新</div>
+                <div class="focus-code">000657</div>
+                <div class="focus-reason">钨钼制品龙头，硬质合金+钨钼材料双主业。切削工具与矿山工具需求受益制造业景气修复，钼制品加工利润率稳健。</div>
+            </div>
+        </div>
+    </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p style="text-align:center;color:#8892a8;font-size:0.8em;padding:30px 0 10px;border-top:1px solid #1e293b;margin-top:40px">行情数据来源：东方财富 | 静态行业数据参考：上市公司公告、公开研报与公开报道 | 生成时间：2026-06-12 13:26</p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em">静态描述为公开资料整理，部分市占率、需求预测、价格判断采用机构预测口径，仅供研究参考。</p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em;margin-top:6px">左侧/右侧买入评级仅基于当前行情、成交额、市值与估值的规则化排序，不构成具体买卖建议。</p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em;margin-top:6px">本报告仅为数据整理，不构成任何投资建议。股市有风险，投资需谨慎。</p>
+        </div>
+    </div>
+</body>
+</html>

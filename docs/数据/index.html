@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据导航</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+        h1 { text-align: center; font-size: 28px; font-weight: 700; margin-bottom: 8px; color: #f1f5f9; }
+        .subtitle { text-align: center; color: #64748b; font-size: 14px; margin-bottom: 36px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+        .card { display: flex; align-items: center; gap: 14px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 16px 18px; text-decoration: none; color: #e2e8f0; transition: all 0.2s; }
+        .card:hover { background: #3b1f4a; border-color: #c084fc; transform: translateY(-2px); box-shadow: 0 4px 16px rgba(192,132,252,0.15); }
+        .icon { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+        .icon.data { background: #3b1f4a; color: #c084fc; }
+        .info { flex: 1; min-width: 0; }
+        .name { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .desc { font-size: 12px; color: #64748b; margin-top: 2px; }
+        .arrow { color: #475569; font-size: 18px; flex-shrink: 0; }
+        .card:hover .arrow { color: #c084fc; }
+        footer { text-align: center; color: #475569; font-size: 12px; margin-top: 40px; padding-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>数据导航</h1>
+        <p class="subtitle">板块行业分析报告</p>
+        <div class="grid">
+            <a class="card" href="20260623_A股周期板块分析.html">
+                <div class="icon data">周</div>
+                <div class="info"><div class="name">A股周期板块分析</div><div class="desc">2026-06-23 · 有色/能源/钢建/化工 118只标的</div></div>
+                <div class="arrow">›</div>
+            </a>
+            <a class="card" href="20260612_锂电能源金属板块分析.html">
+                <div class="icon data">锂</div>
+                <div class="info"><div class="name">锂电能源金属板块分析</div><div class="desc">2026-06-12</div></div>
+                <div class="arrow">›</div>
+            </a>
+            <a class="card" href="20260612_钼金属板块分析.html">
+                <div class="icon data">钼</div>
+                <div class="info"><div class="name">钼金属板块分析</div><div class="desc">2026-06-12</div></div>
+                <div class="arrow">›</div>
+            </a>
+            <a class="card" href="20260612_芯片存储板块.html">
+                <div class="icon data">芯</div>
+                <div class="info"><div class="name">芯片存储板块分析</div><div class="desc">2026-06-12</div></div>
+                <div class="arrow">›</div>
+            </a>
+            <a class="card" href="20260612_SpaceX公司分析.html">
+                <div class="icon data">S</div>
+                <div class="info"><div class="name">SpaceX公司分析</div><div class="desc">2026-06-12</div></div>
+                <div class="arrow">›</div>
+            </a>
+            <a class="card" href="20260623_AI产业链核心标的图谱.html">
+                <div class="icon data">AI</div>
+                <div class="info"><div class="name">AI产业链核心标的图谱</div><div class="desc">2026-06-23 · 13环节 · 55+标的 · 英伟达绑定</div></div>
+                <div class="arrow">›</div>
+            </a>
+            <a class="card" href="20260623_AI供应链紧缺分析_2027.html">
+                <div class="icon data">AI</div>
+                <div class="info"><div class="name">2027年AI供应链紧缺分析</div><div class="desc">2026-06-23 · 8大环节 · 40+受益标的</div></div>
+                <div class="arrow">›</div>
+            </a>
+            <a class="card" href="2026-06-24_华为AI产业链板块分析.html">
+                <div class="icon data">华</div>
+                <div class="info"><div class="name">华为AI产业链分析</div><div class="desc">2026-06-24 · 7大领域 · 28只标的</div></div>
+                <div class="arrow">›</div>
+            </a>
+            <a class="card" href="2026中报业绩预增分析.html">
+                <div class="icon data">预</div>
+                <div class="info"><div class="name">2026中报业绩预增分析</div><div class="desc">2026-07-08 · 88只预增标的 · 含实时行情</div></div>
+                <div class="arrow">›</div>
+            </a>
+            <a class="card" href="AI算力业绩日历_2026Q2.html">
+                <div class="icon data">历</div>
+                <div class="info"><div class="name">AI算力业绩日历 2026Q2</div><div class="desc">2026-07-08 · A股52+美股28+韩股2 · 中报发布日历</div></div>
+                <div class="arrow">›</div>
+            </a>
+        </div>
+        <footer>共 12 个板块分析报告</footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1809 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>医药生物板块 - A股公司清单与产业链关系</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #0a0e17; color: #e0e6f0; line-height: 1.6; min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+        .header { text-align: center; margin-bottom: 48px; }
+        .header h1 { font-size: 36px; font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa, #34d399, #f472b6);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 12px; }
+        .header .subtitle { font-size: 16px; color: #8892a8; }
+        .header .update-time { font-size: 13px; color: #5a6478; margin-top: 8px; }
+
+        .section-title { font-size: 22px; font-weight: 600; color: #c8d0e0;
+            margin-bottom: 24px; padding-left: 14px; border-left: 3px solid #60a5fa; }
+
+        /* 统计卡片 */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 16px; margin-bottom: 56px; }
+        .stat-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 12px; padding: 20px; }
+        .stat-card .stat-label { font-size: 13px; color: #5a6478; margin-bottom: 6px; }
+        .stat-card .stat-value { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+        .stat-card .stat-note { font-size: 12px; color: #5a6478; }
+        .stat-green .stat-value { color: #34d399; }
+        .stat-blue .stat-value { color: #60a5fa; }
+        .stat-pink .stat-value { color: #f472b6; }
+        .stat-yellow .stat-value { color: #fbbf24; }
+        .stat-purple .stat-value { color: #a78bfa; }
+        .stat-red .stat-value { color: #f87171; }
+
+        /* 流程图 */
+        .flow-section { margin-bottom: 56px; }
+        .flow-diagram { display: flex; align-items: stretch; gap: 0;
+            background: #111827; border-radius: 16px; border: 1px solid #1e293b; overflow: hidden; }
+        .flow-stage { flex: 1; padding: 28px 20px; position: relative; }
+        .flow-stage:not(:last-child)::after {
+            content: '→'; position: absolute; right: -14px; top: 50%;
+            transform: translateY(-50%); font-size: 28px; color: #4b5563; z-index: 2; }
+        .flow-stage:not(:last-child) { border-right: 1px solid #1e293b; }
+        .flow-stage .stage-label { font-size: 13px; font-weight: 600; letter-spacing: 1px;
+            margin-bottom: 12px; padding: 4px 12px; border-radius: 20px; display: inline-block; }
+        .flow-upstream .stage-label { background: rgba(16,185,129,0.15); color: #34d399; }
+        .flow-midstream .stage-label { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .flow-downstream .stage-label { background: rgba(244,114,182,0.15); color: #f472b6; }
+        .flow-end .stage-label { background: rgba(251,191,36,0.15); color: #fbbf24; }
+        .flow-stage .stage-title { font-size: 18px; font-weight: 600; color: #e0e6f0; margin-bottom: 8px; }
+        .flow-stage .stage-desc { font-size: 13px; color: #8892a8; }
+        .flow-stage .stage-products { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+        .flow-stage .product-tag { font-size: 12px; padding: 3px 10px; border-radius: 12px;
+            background: rgba(255,255,255,0.06); color: #a0aec0;
+            border: 1px solid rgba(255,255,255,0.08); }
+
+        /* 公司卡片 */
+        .companies-section { margin-bottom: 48px; }
+        .company-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; }
+        .company-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; transition: border-color 0.2s, transform 0.2s; }
+        .company-card:hover { border-color: #374151; transform: translateY(-2px); }
+        .company-card .card-header { display: flex; justify-content: space-between;
+            align-items: flex-start; margin-bottom: 14px; }
+        .company-card .card-name { font-size: 18px; font-weight: 600; color: #e0e6f0; }
+        .company-card .card-code { font-size: 13px; font-weight: 500; padding: 3px 10px;
+            border-radius: 8px; background: rgba(96,165,250,0.12); color: #60a5fa; white-space: nowrap; }
+        .company-card .card-position { font-size: 13px; padding: 3px 10px;
+            border-radius: 8px; display: inline-block; margin-bottom: 10px; }
+        .position-upstream { background: rgba(16,185,129,0.12); color: #34d399; }
+        .position-midstream { background: rgba(96,165,250,0.12); color: #60a5fa; }
+        .position-downstream { background: rgba(244,114,182,0.12); color: #f472b6; }
+        .company-card .card-desc { font-size: 14px; color: #8892a8; line-height: 1.7; margin-bottom: 12px; }
+        .company-card .card-data-row { display: flex; flex-wrap: wrap; gap: 8px 18px;
+            font-size: 13px; color: #c8d0e0; padding: 10px 14px;
+            background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 3px solid #374151; }
+        .company-card .card-data-row strong { color: #e0e6f0; margin-left: 2px; }
+        .rating-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+        .rating-card { border-radius: 10px; padding: 10px 12px; border: 1px solid; background: rgba(255,255,255,0.03); }
+        .rating-title { font-size: 12px; color: #8892a8; margin-bottom: 4px; }
+        .rating-level { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .rating-reason { font-size: 12px; color: #8892a8; line-height: 1.5; }
+        .rating-strong { border-color: rgba(52,211,153,0.35); background: rgba(16,185,129,0.08); }
+        .rating-strong .rating-level { color: #34d399; }
+        .rating-mid { border-color: rgba(96,165,250,0.35); background: rgba(96,165,250,0.08); }
+        .rating-mid .rating-level { color: #60a5fa; }
+        .rating-watch { border-color: rgba(251,191,36,0.35); background: rgba(251,191,36,0.08); }
+        .rating-watch .rating-level { color: #fbbf24; }
+        .rating-weak { border-color: rgba(248,113,113,0.35); background: rgba(248,113,113,0.06); }
+        .rating-weak .rating-level { color: #f87171; }
+        .rating-guide { margin-bottom: 56px; }
+
+        /* 关系图 */
+        .relation-section { margin-bottom: 56px; }
+        .relation-diagram { background: #111827; border: 1px solid #1e293b;
+            border-radius: 16px; padding: 32px; overflow-x: auto; }
+        .relation-row { display: flex; align-items: center; margin-bottom: 16px; }
+        .relation-row:last-child { margin-bottom: 0; }
+        .relation-label { min-width: 85px; font-size: 14px; font-weight: 600;
+            color: #8892a8; flex-shrink: 0; }
+        .relation-items { display: flex; flex-wrap: wrap; gap: 10px; }
+        .relation-node { padding: 8px 16px; border-radius: 10px; font-size: 14px;
+            font-weight: 500; border: 1px solid; }
+        .relation-node.upstream { background: rgba(16,185,129,0.08);
+            border-color: rgba(16,185,129,0.25); color: #34d399; }
+        .relation-node.midstream { background: rgba(96,165,250,0.08);
+            border-color: rgba(96,165,250,0.25); color: #60a5fa; }
+        .relation-node.downstream { background: rgba(244,114,182,0.08);
+            border-color: rgba(244,114,182,0.25); color: #f472b6; }
+        .relation-node.end { background: rgba(251,191,36,0.08);
+            border-color: rgba(251,191,36,0.25); color: #fbbf24; }
+        .relation-arrow { text-align: center; color: #4b5563; font-size: 20px; padding: 4px 0; }
+        .relation-node .node-code { font-size: 11px; opacity: 0.7; margin-left: 6px; }
+
+        /* 核心关注 */
+        .focus-section { margin-bottom: 40px; }
+        .focus-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .focus-card { background: linear-gradient(135deg, #111827, #1a2332);
+            border: 1px solid #1e293b; border-radius: 14px; padding: 24px;
+            position: relative; overflow: hidden; }
+        .focus-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .focus-card:nth-child(1)::before { background: linear-gradient(90deg, #34d399, #10b981); }
+        .focus-card:nth-child(2)::before { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+        .focus-card:nth-child(3)::before { background: linear-gradient(90deg, #a78bfa, #8b5cf6); }
+        .focus-card:nth-child(4)::before { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+        .focus-card:nth-child(5)::before { background: linear-gradient(90deg, #f472b6, #ec4899); }
+        .focus-card:nth-child(6)::before { background: linear-gradient(90deg, #f87171, #ef4444); }
+        .focus-card .focus-rank { font-size: 48px; font-weight: 800;
+            color: rgba(255,255,255,0.04); position: absolute; top: 8px; right: 16px; }
+        .focus-card .focus-name { font-size: 18px; font-weight: 600; color: #e0e6f0; margin-bottom: 4px; }
+        .focus-card .focus-code { font-size: 13px; color: #60a5fa; margin-bottom: 10px; }
+        .focus-card .focus-reason { font-size: 14px; color: #8892a8; line-height: 1.7; }
+
+        /* 逻辑卡片 */
+        .logic-section { margin-bottom: 56px; }
+        .logic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+        .logic-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; }
+        .logic-card .logic-icon { font-size: 28px; margin-bottom: 12px; }
+        .logic-card .logic-title { font-size: 17px; font-weight: 600; color: #e0e6f0; margin-bottom: 8px; }
+        .logic-card .logic-desc { font-size: 14px; color: #8892a8; line-height: 1.7; }
+        .logic-card .logic-tag { display: inline-block; font-size: 12px; padding: 2px 10px;
+            border-radius: 8px; margin-top: 10px; margin-right: 6px; }
+        .tag-green { background: rgba(16,185,129,0.12); color: #34d399; }
+        .tag-blue { background: rgba(96,165,250,0.12); color: #60a5fa; }
+        .tag-pink { background: rgba(244,114,182,0.12); color: #f472b6; }
+        .tag-yellow { background: rgba(251,191,36,0.12); color: #fbbf24; }
+        .tag-red { background: rgba(248,113,113,0.12); color: #f87171; }
+
+        /* 表格 */
+        .table-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid #1e293b; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9em; min-width: 500px; }
+        thead th { background: #111827; color: #8892a8; font-weight: 500;
+            padding: 12px 14px; text-align: center; white-space: nowrap;
+            border-bottom: 2px solid #1e293b; position: sticky; top: 0; }
+        tbody td { padding: 10px 14px; border-bottom: 1px solid #1e293b; text-align: center; }
+        tbody tr:hover { background: rgba(255,255,255,0.03); }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            .header h1 { font-size: 26px; }
+            .flow-diagram { flex-direction: column; }
+            .flow-stage:not(:last-child)::after { content: '↓'; right: auto; bottom: -16px; top: auto;
+                left: 50%; transform: translateX(-50%); }
+            .flow-stage:not(:last-child) { border-right: none; border-bottom: 1px solid #1e293b; }
+            .company-grid { grid-template-columns: 1fr; }
+            .rating-row { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .focus-cards { grid-template-columns: 1fr; }
+            .logic-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>医药生物板块</h1>
+            <div class="subtitle">A股相关公司清单与产业链关系 · 覆盖化学制药、原料药、中药、生物制品、医疗器械、CXO、医疗服务、医药商业八大细分领域</div>
+            <div class="update-time">数据更新时间：2026-06-23 19:07 | 数据来源：东方财富</div>
+        </div>
+
+        <!-- 行业供需概览 -->
+        <div class="overview-section">
+            <div class="section-title">行业供需概览</div>
+            <div class="stats-grid"><div class="stat-card stat-green">
+        <div class="stat-label">医药政策环境</div>
+        <div class="stat-value">支持创新</div>
+        <div class="stat-note">全链条支持创新药政策落地，医保谈判常态化，审评审批提速</div>
+    </div>
+    <div class="stat-card stat-blue">
+        <div class="stat-label">创新药出海</div>
+        <div class="stat-value">BD交易火热</div>
+        <div class="stat-note">国产ADC/GLP-1等管线频频对外授权，海外授权金额创新高</div>
+    </div>
+    <div class="stat-card stat-pink">
+        <div class="stat-label">集采影响</div>
+        <div class="stat-value">边际减弱</div>
+        <div class="stat-note">存量仿制药集采出清，胰岛素/骨科等低价中标后量价修复</div>
+    </div>
+    <div class="stat-card stat-yellow">
+        <div class="stat-label">医疗需求</div>
+        <div class="stat-value">老龄化驱动</div>
+        <div class="stat-note">银发经济+消费医疗崛起，眼科/齿科/医美长坡厚雪</div>
+    </div>
+    <div class="stat-card stat-purple">
+        <div class="stat-label">机构核心判断</div>
+        <div class="stat-value">底部反转</div>
+        <div class="stat-note">板块估值处历史低位，创新药兑现+集采出清，业绩与估值有望共振</div>
+    </div></div>
+        </div>
+
+        <!-- 实时行情概览 -->
+        <div class="overview-section">
+            <div class="section-title">今日实时行情概览</div>
+            <div class="stats-grid"><div class="stat-card stat-green">
+        <div class="stat-label">今日平均涨跌</div>
+        <div class="stat-value">+1.13%</div>
+        <div class="stat-note">覆盖 50 只核心标的</div>
+    </div>
+    <div class="stat-card stat-blue">
+        <div class="stat-label">上涨 / 下跌家数</div>
+        <div class="stat-value">38 / 11</div>
+        <div class="stat-note">上涨占比 78%</div>
+    </div>
+    <div class="stat-card stat-pink">
+        <div class="stat-label">总成交额</div>
+        <div class="stat-value">308.57亿</div>
+        <div class="stat-note">板块资金活跃度</div>
+    </div>
+    <div class="stat-card stat-yellow">
+        <div class="stat-label">总市值</div>
+        <div class="stat-value">2.27万亿</div>
+        <div class="stat-note">七大细分领域合计</div>
+    </div>
+    <div class="stat-card stat-purple">
+        <div class="stat-label">强势股TOP1</div>
+        <div class="stat-value">海思科 +8.1%</div>
+        <div class="stat-note">今日涨幅最大标的</div>
+    </div></div>
+        </div>
+
+        <!-- 核心驱动逻辑 -->
+        <div class="logic-section">
+        <div class="section-title">核心驱动逻辑</div>
+        <div class="logic-grid">
+            <div class="logic-card">
+                <div class="logic-icon">💊</div>
+                <div class="logic-title">需求端：老龄化+消费医疗+创新药出海三重驱动</div>
+                <div class="logic-desc">国内老龄化加速释放医疗刚需，肿瘤/自免/代谢等疾病谱扩容。消费医疗（眼科、齿科、医美、减重）渗透率持续提升。国产创新药ADC、GLP-1、双抗等管线频获海外大额BD授权，出海打开全球化成长空间。</div>
+                <span class="logic-tag tag-green">老龄化刚需</span>
+                <span class="logic-tag tag-blue">消费医疗</span>
+                <span class="logic-tag tag-pink">创新药出海</span>
+            </div>
+            <div class="logic-card">
+                <div class="logic-icon">📜</div>
+                <div class="logic-title">政策端：全链条支持创新+集采边际出清</div>
+                <div class="logic-desc">全链条支持创新药政策落地，审评审批提速+医保谈判规则优化，创新药放量周期缩短。仿制药集采已覆盖存量品种，胰岛素、骨科等低价中标后量价修复，政策扰动进入尾声，行业生态回归创新与质量本源。</div>
+                <span class="logic-tag tag-green">支持创新</span>
+                <span class="logic-tag tag-blue">集采出清</span>
+                <span class="logic-tag tag-pink">审评提速</span>
+            </div>
+            <div class="logic-card">
+                <div class="logic-icon">📊</div>
+                <div class="logic-title">利润端：创新药兑现+估值底部，业绩估值有望共振</div>
+                <div class="logic-desc">恒瑞、科伦等创新药管线进入兑现期，BD授权贡献增量利润。医疗器械国产替代加速、CXO海外订单回暖。当前医药板块PE处历史低位，业绩改善叠加估值修复，板块有望迎来戴维斯双击。</div>
+                <span class="logic-tag tag-green">创新兑现</span>
+                <span class="logic-tag tag-blue">估值底部</span>
+                <span class="logic-tag tag-pink">戴维斯双击</span>
+            </div>
+        </div>
+    </div>
+
+        <!-- 产业链全景 -->
+        <div class="flow-section">
+        <div class="section-title">产业链全景</div>
+        <div class="flow-diagram">
+            <div class="flow-stage flow-upstream">
+                <span class="stage-label">上游</span>
+                <div class="stage-title">原料药与中间体</div>
+                <div class="stage-desc">大宗原料药（维生素、抗生素中间体）与特色原料药（沙坦、普利、他汀类）的生产供应，是制剂的成本基础。新和成、浙江医药等具备全球议价权，周期性波动影响制剂端成本。</div>
+                <div class="stage-products">
+                    <span class="product-tag">大宗原料药</span>
+                    <span class="product-tag">特色原料药</span>
+                    <span class="product-tag">中间体</span>
+                    <span class="product-tag">维生素</span>
+                </div>
+            </div>
+            <div class="flow-stage flow-midstream">
+                <span class="stage-label">中游</span>
+                <div class="stage-title">制药与器械制造</div>
+                <div class="stage-desc">化学制药、中药、生物制品（疫苗、血制品、抗体）研发生产，以及医疗器械（影像、IVD、耗材）制造。CXO提供研发生产外包服务。创新药研发管线与注册审批决定中长期价值。</div>
+                <div class="stage-products">
+                    <span class="product-tag">化学创新药</span>
+                    <span class="product-tag">中药</span>
+                    <span class="product-tag">疫苗血制</span>
+                    <span class="product-tag">医疗器械</span>
+                    <span class="product-tag">CXO外包</span>
+                </div>
+            </div>
+            <div class="flow-stage flow-downstream">
+                <span class="stage-label">下游</span>
+                <div class="stage-title">流通与医疗服务</div>
+                <div class="stage-desc">医药商业（分销、连锁药店）承担药品流通，医疗服务（眼科、口腔、体检、综合医院）直接面向患者提供诊疗。处方外流与消费医疗升级是下游核心增量。</div>
+                <div class="stage-products">
+                    <span class="product-tag">医药分销</span>
+                    <span class="product-tag">连锁药店</span>
+                    <span class="product-tag">专科医院</span>
+                    <span class="product-tag">健康体检</span>
+                </div>
+            </div>
+            <div class="flow-stage flow-end">
+                <span class="stage-label">终端</span>
+                <div class="stage-title">应用场景</div>
+                <div class="stage-desc">公立医院、基层医疗机构、零售药店、互联网医疗及个人消费者。终端需求由疾病谱、医保支付与消费升级共同驱动。</div>
+                <div class="stage-products">
+                    <span class="product-tag">公立医院</span>
+                    <span class="product-tag">基层医疗</span>
+                    <span class="product-tag">零售终端</span>
+                    <span class="product-tag">消费医疗</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- 买入评级说明 -->
+        <div class="rating-guide">
+        <div class="section-title">买入评级说明</div>
+        <div class="logic-grid">
+            <div class="logic-card">
+                <div class="logic-title">★★★ ★★☆ ★☆☆ ☆☆☆</div>
+                <div class="logic-desc">高关注 → 关注 → 观望 → 暂缓。基于成交额、市值、估值、涨跌幅综合打分排序，供快速扫描参考。</div>
+                <span class="logic-tag tag-green">★★★</span><span class="logic-tag tag-blue">★★☆</span><span class="logic-tag tag-yellow">★☆☆</span><span class="logic-tag tag-red">☆☆☆</span>
+            </div>
+            <div class="logic-card">
+                <div class="logic-title">左侧 / 右侧</div>
+                <div class="logic-desc">左侧偏低吸（看回调幅度+估值），右侧偏趋势确认（看涨跌幅+成交活跃度）。两侧独立评分，可能得出不同星级。</div>
+                <span class="logic-tag tag-green">低吸</span><span class="logic-tag tag-blue">趋势</span>
+            </div>
+        </div>
+    </div>
+
+        <!-- 公司清单 -->
+        <h2 class="section-title" style="margin-top:56px">核心标的一览（按细分领域）</h2>
+        <div class="companies-section">
+            <div class="section-title">化学制药</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">海思科</div>
+                    <div class="card-code">002653</div>
+                </div>
+                <span class="card-position position-upstream">化学制药</span>
+                <div class="card-desc">肠外营养专科龙头，创新药环泊酚（麻醉）商业化放量，全球多中心临床推进中，麻醉新药管线值得跟踪。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>53.21</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+8.08%</span></span>
+                    <span>成交 <strong>5.15亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">77.6</span></strong></span>
+                    <span>市值 <strong>595.91亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 短线涨幅偏大</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 强势但需防追高</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">博瑞医药</div>
+                    <div class="card-code">688166</div>
+                </div>
+                <span class="card-position position-upstream">化学制药</span>
+                <div class="card-desc">高端仿制药+难仿药平台型药企，卡泊芬净/艾立布林等发酵半合成技术壁垒高。BGM0504 GLP-1减重药进入临床，创新转型弹性大。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>37.82</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+4.59%</span></span>
+                    <span>成交 <strong>9.53亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">324.1</span></strong></span>
+                    <span>市值 <strong>164.82亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">流动性尚可</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">流动性尚可 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">华海药业</div>
+                    <div class="card-code">600521</div>
+                </div>
+                <span class="card-position position-upstream">化学制药</span>
+                <div class="card-desc">特色原料药+制剂一体化龙头，缬沙坦等普利类原料药全球市占率领先。国内制剂集采中标大户，制剂出口欧美规范市场。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>14.69</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+2.80%</span></span>
+                    <span>成交 <strong>2.97亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">58.9</span></strong></span>
+                    <span>市值 <strong>219.95亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">估值偏高但可跟踪</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">估值偏高但可跟踪 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">科伦药业</div>
+                    <div class="card-code">002422</div>
+                </div>
+                <span class="card-position position-upstream">化学制药</span>
+                <div class="card-desc">大输液龙头转型创新药，博瑞舒欣（A167）等ADC管线授权默沙东，大金额BD交易落地，输液+抗生素中间体+创新药三足鼎立。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>37.31</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+1.80%</span></span>
+                    <span>成交 <strong>8.79亿</strong></span>
+                    <span>PE <strong>37.8</strong></span>
+                    <span>市值 <strong>593.52亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值偏高但可跟踪</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值偏高但可跟踪</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">复星医药</div>
+                    <div class="card-code">600196</div>
+                </div>
+                <span class="card-position position-upstream">化学制药</span>
+                <div class="card-desc">医药全产业链布局，化药+生物药+医疗器械+医药商业多元驱动。CAR-T细胞治疗+mRNA疫苗技术储备，全球化运营能力突出。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>22.26</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.91%</span></span>
+                    <span>成交 <strong>7.14亿</strong></span>
+                    <span>PE <strong>17.1</strong></span>
+                    <span>市值 <strong>594.44亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">丽珠集团</div>
+                    <div class="card-code">000513</div>
+                </div>
+                <span class="card-position position-upstream">化学制药</span>
+                <div class="card-desc">制剂+原料药一体化，微球制剂平台国内领先。重组人源化抗IL-6R单抗获批，精神类+消化道专科优势稳固。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>29.52</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.85%</span></span>
+                    <span>成交 <strong>1.44亿</strong></span>
+                    <span>PE <strong>13.3</strong></span>
+                    <span>市值 <strong>262.11亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">估值相对可控 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">估值相对可控 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">信立泰</div>
+                    <div class="card-code">002294</div>
+                </div>
+                <span class="card-position position-upstream">化学制药</span>
+                <div class="card-desc">心血管专科龙头，氯吡格雷原研企业。创新药信立坦（阿利沙坦酯）放量中，恩那司他等肾性贫血新药构筑第二增长曲线。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>31.00</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.71%</span></span>
+                    <span>成交 <strong>6.47亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">51.1</span></strong></span>
+                    <span>市值 <strong>345.59亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 估值偏高但可跟踪 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">流动性尚可 / 估值偏高但可跟踪 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">恒瑞医药</div>
+                    <div class="card-code">600276</div>
+                </div>
+                <span class="card-position position-upstream">化学制药</span>
+                <div class="card-desc">国内化学制药绝对龙头，创新药管线最丰富，获批上市1类新药20余款。卡瑞利珠单抗+阿帕替尼双艾组合出海在即，BD授权海外频出，创新转型进入兑现期。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>48.98</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-0.77%</span></span>
+                    <span>成交 <strong>53.77亿</strong></span>
+                    <span>PE <strong>40.0</strong></span>
+                    <span>市值 <strong>3250.90亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-strong">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值偏高但可跟踪</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值偏高但可跟踪</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">原料药</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">天宇股份</div>
+                    <div class="card-code">300702</div>
+                </div>
+                <span class="card-position position-upstream">原料药</span>
+                <div class="card-desc">特色原料药龙头，沙坦类降压药原料药全球市占率前列。CDMO业务拓展，制剂一体化转型推进。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>21.51</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+5.08%</span></span>
+                    <span>成交 <strong>1.79亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">78.2</span></strong></span>
+                    <span>市值 <strong>74.85亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">短线涨幅偏大</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">浙江医药</div>
+                    <div class="card-code">600216</div>
+                </div>
+                <span class="card-position position-upstream">原料药</span>
+                <div class="card-desc">VA/VE原料药双龙头之一，辅酶Q10全球市占率领先。创新药产业布局生物医药，受益维生素价格周期回暖。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>11.87</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+1.37%</span></span>
+                    <span>成交 <strong>2.52亿</strong></span>
+                    <span>PE <strong>15.2</strong></span>
+                    <span>市值 <strong>114.15亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">估值相对可控 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">估值相对可控 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">新和成</div>
+                    <div class="card-code">002001</div>
+                </div>
+                <span class="card-position position-upstream">原料药</span>
+                <div class="card-desc">全球维生素龙头，VA/VE/VD3全产业链一体化。蛋氨酸+香精香料+新材料多元布局，成本优势与周期弹性兼具。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>29.75</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+1.02%</span></span>
+                    <span>成交 <strong>14.53亿</strong></span>
+                    <span>PE <strong>13.6</strong></span>
+                    <span>市值 <strong>914.34亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-strong">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">中药</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">以岭药业</div>
+                    <div class="card-code">002603</div>
+                </div>
+                <span class="card-position position-midstream">中药</span>
+                <div class="card-desc">连花清瘟母公司，中药呼吸专科龙头。通心络/芪苈强心心脑血管管线丰富，化药创新+大健康拓展。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>15.44</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+2.59%</span></span>
+                    <span>成交 <strong>3.12亿</strong></span>
+                    <span>PE <strong>18.8</strong></span>
+                    <span>市值 <strong>257.96亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">流动性尚可 / 估值相对可控 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">济川药业</div>
+                    <div class="card-code">600566</div>
+                </div>
+                <span class="card-position position-midstream">中药</span>
+                <div class="card-desc">儿科中成药龙头，蒲地蓝/小儿豉翘清热颗粒主导。雷贝拉唑等化药放量，现金流充沛高分红标的。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>26.11</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+1.44%</span></span>
+                    <span>成交 <strong>1.56亿</strong></span>
+                    <span>PE <strong>13.8</strong></span>
+                    <span>市值 <strong>240.65亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">估值相对可控 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">估值相对可控 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">华润三九</div>
+                    <div class="card-code">000999</div>
+                </div>
+                <span class="card-position position-midstream">中药</span>
+                <div class="card-desc">OTC中药龙头，999感冒灵/三九胃泰国民品牌。配方颗粒国标切换后份额回升，CHC自我诊疗+处方药双轮驱动。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>23.83</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+1.40%</span></span>
+                    <span>成交 <strong>2.34亿</strong></span>
+                    <span>PE <strong>12.3</strong></span>
+                    <span>市值 <strong>396.58亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">估值相对可控 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">估值相对可控 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">天士力</div>
+                    <div class="card-code">600535</div>
+                </div>
+                <span class="card-position position-midstream">中药</span>
+                <div class="card-desc">现代中药龙头，复方丹参滴丸国际化推进中。中药创新药+生物药+化药协同，华润系入主带来整合预期。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>13.87</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+1.31%</span></span>
+                    <span>成交 <strong>1.74亿</strong></span>
+                    <span>PE <strong>17.9</strong></span>
+                    <span>市值 <strong>207.21亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">估值相对可控 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">估值相对可控 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">同仁堂</div>
+                    <div class="card-code">600085</div>
+                </div>
+                <span class="card-position position-midstream">中药</span>
+                <div class="card-desc">百年老字号中药金字招牌，安宫牛黄丸等名品护城河深。精品战略+直销渠道改革，品牌溢价持续兑现。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>23.61</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.25%</span></span>
+                    <span>成交 <strong>2.39亿</strong></span>
+                    <span>PE <strong>30.0</strong></span>
+                    <span>市值 <strong>323.80亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">估值偏高但可跟踪 / 涨幅温和</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">估值偏高但可跟踪 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">东阿阿胶</div>
+                    <div class="card-code">000423</div>
+                </div>
+                <span class="card-position position-midstream">中药</span>
+                <div class="card-desc">阿胶滋补品龙头，价值回归+渠道重塑成效显现。复方阿胶浆双盲临床推进，华润系赋能下经营拐点确认。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>45.30</strong></span>
+                    <span>涨跌 <span style="color:#8892a8;font-weight:600">0.00%</span></span>
+                    <span>成交 <strong>2.55亿</strong></span>
+                    <span>PE <strong>16.5</strong></span>
+                    <span>市值 <strong>291.72亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">估值相对可控 / 低吸区间</div>
+    </div><div class="rating-card rating-weak">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">估值相对可控 / 尚未转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">云南白药</div>
+                    <div class="card-code">000538</div>
+                </div>
+                <span class="card-position position-midstream">中药</span>
+                <div class="card-desc">国家保密配方中药龙头，白药系列止血镇痛名药。大健康+日化牙膏市占率第一，国企改革注入活力。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>48.53</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-0.27%</span></span>
+                    <span>成交 <strong>5.42亿</strong></span>
+                    <span>PE <strong>16.5</strong></span>
+                    <span>市值 <strong>865.90亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-strong">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">片仔癀</div>
+                    <div class="card-code">600436</div>
+                </div>
+                <span class="card-position position-midstream">中药</span>
+                <div class="card-desc">国家绝密配方中药稀缺资产，消炎护肝百年名药。系列化妆品+日化拓展，稀缺性溢价+提价能力构成护城河。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>113.31</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-0.86%</span></span>
+                    <span>成交 <strong>4.56亿</strong></span>
+                    <span>PE <strong>35.9</strong></span>
+                    <span>市值 <strong>683.62亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值偏高但可跟踪</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值偏高但可跟踪</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">生物制品</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">我武生物</div>
+                    <div class="card-code">300357</div>
+                </div>
+                <span class="card-position position-midstream">生物制品</span>
+                <div class="card-desc">脱敏治疗独占企业，粉尘螨滴剂市占率独家。黄花蒿粉滴剂适应症拓展，过敏性疾病赛道高成长。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>22.65</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+2.86%</span></span>
+                    <span>成交 <strong>2.68亿</strong></span>
+                    <span>PE <strong>27.9</strong></span>
+                    <span>市值 <strong>118.59亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">估值相对可控</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">估值相对可控 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">康泰生物</div>
+                    <div class="card-code">300601</div>
+                </div>
+                <span class="card-position position-midstream">生物制品</span>
+                <div class="card-desc">疫苗管线丰富，13价肺炎+百白破联苗放量。MCV4四价脑膜炎、二倍体狂犬疫苗等重磅品种陆续兑现。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>11.72</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+2.45%</span></span>
+                    <span>成交 <strong>2.74亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">161.1</span></strong></span>
+                    <span>市值 <strong>130.90亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">信号不足</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">华兰生物</div>
+                    <div class="card-code">002007</div>
+                </div>
+                <span class="card-position position-midstream">生物制品</span>
+                <div class="card-desc">血液制品+流感疫苗双龙头，流感疫苗市占率行业第一。单抗生物类似药管线推进，血制品行业景气向上。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>12.95</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+2.37%</span></span>
+                    <span>成交 <strong>1.63亿</strong></span>
+                    <span>PE <strong>27.6</strong></span>
+                    <span>市值 <strong>236.43亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">估值相对可控</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">估值相对可控 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">天坛生物</div>
+                    <div class="card-code">600161</div>
+                </div>
+                <span class="card-position position-midstream">生物制品</span>
+                <div class="card-desc">国资血液制品龙头，浆站资源行业最丰富。血制品供不应求格局下，采浆量与品种拓展驱动成长。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>12.24</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+1.49%</span></span>
+                    <span>成交 <strong>2.10亿</strong></span>
+                    <span>PE <strong>24.9</strong></span>
+                    <span>市值 <strong>242.03亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">估值相对可控 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">估值相对可控 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">智飞生物</div>
+                    <div class="card-code">300122</div>
+                </div>
+                <span class="card-position position-midstream">生物制品</span>
+                <div class="card-desc">疫苗代理+自研双轮驱动，HPV疫苗代理贡献主力。自研23价肺炎、MCV4等管线丰富，男性HPV适应症打开增量空间。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>12.41</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.81%</span></span>
+                    <span>成交 <strong>3.57亿</strong></span>
+                    <span>PE <strong><span style="color:#8892a8">-2.0</span></strong></span>
+                    <span>市值 <strong>297.07亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">流动性尚可 / 利润为负 / 涨幅温和</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 利润为负 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">长春高新</div>
+                    <div class="card-code">000661</div>
+                </div>
+                <span class="card-position position-midstream">生物制品</span>
+                <div class="card-desc">生长激素绝对龙头，长效生长激素份额持续提升。疫苗+地产辅助，带量采购预期下估值已处历史低位。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>65.68</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.78%</span></span>
+                    <span>成交 <strong>7.36亿</strong></span>
+                    <span>PE <strong><span style="color:#8892a8">-638.1</span></strong></span>
+                    <span>市值 <strong>267.93亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">流动性尚可 / 利润为负 / 涨幅温和</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 利润为负 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">甘李药业</div>
+                    <div class="card-code">603087</div>
+                </div>
+                <span class="card-position position-midstream">生物制品</span>
+                <div class="card-desc">国产胰岛素龙头，三代胰岛素市占率国产第一。集采后量价修复，国际化出口持续突破。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>57.25</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.47%</span></span>
+                    <span>成交 <strong>4.91亿</strong></span>
+                    <span>PE <strong>33.4</strong></span>
+                    <span>市值 <strong>341.96亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 估值偏高但可跟踪 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">流动性尚可 / 估值偏高但可跟踪 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">万泰生物</div>
+                    <div class="card-code">603392</div>
+                </div>
+                <span class="card-position position-midstream">生物制品</span>
+                <div class="card-desc">国产二价HPV疫苗首家，国产替代先行者。九价HPV临床进度领先，IVD诊断+疫苗双主业。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>28.51</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-0.45%</span></span>
+                    <span>成交 <strong>1.80亿</strong></span>
+                    <span>PE <strong><span style="color:#8892a8">-92.8</span></strong></span>
+                    <span>市值 <strong>360.48亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">利润为负 / 低吸区间</div>
+    </div><div class="rating-card rating-weak">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">利润为负 / 尚未转强</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">医疗器械</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">健帆生物</div>
+                    <div class="card-code">300529</div>
+                </div>
+                <span class="card-position position-midstream">医疗器械</span>
+                <div class="card-desc">血液灌流器全球龙头，尿毒症/肝病灌流独家。一次性血液灌流器集采降价风险释放，海外市场拓展中。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>15.85</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+1.34%</span></span>
+                    <span>成交 <strong>1.04亿</strong></span>
+                    <span>PE <strong>22.4</strong></span>
+                    <span>市值 <strong>126.58亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">估值相对可控 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">估值相对可控 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">乐普医疗</div>
+                    <div class="card-code">300003</div>
+                </div>
+                <span class="card-position position-midstream">医疗器械</span>
+                <div class="card-desc">心血管介入器械龙头，药物支架+封堵器主导。AI心电+心血管创新器械管线丰富，集采后盈利能力修复。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>11.94</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+1.10%</span></span>
+                    <span>成交 <strong>4.12亿</strong></span>
+                    <span>PE <strong>26.5</strong></span>
+                    <span>市值 <strong>220.10亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">流动性尚可 / 估值相对可控 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">流动性尚可 / 估值相对可控 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">大博医疗</div>
+                    <div class="card-code">002901</div>
+                </div>
+                <span class="card-position position-midstream">医疗器械</span>
+                <div class="card-desc">骨科植入物龙头，创伤/脊柱/微创耗材全覆盖。集采出清后国产份额提升，骨科运动医学拓展。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>42.05</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.72%</span></span>
+                    <span>成交 <strong>8009.0万</strong></span>
+                    <span>PE <strong>27.1</strong></span>
+                    <span>市值 <strong>174.10亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">估值相对可控 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">估值相对可控 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">欧普康视</div>
+                    <div class="card-code">300595</div>
+                </div>
+                <span class="card-position position-midstream">医疗器械</span>
+                <div class="card-desc">角膜塑形镜（OK镜）国产龙头，青少年近视防控赛道。视光服务终端网络扩张，近视防控渗透率提升。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>11.16</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.72%</span></span>
+                    <span>成交 <strong>1.13亿</strong></span>
+                    <span>PE <strong>21.5</strong></span>
+                    <span>市值 <strong>99.91亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">估值相对可控 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">估值相对可控 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">心脉医疗</div>
+                    <div class="card-code">688016</div>
+                </div>
+                <span class="card-position position-midstream">医疗器械</span>
+                <div class="card-desc">主动脉介入器械龙头，胸主/腹主动脉支架主导。外周血管介入创新器械放量，微创系高成长标的。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>88.80</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.36%</span></span>
+                    <span>成交 <strong>1.61亿</strong></span>
+                    <span>PE <strong>18.6</strong></span>
+                    <span>市值 <strong>109.46亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">估值相对可控 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">估值相对可控 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">联影医疗</div>
+                    <div class="card-code">688271</div>
+                </div>
+                <span class="card-position position-midstream">医疗器械</span>
+                <div class="card-desc">国产高端医学影像龙头，CT/MR/PET-CT打破GPS垄断。高端影像设备国产替代核心标的，海外订单高增。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>102.52</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-1.60%</span></span>
+                    <span>成交 <strong>6.70亿</strong></span>
+                    <span>PE <strong>44.5</strong></span>
+                    <span>市值 <strong>844.93亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值偏高但可跟踪</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值偏高但可跟踪</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">迈瑞医疗</div>
+                    <div class="card-code">300760</div>
+                </div>
+                <span class="card-position position-midstream">医疗器械</span>
+                <div class="card-desc">国产医疗器械绝对龙头，监护仪/彩超/IVD全球前三。海外高端市场突破+国内医疗新基建，器械出海标杆。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>139.38</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-1.74%</span></span>
+                    <span>成交 <strong>12.79亿</strong></span>
+                    <span>PE <strong>21.6</strong></span>
+                    <span>市值 <strong>1689.90亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-strong">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">CXO医药外包</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">博腾股份</div>
+                    <div class="card-code">300363</div>
+                </div>
+                <span class="card-position position-midstream">CXO医药外包</span>
+                <div class="card-desc">基因细胞治疗CDMO+小分子CDMO双平台，JLABS合作推进。CGT产能释放，制剂与生物CDMO转型。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>14.64</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+2.59%</span></span>
+                    <span>成交 <strong>2.50亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">61.9</span></strong></span>
+                    <span>市值 <strong>79.56亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">信号不足</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">凯莱英</div>
+                    <div class="card-code">002821</div>
+                </div>
+                <span class="card-position position-midstream">CXO医药外包</span>
+                <div class="card-desc">小分子CDMO龙头，连续反应技术领先。订单交付稳健，新兴业务（大分子+化学大分子）拓展第二曲线。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>128.70</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+2.30%</span></span>
+                    <span>成交 <strong>11.54亿</strong></span>
+                    <span>PE <strong>41.8</strong></span>
+                    <span>市值 <strong>464.33亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 估值偏高但可跟踪</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 估值偏高但可跟踪 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">九洲药业</div>
+                    <div class="card-code">603456</div>
+                </div>
+                <span class="card-position position-midstream">CXO医药外包</span>
+                <div class="card-desc">特色原料药转型CDMO，瑞博 CRO平台承接诺华等大客户。小分子CDMO产能扩张，订单结构持续优化。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>13.19</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+2.17%</span></span>
+                    <span>成交 <strong>2.32亿</strong></span>
+                    <span>PE <strong>18.0</strong></span>
+                    <span>市值 <strong>117.32亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">估值相对可控</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">估值相对可控 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">泰格医药</div>
+                    <div class="card-code">300347</div>
+                </div>
+                <span class="card-position position-midstream">CXO医药外包</span>
+                <div class="card-desc">国内临床CRO龙头，临床试验服务+投资收益双轮驱动。海外多中心临床能力突出，创新药研发浪潮核心受益。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>41.08</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-0.29%</span></span>
+                    <span>成交 <strong>11.43亿</strong></span>
+                    <span>PE <strong>45.9</strong></span>
+                    <span>市值 <strong>353.71亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 估值偏高但可跟踪 / 低吸区间</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 估值偏高但可跟踪 / 尚未转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">药明康德</div>
+                    <div class="card-code">603259</div>
+                </div>
+                <span class="card-position position-midstream">CXO医药外包</span>
+                <div class="card-desc">全球CRO/CDMO一体化龙头，小分子+细胞基因治疗双平台。海外客户主导，一体化赋能产能与技术优势突出。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>106.31</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-0.49%</span></span>
+                    <span>成交 <strong>56.48亿</strong></span>
+                    <span>PE <strong>15.8</strong></span>
+                    <span>市值 <strong>3172.03亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-strong">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">医疗服务</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">爱尔眼科</div>
+                    <div class="card-code">300015</div>
+                </div>
+                <span class="card-position position-downstream">医疗服务</span>
+                <div class="card-desc">民营眼科医疗连锁龙头，屈光+视光+白眼综合诊疗。分级连锁+并购基金扩张，眼科黄金赛道长牛标的。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>8.58</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+1.06%</span></span>
+                    <span>成交 <strong>10.37亿</strong></span>
+                    <span>PE <strong>23.7</strong></span>
+                    <span>市值 <strong>800.12亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-strong">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">爱博医疗</div>
+                    <div class="card-code">688050</div>
+                </div>
+                <span class="card-position position-downstream">医疗服务</span>
+                <div class="card-desc">人工晶体+角膜塑形镜双驱龙头，国产人工晶体替代先锋。功能性人工晶体+近视防控管线丰富。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>38.79</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.23%</span></span>
+                    <span>成交 <strong>1.12亿</strong></span>
+                    <span>PE <strong>28.3</strong></span>
+                    <span>市值 <strong>75.03亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">估值相对可控 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">估值相对可控 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">通策医疗</div>
+                    <div class="card-code">600763</div>
+                </div>
+                <span class="card-position position-downstream">医疗服务</span>
+                <div class="card-desc">民营口腔连锁龙头，种植牙集采后量增价稳。蒲公英分院扩张+辅助生殖布局，口腔服务赛道集中度提升。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>35.23</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.17%</span></span>
+                    <span>成交 <strong>3.11亿</strong></span>
+                    <span>PE <strong>31.2</strong></span>
+                    <span>市值 <strong>157.58亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 估值偏高但可跟踪 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">流动性尚可 / 估值偏高但可跟踪 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">华厦眼科</div>
+                    <div class="card-code">301267</div>
+                </div>
+                <span class="card-position position-downstream">医疗服务</span>
+                <div class="card-desc">民营眼科连锁新锐，屈光手术+眼视光+眼底病诊疗。区域龙头全国扩张，眼科医疗服务需求高景气。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>16.23</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-0.43%</span></span>
+                    <span>成交 <strong>6609.0万</strong></span>
+                    <span>PE <strong>29.5</strong></span>
+                    <span>市值 <strong>136.33亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">估值相对可控 / 低吸区间</div>
+    </div><div class="rating-card rating-weak">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">估值相对可控 / 尚未转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">美年健康</div>
+                    <div class="card-code">002044</div>
+                </div>
+                <span class="card-position position-downstream">医疗服务</span>
+                <div class="card-desc">民营预防医学体检龙头，分院网络覆盖全国。AI辅助诊断+精准预防升级，健康体检赛道集中度提升。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>5.54</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-0.54%</span></span>
+                    <span>成交 <strong>8.37亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">71.0</span></strong></span>
+                    <span>市值 <strong>216.85亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 低吸区间</div>
+    </div><div class="rating-card rating-weak">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">流动性尚可 / 尚未转强</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">医药商业</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">国药一致</div>
+                    <div class="card-code">000028</div>
+                </div>
+                <span class="card-position position-downstream">医药商业</span>
+                <div class="card-desc">国药系医药商业+工业一体化，两广分销龙头。国大药房零售连锁+致君工业双驱动。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>23.06</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+2.26%</span></span>
+                    <span>成交 <strong>8560.0万</strong></span>
+                    <span>PE <strong>11.7</strong></span>
+                    <span>市值 <strong>128.34亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">估值相对可控</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">估值相对可控 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">国药股份</div>
+                    <div class="card-code">600511</div>
+                </div>
+                <span class="card-position position-downstream">医药商业</span>
+                <div class="card-desc">国药系北京医药商业龙头，麻精特药分销独家优势。北京地区分销主导，血制品+器械配送协同。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>27.43</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+1.22%</span></span>
+                    <span>成交 <strong>1.48亿</strong></span>
+                    <span>PE <strong>10.3</strong></span>
+                    <span>市值 <strong>206.96亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">估值相对可控 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">估值相对可控 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">上海医药</div>
+                    <div class="card-code">601607</div>
+                </div>
+                <span class="card-position position-downstream">医药商业</span>
+                <div class="card-desc">医药商业+工业双轮，进口药品分销龙头。创新药管线+CSO合作，分销网络与工业研发协同。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>16.14</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+1.13%</span></span>
+                    <span>成交 <strong>2.33亿</strong></span>
+                    <span>PE <strong>10.3</strong></span>
+                    <span>市值 <strong>598.53亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">市值支撑较强 / 估值相对可控 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">市值支撑较强 / 估值相对可控 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">老百姓</div>
+                    <div class="card-code">603883</div>
+                </div>
+                <span class="card-position position-downstream">医药商业</span>
+                <div class="card-desc">民营连锁药店龙头，下沉市场布局领先。星火并购+加盟双模式扩张，处方外流承接能力强。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>11.87</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+1.11%</span></span>
+                    <span>成交 <strong>9422.0万</strong></span>
+                    <span>PE <strong>22.8</strong></span>
+                    <span>市值 <strong>90.08亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">估值相对可控 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">估值相对可控 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">大参林</div>
+                    <div class="card-code">603233</div>
+                </div>
+                <span class="card-position position-downstream">医药商业</span>
+                <div class="card-desc">民营连锁药店龙头，华南区域优势突出。中西成药+参茸滋补特色品类，门店网络持续加密。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>15.99</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.76%</span></span>
+                    <span>成交 <strong>8007.0万</strong></span>
+                    <span>PE <strong>14.2</strong></span>
+                    <span>市值 <strong>182.10亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">估值相对可控 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">估值相对可控 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">益丰药房</div>
+                    <div class="card-code">603939</div>
+                </div>
+                <span class="card-position position-downstream">医药商业</span>
+                <div class="card-desc">民营连锁药店龙头，DTP+慢病管理服务领先。门店扩张稳健，处方外流核心受益标的。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>19.56</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-0.96%</span></span>
+                    <span>成交 <strong>1.49亿</strong></span>
+                    <span>PE <strong>13.7</strong></span>
+                    <span>市值 <strong>237.14亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">估值相对可控 / 低吸区间</div>
+    </div><div class="rating-card rating-weak">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">估值相对可控 / 尚未转强</div>
+    </div></div>
+            </div></div>
+        </div>
+
+        <!-- 板块涨跌统计 -->
+        <div class="companies-section">
+            <div class="section-title">各细分板块涨跌统计</div>
+            <div class="table-wrapper">
+                <table><thead><tr>
+                    <th>细分板块</th><th>标的数</th><th>平均涨跌幅</th><th>上涨</th><th>下跌</th><th>总成交额</th><th>总市值</th>
+                </tr></thead><tbody><tr>
+            <td style="text-align:left;font-weight:500">化学制药</td>
+            <td>8</td>
+            <td><span style="display:inline-block;width:9.485px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+2.37%</td>
+            <td style="color:#34d399">7</td>
+            <td style="color:#f87171">1</td>
+            <td>95.26亿</td>
+            <td>6027.24亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">原料药</td>
+            <td>3</td>
+            <td><span style="display:inline-block;width:9.959999999999999px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+2.49%</td>
+            <td style="color:#34d399">3</td>
+            <td style="color:#f87171">0</td>
+            <td>18.84亿</td>
+            <td>1103.34亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">中药</td>
+            <td>8</td>
+            <td><span style="display:inline-block;width:2.9299999999999997px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+0.73%</td>
+            <td style="color:#34d399">5</td>
+            <td style="color:#f87171">2</td>
+            <td>23.68亿</td>
+            <td>3267.44亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">生物制品</td>
+            <td>8</td>
+            <td><span style="display:inline-block;width:5.390000000000001px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+1.35%</td>
+            <td style="color:#34d399">7</td>
+            <td style="color:#f87171">1</td>
+            <td>26.79亿</td>
+            <td>1995.39亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">医疗器械</td>
+            <td>7</td>
+            <td><span style="display:inline-block;width:0.514285714285714px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+0.13%</td>
+            <td style="color:#34d399">5</td>
+            <td style="color:#f87171">2</td>
+            <td>28.20亿</td>
+            <td>3264.98亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">CXO医药外包</td>
+            <td>5</td>
+            <td><span style="display:inline-block;width:5.023999999999999px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+1.26%</td>
+            <td style="color:#34d399">3</td>
+            <td style="color:#f87171">2</td>
+            <td>84.27亿</td>
+            <td>4186.95亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">医疗服务</td>
+            <td>5</td>
+            <td><span style="display:inline-block;width:0.392px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+0.10%</td>
+            <td style="color:#34d399">3</td>
+            <td style="color:#f87171">2</td>
+            <td>23.63亿</td>
+            <td>1385.91亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">医药商业</td>
+            <td>6</td>
+            <td><span style="display:inline-block;width:3.6799999999999997px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+0.92%</td>
+            <td style="color:#34d399">5</td>
+            <td style="color:#f87171">1</td>
+            <td>7.90亿</td>
+            <td>1443.15亿</td>
+        </tr><tr style="background:#111827;border-top:2px solid #374151">
+        <td style="text-align:left"><strong>全板块合计</strong></td>
+        <td><strong>50</strong></td>
+        <td><strong>+1.13%</strong></td>
+        <td style="color:#34d399"><strong>38</strong></td>
+        <td style="color:#f87171"><strong>11</strong></td>
+        <td><strong>308.57亿</strong></td>
+        <td><strong>2.27万亿</strong></td>
+    </tr></tbody></table>
+            </div>
+        </div>
+
+        <!-- 强势股/弱势股 -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px">
+            <div>
+                <div class="section-title">强势股 TOP5</div>
+                <div class="table-wrapper">
+                    <table><thead><tr><th>名称</th><th>代码</th><th>最新价</th><th>涨跌幅</th><th>成交额</th><th>板块</th></tr></thead>
+                    <tbody><tr>
+                <td style="text-align:left;font-weight:500">海思科</td>
+                <td style="color:#60a5fa">002653</td>
+                <td style="font-family:monospace">53.21</td>
+                <td><span style="color:#34d399;font-weight:600">+8.08%</span></td>
+                <td style="font-family:monospace">5.15亿</td>
+                <td>化学制药</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">天宇股份</td>
+                <td style="color:#60a5fa">300702</td>
+                <td style="font-family:monospace">21.51</td>
+                <td><span style="color:#34d399;font-weight:600">+5.08%</span></td>
+                <td style="font-family:monospace">1.79亿</td>
+                <td>原料药</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">博瑞医药</td>
+                <td style="color:#60a5fa">688166</td>
+                <td style="font-family:monospace">37.82</td>
+                <td><span style="color:#34d399;font-weight:600">+4.59%</span></td>
+                <td style="font-family:monospace">9.53亿</td>
+                <td>化学制药</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">我武生物</td>
+                <td style="color:#60a5fa">300357</td>
+                <td style="font-family:monospace">22.65</td>
+                <td><span style="color:#34d399;font-weight:600">+2.86%</span></td>
+                <td style="font-family:monospace">2.68亿</td>
+                <td>生物制品</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">华海药业</td>
+                <td style="color:#60a5fa">600521</td>
+                <td style="font-family:monospace">14.69</td>
+                <td><span style="color:#34d399;font-weight:600">+2.80%</span></td>
+                <td style="font-family:monospace">2.97亿</td>
+                <td>化学制药</td>
+            </tr></tbody></table>
+                </div>
+            </div>
+            <div>
+                <div class="section-title">弱势股 TOP5</div>
+                <div class="table-wrapper">
+                    <table><thead><tr><th>名称</th><th>代码</th><th>最新价</th><th>涨跌幅</th><th>成交额</th><th>板块</th></tr></thead>
+                    <tbody><tr>
+                <td style="text-align:left;font-weight:500">迈瑞医疗</td>
+                <td style="color:#60a5fa">300760</td>
+                <td style="font-family:monospace">139.38</td>
+                <td><span style="color:#f87171;font-weight:600">-1.74%</span></td>
+                <td style="font-family:monospace">12.79亿</td>
+                <td>医疗器械</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">联影医疗</td>
+                <td style="color:#60a5fa">688271</td>
+                <td style="font-family:monospace">102.52</td>
+                <td><span style="color:#f87171;font-weight:600">-1.60%</span></td>
+                <td style="font-family:monospace">6.70亿</td>
+                <td>医疗器械</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">益丰药房</td>
+                <td style="color:#60a5fa">603939</td>
+                <td style="font-family:monospace">19.56</td>
+                <td><span style="color:#f87171;font-weight:600">-0.96%</span></td>
+                <td style="font-family:monospace">1.49亿</td>
+                <td>医药商业</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">片仔癀</td>
+                <td style="color:#60a5fa">600436</td>
+                <td style="font-family:monospace">113.31</td>
+                <td><span style="color:#f87171;font-weight:600">-0.86%</span></td>
+                <td style="font-family:monospace">4.56亿</td>
+                <td>中药</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">恒瑞医药</td>
+                <td style="color:#60a5fa">600276</td>
+                <td style="font-family:monospace">48.98</td>
+                <td><span style="color:#f87171;font-weight:600">-0.77%</span></td>
+                <td style="font-family:monospace">53.77亿</td>
+                <td>化学制药</td>
+            </tr></tbody></table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 产业链关系图 -->
+        <div class="relation-section">
+        <div class="section-title">产业链上下游关系</div>
+        <div class="relation-diagram">
+            <div class="relation-row">
+                <div class="relation-label">原料药</div>
+                <div class="relation-items">
+                    <div class="relation-node upstream">新和成<span class="node-code">维生素龙头</span></div>
+                    <div class="relation-node upstream">浙江医药<span class="node-code">VA/VE双龙</span></div>
+                    <div class="relation-node upstream">天宇股份<span class="node-code">沙坦原料</span></div>
+                    <div class="relation-node upstream">华海药业<span class="node-code">制剂一体化</span></div>
+                </div>
+            </div>
+            <div class="relation-arrow">→ 中间体 / 特色原料药 →</div>
+            <div class="relation-row">
+                <div class="relation-label">化学制药/中药</div>
+                <div class="relation-items">
+                    <div class="relation-node midstream">恒瑞医药<span class="node-code">创新药龙头</span></div>
+                    <div class="relation-node midstream">复星医药<span class="node-code">全产业链</span></div>
+                    <div class="relation-node midstream">科伦药业<span class="node-code">输液+创新</span></div>
+                    <div class="relation-node midstream">片仔癀<span class="node-code">稀缺中药</span></div>
+                    <div class="relation-node midstream">云南白药<span class="node-code">保密配方</span></div>
+                </div>
+            </div>
+            <div class="relation-arrow">→ 生物制品 / 器械 / CXO →</div>
+            <div class="relation-row">
+                <div class="relation-label">生物/器械/CXO</div>
+                <div class="relation-items">
+                    <div class="relation-node midstream">智飞生物<span class="node-code">疫苗代理</span></div>
+                    <div class="relation-node midstream">长春高新<span class="node-code">生长激素</span></div>
+                    <div class="relation-node midstream">迈瑞医疗<span class="node-code">器械龙头</span></div>
+                    <div class="relation-node midstream">联影医疗<span class="node-code">高端影像</span></div>
+                    <div class="relation-node midstream">药明康德<span class="node-code">CXO龙头</span></div>
+                </div>
+            </div>
+            <div class="relation-arrow">→ 流通与医疗服务 →</div>
+            <div class="relation-row">
+                <div class="relation-label">流通/服务</div>
+                <div class="relation-items">
+                    <div class="relation-node downstream">上海医药<span class="node-code">分销龙头</span></div>
+                    <div class="relation-node downstream">益丰药房<span class="node-code">连锁药店</span></div>
+                    <div class="relation-node downstream">爱尔眼科<span class="node-code">眼科连锁</span></div>
+                    <div class="relation-node downstream">通策医疗<span class="node-code">口腔连锁</span></div>
+                    <div class="relation-node downstream">美年健康<span class="node-code">健康体检</span></div>
+                </div>
+            </div>
+            <div class="relation-arrow">→ 终端应用 →</div>
+            <div class="relation-row">
+                <div class="relation-label">终端应用</div>
+                <div class="relation-items">
+                    <div class="relation-node end">公立医院</div>
+                    <div class="relation-node end">零售药店</div>
+                    <div class="relation-node end">消费医疗</div>
+                    <div class="relation-node end">基层医疗</div>
+                    <div class="relation-node end">互联网医疗</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- 核心关注标的 -->
+        <div class="focus-section">
+        <div class="section-title">核心关注标的</div>
+        <div class="focus-cards">
+            <div class="focus-card">
+                <div class="focus-rank">01</div>
+                <div class="focus-name">恒瑞医药</div>
+                <div class="focus-code">600276</div>
+                <div class="focus-reason">国内化学制药绝对龙头，创新药管线最丰富，双艾组合出海在即，BD授权频出。创新转型进入兑现期，集采影响出清后业绩与估值弹性较大，板块核心锚点标的。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">02</div>
+                <div class="focus-name">迈瑞医疗</div>
+                <div class="focus-code">300760</div>
+                <div class="focus-reason">国产医疗器械绝对龙头，监护仪/彩超/IVD全球前三。海外高端市场突破+国内医疗新基建双驱动，器械出海标杆，业绩确定性高、现金流优异，机构长期重仓。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">03</div>
+                <div class="focus-name">药明康德</div>
+                <div class="focus-code">603259</div>
+                <div class="focus-reason">全球CRO/CDMO一体化龙头，小分子+细胞基因治疗双平台，海外客户主导。创新药研发浪潮核心受益，产能与技术优势突出，估值消化后具备修复空间。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">04</div>
+                <div class="focus-name">爱尔眼科</div>
+                <div class="focus-code">300015</div>
+                <div class="focus-reason">民营眼科医疗连锁龙头，屈光+视光+眼病综合诊疗。分级连锁+并购基金持续扩张，眼科黄金赛道长牛标的，消费医疗升级直接受益。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">05</div>
+                <div class="focus-name">智飞生物</div>
+                <div class="focus-code">300122</div>
+                <div class="focus-reason">疫苗代理+自研双轮驱动，HPV疫苗代理贡献主力。自研肺炎、MCV4等管线丰富，男性HPV适应症打开增量空间，疫苗板块高弹性标的。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">06</div>
+                <div class="focus-name">片仔癀</div>
+                <div class="focus-code">600436</div>
+                <div class="focus-reason">国家绝密配方中药稀缺资产，消炎护肝百年名药。稀缺性溢价+提价能力构成护城河，系列化妆品日化拓展，中药板块核心配置标的。</div>
+            </div>
+        </div>
+    </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p style="text-align:center;color:#8892a8;font-size:0.8em;padding:30px 0 10px;border-top:1px solid #1e293b;margin-top:40px">行情数据来源：东方财富 | 静态行业数据参考：上市公司公告、公开研报与公开报道 | 生成时间：2026-06-23 19:07</p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em">静态描述为公开资料整理，部分市占率、需求预测、价格判断采用机构预测口径，仅供研究参考。</p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em;margin-top:6px">左侧/右侧买入评级仅基于当前行情、成交额、市值与估值的规则化排序，不构成具体买卖建议。</p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em;margin-top:6px">本报告仅为数据整理，不构成任何投资建议。股市有风险，投资需谨慎。</p>
+        </div>
+    </div>
+</body>
+</html>

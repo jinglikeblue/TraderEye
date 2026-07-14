@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>华为AI产业链 - A股公司清单与产业链关系</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #0a0e17; color: #e0e6f0; line-height: 1.6; min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+        .header { text-align: center; margin-bottom: 48px; }
+        .header h1 { font-size: 36px; font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa, #34d399, #f472b6);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 12px; }
+        .header .subtitle { font-size: 16px; color: #8892a8; }
+        .header .update-time { font-size: 13px; color: #5a6478; margin-top: 8px; }
+
+        .section-title { font-size: 22px; font-weight: 600; color: #c8d0e0;
+            margin-bottom: 24px; padding-left: 14px; border-left: 3px solid #60a5fa; }
+
+        /* 统计卡片 */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 16px; margin-bottom: 56px; }
+        .stat-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 12px; padding: 20px; }
+        .stat-card .stat-label { font-size: 13px; color: #5a6478; margin-bottom: 6px; }
+        .stat-card .stat-value { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+        .stat-card .stat-note { font-size: 12px; color: #5a6478; }
+        .stat-green .stat-value { color: #34d399; }
+        .stat-blue .stat-value { color: #60a5fa; }
+        .stat-pink .stat-value { color: #f472b6; }
+        .stat-yellow .stat-value { color: #fbbf24; }
+        .stat-purple .stat-value { color: #a78bfa; }
+        .stat-red .stat-value { color: #f87171; }
+
+        /* 流程图 */
+        .flow-section { margin-bottom: 56px; }
+        .flow-diagram { display: flex; align-items: stretch; gap: 0;
+            background: #111827; border-radius: 16px; border: 1px solid #1e293b; overflow: hidden; }
+        .flow-stage { flex: 1; padding: 28px 20px; position: relative; }
+        .flow-stage:not(:last-child)::after {
+            content: '→'; position: absolute; right: -14px; top: 50%;
+            transform: translateY(-50%); font-size: 28px; color: #4b5563; z-index: 2; }
+        .flow-stage:not(:last-child) { border-right: 1px solid #1e293b; }
+        .flow-stage .stage-label { font-size: 13px; font-weight: 600; letter-spacing: 1px;
+            margin-bottom: 12px; padding: 4px 12px; border-radius: 20px; display: inline-block; }
+        .flow-upstream .stage-label { background: rgba(16,185,129,0.15); color: #34d399; }
+        .flow-midstream .stage-label { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .flow-downstream .stage-label { background: rgba(244,114,182,0.15); color: #f472b6; }
+        .flow-end .stage-label { background: rgba(251,191,36,0.15); color: #fbbf24; }
+        .flow-stage .stage-title { font-size: 18px; font-weight: 600; color: #e0e6f0; margin-bottom: 8px; }
+        .flow-stage .stage-desc { font-size: 13px; color: #8892a8; }
+        .flow-stage .stage-products { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+        .flow-stage .product-tag { font-size: 12px; padding: 3px 10px; border-radius: 12px;
+            background: rgba(255,255,255,0.06); color: #a0aec0;
+            border: 1px solid rgba(255,255,255,0.08); }
+
+        /* 公司卡片 */
+        .companies-section { margin-bottom: 48px; }
+        .company-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; }
+        .company-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; transition: border-color 0.2s, transform 0.2s; }
+        .company-card:hover { border-color: #374151; transform: translateY(-2px); }
+        .company-card .card-header { display: flex; justify-content: space-between;
+            align-items: flex-start; margin-bottom: 14px; }
+        .company-card .card-name { font-size: 18px; font-weight: 600; color: #e0e6f0; }
+        .company-card .card-code { font-size: 13px; font-weight: 500; padding: 3px 10px;
+            border-radius: 8px; background: rgba(96,165,250,0.12); color: #60a5fa; white-space: nowrap; }
+        .company-card .card-position { font-size: 13px; padding: 3px 10px;
+            border-radius: 8px; display: inline-block; margin-bottom: 10px; }
+        .position-upstream { background: rgba(16,185,129,0.12); color: #34d399; }
+        .position-midstream { background: rgba(96,165,250,0.12); color: #60a5fa; }
+        .position-downstream { background: rgba(244,114,182,0.12); color: #f472b6; }
+        .company-card .card-desc { font-size: 14px; color: #8892a8; line-height: 1.7; margin-bottom: 12px; }
+        .company-card .card-data-row { display: flex; flex-wrap: wrap; gap: 8px 18px;
+            font-size: 13px; color: #c8d0e0; padding: 10px 14px;
+            background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 3px solid #374151; }
+        .company-card .card-data-row strong { color: #e0e6f0; margin-left: 2px; }
+        .rating-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+        .rating-card { border-radius: 10px; padding: 10px 12px; border: 1px solid; background: rgba(255,255,255,0.03); }
+        .rating-title { font-size: 12px; color: #8892a8; margin-bottom: 4px; }
+        .rating-level { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .rating-reason { font-size: 12px; color: #8892a8; line-height: 1.5; }
+        .rating-strong { border-color: rgba(52,211,153,0.35); background: rgba(16,185,129,0.08); }
+        .rating-strong .rating-level { color: #34d399; }
+        .rating-mid { border-color: rgba(96,165,250,0.35); background: rgba(96,165,250,0.08); }
+        .rating-mid .rating-level { color: #60a5fa; }
+        .rating-watch { border-color: rgba(251,191,36,0.35); background: rgba(251,191,36,0.08); }
+        .rating-watch .rating-level { color: #fbbf24; }
+        .rating-weak { border-color: rgba(248,113,113,0.35); background: rgba(248,113,113,0.06); }
+        .rating-weak .rating-level { color: #f87171; }
+
+        /* 华为关联强度 */
+        .relevance-badge { border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; border: 1px solid; }
+        .relevance-title { font-size: 11px; color: #8892a8; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .relevance-stars { font-size: 18px; font-weight: 700; letter-spacing: 2px; margin-bottom: 2px; }
+        .relevance-label { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+        .relevance-hint { font-size: 11px; opacity: 0.7; line-height: 1.4; }
+        .relevance-core { border-color: rgba(239,68,68,0.35); background: rgba(239,68,68,0.08); }
+        .relevance-core .relevance-stars { color: #f87171; }
+        .relevance-core .relevance-label { color: #f87171; }
+        .relevance-core .relevance-hint { color: #f87171; }
+        .relevance-deep { border-color: rgba(245,158,11,0.35); background: rgba(245,158,11,0.08); }
+        .relevance-deep .relevance-stars { color: #fbbf24; }
+        .relevance-deep .relevance-label { color: #fbbf24; }
+        .relevance-deep .relevance-hint { color: #fbbf24; }
+        .relevance-normal { border-color: rgba(96,165,250,0.35); background: rgba(96,165,250,0.08); }
+        .relevance-normal .relevance-stars { color: #60a5fa; }
+        .relevance-normal .relevance-label { color: #60a5fa; }
+        .relevance-normal .relevance-hint { color: #60a5fa; }
+        .relevance-theme { border-color: rgba(139,92,246,0.35); background: rgba(139,92,246,0.08); }
+        .relevance-theme .relevance-stars { color: #a78bfa; }
+        .relevance-theme .relevance-label { color: #a78bfa; }
+        .relevance-theme .relevance-hint { color: #a78bfa; }
+        .relevance-none { border-color: rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); }
+        .relevance-none .relevance-stars { color: #5a6478; }
+        .relevance-none .relevance-label { color: #5a6478; }
+        .relevance-none .relevance-hint { color: #5a6478; }
+        .rating-guide { margin-bottom: 56px; }
+
+        /* 关系图 */
+        .relation-section { margin-bottom: 56px; }
+        .relation-diagram { background: #111827; border: 1px solid #1e293b;
+            border-radius: 16px; padding: 32px; overflow-x: auto; }
+        .relation-row { display: flex; align-items: center; margin-bottom: 16px; }
+        .relation-row:last-child { margin-bottom: 0; }
+        .relation-label { min-width: 85px; font-size: 14px; font-weight: 600;
+            color: #8892a8; flex-shrink: 0; }
+        .relation-items { display: flex; flex-wrap: wrap; gap: 10px; }
+        .relation-node { padding: 8px 16px; border-radius: 10px; font-size: 14px;
+            font-weight: 500; border: 1px solid; }
+        .relation-node.upstream { background: rgba(16,185,129,0.08);
+            border-color: rgba(16,185,129,0.25); color: #34d399; }
+        .relation-node.midstream { background: rgba(96,165,250,0.08);
+            border-color: rgba(96,165,250,0.25); color: #60a5fa; }
+        .relation-node.downstream { background: rgba(244,114,182,0.08);
+            border-color: rgba(244,114,182,0.25); color: #f472b6; }
+        .relation-node.end { background: rgba(251,191,36,0.08);
+            border-color: rgba(251,191,36,0.25); color: #fbbf24; }
+        .relation-arrow { text-align: center; color: #4b5563; font-size: 20px; padding: 4px 0; }
+        .relation-node .node-code { font-size: 11px; opacity: 0.7; margin-left: 6px; }
+
+        /* 核心关注 */
+        .focus-section { margin-bottom: 40px; }
+        .focus-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .focus-card { background: linear-gradient(135deg, #111827, #1a2332);
+            border: 1px solid #1e293b; border-radius: 14px; padding: 24px;
+            position: relative; overflow: hidden; }
+        .focus-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .focus-card:nth-child(1)::before { background: linear-gradient(90deg, #34d399, #10b981); }
+        .focus-card:nth-child(2)::before { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+        .focus-card:nth-child(3)::before { background: linear-gradient(90deg, #a78bfa, #8b5cf6); }
+        .focus-card:nth-child(4)::before { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+        .focus-card:nth-child(5)::before { background: linear-gradient(90deg, #f472b6, #ec4899); }
+        .focus-card:nth-child(6)::before { background: linear-gradient(90deg, #f87171, #ef4444); }
+        .focus-card .focus-rank { font-size: 48px; font-weight: 800;
+            color: rgba(255,255,255,0.04); position: absolute; top: 8px; right: 16px; }
+        .focus-card .focus-name { font-size: 18px; font-weight: 600; color: #e0e6f0; margin-bottom: 4px; }
+        .focus-card .focus-code { font-size: 13px; color: #60a5fa; margin-bottom: 10px; }
+        .focus-card .focus-reason { font-size: 14px; color: #8892a8; line-height: 1.7; }
+
+        /* 逻辑卡片 */
+        .logic-section { margin-bottom: 56px; }
+        .logic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+        .logic-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; }
+        .logic-card .logic-icon { font-size: 28px; margin-bottom: 12px; }
+        .logic-card .logic-title { font-size: 17px; font-weight: 600; color: #e0e6f0; margin-bottom: 8px; }
+        .logic-card .logic-desc { font-size: 14px; color: #8892a8; line-height: 1.7; }
+        .logic-card .logic-tag { display: inline-block; font-size: 12px; padding: 2px 10px;
+            border-radius: 8px; margin-top: 10px; margin-right: 6px; }
+        .tag-green { background: rgba(16,185,129,0.12); color: #34d399; }
+        .tag-blue { background: rgba(96,165,250,0.12); color: #60a5fa; }
+        .tag-pink { background: rgba(244,114,182,0.12); color: #f472b6; }
+        .tag-yellow { background: rgba(251,191,36,0.12); color: #fbbf24; }
+        .tag-red { background: rgba(248,113,113,0.12); color: #f87171; }
+
+        /* 表格 */
+        .table-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid #1e293b; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9em; min-width: 500px; }
+        thead th { background: #111827; color: #8892a8; font-weight: 500;
+            padding: 12px 14px; text-align: center; white-space: nowrap;
+            border-bottom: 2px solid #1e293b; position: sticky; top: 0; }
+        tbody td { padding: 10px 14px; border-bottom: 1px solid #1e293b; text-align: center; }
+        tbody tr:hover { background: rgba(255,255,255,0.03); }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            .header h1 { font-size: 26px; }
+            .flow-diagram { flex-direction: column; }
+            .flow-stage:not(:last-child)::after { content: '↓'; right: auto; bottom: -16px; top: auto;
+                left: 50%; transform: translateX(-50%); }
+            .flow-stage:not(:last-child) { border-right: none; border-bottom: 1px solid #1e293b; }
+            .company-grid { grid-template-columns: 1fr; }
+            .rating-row { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .focus-cards { grid-template-columns: 1fr; }
+            .logic-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>华为AI产业链</h1>
+            <div class="subtitle">A股相关公司清单与产业链关系 · 覆盖AI芯片、昇腾生态、AI服务器、光模块、先进封装、存储芯片、AI应用七大细分领域</div>
+            <div class="update-time">数据更新时间：2026-06-24 21:02 | 数据来源：东方财富</div>
+        </div>
+
+        <!-- 行业供需概览 -->
+        <div class="overview-section">
+            <div class="section-title">行业供需概览</div>
+            <div class="stats-grid"><div class="stat-card stat-green">
+        <div class="stat-label">全球AI算力市场</div>
+        <div class="stat-value">3.5万亿$</div>
+        <div class="stat-note">2030年全球AI算力市场规模预测，年复合增速35%+。AI芯片/服务器/光模块是产业链价值最集中的环节</div>
+    </div>
+    <div class="stat-card stat-blue">
+        <div class="stat-label">华为昇腾市占率</div>
+        <div class="stat-value">快速提升</div>
+        <div class="stat-note">昇腾910B性能对标A100，国产替代窗口打开。公开研报口径：2026年国内AI芯片市场华为份额持续扩大</div>
+    </div>
+    <div class="stat-card stat-pink">
+        <div class="stat-label">中国AI服务器出货</div>
+        <div class="stat-value">+60%YoY</div>
+        <div class="stat-note">大模型训练+推理需求驱动AI服务器高速增长，液冷渗透率快速提升</div>
+    </div>
+    <div class="stat-card stat-yellow">
+        <div class="stat-label">800G光模块出货</div>
+        <div class="stat-value">爆发增长</div>
+        <div class="stat-note">AI数据中心升级驱动800G光模块需求井喷，1.6T光模块2026年开启放量</div>
+    </div>
+    <div class="stat-card stat-purple">
+        <div class="stat-label">机构核心判断</div>
+        <div class="stat-value">国产替代加速</div>
+        <div class="stat-note">华为AI产业链进入"国产替代+全球需求共振"双轮驱动，从芯片到应用全线受益</div>
+    </div></div>
+        </div>
+
+        <!-- 实时行情概览 -->
+        <div class="overview-section">
+            <div class="section-title">今日实时行情概览</div>
+            <div class="stats-grid"><div class="stat-card stat-green">
+        <div class="stat-label">今日平均涨跌</div>
+        <div class="stat-value">+2.03%</div>
+        <div class="stat-note">覆盖 28 只核心标的</div>
+    </div>
+    <div class="stat-card stat-blue">
+        <div class="stat-label">上涨 / 下跌家数</div>
+        <div class="stat-value">21 / 7</div>
+        <div class="stat-note">上涨占比 75%</div>
+    </div>
+    <div class="stat-card stat-pink">
+        <div class="stat-label">总成交额</div>
+        <div class="stat-value">2755.25亿</div>
+        <div class="stat-note">板块资金活跃度</div>
+    </div>
+    <div class="stat-card stat-yellow">
+        <div class="stat-label">总市值</div>
+        <div class="stat-value">9.71万亿</div>
+        <div class="stat-note">七大细分领域合计</div>
+    </div>
+    <div class="stat-card stat-purple">
+        <div class="stat-label">强势股TOP1</div>
+        <div class="stat-value">兆易创新 +10.0%</div>
+        <div class="stat-note">今日涨幅最大标的</div>
+    </div></div>
+        </div>
+
+        <!-- 核心驱动逻辑 -->
+        <div class="logic-section">
+        <div class="section-title">核心驱动逻辑</div>
+        <div class="logic-grid">
+            <div class="logic-card">
+                <div class="logic-icon">🧠</div>
+                <div class="logic-title">需求端：大模型竞赛+AI应用爆发+国产替代三重驱动</div>
+                <div class="logic-desc">全球科技巨头大模型训练推理需求持续爆发，OpenAI/谷歌/字节/阿里等千卡→万卡集群加速部署。国内行业AI应用加速渗透，端侧AI终端放量。华为全面智能化战略推动昇腾算力集群出货量激增，公开研报口径2026年昇腾出货量有望翻倍。</div>
+                <span class="logic-tag tag-green">大模型竞赛</span>
+                <span class="logic-tag tag-blue">AI应用渗透</span>
+                <span class="logic-tag tag-pink">国产替代</span>
+            </div>
+            <div class="logic-card">
+                <div class="logic-icon">🔧</div>
+                <div class="logic-title">供给端：国产AI芯片突破+先进封装破局+产能扩张</div>
+                <div class="logic-desc">寒武纪思元590性能对标昇腾910/英伟达A100，海光DCU兼容ROCm生态；华为昇腾910B+CANN生态迅速完善。中芯国际先进制程持续突破+通富微电先进封装产能扩张，国内AI芯片制造体系逐步成型。光模块/PCB/载板产能持续扩张。</div>
+                <span class="logic-tag tag-green">昇腾910B</span>
+                <span class="logic-tag tag-blue">Chiplet封装</span>
+                <span class="logic-tag tag-pink">产能扩张</span>
+            </div>
+            <div class="logic-card">
+                <div class="logic-icon">📊</div>
+                <div class="logic-title">利润端：量价齐升+估值重估，AI产业链戴维斯双击</div>
+                <div class="logic-desc">AI服务器/光模块/存储/PCB等环节订单饱满价格稳健，头部企业营收与净利持续高速增长。当前A股AI产业链估值消化至历史均值以下，业绩高增+国产替代确定性带来估值重塑。2026年AI算力产业链公司盈利增长确定性高。</div>
+                <span class="logic-tag tag-green">量价齐升</span>
+                <span class="logic-tag tag-blue">业绩高增</span>
+                <span class="logic-tag tag-pink">戴维斯双击</span>
+            </div>
+        </div>
+    </div>
+
+        <!-- 产业链全景 -->
+        <div class="flow-section">
+        <div class="section-title">产业链全景</div>
+        <div class="flow-diagram">
+            <div class="flow-stage flow-upstream">
+                <span class="stage-label">上游</span>
+                <div class="stage-title">AI芯片与算力底座</div>
+                <div class="stage-desc">AI训练/推理芯片（GPU/ASIC）+ CPU + 先进晶圆制造。芯片性能与制造能力决定整个产业链的算力天花板，是国产替代最关键环节。</div>
+                <div class="stage-products">
+                    <span class="product-tag">AI推理芯片</span>
+                    <span class="product-tag">GPU/ASIC</span>
+                    <span class="product-tag">服务器CPU</span>
+                    <span class="product-tag">先进制程代工</span>
+                </div>
+            </div>
+            <div class="flow-stage flow-midstream">
+                <span class="stage-label">中游</span>
+                <div class="stage-title">AI服务器+互联+封装</div>
+                <div class="stage-desc">AI服务器整机（昇腾/英伟达双生态）+ 光模块高速互联 + 先进封装（2.5D/3D/Chiplet）+ 高端PCB/载板。是算力基础设施落地的核心环节。</div>
+                <div class="stage-products">
+                    <span class="product-tag">昇腾服务器</span>
+                    <span class="product-tag">AI通用服务器</span>
+                    <span class="product-tag">800G光模块</span>
+                    <span class="product-tag">先进封装</span>
+                    <span class="product-tag">高端PCB</span>
+                    <span class="product-tag">HBM存储</span>
+                </div>
+            </div>
+            <div class="flow-stage flow-downstream">
+                <span class="stage-label">下游</span>
+                <div class="stage-title">AI应用与行业落地</div>
+                <div class="stage-desc">大模型+行业AI应用（教育/医疗/办公/金融/安防等），将算力转化为生产力。端侧AI终端（AIPC/AI手机/具身智能）放量打开新空间。</div>
+                <div class="stage-products">
+                    <span class="product-tag">大模型</span>
+                    <span class="product-tag">AI办公</span>
+                    <span class="product-tag">AI+教育</span>
+                    <span class="product-tag">AI+金融</span>
+                    <span class="product-tag">端侧AI</span>
+                </div>
+            </div>
+            <div class="flow-stage flow-end">
+                <span class="stage-label">终端</span>
+                <div class="stage-title">应用场景</div>
+                <div class="stage-desc">云服务商AI算力租赁、企业私有化AI部署、AIPC与AI手机的消费端落地、自动驾驶、具身智能等广泛终端场景。</div>
+                <div class="stage-products">
+                    <span class="product-tag">智算中心</span>
+                    <span class="product-tag">企业AI部署</span>
+                    <span class="product-tag">AIPC</span>
+                    <span class="product-tag">自动驾驶</span>
+                    <span class="product-tag">具身智能</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- 买入评级说明 -->
+        <div class="rating-guide">
+        <div class="section-title">买入评级说明</div>
+        <div class="logic-grid">
+            <div class="logic-card">
+                <div class="logic-title">★★★ ★★☆ ★☆☆ ☆☆☆</div>
+                <div class="logic-desc">高关注 → 关注 → 观望 → 暂缓。基于成交额、市值、估值、涨跌幅综合打分排序，供快速扫描参考。</div>
+                <span class="logic-tag tag-green">★★★</span><span class="logic-tag tag-blue">★★☆</span><span class="logic-tag tag-yellow">★☆☆</span><span class="logic-tag tag-red">☆☆☆</span>
+            </div>
+            <div class="logic-card">
+                <div class="logic-title">左侧 / 右侧</div>
+                <div class="logic-desc">左侧偏低吸（看回调幅度+估值），右侧偏趋势确认（看涨跌幅+成交活跃度）。两侧独立评分，可能得出不同星级。</div>
+                <span class="logic-tag tag-green">低吸</span><span class="logic-tag tag-blue">趋势</span>
+            </div>
+        </div>
+    </div>
+
+        <!-- 华为关联强度说明（仅 hwai） -->
+        <div class="rating-guide">
+        <div class="section-title">华为AI关联强度说明</div>
+        <div class="logic-grid">
+            <div class="logic-card">
+                <div class="logic-title">★★★★★ 核心绑定</div>
+                <div class="logic-desc">华为AI生态战略级合作伙伴，业务/收入深度绑定，是华为AI产业链不可或缺的环节。</div>
+                <span class="logic-tag tag-red">神州数码·拓维·软通·讯飞·中芯</span>
+            </div>
+            <div class="logic-card">
+                <div class="logic-title">★★★★☆ 深度合作</div>
+                <div class="logic-desc">华为金牌/优选级合作伙伴，有明确的AI产品/项目合作，受益确定性高。</div>
+                <span class="logic-tag tag-yellow">紫光·深南·光迅·通富·云从等</span>
+            </div>
+            <div class="logic-card">
+                <div class="logic-title">★★★☆☆ 一般合作</div>
+                <div class="logic-desc">华为生态间接/部分关联，有协同效应但非核心绑定，受益程度适中。</div>
+                <span class="logic-tag tag-blue">海光·浪潮·曙光·旭创·工业富联等</span>
+            </div>
+            <div class="logic-card">
+                <div class="logic-title">★★☆☆☆ 主题关联</div>
+                <div class="logic-desc">受益华为AI生态扩张带来的行业Beta，但直接合作体量有限。</div>
+                <span class="logic-tag tag-purple">寒武纪·龙芯·新易盛·兆易等</span>
+            </div>
+        </div>
+    </div>
+
+        <!-- 公司清单 -->
+        <h2 class="section-title" style="margin-top:56px">核心标的一览（按细分领域）</h2>
+        <div class="companies-section">
+            <div class="section-title">AI芯片与算力</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">海光信息</div>
+                    <div class="card-code">688041</div>
+                </div>
+                <span class="card-position position-upstream">AI芯片与算力</span>
+                <div class="card-desc">国产x86服务器CPU龙头，海光DCU协处理器兼容ROCm生态，与华为昇腾互补。信创+AI双轮驱动，CPU+DCU双平台布局国内稀缺。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>337.10</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+6.34%</span></span>
+                    <span>成交 <strong>149.62亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">287.4</span></strong></span>
+                    <span>市值 <strong>7835.34亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-normal">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★★☆☆</div>
+        <div class="relevance-label">一般合作</div>
+        <div class="relevance-hint">间接关联，有协同效应</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 短线涨幅偏大</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 强势但需防追高</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">龙芯中科</div>
+                    <div class="card-code">688047</div>
+                </div>
+                <span class="card-position position-upstream">AI芯片与算力</span>
+                <div class="card-desc">国产自主指令集CPU龙头，LoongArch架构完全自主可控。AI加速指令集集成推进，信创+AI双重受益。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>146.51</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+3.11%</span></span>
+                    <span>成交 <strong>15.27亿</strong></span>
+                    <span>PE <strong><span style="color:#8892a8">-140.6</span></strong></span>
+                    <span>市值 <strong>587.51亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-theme">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★☆☆☆</div>
+        <div class="relevance-label">主题关联</div>
+        <div class="relevance-hint">受益生态扩张，直接合作有限</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 利润为负</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 利润为负</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">寒武纪</div>
+                    <div class="card-code">688256</div>
+                </div>
+                <span class="card-position position-upstream">AI芯片与算力</span>
+                <div class="card-desc">国产AI芯片龙头，思元系列云端智能芯片性能对标英伟达A100/H100，已适配华为昇腾生态。ASIC路线算力功耗比突出，大模型训练推理需求爆发核心标的。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>1453.00</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+2.83%</span></span>
+                    <span>成交 <strong>201.85亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">336.0</span></strong></span>
+                    <span>市值 <strong>9129.10亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-theme">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★☆☆☆</div>
+        <div class="relevance-label">主题关联</div>
+        <div class="relevance-hint">受益生态扩张，直接合作有限</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">景嘉微</div>
+                    <div class="card-code">300474</div>
+                </div>
+                <span class="card-position position-upstream">AI芯片与算力</span>
+                <div class="card-desc">国产GPU龙头，JM系列图形GPU已在党政/军工批量应用。AI算力GPU研发推进中，国产GPU替代核心标的。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>55.05</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.55%</span></span>
+                    <span>成交 <strong>5.39亿</strong></span>
+                    <span>PE <strong><span style="color:#8892a8">-173.5</span></strong></span>
+                    <span>市值 <strong>287.70亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-normal">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★★☆☆</div>
+        <div class="relevance-label">一般合作</div>
+        <div class="relevance-hint">间接关联，有协同效应</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">流动性尚可 / 利润为负 / 涨幅温和</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 利润为负 / 温和转强</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">华为昇腾生态</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">中芯国际</div>
+                    <div class="card-code">688981</div>
+                </div>
+                <span class="card-position position-upstream">华为昇腾生态</span>
+                <div class="card-desc">中国大陆规模最大、技术最先进的晶圆代工厂，华为昇腾芯片主要代工方之一。先进制程突破+国产替代加速，AI芯片制造核心底座。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>151.53</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+6.94%</span></span>
+                    <span>成交 <strong>211.61亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">257.1</span></strong></span>
+                    <span>市值 <strong>1.30万亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-core">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★★★★</div>
+        <div class="relevance-label">核心绑定</div>
+        <div class="relevance-hint">战略级合作，业务深度耦合</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 短线涨幅偏大</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 强势但需防追高</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">神州数码</div>
+                    <div class="card-code">000034</div>
+                </div>
+                <span class="card-position position-upstream">华为昇腾生态</span>
+                <div class="card-desc">华为昇腾核心整机合作伙伴，神州鲲泰系列AI服务器基于昇腾910B打造，华为企业业务最大分销商之一。华为全面智能化战略核心受益标的。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>25.40</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+1.03%</span></span>
+                    <span>成交 <strong>7.54亿</strong></span>
+                    <span>PE <strong>47.7</strong></span>
+                    <span>市值 <strong>258.25亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-core">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★★★★</div>
+        <div class="relevance-label">核心绑定</div>
+        <div class="relevance-hint">战略级合作，业务深度耦合</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 估值偏高但可跟踪 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">流动性尚可 / 估值偏高但可跟踪 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">四川长虹</div>
+                    <div class="card-code">600839</div>
+                </div>
+                <span class="card-position position-upstream">华为昇腾生态</span>
+                <div class="card-desc">子公司虹信软件与华为合作昇腾AI服务器生产。传统家电企业转型AI+云计算基础设施，估值修复空间较大。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>6.68</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-1.76%</span></span>
+                    <span>成交 <strong>4.72亿</strong></span>
+                    <span>PE <strong>41.6</strong></span>
+                    <span>市值 <strong>308.37亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-deep">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★★★☆</div>
+        <div class="relevance-label">深度合作</div>
+        <div class="relevance-hint">金牌/优选伙伴，项目明确</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">流动性尚可 / 估值偏高但可跟踪 / 低吸区间</div>
+    </div><div class="rating-card rating-weak">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">流动性尚可 / 估值偏高但可跟踪 / 尚未转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">拓维信息</div>
+                    <div class="card-code">002261</div>
+                </div>
+                <span class="card-position position-upstream">华为昇腾生态</span>
+                <div class="card-desc">华为昇腾首批整机合作伙伴，兆瀚系列AI服务器+AI开发平台全国产方案。深耕教育/交通/制造行业AI应用，华为云战略合作。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>29.24</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-2.08%</span></span>
+                    <span>成交 <strong>16.21亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">615.6</span></strong></span>
+                    <span>市值 <strong>368.41亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-core">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★★★★</div>
+        <div class="relevance-label">核心绑定</div>
+        <div class="relevance-hint">战略级合作，业务深度耦合</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 回调较深</div>
+    </div><div class="rating-card rating-weak">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">成交活跃 / 尚未转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">软通动力</div>
+                    <div class="card-code">301236</div>
+                </div>
+                <span class="card-position position-upstream">华为昇腾生态</span>
+                <div class="card-desc">华为第一大IT服务商，深度参与华为鸿蒙+欧拉+昇腾三大生态。收购同方计算机后补齐AI服务器制造，华为全栈生态核心合作伙伴。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>38.18</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-5.21%</span></span>
+                    <span>成交 <strong>13.86亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">733.1</span></strong></span>
+                    <span>市值 <strong>395.24亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-core">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★★★★</div>
+        <div class="relevance-label">核心绑定</div>
+        <div class="relevance-hint">战略级合作，业务深度耦合</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 回调较深</div>
+    </div><div class="rating-card rating-weak">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">成交活跃 / 尚未转强</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">AI服务器</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">工业富联</div>
+                    <div class="card-code">601138</div>
+                </div>
+                <span class="card-position position-midstream">AI服务器</span>
+                <div class="card-desc">全球AI服务器ODM龙头，英伟达H100/B200主力代工厂。液冷+高速连接器双驱动，AI服务器订单持续爆满，盈利能力确定性高。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>76.78</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+3.62%</span></span>
+                    <span>成交 <strong>162.16亿</strong></span>
+                    <span>PE <strong>37.5</strong></span>
+                    <span>市值 <strong>1.52万亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-normal">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★★☆☆</div>
+        <div class="relevance-label">一般合作</div>
+        <div class="relevance-hint">间接关联，有协同效应</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值偏高但可跟踪</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值偏高但可跟踪</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">紫光股份</div>
+                    <div class="card-code">000938</div>
+                </div>
+                <span class="card-position position-midstream">AI服务器</span>
+                <div class="card-desc">旗下新华三为国内ICT基础设施龙头，AI交换机+AI服务器+算力网络全栈布局。华为核心产业链伙伴，AI网络设备市占率领先。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>27.66</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+2.79%</span></span>
+                    <span>成交 <strong>31.61亿</strong></span>
+                    <span>PE <strong>37.2</strong></span>
+                    <span>市值 <strong>791.10亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-deep">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★★★☆</div>
+        <div class="relevance-label">深度合作</div>
+        <div class="relevance-hint">金牌/优选伙伴，项目明确</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值偏高但可跟踪</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值偏高但可跟踪</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">中科曙光</div>
+                    <div class="card-code">603019</div>
+                </div>
+                <span class="card-position position-midstream">AI服务器</span>
+                <div class="card-desc">国产高端计算平台龙头，承建多地国家级超算中心。曙光AI服务器+液冷+算力调度全栈布局，根植中科院技术体系。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>88.93</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+2.15%</span></span>
+                    <span>成交 <strong>45.29亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">58.7</span></strong></span>
+                    <span>市值 <strong>1301.15亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-normal">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★★☆☆</div>
+        <div class="relevance-label">一般合作</div>
+        <div class="relevance-hint">间接关联，有协同效应</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值偏高但可跟踪</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值偏高但可跟踪</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">浪潮信息</div>
+                    <div class="card-code">000977</div>
+                </div>
+                <span class="card-position position-midstream">AI服务器</span>
+                <div class="card-desc">全球AI服务器出货量前三，JDM模式深度绑定大客户。AI算力需求爆发推动AI服务器订单高速增长，液冷技术行业领先。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>64.80</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+1.25%</span></span>
+                    <span>成交 <strong>35.19亿</strong></span>
+                    <span>PE <strong>37.2</strong></span>
+                    <span>市值 <strong>951.57亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-normal">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★★☆☆</div>
+        <div class="relevance-label">一般合作</div>
+        <div class="relevance-hint">间接关联，有协同效应</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值偏高但可跟踪</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值偏高但可跟踪</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">光模块与高速连接</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">天孚通信</div>
+                    <div class="card-code">300394</div>
+                </div>
+                <span class="card-position position-midstream">光模块与高速连接</span>
+                <div class="card-desc">光模块核心器件全球龙头，光引擎+光器件产业链地位独特。800G/1.6T产品持续放量，AI数据中心高速互联受益弹性突出。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>325.28</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+4.57%</span></span>
+                    <span>成交 <strong>141.42亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">163.4</span></strong></span>
+                    <span>市值 <strong>3548.24亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-theme">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★☆☆☆</div>
+        <div class="relevance-label">主题关联</div>
+        <div class="relevance-hint">受益生态扩张，直接合作有限</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">新易盛</div>
+                    <div class="card-code">300502</div>
+                </div>
+                <span class="card-position position-midstream">光模块与高速连接</span>
+                <div class="card-desc">中高速光模块核心供应商，800G光模块批量出货，1.6T光模块研发布局领先。深度受益AI数据中心光互联升级。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>555.30</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.60%</span></span>
+                    <span>成交 <strong>226.67亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">72.1</span></strong></span>
+                    <span>市值 <strong>7742.31亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-theme">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★☆☆☆</div>
+        <div class="relevance-label">主题关联</div>
+        <div class="relevance-hint">受益生态扩张，直接合作有限</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">中际旭创</div>
+                    <div class="card-code">300308</div>
+                </div>
+                <span class="card-position position-midstream">光模块与高速连接</span>
+                <div class="card-desc">全球光模块龙头，800G光模块出货量全球第一，1.6T光模块率先量产，深度供货英伟达/华为数据中心。高速光互联核心硬件。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>1312.18</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.17%</span></span>
+                    <span>成交 <strong>344.37亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">97.9</span></strong></span>
+                    <span>市值 <strong>1.46万亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-normal">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★★☆☆</div>
+        <div class="relevance-label">一般合作</div>
+        <div class="relevance-hint">间接关联，有协同效应</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">光迅科技</div>
+                    <div class="card-code">002281</div>
+                </div>
+                <span class="card-position position-midstream">光模块与高速连接</span>
+                <div class="card-desc">光器件+光模块央企龙头，华为金牌供应商。25G/100G/400G/800G光模块全系列覆盖，国产高端光芯片突破预期。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>266.36</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-0.20%</span></span>
+                    <span>成交 <strong>112.28亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">212.8</span></strong></span>
+                    <span>市值 <strong>2204.30亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-deep">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★★★☆</div>
+        <div class="relevance-label">深度合作</div>
+        <div class="relevance-hint">金牌/优选伙伴，项目明确</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 低吸区间</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 尚未转强</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">先进封装与PCB</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">通富微电</div>
+                    <div class="card-code">002156</div>
+                </div>
+                <span class="card-position position-midstream">先进封装与PCB</span>
+                <div class="card-desc">全球先进封装龙头，与AMD深度绑定，布局2.5D/3D先进封装。华为AI芯片先进封装潜在合作伙伴，Chiplet受益弹性标的。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>74.64</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+9.09%</span></span>
+                    <span>成交 <strong>145.57亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">78.3</span></strong></span>
+                    <span>市值 <strong>1132.73亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-deep">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★★★☆</div>
+        <div class="relevance-label">深度合作</div>
+        <div class="relevance-hint">金牌/优选伙伴，项目明确</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 短线涨幅偏大</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">兴森科技</div>
+                    <div class="card-code">002436</div>
+                </div>
+                <span class="card-position position-midstream">先进封装与PCB</span>
+                <div class="card-desc">IC载板+PCB双线布局，ABF载板国产替代先行者。FC-BGA载板产能建设推进中，先进封装载板深度受益AI芯片需求。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>50.23</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+3.57%</span></span>
+                    <span>成交 <strong>82.22亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">591.6</span></strong></span>
+                    <span>市值 <strong>853.75亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-normal">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★★☆☆</div>
+        <div class="relevance-label">一般合作</div>
+        <div class="relevance-hint">间接关联，有协同效应</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">沪电股份</div>
+                    <div class="card-code">002463</div>
+                </div>
+                <span class="card-position position-midstream">先进封装与PCB</span>
+                <div class="card-desc">高多层PCB行业龙头，AI服务器/交换机用高多层板核心供应商。深度受益AI基础设施扩张，产品结构持续高端化。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>143.35</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+3.50%</span></span>
+                    <span>成交 <strong>100.00亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">64.1</span></strong></span>
+                    <span>市值 <strong>2758.58亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-normal">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★★☆☆</div>
+        <div class="relevance-label">一般合作</div>
+        <div class="relevance-hint">间接关联，有协同效应</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">深南电路</div>
+                    <div class="card-code">002916</div>
+                </div>
+                <span class="card-position position-midstream">先进封装与PCB</span>
+                <div class="card-desc">国内PCB龙头，AI服务器ABF载板国产替代先行者，深度配套昇腾AI服务器。高端封装基板产能持续扩张，封装基板占比持续提升。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>431.90</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+1.38%</span></span>
+                    <span>成交 <strong>55.80亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">80.9</span></strong></span>
+                    <span>市值 <strong>2941.96亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-deep">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★★★☆</div>
+        <div class="relevance-label">深度合作</div>
+        <div class="relevance-hint">金牌/优选伙伴，项目明确</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 温和转强</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">存储芯片</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">兆易创新</div>
+                    <div class="card-code">603986</div>
+                </div>
+                <span class="card-position position-midstream">存储芯片</span>
+                <div class="card-desc">国产存储+MCU双龙头，NOR Flash全球第三。AI终端设备存储需求+端侧AI推理放量，国产存储龙头受益确定性高。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>705.09</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+10.00%</span></span>
+                    <span>成交 <strong>399.45亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">172.1</span></strong></span>
+                    <span>市值 <strong>4947.97亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-theme">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★☆☆☆</div>
+        <div class="relevance-label">主题关联</div>
+        <div class="relevance-hint">受益生态扩张，直接合作有限</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 短线涨幅偏大</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">江波龙</div>
+                    <div class="card-code">301308</div>
+                </div>
+                <span class="card-position position-midstream">存储芯片</span>
+                <div class="card-desc">国产存储模组龙头，雷克沙品牌布局端侧AI。企业级SSD+服务器内存条受益AI基础设施建设，存储涨价周期弹性标的。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>619.98</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+4.02%</span></span>
+                    <span>成交 <strong>123.72亿</strong></span>
+                    <span>PE <strong>48.2</strong></span>
+                    <span>市值 <strong>2622.89亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-theme">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★☆☆☆</div>
+        <div class="relevance-label">主题关联</div>
+        <div class="relevance-hint">受益生态扩张，直接合作有限</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值偏高但可跟踪</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值偏高但可跟踪</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">北京君正</div>
+                    <div class="card-code">300223</div>
+                </div>
+                <span class="card-position position-midstream">存储芯片</span>
+                <div class="card-desc">国产存储芯片龙头之一，DRAM+SRAM+Flash全品类布局。车规级+AI边缘计算存储需求持续增长，并购芯成形成协同。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>197.80</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+1.96%</span></span>
+                    <span>成交 <strong>85.43亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">154.0</span></strong></span>
+                    <span>市值 <strong>956.69亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-theme">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★☆☆☆</div>
+        <div class="relevance-label">主题关联</div>
+        <div class="relevance-hint">受益生态扩张，直接合作有限</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 温和转强</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">AI应用</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">科大讯飞</div>
+                    <div class="card-code">002230</div>
+                </div>
+                <span class="card-position position-downstream">AI应用</span>
+                <div class="card-desc">中国AI第一股，星火大模型国内综合能力前三。教育/医疗/办公/语音等AI应用场景最丰富，华为昇腾生态核心AI应用伙伴。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>42.60</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+0.83%</span></span>
+                    <span>成交 <strong>17.76亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">118.6</span></strong></span>
+                    <span>市值 <strong>1023.29亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-core">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★★★★</div>
+        <div class="relevance-label">核心绑定</div>
+        <div class="relevance-hint">战略级合作，业务深度耦合</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 涨幅温和</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 温和转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">金山办公</div>
+                    <div class="card-code">688111</div>
+                </div>
+                <span class="card-position position-downstream">AI应用</span>
+                <div class="card-desc">WPS AI办公入口，A股最大AI应用平台之一。月活超6亿，AI文档/表格/演示全功能加速渗透，AI应用商业变现核心标的。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>215.17</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-0.12%</span></span>
+                    <span>成交 <strong>13.66亿</strong></span>
+                    <span>PE <strong>27.5</strong></span>
+                    <span>市值 <strong>998.42亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-deep">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★★★☆</div>
+        <div class="relevance-label">深度合作</div>
+        <div class="relevance-hint">金牌/优选伙伴，项目明确</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-strong">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">云从科技</div>
+                    <div class="card-code">688327</div>
+                </div>
+                <span class="card-position position-downstream">AI应用</span>
+                <div class="card-desc">人机协同AI龙头，大模型工业质检/金融/安防多场景应用。华为昇腾优选级合作伙伴，AI应用场景商业化提速。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>13.65</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-1.23%</span></span>
+                    <span>成交 <strong>3.65亿</strong></span>
+                    <span>PE <strong><span style="color:#8892a8">-31.9</span></strong></span>
+                    <span>市值 <strong>141.96亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-deep">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★★★☆</div>
+        <div class="relevance-label">深度合作</div>
+        <div class="relevance-hint">金牌/优选伙伴，项目明确</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 利润为负 / 低吸区间</div>
+    </div><div class="rating-card rating-weak">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">流动性尚可 / 利润为负 / 尚未转强</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">拓尔思</div>
+                    <div class="card-code">300229</div>
+                </div>
+                <span class="card-position position-downstream">AI应用</span>
+                <div class="card-desc">AI+大数据政务龙头，深度参与大模型行业应用。政务大数据+融媒体+金融领域AI应用商业化加速，华为鲲鹏/昇腾双认证。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>15.19</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-2.88%</span></span>
+                    <span>成交 <strong>2.93亿</strong></span>
+                    <span>PE <strong><span style="color:#8892a8">-38.1</span></strong></span>
+                    <span>市值 <strong>132.70亿</strong></span>
+                </div>
+                <div class="relevance-badge relevance-deep">
+        <div class="relevance-title">华为关联强度</div>
+        <div class="relevance-stars">★★★★☆</div>
+        <div class="relevance-label">深度合作</div>
+        <div class="relevance-hint">金牌/优选伙伴，项目明确</div>
+    </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">利润为负 / 回调较深</div>
+    </div><div class="rating-card rating-weak">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">利润为负 / 尚未转强</div>
+    </div></div>
+            </div></div>
+        </div>
+
+        <!-- 板块涨跌统计 -->
+        <div class="companies-section">
+            <div class="section-title">各细分板块涨跌统计</div>
+            <div class="table-wrapper">
+                <table><thead><tr>
+                    <th>细分板块</th><th>标的数</th><th>平均涨跌幅</th><th>上涨</th><th>下跌</th><th>总成交额</th><th>总市值</th>
+                </tr></thead><tbody><tr>
+            <td style="text-align:left;font-weight:500">AI芯片与算力</td>
+            <td>4</td>
+            <td><span style="display:inline-block;width:12.83px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+3.21%</td>
+            <td style="color:#34d399">4</td>
+            <td style="color:#f87171">0</td>
+            <td>372.12亿</td>
+            <td>1.78万亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">华为昇腾生态</td>
+            <td>5</td>
+            <td><span style="display:inline-block;width:0.8639999999999993px;height:4px;border-radius:2px;background:#f87171;margin-right:6px;vertical-align:middle"></span>-0.22%</td>
+            <td style="color:#34d399">2</td>
+            <td style="color:#f87171">3</td>
+            <td>253.94亿</td>
+            <td>1.43万亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">AI服务器</td>
+            <td>4</td>
+            <td><span style="display:inline-block;width:9.81px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+2.45%</td>
+            <td style="color:#34d399">4</td>
+            <td style="color:#f87171">0</td>
+            <td>274.25亿</td>
+            <td>1.83万亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">光模块与高速连接</td>
+            <td>4</td>
+            <td><span style="display:inline-block;width:5.14px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+1.28%</td>
+            <td style="color:#34d399">3</td>
+            <td style="color:#f87171">1</td>
+            <td>824.75亿</td>
+            <td>2.81万亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">先进封装与PCB</td>
+            <td>4</td>
+            <td><span style="display:inline-block;width:17.54px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+4.38%</td>
+            <td style="color:#34d399">4</td>
+            <td style="color:#f87171">0</td>
+            <td>383.59亿</td>
+            <td>7687.02亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">存储芯片</td>
+            <td>3</td>
+            <td><span style="display:inline-block;width:21.30666666666667px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+5.33%</td>
+            <td style="color:#34d399">3</td>
+            <td style="color:#f87171">0</td>
+            <td>608.60亿</td>
+            <td>8527.55亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">AI应用</td>
+            <td>4</td>
+            <td><span style="display:inline-block;width:3.4px;height:4px;border-radius:2px;background:#f87171;margin-right:6px;vertical-align:middle"></span>-0.85%</td>
+            <td style="color:#34d399">1</td>
+            <td style="color:#f87171">3</td>
+            <td>38.01亿</td>
+            <td>2296.37亿</td>
+        </tr><tr style="background:#111827;border-top:2px solid #374151">
+        <td style="text-align:left"><strong>全板块合计</strong></td>
+        <td><strong>28</strong></td>
+        <td><strong>+2.03%</strong></td>
+        <td style="color:#34d399"><strong>21</strong></td>
+        <td style="color:#f87171"><strong>7</strong></td>
+        <td><strong>2755.25亿</strong></td>
+        <td><strong>9.71万亿</strong></td>
+    </tr></tbody></table>
+            </div>
+        </div>
+
+        <!-- 强势股/弱势股 -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px">
+            <div>
+                <div class="section-title">强势股 TOP5</div>
+                <div class="table-wrapper">
+                    <table><thead><tr><th>名称</th><th>代码</th><th>最新价</th><th>涨跌幅</th><th>成交额</th><th>板块</th></tr></thead>
+                    <tbody><tr>
+                <td style="text-align:left;font-weight:500">兆易创新</td>
+                <td style="color:#60a5fa">603986</td>
+                <td style="font-family:monospace">705.09</td>
+                <td><span style="color:#34d399;font-weight:600">+10.00%</span></td>
+                <td style="font-family:monospace">399.45亿</td>
+                <td>存储芯片</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">通富微电</td>
+                <td style="color:#60a5fa">002156</td>
+                <td style="font-family:monospace">74.64</td>
+                <td><span style="color:#34d399;font-weight:600">+9.09%</span></td>
+                <td style="font-family:monospace">145.57亿</td>
+                <td>先进封装与PCB</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">中芯国际</td>
+                <td style="color:#60a5fa">688981</td>
+                <td style="font-family:monospace">151.53</td>
+                <td><span style="color:#34d399;font-weight:600">+6.94%</span></td>
+                <td style="font-family:monospace">211.61亿</td>
+                <td>华为昇腾生态</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">海光信息</td>
+                <td style="color:#60a5fa">688041</td>
+                <td style="font-family:monospace">337.10</td>
+                <td><span style="color:#34d399;font-weight:600">+6.34%</span></td>
+                <td style="font-family:monospace">149.62亿</td>
+                <td>AI芯片与算力</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">天孚通信</td>
+                <td style="color:#60a5fa">300394</td>
+                <td style="font-family:monospace">325.28</td>
+                <td><span style="color:#34d399;font-weight:600">+4.57%</span></td>
+                <td style="font-family:monospace">141.42亿</td>
+                <td>光模块与高速连接</td>
+            </tr></tbody></table>
+                </div>
+            </div>
+            <div>
+                <div class="section-title">弱势股 TOP5</div>
+                <div class="table-wrapper">
+                    <table><thead><tr><th>名称</th><th>代码</th><th>最新价</th><th>涨跌幅</th><th>成交额</th><th>板块</th></tr></thead>
+                    <tbody><tr>
+                <td style="text-align:left;font-weight:500">软通动力</td>
+                <td style="color:#60a5fa">301236</td>
+                <td style="font-family:monospace">38.18</td>
+                <td><span style="color:#f87171;font-weight:600">-5.21%</span></td>
+                <td style="font-family:monospace">13.86亿</td>
+                <td>华为昇腾生态</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">拓尔思</td>
+                <td style="color:#60a5fa">300229</td>
+                <td style="font-family:monospace">15.19</td>
+                <td><span style="color:#f87171;font-weight:600">-2.88%</span></td>
+                <td style="font-family:monospace">2.93亿</td>
+                <td>AI应用</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">拓维信息</td>
+                <td style="color:#60a5fa">002261</td>
+                <td style="font-family:monospace">29.24</td>
+                <td><span style="color:#f87171;font-weight:600">-2.08%</span></td>
+                <td style="font-family:monospace">16.21亿</td>
+                <td>华为昇腾生态</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">四川长虹</td>
+                <td style="color:#60a5fa">600839</td>
+                <td style="font-family:monospace">6.68</td>
+                <td><span style="color:#f87171;font-weight:600">-1.76%</span></td>
+                <td style="font-family:monospace">4.72亿</td>
+                <td>华为昇腾生态</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">云从科技</td>
+                <td style="color:#60a5fa">688327</td>
+                <td style="font-family:monospace">13.65</td>
+                <td><span style="color:#f87171;font-weight:600">-1.23%</span></td>
+                <td style="font-family:monospace">3.65亿</td>
+                <td>AI应用</td>
+            </tr></tbody></table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 产业链关系图 -->
+        <div class="relation-section">
+        <div class="section-title">产业链上下游关系</div>
+        <div class="relation-diagram">
+            <div class="relation-row">
+                <div class="relation-label">AI芯片</div>
+                <div class="relation-items">
+                    <div class="relation-node upstream">寒武纪<span class="node-code">云端AI芯片</span></div>
+                    <div class="relation-node upstream">海光信息<span class="node-code">x86+DCU</span></div>
+                    <div class="relation-node upstream">景嘉微<span class="node-code">国产GPU</span></div>
+                    <div class="relation-node upstream">龙芯中科<span class="node-code">自主CPU</span></div>
+                </div>
+            </div>
+            <div class="relation-arrow">→ 昇腾生态 / 晶圆代工 →</div>
+            <div class="relation-row">
+                <div class="relation-label">昇腾生态/代工</div>
+                <div class="relation-items">
+                    <div class="relation-node midstream">神州数码<span class="node-code">昇腾整机伙伴</span></div>
+                    <div class="relation-node midstream">拓维信息<span class="node-code">昇腾+AI平台</span></div>
+                    <div class="relation-node midstream">软通动力<span class="node-code">华为全栈伙伴</span></div>
+                    <div class="relation-node midstream">中芯国际<span class="node-code">AI芯片代工</span></div>
+                    <div class="relation-node midstream">四川长虹<span class="node-code">昇腾服务器</span></div>
+                </div>
+            </div>
+            <div class="relation-arrow">→ AI服务器 / 光模块 / 封装 / 存储 →</div>
+            <div class="relation-row">
+                <div class="relation-label">算力基础设施</div>
+                <div class="relation-items">
+                    <div class="relation-node midstream">浪潮信息<span class="node-code">AI服务器</span></div>
+                    <div class="relation-node midstream">中科曙光<span class="node-code">超算+液冷</span></div>
+                    <div class="relation-node midstream">工业富联<span class="node-code">ODM龙头</span></div>
+                    <div class="relation-node midstream">中际旭创<span class="node-code">800G光模块</span></div>
+                    <div class="relation-node midstream">深南电路<span class="node-code">PCB+载板</span></div>
+                    <div class="relation-node midstream">通富微电<span class="node-code">先进封装</span></div>
+                    <div class="relation-node midstream">兆易创新<span class="node-code">存储龙头</span></div>
+                </div>
+            </div>
+            <div class="relation-arrow">→ AI应用平台 →</div>
+            <div class="relation-row">
+                <div class="relation-label">AI应用</div>
+                <div class="relation-items">
+                    <div class="relation-node downstream">科大讯飞<span class="node-code">星火大模型</span></div>
+                    <div class="relation-node downstream">金山办公<span class="node-code">WPS AI</span></div>
+                    <div class="relation-node downstream">拓尔思<span class="node-code">政务AI</span></div>
+                    <div class="relation-node downstream">云从科技<span class="node-code">人机协同</span></div>
+                </div>
+            </div>
+            <div class="relation-arrow">→ 终端应用 →</div>
+            <div class="relation-row">
+                <div class="relation-label">终端场景</div>
+                <div class="relation-items">
+                    <div class="relation-node end">大模型训练</div>
+                    <div class="relation-node end">自动驾驶</div>
+                    <div class="relation-node end">智慧医疗</div>
+                    <div class="relation-node end">金融科技</div>
+                    <div class="relation-node end">智能办公</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- 核心关注标的 -->
+        <div class="focus-section">
+        <div class="section-title">核心关注标的</div>
+        <div class="focus-cards">
+            <div class="focus-card">
+                <div class="focus-rank">01</div>
+                <div class="focus-name">中际旭创</div>
+                <div class="focus-code">300308</div>
+                <div class="focus-reason">全球光模块龙头，800G出货量全球第一，1.6T率先量产。深度供货英伟达/华为AI数据中心，是AI算力基础设施中确定性最高的硬件环节，业绩持续超预期。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">02</div>
+                <div class="focus-name">寒武纪</div>
+                <div class="focus-code">688256</div>
+                <div class="focus-reason">国产AI芯片龙头，思元系列云端AI芯片性能对标英伟达，已适配华为昇腾生态。ASIC路线在大模型推理场景有功耗比优势，是国产AI芯片核心受益标的。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">03</div>
+                <div class="focus-name">软通动力</div>
+                <div class="focus-code">301236</div>
+                <div class="focus-reason">华为第一大IT服务商，深度参与鸿蒙+欧拉+昇腾三大生态。收购同方补全服务器制造，是华为AI全栈生态最完整的合作伙伴，战略价值突出。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">04</div>
+                <div class="focus-name">科大讯飞</div>
+                <div class="focus-code">002230</div>
+                <div class="focus-reason">中国AI应用第一股，星火大模型国内综合能力前三。教育/医疗/办公场景最丰富，华为昇腾生态核心AI应用伙伴，AI应用商业变现核心标的。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">05</div>
+                <div class="focus-name">浪潮信息</div>
+                <div class="focus-code">000977</div>
+                <div class="focus-reason">全球AI服务器出货量前三，JDM模式深度绑定大客户。AI算力需求爆发推动服务器订单高速增长，液冷技术行业领先，盈利弹性突出。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">06</div>
+                <div class="focus-name">中芯国际</div>
+                <div class="focus-code">688981</div>
+                <div class="focus-reason">中国大陆最大晶圆代工厂，华为昇腾芯片主要代工方。先进制程突破+国产替代加速，是华为AI芯片制造的核心底座，战略意义突出。</div>
+            </div>
+        </div>
+    </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p style="text-align:center;color:#8892a8;font-size:0.8em;padding:30px 0 10px;border-top:1px solid #1e293b;margin-top:40px">行情数据来源：东方财富 | 静态行业数据参考：上市公司公告、公开研报与公开报道 | 生成时间：2026-06-24 21:02</p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em">静态描述为公开资料整理，部分市占率、需求预测、价格判断采用机构预测口径，仅供研究参考。</p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em;margin-top:6px">左侧/右侧买入评级仅基于当前行情、成交额、市值与估值的规则化排序，不构成具体买卖建议。</p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em;margin-top:6px">本报告仅为数据整理，不构成任何投资建议。股市有风险，投资需谨慎。</p>
+        </div>
+    </div>
+</body>
+</html>

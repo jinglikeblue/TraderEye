@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>东莞证券：电子行业2026年中期投资策略 — 研报摘要</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #0a0e17; color: #e0e6f0; line-height: 1.6; min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+        .header { text-align: center; margin-bottom: 48px; }
+        .header h1 { font-size: 32px; font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa, #34d399);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 8px; }
+        .header h2 { font-size: 18px; color: #8892a8; font-weight: 400; margin-bottom: 12px; }
+        .header .meta { font-size: 13px; color: #5a6478; }
+        .header .meta span { margin: 0 10px; }
+
+        .section { margin-bottom: 48px; }
+        .section-title { font-size: 22px; font-weight: 600; color: #c8d0e0;
+            margin-bottom: 24px; padding-left: 14px; border-left: 3px solid #60a5fa; }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #1a2235, #111827);
+            border: 1px solid #1e3a5f; border-radius: 14px;
+            padding: 24px 28px; margin-bottom: 24px;
+        }
+        .highlight-box .hl-title { font-size: 15px; font-weight: 600; color: #60a5fa; margin-bottom: 10px; }
+        .highlight-box .hl-text { font-size: 15px; color: #c8d0e0; line-height: 1.8; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 16px; margin-bottom: 20px; }
+        .stat-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 12px; padding: 20px; }
+        .stat-card .stat-label { font-size: 13px; color: #5a6478; margin-bottom: 6px; }
+        .stat-card .stat-value { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+        .stat-card .stat-note { font-size: 12px; color: #5a6478; }
+        .stat-blue .stat-value { color: #60a5fa; }
+        .stat-green .stat-value { color: #34d399; }
+        .stat-yellow .stat-value { color: #fbbf24; }
+        .stat-pink .stat-value { color: #f472b6; }
+
+        .logic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+        .logic-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; }
+        .logic-card .logic-icon { font-size: 28px; margin-bottom: 12px; }
+        .logic-card .logic-title { font-size: 17px; font-weight: 600; color: #e0e6f0; margin-bottom: 8px; }
+        .logic-card .logic-desc { font-size: 14px; color: #8892a8; line-height: 1.7; }
+        .logic-card .logic-tag { display: inline-block; font-size: 12px; padding: 2px 10px;
+            border-radius: 8px; margin-top: 10px; margin-right: 6px; }
+        .tag-blue { background: rgba(96,165,250,0.12); color: #60a5fa; }
+        .tag-green { background: rgba(16,185,129,0.12); color: #34d399; }
+        .tag-yellow { background: rgba(251,191,36,0.12); color: #fbbf24; }
+        .tag-pink { background: rgba(244,114,182,0.12); color: #f472b6; }
+        .tag-red { background: rgba(248,113,113,0.12); color: #f87171; }
+
+        .table-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid #1e293b; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.88em; min-width: 700px; }
+        thead th { background: #111827; color: #8892a8; font-weight: 500;
+            padding: 12px 14px; text-align: center; white-space: nowrap;
+            border-bottom: 2px solid #1e293b; position: sticky; top: 0; }
+        tbody td { padding: 10px 14px; border-bottom: 1px solid #1e293b; text-align: center; }
+        tbody tr:hover { background: rgba(255,255,255,0.03); }
+
+        .company-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+        .company-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; }
+        .company-card .c-code { font-size: 12px; color: #5a6478; width: 60px; flex-shrink: 0; }
+        .company-card .c-info { flex: 1; }
+        .company-card .c-name { font-size: 15px; font-weight: 600; color: #e0e6f0; }
+        .company-card .c-price { font-size: 20px; font-weight: 700; color: #60a5fa; margin-top: 2px; }
+        .company-card .c-rating { font-size: 12px; padding: 2px 8px; border-radius: 6px;
+            background: rgba(16,185,129,0.12); color: #34d399; }
+
+        .risk-list { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 20px 28px; }
+        .risk-list ul { list-style: none; }
+        .risk-list li { padding: 10px 0; border-bottom: 1px solid #1e293b;
+            font-size: 14px; color: #8892a8; }
+        .risk-list li:last-child { border-bottom: none; }
+        .risk-list li::before { content: '⚠️ '; margin-right: 8px; }
+
+        .timeline { position: relative; padding-left: 24px; border-left: 2px solid #1e3a5f; margin-left: 12px; }
+        .timeline-item { margin-bottom: 18px; position: relative; }
+        .timeline-item::before { content: ''; position: absolute; left: -32px; top: 6px;
+            width: 10px; height: 10px; border-radius: 50%; background: #60a5fa; border: 2px solid #0a0e17; }
+        .timeline-item .t-date { font-size: 12px; color: #5a6478; }
+        .timeline-item .t-content { font-size: 14px; color: #c8d0e0; line-height: 1.6; }
+
+        .copy-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 13px; padding: 6px 16px;
+            background: rgba(96,165,250,0.1); color: #60a5fa;
+            border: 1px solid rgba(96,165,250,0.25); border-radius: 8px;
+            cursor: pointer; transition: all 0.2s;
+            vertical-align: middle; margin-left: 12px;
+        }
+        .copy-btn:hover { background: rgba(96,165,250,0.2); border-color: #60a5fa; }
+        .copy-btn.copied { background: rgba(16,185,129,0.1); color: #34d399; border-color: rgba(16,185,129,0.25); }
+
+        .disclaimer { margin-top: 60px; padding: 20px; background: #0d1117;
+            border: 1px solid #1e293b; border-radius: 10px; text-align: center;
+            font-size: 12px; color: #5a6478; line-height: 1.7; }
+
+        @media (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            .header h1 { font-size: 24px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .logic-grid, .company-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- 头部 -->
+        <div class="header">
+            <h1>AI商业化加速驱动算力景气上行，电子元件产业链迎黄金机遇期</h1>
+            <h2>东莞证券 · 电子行业2026年中期投资策略</h2>
+            <div class="meta">
+                发布日期：2026-07-06<span>|</span>分析师：罗炜斌<span>|</span>评级：<span style="color:#34d399;">超配（维持）</span>
+            </div>
+        </div>
+
+        <!-- 核心结论 -->
+        <div class="section">
+            <div class="section-title">核心结论</div>
+            <div class="highlight-box">
+                <div class="hl-title">▎核心逻辑</div>
+                <div class="hl-text">
+                    随着大模型 Agent、Coding 能力快速提升，AI 商业化加速落地。Agent Token 消耗量大幅增长，算力瓶颈进一步加剧，算力相关产品今年价格密集上调。北美四大巨头今年资本开支有望超过 <strong style="color:#fbbf24;">7,000亿美元</strong>，算力景气上行。建议重点围绕 <strong style="color:#60a5fa;">PCB产业链（PCB、CCL、铜箔、钻针、设备）</strong> 和 <strong style="color:#34d399;">MLCC</strong> 细分领域布局。
+                </div>
+            </div>
+        </div>
+
+        <!-- 关键数据一览 -->
+        <div class="section">
+            <div class="section-title">关键数据一览</div>
+            <div class="stats-grid">
+                <div class="stat-card stat-blue">
+                    <div class="stat-label">北美四大CSP Q1资本开支</div>
+                    <div class="stat-value">1,306亿$</div>
+                    <div class="stat-note">同比 +70.61%</div>
+                </div>
+                <div class="stat-card stat-green">
+                    <div class="stat-label">Anthropic ARR（截至5月）</div>
+                    <div class="stat-value">440亿$</div>
+                    <div class="stat-note">2025.12仅为90亿$</div>
+                </div>
+                <div class="stat-card stat-yellow">
+                    <div class="stat-label">GB300单机柜MLCC消耗</div>
+                    <div class="stat-value">44万颗</div>
+                    <div class="stat-note">手机×30，汽车×3</div>
+                </div>
+                <div class="stat-card stat-pink">
+                    <div class="stat-label">中国日均Token消耗（3月）</div>
+                    <div class="stat-value">140万亿</div>
+                    <div class="stat-note">较2025年底增长40%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第一章：AI商业化与算力 -->
+        <div class="section">
+            <div class="section-title">一、AI商业化加速，算力景气上行</div>
+
+            <div class="logic-grid">
+                <div class="logic-card">
+                    <div class="logic-icon">🧠</div>
+                    <div class="logic-title">大模型军备竞赛加剧</div>
+                    <div class="logic-desc">
+                        DeepSeek V4拥有百万字超长上下文，在Agent能力、推理性能上国内领先。国产模型API调用量在2月底首次反超美国，排名全球第一。
+                    </div>
+                    <span class="logic-tag tag-blue">Agent</span>
+                    <span class="logic-tag tag-green">Coding</span>
+                </div>
+                <div class="logic-card">
+                    <div class="logic-icon">💰</div>
+                    <div class="logic-title">AI商业化提速</div>
+                    <div class="logic-desc">
+                        Anthropic ARR飙升至440亿$（5个月增长近5倍）；OpenAI企业客户API调用量达150亿/分钟；谷歌Q1云收入200亿$（+63%）；AWS Q1收入376亿$（+28%）；阿里云AI产品收入连续11季度三位数增长。
+                    </div>
+                    <span class="logic-tag tag-yellow">ARR</span>
+                    <span class="logic-tag tag-green">云业务</span>
+                </div>
+                <div class="logic-card">
+                    <div class="logic-icon">📈</div>
+                    <div class="logic-title">算力紧张，价格密集上调</div>
+                    <div class="logic-desc">
+                        阿里云AI算力产品上涨5%-34%；百度云上调5%-30%；腾讯云多次调价。IDC预计2025-2030年全球Token消耗量复合增速达 <strong>3418%</strong>。
+                    </div>
+                    <span class="logic-tag tag-red">涨价</span>
+                    <span class="logic-tag tag-yellow">供需矛盾</span>
+                </div>
+                <div class="logic-card">
+                    <div class="logic-icon">🏗️</div>
+                    <div class="logic-title">巨头加大CAPEX</div>
+                    <div class="logic-desc">
+                        谷歌上调全年CAPEX至1,800-1,900亿$；微软预计1,900亿$；Meta上调至1,250-1,450亿$。阿里巴巴表示未来3年3,800亿元CAPEX计划需要上修。英伟达维持到2027年底 Blackwell+Rubin 销售额1万亿$目标。
+                    </div>
+                    <span class="logic-tag tag-blue">CAPEX</span>
+                    <span class="logic-tag tag-green">英伟达</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第二章：PCB产业链 -->
+        <div class="section">
+            <div class="section-title">二、PCB产业链：全面受益</div>
+
+            <div class="logic-grid">
+                <div class="logic-card">
+                    <div class="logic-icon">🖥️</div>
+                    <div class="logic-title">PCB：量价齐升</div>
+                    <div class="logic-desc">
+                        Rubin平台推动PCB向高密度、高性能发展。VR200 Compute Tray采用<strong>6阶HDI</strong>，Midplane采用<strong>44层超高多层板</strong>。正交背板、mSAP、CoWoP等新技术加速落地，市场空间进一步打开。CoWoP直接取消载板，倒逼PCB载板化。
+                    </div>
+                    <span class="logic-tag tag-blue">HDI</span>
+                    <span class="logic-tag tag-green">高多层</span>
+                    <span class="logic-tag tag-yellow">CoWoP</span>
+                </div>
+                <div class="logic-card">
+                    <div class="logic-icon">📐</div>
+                    <div class="logic-title">CCL：成长与周期共振</div>
+                    <div class="logic-desc">
+                        Rubin平台覆铜板有望升级至<strong>M8/M9</strong>材料。建滔积层板今年累计下发5份涨价函，板料累计涨幅达55%。内资企业（生益科技、南亚新材、华正新材）积极跟进，南亚新材率先推出M10材料。
+                    </div>
+                    <span class="logic-tag tag-red">涨价</span>
+                    <span class="logic-tag tag-blue">M8/M9</span>
+                </div>
+                <div class="logic-card">
+                    <div class="logic-icon">🪙</div>
+                    <div class="logic-title">铜箔：供应紧张，加工费有望调涨</div>
+                    <div class="logic-desc">
+                        HVLP4铜箔（Rz仅0.5μm）成AI覆铜板核心材料，生产门槛高、良率挑战大。全球有效产能有限，Q2起HVLP4市场将出现较大供需缺口。日企占60%+高端份额，德福科技等内资积极突破。
+                    </div>
+                    <span class="logic-tag tag-red">HVLP4</span>
+                    <span class="logic-tag tag-yellow">供需缺口</span>
+                </div>
+                <div class="logic-card">
+                    <div class="logic-icon">🔩</div>
+                    <div class="logic-title">钻针：量价齐升</div>
+                    <div class="logic-desc">
+                        钻针使用寿命从3,000次降至800次（AI PCB），导入M9材料后仅100次。金刚石微钻（PCD）寿命更长，有望大规模应用。鼎泰高科（全球Top1，月产能1.3亿支）、中钨高新旗下金洲精工（Top2）份额领先。
+                    </div>
+                    <span class="logic-tag tag-green">鼎泰高科</span>
+                    <span class="logic-tag tag-blue">中钨高新</span>
+                </div>
+                <div class="logic-card">
+                    <div class="logic-icon">⚙️</div>
+                    <div class="logic-title">设备：扩产浪潮持续</div>
+                    <div class="logic-desc">
+                        截至26Q1，SW印制电路板在建工程合计269.78亿元（+65.72% YoY），较2025年底增长26.88%。钻孔和曝光设备占设备投资30%以上，PCB专用设备需求持续释放。
+                    </div>
+                    <span class="logic-tag tag-blue">在建工程</span>
+                    <span class="logic-tag tag-green">扩产</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第三章：MLCC -->
+        <div class="section">
+            <div class="section-title">三、MLCC：供需矛盾加剧，价格有望上扬</div>
+
+            <div class="highlight-box">
+                <div class="hl-title">▎MLCC 核心数据</div>
+                <div class="hl-text">
+                    • GB300平台搭载约 <strong style="color:#fbbf24;">3万颗MLCC</strong>（手机30倍、汽车3倍），单机柜 <strong style="color:#fbbf24;">44万颗</strong><br>
+                    • AI服务器MLCC价值量是传统服务器的 <strong style="color:#fbbf24;">10-15倍</strong>，旗舰机柜超 <strong style="color:#fbbf24;">4,600美元</strong><br>
+                    • 村田预计2025-2030年服务器电容需求复合增速 <strong style="color:#34d399;">30%</strong><br>
+                    • 村田电容B/B值 <strong style="color:#f472b6;">1.36</strong>，产能利用率接近 <strong style="color:#f472b6;">95%</strong>；太阳诱电B/B值 <strong style="color:#f472b6;">1.31</strong>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>厂商</th>
+                            <th>产品</th>
+                            <th>26Q1交期（周）</th>
+                            <th>26Q2交期（周）</th>
+                            <th>26Q2价格</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td rowspan="3">村田</td><td>低容MLCC</td><td>10-14</td><td>16-18</td><td>持平</td></tr>
+                        <tr><td>高容MLCC</td><td>18-20</td><td>18-20</td><td>持平</td></tr>
+                        <tr><td>车规级MLCC</td><td>14-16</td><td style="color:#fbbf24;">20-24</td><td>持平</td></tr>
+                        <tr><td rowspan="3">太阳诱电</td><td>低容MLCC</td><td>10-14</td><td style="color:#fbbf24;">16-20</td><td style="color:#f87171;">上涨</td></tr>
+                        <tr><td>高容MLCC</td><td>20-22</td><td style="color:#fbbf24;">22-24</td><td style="color:#f87171;">上涨</td></tr>
+                        <tr><td>车规级MLCC</td><td>20-22</td><td style="color:#fbbf24;">22-24</td><td style="color:#f87171;">上涨</td></tr>
+                        <tr><td rowspan="3">TDK</td><td>低容MLCC</td><td>16-20</td><td style="color:#fbbf24;">20-24</td><td style="color:#f87171;">上涨</td></tr>
+                        <tr><td>高容MLCC</td><td>20-24</td><td>20-24</td><td style="color:#f87171;">上涨</td></tr>
+                        <tr><td>车规级MLCC</td><td>20-24</td><td>20-24</td><td style="color:#f87171;">上涨</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="logic-grid">
+                <div class="logic-card">
+                    <div class="logic-icon">🔥</div>
+                    <div class="logic-title">需求端：AI驱动量价齐升</div>
+                    <div class="logic-desc">
+                        AI芯片工作电压低、电流大且瞬时波动剧烈，需要MLCC实现就近去耦、瞬时补电。高容、高压、宽温、小型化MLCC需求加大，价值量大幅增加。
+                    </div>
+                </div>
+                <div class="logic-card">
+                    <div class="logic-icon">🏭</div>
+                    <div class="logic-title">供给端：产能满载，新增有限</div>
+                    <div class="logic-desc">
+                        村田、三星电机已处满载状态，今年新增高端产能有限。高端MLCC堆叠层数大、工艺复杂、良率低，整体产能消耗大，还会挤占常规品产能。
+                    </div>
+                    <span class="logic-tag tag-red">满载</span>
+                    <span class="logic-tag tag-yellow">产能紧缺</span>
+                </div>
+                <div class="logic-card">
+                    <div class="logic-icon">💹</div>
+                    <div class="logic-title">价格：多家厂商已上调</div>
+                    <div class="logic-desc">
+                        村田3月对AI服务器和高端车规级MLCC涨价15%-35%；三星电机4月全线涨价10%-20%。太阳诱电、风华高科、三环集团均有不同幅度调价。供需矛盾加剧，价格有望进一步走高。
+                    </div>
+                    <span class="logic-tag tag-red">涨价</span>
+                    <span class="logic-tag tag-green">风华高科</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第四章：重点公司 -->
+        <div class="section">
+            <div class="section-title">
+                四、重点公司盈利预测及投资评级（截至2026/7/3）
+                <button class="copy-btn" onclick="copyStockCodes(this)" title="复制所有股票代码">
+                    📋 复制代码
+                </button>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>代码</th><th>简称</th><th>股价（元）</th>
+                            <th>EPS 25A</th><th>EPS 26E</th><th>EPS 27E</th>
+                            <th>PE 26E</th><th>PE 27E</th><th>评级</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>000636</td><td>风华高科</td><td>63.23</td><td>0.24</td><td>0.63</td><td>0.74</td><td>100.37</td><td>85.45</td><td style="color:#34d399;">买入</td></tr>
+                        <tr><td>001389</td><td>广合科技</td><td>203.00</td><td>2.15</td><td>4.04</td><td>6.51</td><td>50.25</td><td>31.19</td><td style="color:#34d399;">买入</td></tr>
+                        <tr><td>002008</td><td>大族激光</td><td>129.64</td><td>1.16</td><td>2.33</td><td>3.53</td><td>55.53</td><td>36.68</td><td style="color:#34d399;">买入</td></tr>
+                        <tr><td>002436</td><td>兴森科技</td><td>46.37</td><td>0.08</td><td>0.25</td><td>0.44</td><td>186.52</td><td>105.05</td><td style="color:#34d399;">买入</td></tr>
+                        <tr><td>002463</td><td>沪电股份</td><td>135.35</td><td>1.99</td><td>2.94</td><td>4.53</td><td>46.04</td><td>29.88</td><td style="color:#34d399;">买入</td></tr>
+                        <tr><td>002916</td><td>深南电路</td><td>454.48</td><td>4.81</td><td>8.07</td><td>11.30</td><td>56.31</td><td>40.21</td><td style="color:#34d399;">买入</td></tr>
+                        <tr><td>002938</td><td>鹏鼎控股</td><td>96.77</td><td>1.61</td><td>2.31</td><td>3.19</td><td>41.94</td><td>30.30</td><td style="color:#34d399;">买入</td></tr>
+                        <tr><td>300395</td><td>菲利华</td><td>114.02</td><td>0.84</td><td>1.55</td><td>2.28</td><td>73.51</td><td>49.94</td><td style="color:#34d399;">买入</td></tr>
+                        <tr><td>300408</td><td>三环集团</td><td>144.89</td><td>1.37</td><td>1.88</td><td>2.39</td><td>77.02</td><td>60.74</td><td style="color:#34d399;">买入</td></tr>
+                        <tr><td>300476</td><td>胜宏科技</td><td>308.07</td><td>4.39</td><td>8.98</td><td>16.19</td><td>34.31</td><td>19.03</td><td style="color:#34d399;">买入</td></tr>
+                        <tr><td>301200</td><td>大族数控</td><td>343.00</td><td>1.69</td><td>3.44</td><td>5.41</td><td>99.65</td><td>63.35</td><td style="color:#34d399;">买入</td></tr>
+                        <tr><td>301217</td><td>铜冠铜箔</td><td>154.63</td><td>0.08</td><td>0.69</td><td>1.01</td><td>225.74</td><td>153.75</td><td style="color:#34d399;">买入</td></tr>
+                        <tr><td>301511</td><td>德福科技</td><td>153.10</td><td>0.18</td><td>1.48</td><td>1.91</td><td>103.45</td><td>80.16</td><td style="color:#34d399;">买入</td></tr>
+                        <tr><td>600183</td><td>生益科技</td><td>160.78</td><td>1.37</td><td>2.24</td><td>3.20</td><td>71.87</td><td>50.29</td><td style="color:#34d399;">买入</td></tr>
+                        <tr><td>603186</td><td>华正新材</td><td>199.99</td><td>1.76</td><td>3.02</td><td>4.92</td><td>66.22</td><td>40.65</td><td style="color:#34d399;">买入</td></tr>
+                        <tr><td>603228</td><td>景旺电子</td><td>71.97</td><td>1.25</td><td>2.04</td><td>2.86</td><td>35.30</td><td>25.16</td><td style="color:#34d399;">买入</td></tr>
+                        <tr><td>688388</td><td>嘉元科技</td><td>39.27</td><td>0.09</td><td>1.13</td><td>1.81</td><td>34.85</td><td>21.70</td><td style="color:#34d399;">买入</td></tr>
+                        <tr><td>688519</td><td>南亚新材</td><td>371.22</td><td>1.02</td><td>2.41</td><td>4.06</td><td>153.82</td><td>91.43</td><td style="color:#34d399;">买入</td></tr>
+                        <tr><td>688630</td><td>芯碁微装</td><td>480.32</td><td>2.01</td><td>3.91</td><td>5.63</td><td>122.72</td><td>85.39</td><td style="color:#34d399;">买入</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="font-size:13px; color:#5a6478; margin-top: 8px;">
+                数据来源：iFind，东莞证券研究所。股价截至2026/7/3，评级均维持/首次"买入"。
+            </div>
+        </div>
+
+        <!-- 第五章：风险提示 -->
+        <div class="section">
+            <div class="section-title">五、风险提示</div>
+            <div class="risk-list">
+                <ul>
+                    <li><strong>下游需求不及预期：</strong>若AI应用落地、商业化节奏不及预期，将影响算力产业链各环节需求，可能对相关公司业绩产生不利影响。</li>
+                    <li><strong>技术推进不及预期：</strong>AI算力领域发展较快，对PCB、CCL、MLCC等产品提出更高要求，若相关公司技术不符最新终端需求，可能对业绩产生不利影响。</li>
+                    <li><strong>行业竞争加剧：</strong>多家公司积极推进扩产，随着产能释放，若下游需求不及预期，可能导致供过于求，影响产品价格和业绩。</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 免责声明 -->
+        <div class="disclaimer">
+            <strong>免责声明</strong><br>
+            本摘要基于东莞证券研究所发布的《电子行业2026年中期投资策略》研报（2026-07-06）整理，仅供学习参考，不构成任何投资建议。<br>
+            原始报告版权归东莞证券股份有限公司所有。投资者需自主作出投资决策并自行承担投资风险。<br>
+            数据来源：东莞证券研究所、iFind、各公司官网及公告。
+        </div>
+
+    <script>
+        function copyStockCodes(btn) {
+            const rows = document.querySelectorAll('.section-title + .table-wrapper tbody tr');
+            const codes = [];
+            rows.forEach(row => {
+                const code = row.cells[0]?.textContent?.trim();
+                if (code) codes.push(code);
+            });
+            const text = codes.join(',');
+            navigator.clipboard.writeText(text).then(() => {
+                btn.classList.add('copied');
+                btn.textContent = '✅ 已复制';
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    btn.textContent = '📋 复制代码';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

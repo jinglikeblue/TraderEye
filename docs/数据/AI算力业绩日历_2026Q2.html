@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 算力业绩日历 · 2026 Q2</title>
+<style>
+  :root {
+    --bg: #0a0e17;
+    --card: #111827;
+    --card2: #1a2236;
+    --border: #1e293b;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --accent: #38bdf8;
+    --us-tag: #3b82f6;
+    --kr-tag: #f59e0b;
+    --cn-tag: #ef4444;
+    --up-strong: #22c55e;
+    --up-mid: #4ade80;
+    --up-weak: #a7f3d0;
+    --down: #f87171;
+    --neutral: #94a3b8;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--text); min-height:100vh; line-height:1.55; }
+  .container { max-width: 1500px; margin:0 auto; padding: 32px 20px; }
+
+  /* Header */
+  .header { text-align:center; margin-bottom:32px; }
+  .header h1 { font-size:28px; font-weight:700; color:#f1f5f9; margin-bottom:6px; }
+  .header .sub { font-size:14px; color:var(--muted); }
+  .header .update { font-size:12px; color:#475569; margin-top:4px; }
+
+  /* Legend */
+  .legend { display:flex; justify-content:center; gap:18px; margin-bottom:24px; flex-wrap:wrap; font-size:12px; }
+  .legend-item { display:flex; align-items:center; gap:6px; color:var(--muted); }
+  .leg-tag { display:inline-block; padding:1px 7px; border-radius:3px; font-size:11px; font-weight:600; }
+  .leg-tag.us { background:var(--us-tag); color:#fff; }
+  .leg-tag.kr { background:var(--kr-tag); color:#000; }
+  .leg-tag.cn { background:var(--cn-tag); color:#fff; }
+  .leg-pct { padding:1px 6px; border-radius:3px; font-weight:600; font-size:11px; }
+  .leg-pct.strong { background:rgba(34,197,94,0.2); color:var(--up-strong); }
+  .leg-pct.mid { background:rgba(74,222,128,0.12); color:var(--up-mid); }
+  .leg-pct.down { background:rgba(248,113,113,0.12); color:var(--down); }
+
+  /* Summary Cards */
+  .summary { display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-bottom:32px; }
+  .sum-card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px 18px; text-align:center; }
+  .sum-card .num { font-size:30px; font-weight:800; }
+  .sum-card .label { font-size:12px; color:var(--muted); margin-top:2px; }
+  .sum-card.us .num { color:#60a5fa; }
+  .sum-card.kr .num { color:#fbbf24; }
+  .sum-card.cn .num { color:#f87171; }
+  .sum-card.total .num { color:#c084fc; }
+  .sum-card.forecast .num { color:var(--up-strong); }
+
+  /* Highlight box */
+  .highlight-box { background:linear-gradient(135deg, rgba(34,197,94,0.08), rgba(59,130,246,0.05)); border:1px solid rgba(34,197,94,0.25); border-radius:10px; padding:18px 22px; margin-bottom:28px; }
+  .highlight-box h3 { color:var(--up-strong); font-size:15px; margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+  .highlight-box .items { display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:10px; }
+  .highlight-item { background:rgba(15,23,42,0.6); border:1px solid rgba(34,197,94,0.15); border-radius:6px; padding:10px 14px; font-size:12px; }
+  .highlight-item .n { font-weight:600; color:#e2e8f0; }
+  .highlight-item .p { font-weight:700; margin-left:6px; }
+
+  /* Date groups (timeline) */
+  .day-group { margin-bottom:20px; background:var(--card); border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+  .day-header { display:flex; align-items:center; justify-content:space-between; padding:14px 20px; background:linear-gradient(90deg, rgba(56,189,248,0.08), transparent); border-bottom:1px solid var(--border); }
+  .day-header .date { font-size:17px; font-weight:700; color:#f1f5f9; }
+  .day-header .weekday { font-size:13px; color:var(--muted); margin-left:8px; }
+  .day-header .badges { display:flex; gap:6px; align-items:center; }
+  .day-header .cnt { font-size:12px; color:var(--muted); }
+  .day-header .cnt-num { font-weight:700; color:#e2e8f0; padding:1px 6px; background:rgba(56,189,248,0.15); border-radius:3px; margin-right:4px; }
+  .day-header.hot { background:linear-gradient(90deg, rgba(239,68,68,0.12), transparent); }
+  .day-header.super-hot { background:linear-gradient(90deg, rgba(239,68,68,0.2), rgba(34,197,94,0.05)); }
+  .day-header.super-hot .date { color:#fbbf24; }
+  .day-header.super-hot .date::before { content:"⚡ "; }
+
+  /* Table (inside day group) */
+  .table-wrap { overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  thead { background: #0f1b2d; }
+  th { padding:9px 12px; text-align:left; font-weight:600; color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:0.5px; white-space:nowrap; border-bottom:1px solid var(--border); }
+  td { padding:10px 12px; border-bottom:1px solid #0f1a27; vertical-align:middle; }
+  tbody tr:last-child td { border-bottom:none; }
+  tbody tr { transition: background 0.15s; }
+  tbody tr:hover { background: #1a2740; }
+  td.nowrap { white-space:nowrap; }
+
+  /* Market badges */
+  .mkt { display:inline-block; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:700; letter-spacing:0.3px; }
+  .mkt.us { background:rgba(59,130,246,0.18); color:#60a5fa; }
+  .mkt.kr { background:rgba(245,158,11,0.18); color:#fbbf24; }
+  .mkt.cn { background:rgba(239,68,68,0.18); color:#f87171; }
+
+  /* Status */
+  .status { display:inline-block; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:600; }
+  .status.confirmed { background:rgba(34,197,94,0.12); color:var(--up-mid); }
+  .status.estimated { background:rgba(250,204,21,0.12); color:#facc15; }
+
+  /* Forecast type */
+  .ftype { display:inline-block; padding:1px 6px; border-radius:3px; font-size:11px; font-weight:600; }
+  .ftype.预增, .ftype.扭亏, .ftype.续盈 { background:rgba(34,197,94,0.14); color:var(--up-mid); }
+  .ftype.略增 { background:rgba(74,222,128,0.1); color:var(--up-weak); }
+  .ftype.减亏 { background:rgba(250,204,21,0.12); color:#facc15; }
+  .ftype.首亏, .ftype.续亏, .ftype.增亏 { background:rgba(248,113,113,0.14); color:var(--down); }
+
+  /* Change pct */
+  .pct { font-weight:700; font-size:12px; padding:1px 5px; border-radius:3px; white-space:nowrap; }
+  .pct.big { background:rgba(34,197,94,0.2); color:var(--up-strong); }
+  .pct.mid { background:rgba(74,222,128,0.12); color:var(--up-mid); }
+  .pct.small { background:rgba(167,243,208,0.1); color:var(--up-weak); }
+  .pct.neg { background:rgba(248,113,113,0.12); color:var(--down); }
+
+  /* Category */
+  .cat { font-size:11px; color:var(--muted); background:rgba(100,116,139,0.1); padding:1px 6px; border-radius:3px; white-space:nowrap; }
+
+  /* Stock cell */
+  .stock-cell { line-height:1.3; }
+  .stock-cell .code-line { color:var(--accent); font-size:11px; font-weight:500; }
+  .stock-cell .name-line { font-size:13px; font-weight:600; color:#e2e8f0; }
+
+  /* Forecast detail */
+  .forecast-detail { font-size:11px; color:#94a3b8; margin-top:2px; line-height:1.35; }
+
+  /* Reason text */
+  .reason { font-size:11px; color:#94a3b8; line-height:1.4; }
+
+  /* Filter buttons */
+  .filter-bar { display:flex; gap:8px; justify-content:center; margin-bottom:20px; flex-wrap:wrap; }
+  .filter-btn { background:var(--card); border:1px solid var(--border); color:var(--muted); padding:6px 14px; border-radius:20px; font-size:12px; cursor:pointer; transition:all 0.15s; }
+  .filter-btn:hover { color:#e2e8f0; border-color:var(--accent); }
+  .filter-btn.active { background:var(--accent); color:#0a0e17; border-color:var(--accent); font-weight:600; }
+
+  /* Section title */
+  .section-title { font-size:18px; font-weight:700; color:#f1f5f9; padding-bottom:8px; border-bottom:2px solid #1e3a5f; margin:32px 0 18px; }
+
+  /* Footer */
+  footer { text-align:center; color:#475569; font-size:12px; margin-top:40px; padding:24px 0; border-top:1px solid var(--border); }
+  footer p { margin:4px 0; }
+
+  .nav-back { text-align:center; margin-top:24px; }
+  .nav-back a { color:var(--accent); text-decoration:none; font-size:13px; }
+  .nav-back a:hover { text-decoration:underline; }
+
+  @media (max-width: 768px) {
+    .container { padding:16px 12px; }
+    .header h1 { font-size:22px; }
+    td, th { padding:8px; font-size:12px; }
+    .day-header { padding:12px 14px; }
+    .day-header .date { font-size:15px; }
+  }
+
+  /* Hidden helper */
+  .hidden { display:none !important; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>🤖 AI 算力业绩日历 · 2026 Q2</h1>
+    <p class="sub">按日期合并 A 股 · 韩股 · 美股 AI 算力核心公司业绩公布时间</p>
+    <p class="update">数据更新：2026-07-08 ｜ A股数据源：东方财富预约披露 & 业绩预告 ｜ 美股/韩股：公开财报日历</p>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><span class="leg-tag cn">A股</span></div>
+    <div class="legend-item"><span class="leg-tag kr">韩股</span></div>
+    <div class="legend-item"><span class="leg-tag us">美股</span></div>
+    <div class="legend-item">增速：<span class="leg-pct strong">≥100%</span> <span class="leg-pct mid">50-100%</span> <span class="leg-pct down">下滑</span></div>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="summary">
+    <div class="sum-card total"><div class="num">72</div><div class="label">覆盖标的总数</div></div>
+    <div class="sum-card cn"><div class="num">51</div><div class="label">A股 AI 算力</div></div>
+    <div class="sum-card us"><div class="num">18</div><div class="label">美股 AI 算力</div></div>
+    <div class="sum-card kr"><div class="num">3</div><div class="label">韩股 AI 算力</div></div>
+    <div class="sum-card forecast"><div class="num">29</div><div class="label">已发预告(A股)</div></div>
+  </div>
+
+  <!-- 亮点高亮 -->
+  <div class="highlight-box">
+    <h3>⚡ 2026 H1 已发预告 · 净利润超预期标的（4只）</h3>
+    <div class="items">
+      <div class="highlight-item"><span class="n">江波龙 301308</span> <span class="p" style="color:var(--up-strong)">+68299%</span> <span class="ftype 预增">预增</span></div>
+      <div class="highlight-item"><span class="n">浪潮信息 000977</span> <span class="p" style="color:var(--up-strong)">+257%</span> <span class="ftype 预增">预增</span></div>
+      <div class="highlight-item"><span class="n">星网锐捷 002396</span> <span class="p" style="color:var(--up-mid)">+74.6%</span> <span class="ftype 预增">预增</span></div>
+      <div class="highlight-item"><span class="n">瑞芯微 603893</span> <span class="p" style="color:var(--up-mid)">+65.7%</span> <span class="ftype 预增">预增</span></div>
+    </div>
+  </div>
+
+  <!-- Filter -->
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">全部</button>
+    <button class="filter-btn" data-filter="cn">仅 A 股</button>
+    <button class="filter-btn" data-filter="us">仅 美股</button>
+    <button class="filter-btn" data-filter="kr">仅 韩股</button>
+    <button class="filter-btn" data-filter="hasforecast">仅已披露预告</button>
+  </div>
+
+  <div class="section-title">📅 时间线 · 按日期合并三地市场</div>
+
+  <!-- ============ 07-08 三星电子 Q2 初步指引 ============ -->
+  <div class="day-group" data-day="0708">
+    <div class="day-header">
+      <div><span class="date">07-08</span><span class="weekday">周二</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">1</span>家 · 韩股</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="kr">
+            <td><span class="mkt kr">韩股</span></td>
+            <td class="stock-cell"><div class="name-line">三星电子</div><div class="code-line">005930.KS</div></td>
+            <td><span class="cat">HBM/存储</span></td>
+            <td>Q2 初步业绩指引</td>
+            <td class="reason">HBM3e 12H 交付进展 / 内存价格</td>
+            <td><span class="status estimated">预估</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 07-16 台积电 ============ -->
+  <div class="day-group" data-day="0716">
+    <div class="day-header">
+      <div><span class="date">07-16</span><span class="weekday">周三</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">1</span>家 · 美股</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="us">
+            <td><span class="mkt us">美股</span></td>
+            <td class="stock-cell"><div class="name-line">台积电 TSMC</div><div class="code-line">TSM</div></td>
+            <td><span class="cat">先进制程</span></td>
+            <td>Q2 财报</td>
+            <td class="reason">3nm/2nm 产能 · AI 客户订单指引</td>
+            <td><span class="status estimated">预估</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 07-23 ASML ============ -->
+  <div class="day-group" data-day="0723">
+    <div class="day-header">
+      <div><span class="date">07-23</span><span class="weekday">周三</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">1</span>家 · 美股</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="us">
+            <td><span class="mkt us">美股</span></td>
+            <td class="stock-cell"><div class="name-line">阿斯麦 ASML</div><div class="code-line">ASML</div></td>
+            <td><span class="cat">光刻设备</span></td>
+            <td>Q2 财报</td>
+            <td class="reason">EUV 订单 · 中国出货节奏</td>
+            <td><span class="status estimated">预估</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 07-24 韩股双雄 ============ -->
+  <div class="day-group" data-day="0724">
+    <div class="day-header hot">
+      <div><span class="date">07-24</span><span class="weekday">周四</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">2</span>家 · 韩股 HBM 双雄</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="kr">
+            <td><span class="mkt kr">韩股</span></td>
+            <td class="stock-cell"><div class="name-line">SK 海力士</div><div class="code-line">000660.KS</div></td>
+            <td><span class="cat">HBM/存储</span></td>
+            <td>Q2 正式财报</td>
+            <td class="reason">HBM3e 出货占比 · NVIDIA 供应</td>
+            <td><span class="status estimated">预估</span></td>
+          </tr>
+          <tr data-mkt="kr">
+            <td><span class="mkt kr">韩股</span></td>
+            <td class="stock-cell"><div class="name-line">三星电子</div><div class="code-line">005930.KS</div></td>
+            <td><span class="cat">HBM/存储</span></td>
+            <td>Q2 正式财报</td>
+            <td class="reason">HBM3e 12H 是否通过 NVIDIA 认证</td>
+            <td><span class="status estimated">预估</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 07-29 AMD ============ -->
+  <div class="day-group" data-day="0729">
+    <div class="day-header">
+      <div><span class="date">07-29</span><span class="weekday">周二</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">1</span>家 · 美股</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="us">
+            <td><span class="mkt us">美股</span></td>
+            <td class="stock-cell"><div class="name-line">超威半导体 AMD</div><div class="code-line">AMD</div></td>
+            <td><span class="cat">AI GPU/CPU</span></td>
+            <td>Q2 财报</td>
+            <td class="reason">MI350 出货 · 数据中心营收</td>
+            <td><span class="status estimated">预估</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 07-30 高通 ============ -->
+  <div class="day-group" data-day="0730">
+    <div class="day-header">
+      <div><span class="date">07-30</span><span class="weekday">周三</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">1</span>家 · 美股</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="us">
+            <td><span class="mkt us">美股</span></td>
+            <td class="stock-cell"><div class="name-line">高通 Qualcomm</div><div class="code-line">QCOM</div></td>
+            <td><span class="cat">移动AI芯片</span></td>
+            <td>Q3 FY2026</td>
+            <td class="reason">边缘 AI · 手机芯片市占</td>
+            <td><span class="status estimated">预估</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 07-31 Intel ============ -->
+  <div class="day-group" data-day="0731">
+    <div class="day-header">
+      <div><span class="date">07-31</span><span class="weekday">周四</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">1</span>家 · 美股</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="us">
+            <td><span class="mkt us">美股</span></td>
+            <td class="stock-cell"><div class="name-line">英特尔 Intel</div><div class="code-line">INTC</div></td>
+            <td><span class="cat">芯片制造</span></td>
+            <td>Q2 财报</td>
+            <td class="reason">18A 工艺进展 · Gaudi 3 表现</td>
+            <td><span class="status estimated">预估</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 08-04 Arista ============ -->
+  <div class="day-group" data-day="0804">
+    <div class="day-header">
+      <div><span class="date">08-04</span><span class="weekday">周一</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">1</span>家 · 美股</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="us">
+            <td><span class="mkt us">美股</span></td>
+            <td class="stock-cell"><div class="name-line">Arista Networks</div><div class="code-line">ANET</div></td>
+            <td><span class="cat">AI交换机</span></td>
+            <td>Q2 财报</td>
+            <td class="reason">Meta/微软订单 · 800G 出货</td>
+            <td><span class="status estimated">预估</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 08-05 SMCI ============ -->
+  <div class="day-group" data-day="0805">
+    <div class="day-header">
+      <div><span class="date">08-05</span><span class="weekday">周二</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">1</span>家 · 美股</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="us">
+            <td><span class="mkt us">美股</span></td>
+            <td class="stock-cell"><div class="name-line">超微电脑 SMCI</div><div class="code-line">SMCI</div></td>
+            <td><span class="cat">AI服务器</span></td>
+            <td>Q4 FY2026</td>
+            <td class="reason">Blackwell 系统出货 · 液冷</td>
+            <td><span class="status estimated">预估</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 08-06 Marvell ============ -->
+  <div class="day-group" data-day="0806">
+    <div class="day-header">
+      <div><span class="date">08-06</span><span class="weekday">周三</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">1</span>家 · 美股</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="us">
+            <td><span class="mkt us">美股</span></td>
+            <td class="stock-cell"><div class="name-line">美满电子 Marvell</div><div class="code-line">MRVL</div></td>
+            <td><span class="cat">AI ASIC/网络</span></td>
+            <td>Q2 财报</td>
+            <td class="reason">AWS Trainium2 ASIC 收入</td>
+            <td><span class="status estimated">预估</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 08-08 寒武纪 ============ -->
+  <div class="day-group" data-day="0808">
+    <div class="day-header">
+      <div><span class="date">08-08</span><span class="weekday">周五</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">1</span>家 · A股</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">寒武纪</div><div class="code-line">688256</div></td>
+            <td><span class="cat">AI芯片</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 扭亏">2025年报 · 扭亏</span> <span class="pct big">+542%</span><div class="forecast-detail">盈利 18.5-21.5亿元</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 08-11 Palantir ============ -->
+  <div class="day-group" data-day="0811">
+    <div class="day-header">
+      <div><span class="date">08-11</span><span class="weekday">周一</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">1</span>家 · 美股</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="us">
+            <td><span class="mkt us">美股</span></td>
+            <td class="stock-cell"><div class="name-line">Palantir</div><div class="code-line">PLTR</div></td>
+            <td><span class="cat">AI数据分析</span></td>
+            <td>Q2 财报</td>
+            <td class="reason">AIP 商业化 · 美国政府订单</td>
+            <td><span class="status estimated">预估</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 08-12 工业富联+鹏鼎+思科 ============ -->
+  <div class="day-group" data-day="0812">
+    <div class="day-header hot">
+      <div><span class="date">08-12</span><span class="weekday">周二</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">3</span>家 · A股 2 + 美股 1</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">工业富联</div><div class="code-line">601138</div></td>
+            <td><span class="cat">AI服务器</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 预增">2025年报 · 预增</span> <span class="pct mid">+52.5%</span><div class="forecast-detail">盈利 351-357亿元</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">鹏鼎控股</div><div class="code-line">002938</div></td>
+            <td><span class="cat">PCB</span></td>
+            <td>2026中报</td>
+            <td class="reason">-</td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="us">
+            <td><span class="mkt us">美股</span></td>
+            <td class="stock-cell"><div class="name-line">思科 Cisco</div><div class="code-line">CSCO</div></td>
+            <td><span class="cat">AI网络</span></td>
+            <td>Q4 FY2026</td>
+            <td class="reason">Silicon One · Splunk 整合</td>
+            <td><span class="status estimated">预估</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 08-15 紫光国微+星网锐捷 ============ -->
+  <div class="day-group" data-day="0815">
+    <div class="day-header">
+      <div><span class="date">08-15</span><span class="weekday">周五</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">2</span>家 · A股</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="cn">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">紫光国微</div><div class="code-line">002049</div></td>
+            <td><span class="cat">特种芯片</span></td>
+            <td>2026中报</td>
+            <td class="reason">-</td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">星网锐捷</div><div class="code-line">002396</div></td>
+            <td><span class="cat">交换机</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 预增">2026H1 · 预增</span> <span class="pct mid">+74.6%</span><div class="forecast-detail">H1盈利 3.1-4.3亿元</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 08-18 瑞芯微 ============ -->
+  <div class="day-group" data-day="0818">
+    <div class="day-header">
+      <div><span class="date">08-18</span><span class="weekday">周一</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">1</span>家 · A股</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">瑞芯微</div><div class="code-line">603893</div></td>
+            <td><span class="cat">AIoT芯片</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 预增">2026H1 · 预增</span> <span class="pct mid">+65.7%</span><div class="forecast-detail">H1盈利 8.5-9.1亿元 · Q1+57.5% · 2025+78.7%</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 08-19 天孚+兆易 ============ -->
+  <div class="day-group" data-day="0819">
+    <div class="day-header">
+      <div><span class="date">08-19</span><span class="weekday">周二</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">2</span>家 · A股</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">天孚通信</div><div class="code-line">300394</div></td>
+            <td><span class="cat">光器件</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 预增">2025年报 · 预增</span> <span class="pct mid">+50%</span><div class="forecast-detail">盈利 18.8-21.5亿元</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">兆易创新</div><div class="code-line">603986</div></td>
+            <td><span class="cat">存储/MCU</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 略增">2025年报 · 略增</span> <span class="pct small">+46%</span><div class="forecast-detail">盈利约 16.1亿元</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 08-20 A股大批 ============ -->
+  <div class="day-group" data-day="0820">
+    <div class="day-header hot">
+      <div><span class="date">08-20</span><span class="weekday">周三</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">6</span>家 · A股（芯片密集日）</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">海光信息</div><div class="code-line">688041</div></td>
+            <td><span class="cat">AI芯片/CPU</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 略增">2026Q1 · 略增</span> <span class="pct small">+32.4%</span><div class="forecast-detail">Q1盈利 6.2-7.2亿</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">光迅科技</div><div class="code-line">002281</div></td>
+            <td><span class="cat">光模块</span></td>
+            <td>2026中报</td>
+            <td class="reason">-</td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">中微公司</div><div class="code-line">688012</div></td>
+            <td><span class="cat">刻蚀设备</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 略增">2025年报 · 略增</span> <span class="pct small">+31.8%</span><div class="forecast-detail">盈利 20.8-21.8亿</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">恒玄科技</div><div class="code-line">688608</div></td>
+            <td><span class="cat">AIoT芯片</span></td>
+            <td>2026中报</td>
+            <td class="reason">-</td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">晶晨股份</div><div class="code-line">688099</div></td>
+            <td><span class="cat">多媒体芯片</span></td>
+            <td>2026中报</td>
+            <td class="reason">-</td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">金山办公</div><div class="code-line">688111</div></td>
+            <td><span class="cat">AI办公</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 预增">2026Q1 · 预增</span> <span class="pct big">+437%</span><div class="forecast-detail">Q1盈利 20.2-23.1亿</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 08-21 A股3+美股2 ============ -->
+  <div class="day-group" data-day="0821">
+    <div class="day-header super-hot">
+      <div><span class="date">08-21</span><span class="weekday">周四</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">5</span>家 · A股 3 + 美股 2（含博通）</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">景嘉微</div><div class="code-line">300474</div></td>
+            <td><span class="cat">GPU</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 续亏">2025年报 · 续亏</span><div class="forecast-detail">亏损 1.2-1.8亿</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">长电科技</div><div class="code-line">600584</div></td>
+            <td><span class="cat">先进封装</span></td>
+            <td>2026中报</td>
+            <td class="reason">-</td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">科大讯飞</div><div class="code-line">002230</div></td>
+            <td><span class="cat">大模型/AI</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 预增">2025年报 · 预增</span> <span class="pct mid">+55%</span><div class="forecast-detail">盈利 7.85-9.5亿</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="us">
+            <td><span class="mkt us">美股</span></td>
+            <td class="stock-cell"><div class="name-line">博通 Broadcom</div><div class="code-line">AVGO</div></td>
+            <td><span class="cat">AI ASIC/网络</span></td>
+            <td>Q3 FY2026</td>
+            <td class="reason">Google TPU · Meta MTIA · 3nm ASIC</td>
+            <td><span class="status estimated">预估</span></td>
+          </tr>
+          <tr data-mkt="us">
+            <td><span class="mkt us">美股</span></td>
+            <td class="stock-cell"><div class="name-line">戴尔科技 Dell</div><div class="code-line">DELL</div></td>
+            <td><span class="cat">AI服务器</span></td>
+            <td>Q2 财报</td>
+            <td class="reason">AI 服务器订单积压 · xAI 订单</td>
+            <td><span class="status estimated">预估</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 08-22 A股大批 ============ -->
+  <div class="day-group" data-day="0822">
+    <div class="day-header hot">
+      <div><span class="date">08-22</span><span class="weekday">周五</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">7</span>家 · A股（周五大批）</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="cn">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">景旺电子</div><div class="code-line">603228</div></td>
+            <td><span class="cat">PCB</span></td>
+            <td>2026中报</td>
+            <td class="reason">-</td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">华天科技</div><div class="code-line">002185</div></td>
+            <td><span class="cat">封测</span></td>
+            <td>2026中报</td>
+            <td class="reason">-</td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">芯原股份</div><div class="code-line">688521</div></td>
+            <td><span class="cat">IP/芯片设计</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 减亏">2025年报 · 减亏</span> <span class="pct small">+25.3%</span><div class="forecast-detail">亏损约 4.5亿</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">数据港</div><div class="code-line">603881</div></td>
+            <td><span class="cat">IDC</span></td>
+            <td>2026中报</td>
+            <td class="reason">-</td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">高澜股份</div><div class="code-line">300499</div></td>
+            <td><span class="cat">液冷</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 扭亏">2025年报 · 扭亏</span> <span class="pct big">+154%</span><div class="forecast-detail">盈利 2350-3050万</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">同花顺</div><div class="code-line">300033</div></td>
+            <td><span class="cat">AI金融</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 预增">2025年报 · 预增</span> <span class="pct mid">+65%</span><div class="forecast-detail">盈利 27.3-32.8亿</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">中兴通讯</div><div class="code-line">000063</div></td>
+            <td><span class="cat">通信/AI算力</span></td>
+            <td>2026中报</td>
+            <td class="reason">-</td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">深信服</div><div class="code-line">002439</div></td>
+            <td><span class="cat">AI安全</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 预增">2026Q1 · 预增</span> <span class="pct big">+2780%</span><div class="forecast-detail">Q1盈利 3800-5400万 · 2025年报增亏 -154%</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 08-24 中际旭创+万兴 ============ -->
+  <div class="day-group" data-day="0824">
+    <div class="day-header">
+      <div><span class="date">08-24</span><span class="weekday">周一</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">2</span>家 · A股</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">中际旭创</div><div class="code-line">300308</div></td>
+            <td><span class="cat">光模块</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 预增">2025年报 · 预增</span> <span class="pct big">+109%</span><div class="forecast-detail">盈利 98-118亿</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">万兴科技</div><div class="code-line">300624</div></td>
+            <td><span class="cat">AI创意</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 减亏">2025年报 · 减亏</span> <span class="pct small">+51%</span><div class="forecast-detail">亏损 6500-9500万</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 08-25 A股大批 ============ -->
+  <div class="day-group" data-day="0825">
+    <div class="day-header hot">
+      <div><span class="date">08-25</span><span class="weekday">周二</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">5</span>家 · A股</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">新易盛</div><div class="code-line">300502</div></td>
+            <td><span class="cat">光模块</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 预增">2025年报 · 预增</span> <span class="pct big">+240%</span><div class="forecast-detail">盈利 94-99亿</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">深南电路</div><div class="code-line">002916</div></td>
+            <td><span class="cat">IC载板/PCB</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 预增">2025年报 · 预增</span> <span class="pct mid">+73%</span><div class="forecast-detail">盈利 31.5-33.4亿</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">韦尔股份</div><div class="code-line">603501</div></td>
+            <td><span class="cat">存储/CIS</span></td>
+            <td>2026中报</td>
+            <td class="reason">-</td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">佰维存储</div><div class="code-line">688525</div></td>
+            <td><span class="cat">存储模组</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 预增">2025年报 · 预增</span> <span class="pct big">+474%</span><div class="forecast-detail">盈利 8.5-10亿</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">英维克</div><div class="code-line">002837</div></td>
+            <td><span class="cat">温控</span></td>
+            <td>2026中报</td>
+            <td class="reason">-</td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 08-26 A股大批 ============ -->
+  <div class="day-group" data-day="0826">
+    <div class="day-header hot">
+      <div><span class="date">08-26</span><span class="weekday">周三</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">6</span>家 · A股</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="cn">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">中科曙光</div><div class="code-line">603019</div></td>
+            <td><span class="cat">服务器/算力</span></td>
+            <td>2026中报</td>
+            <td class="reason">-</td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">沪电股份</div><div class="code-line">002463</div></td>
+            <td><span class="cat">高端PCB</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 预增">2026Q1 · 预增</span> <span class="pct mid">+60%</span><div class="forecast-detail">Q1盈利 11.8-12.6亿</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">通富微电</div><div class="code-line">002156</div></td>
+            <td><span class="cat">先进封装</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 预增">2025年报 · 预增</span> <span class="pct mid">+81%</span><div class="forecast-detail">盈利 11-13.5亿</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">北方华创</div><div class="code-line">002371</div></td>
+            <td><span class="cat">半导体设备</span></td>
+            <td>2026中报</td>
+            <td class="reason">-</td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">欧陆通</div><div class="code-line">300870</div></td>
+            <td><span class="cat">服务器电源</span></td>
+            <td>2026中报</td>
+            <td class="reason">-</td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">中科创达</div><div class="code-line">300496</div></td>
+            <td><span class="cat">边缘AI</span></td>
+            <td>2026中报</td>
+            <td class="reason">-</td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 08-27 全球AI焦点日 ============ -->
+  <div class="day-group" data-day="0827">
+    <div class="day-header super-hot">
+      <div><span class="date">08-27</span><span class="weekday">周四</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">6</span>家 · A股 3 + 美股 3（英伟达日 + 江波龙）</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="cn">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">华虹公司</div><div class="code-line">688347</div></td>
+            <td><span class="cat">晶圆制造</span></td>
+            <td>2026中报</td>
+            <td class="reason">-</td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn" data-forecast="1" style="background:rgba(34,197,94,0.06)">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">江波龙 ⚡</div><div class="code-line">301308</div></td>
+            <td><span class="cat">存储模组</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 预增">2026H1 · 预增</span> <span class="pct big">+68299%</span><div class="forecast-detail">H1盈利 92-110亿 · 2025年报+181%</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">光环新网</div><div class="code-line">300383</div></td>
+            <td><span class="cat">IDC</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 首亏">2025年报 · 首亏</span> <span class="pct neg">-298%</span><div class="forecast-detail">亏损 7.3-7.8亿</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="us" style="background:rgba(59,130,246,0.08)">
+            <td><span class="mkt us">美股</span></td>
+            <td class="stock-cell"><div class="name-line">英伟达 NVIDIA ⚡⚡</div><div class="code-line">NVDA</div></td>
+            <td><span class="cat">AI GPU 龙头</span></td>
+            <td>Q2 FY2027</td>
+            <td class="reason">Blackwell Ultra 出货 · Rubin 进展 · 数据中心占比</td>
+            <td><span class="status estimated">预估</span></td>
+          </tr>
+          <tr data-mkt="us">
+            <td><span class="mkt us">美股</span></td>
+            <td class="stock-cell"><div class="name-line">CrowdStrike</div><div class="code-line">CRWD</div></td>
+            <td><span class="cat">AI安全</span></td>
+            <td>Q2 财报</td>
+            <td class="reason">Falcon 平台 ARR · 存量客户扩单</td>
+            <td><span class="status estimated">预估</span></td>
+          </tr>
+          <tr data-mkt="us">
+            <td><span class="mkt us">美股</span></td>
+            <td class="stock-cell"><div class="name-line">ServiceNow</div><div class="code-line">NOW</div></td>
+            <td><span class="cat">AI企业软件</span></td>
+            <td>Q2 财报</td>
+            <td class="reason">Now Assist · GenAI 订阅收入</td>
+            <td><span class="status estimated">预估</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 08-28 中芯+胜宏 ============ -->
+  <div class="day-group" data-day="0828">
+    <div class="day-header">
+      <div><span class="date">08-28</span><span class="weekday">周五</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">2</span>家 · A股</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="cn">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">中芯国际</div><div class="code-line">688981</div></td>
+            <td><span class="cat">晶圆制造</span></td>
+            <td>2026中报</td>
+            <td class="reason">-</td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">胜宏科技</div><div class="code-line">300476</div></td>
+            <td><span class="cat">PCB</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 预增">2025年报 · 预增</span> <span class="pct big">+278%</span><div class="forecast-detail">盈利 41.6-45.6亿</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 08-29 A股超密集日 ============ -->
+  <div class="day-group" data-day="0829">
+    <div class="day-header super-hot">
+      <div><span class="date">08-29</span><span class="weekday">周五</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">9</span>家 · A股（含浪潮信息 +257%）</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="cn" data-forecast="1" style="background:rgba(34,197,94,0.06)">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">浪潮信息 ⚡</div><div class="code-line">000977</div></td>
+            <td><span class="cat">服务器/算力</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 预增">2026H1 · 预增</span> <span class="pct big">+257%</span><div class="forecast-detail">H1盈利 26-31亿</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">紫光股份</div><div class="code-line">000938</div></td>
+            <td><span class="cat">ICT/算力</span></td>
+            <td>2026中报</td>
+            <td class="reason">-</td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">澜起科技</div><div class="code-line">688008</div></td>
+            <td><span class="cat">内存接口</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 预增">2025年报 · 预增</span> <span class="pct mid">+59%</span><div class="forecast-detail">盈利 21.5-23.5亿</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">源杰科技</div><div class="code-line">688498</div></td>
+            <td><span class="cat">光芯片</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 扭亏">2025年报 · 扭亏</span> <span class="pct big">+3198%</span><div class="forecast-detail">盈利 1.75-2.05亿</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn" data-forecast="1">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">北京君正</div><div class="code-line">300223</div></td>
+            <td><span class="cat">存储/处理器</span></td>
+            <td>2026中报</td>
+            <td><span class="ftype 略增">2025年报 · 略增</span> <span class="pct small">+5.5%</span><div class="forecast-detail">盈利 3.7-4.0亿</div></td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">华海清科</div><div class="code-line">688120</div></td>
+            <td><span class="cat">CMP设备</span></td>
+            <td>2026中报</td>
+            <td class="reason">-</td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">拓荆科技</div><div class="code-line">688072</div></td>
+            <td><span class="cat">薄膜沉积</span></td>
+            <td>2026中报</td>
+            <td class="reason">-</td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+          <tr data-mkt="cn">
+            <td><span class="mkt cn">A股</span></td>
+            <td class="stock-cell"><div class="name-line">华大九天</div><div class="code-line">301269</div></td>
+            <td><span class="cat">EDA</span></td>
+            <td>2026中报</td>
+            <td class="reason">-</td>
+            <td><span class="status confirmed">已预约</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 09-04 Micron ============ -->
+  <div class="day-group" data-day="0904">
+    <div class="day-header">
+      <div><span class="date">09-04</span><span class="weekday">周四</span></div>
+      <div class="badges"><span class="cnt"><span class="cnt-num">1</span>家 · 美股</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:70px">市场</th><th>股票</th><th>环节</th><th>披露内容</th><th>业绩预告/关注要点</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr data-mkt="us">
+            <td><span class="mkt us">美股</span></td>
+            <td class="stock-cell"><div class="name-line">美光科技 Micron</div><div class="code-line">MU</div></td>
+            <td><span class="cat">HBM/DRAM</span></td>
+            <td>Q4 FY2026</td>
+            <td class="reason">HBM3e 8H/12H 收入 · 全年 HBM 售罄</td>
+            <td><span class="status estimated">预估</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 说明 -->
+  <div class="section-title">📌 数据源与说明</div>
+  <div style="background:var(--card); border:1px solid var(--border); border-radius:10px; padding:18px 22px; font-size:13px; line-height:1.75; color:#94a3b8;">
+    <p><strong style="color:#e2e8f0;">A股披露日期：</strong>来源于东方财富 <code style="background:rgba(56,189,248,0.1); color:var(--accent); padding:1px 5px; border-radius:3px;">stock_report_disclosure</code>，公司预约首次披露日期，实际披露可能提前或推迟。</p>
+    <p><strong style="color:#e2e8f0;">A股业绩预告：</strong>来源于东方财富 <code style="background:rgba(56,189,248,0.1); color:var(--accent); padding:1px 5px; border-radius:3px;">stock_yjyg_em</code>，覆盖 2025年报 / 2026Q1 / 2026H1 三期，显示归母净利润指标。</p>
+    <p><strong style="color:#e2e8f0;">美股/韩股披露日期：</strong>基于历史规律预估，请以公司官方投资者关系页面公告为准。</p>
+    <p style="margin-top:8px;">A 股 AI 算力 51 只标的中，<strong style="color:var(--up-mid);">29 只已发布业绩预告</strong>（2026H1 预告 4 只、2026Q1 预告 5 只、2025 年报预告 24 只，部分公司多期都有）。</p>
+  </div>
+
+  <!-- Nav -->
+  <div class="nav-back">
+    <a href="index.html">← 返回数据导航</a>
+  </div>
+
+  <footer>
+    <p>⚠️ 免责声明：本页面仅供信息参考，不构成任何投资建议。</p>
+    <p>数据源：A 股来自东方财富接口 · 美股/韩股日期为公开信息与历史规律预估</p>
+    <p>数据生成：2026-07-08 · 三地合并业绩日历</p>
+  </footer>
+</div>
+
+<script>
+// 筛选功能
+const filterBtns = document.querySelectorAll('.filter-btn');
+const dayGroups = document.querySelectorAll('.day-group');
+
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+
+    dayGroups.forEach(group => {
+      const rows = group.querySelectorAll('tbody tr');
+      let visibleCount = 0;
+
+      rows.forEach(row => {
+        let show = true;
+        if (filter === 'all') {
+          show = true;
+        } else if (filter === 'cn' || filter === 'us' || filter === 'kr') {
+          show = row.dataset.mkt === filter;
+        } else if (filter === 'hasforecast') {
+          show = row.dataset.forecast === '1';
+        }
+        row.classList.toggle('hidden', !show);
+        if (show) visibleCount++;
+      });
+
+      // 隐藏整个日期分组如果没有可见行
+      group.classList.toggle('hidden', visibleCount === 0);
+    });
+  });
+});
+</script>
+</body>
+</html>

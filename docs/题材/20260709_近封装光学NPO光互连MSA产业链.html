@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>近封装光学 NPO 光互连 MSA 产业链分析 | A股受益标的图谱</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+:root{--bg:#0a0e17;--bg-card:#111827;--bg-card-hover:#1a2235;--border:#1e2d45;--text:#e2e8f0;--text-muted:#8899aa;--accent:#38bdf8;--accent2:#8b5cf6;--green:#10b981;--red:#ef4444;--yellow:#f59e0b;--radius:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans SC',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.75}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(56,189,248,0.05)0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(139,92,246,0.05)0%,transparent 50%),radial-gradient(ellipse at 50% 80%,rgba(16,185,129,0.04)0%,transparent 50%);pointer-events:none;z-index:0}
+.container{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 24px}
+.top-bar{border-bottom:1px solid var(--border);padding:12px 24px;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(12px);position:sticky;top:0;z-index:100;background:rgba(10,14,23,0.85)}
+.top-bar .breadcrumb{font-size:.85rem;color:var(--text-muted)}
+.top-bar .breadcrumb a{color:var(--accent);text-decoration:none}
+.top-bar .breadcrumb span{color:var(--text)}
+.top-bar .date{font-size:.85rem;color:var(--text-muted)}
+.header{padding:60px 0 40px;text-align:center;border-bottom:1px solid var(--border);margin-bottom:40px}
+.header .tag{display:inline-block;font-size:.8rem;padding:4px 16px;border-radius:100px;background:rgba(56,189,248,0.12);color:var(--accent);letter-spacing:3px;margin-bottom:16px}
+.header h1{font-size:2.4rem;font-weight:900;background:linear-gradient(135deg,#f1f5f9,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}
+.header .subtitle{color:var(--text-muted);font-size:1.05rem;max-width:760px;margin:0 auto;line-height:1.8}
+.header .meta-row{display:flex;justify-content:center;gap:32px;margin-top:24px;flex-wrap:wrap}
+.meta-item{text-align:center}
+.meta-item .m-label{font-size:.75rem;color:var(--text-muted);letter-spacing:2px}
+.meta-item .m-value{font-size:1.4rem;font-weight:700;color:var(--accent)}
+.overview-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:48px}
+@media(max-width:768px){.overview-grid{grid-template-columns:repeat(2,1fr)}}
+.overview-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;transition:.25s}
+.overview-card:hover{border-color:var(--accent);background:var(--bg-card-hover)}
+.overview-card .ov-value{font-size:1.7rem;font-weight:900;background:linear-gradient(135deg,#38bdf8,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.overview-card .ov-label{font-size:.8rem;color:var(--text-muted);margin-top:4px}
+.executive-summary{background:linear-gradient(135deg,rgba(56,189,248,0.06),rgba(139,92,246,0.06));border:1px solid var(--border);border-radius:var(--radius);padding:32px;margin-bottom:48px}
+.executive-summary h2{font-size:1.2rem;font-weight:700;margin-bottom:16px;color:var(--accent)}
+.executive-summary p{color:var(--text-muted);font-size:.95rem;margin-bottom:10px}
+.section-title{font-size:1.6rem;font-weight:700;margin:56px 0 28px;display:flex;align-items:center;gap:12px}
+.section-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;font-size:1rem;font-weight:800}
+.num-1{background:rgba(239,68,68,0.15);color:var(--red)}
+.num-2{background:rgba(245,158,11,0.15);color:var(--yellow)}
+.num-3{background:rgba(16,185,129,0.15);color:var(--green)}
+.num-4{background:rgba(56,189,248,0.15);color:var(--accent)}
+.analysis-block{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:32px;overflow:hidden;transition:.3s}
+.analysis-block:hover{border-color:rgba(56,189,248,0.3)}
+.ab-header{padding:20px 28px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.ab-header .ab-title{font-size:1.25rem;font-weight:700}
+.ab-header .ab-eng{font-size:.8rem;color:var(--text-muted);margin-top:4px}
+.ab-header .severity{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.severity-dots{display:flex;gap:4px}
+.severity-dot{width:10px;height:10px;border-radius:50%}
+.severity-dot.fill{background:var(--accent)}
+.severity-dot.fill-purple{background:var(--accent2)}
+.severity-dot.empty{background:var(--border)}
+.severity-label{font-size:.8rem;font-weight:600}
+.s-critical{color:var(--red)}
+.s-very-high{color:var(--yellow)}
+.s-high{color:var(--accent)}
+.ab-body{padding:28px}
+.ab-body h3{font-size:1rem;font-weight:700;color:var(--text);margin:24px 0 12px}
+.ab-body h3:first-child{margin-top:0}
+.ab-body p{color:var(--text-muted);font-size:.92rem;margin-bottom:12px}
+.ab-body ul{list-style:none;padding:0;margin:0 0 16px}
+.ab-body ul li{padding:6px 0 6px 24px;position:relative;color:var(--text-muted);font-size:.92rem}
+.ab-body ul li::before{content:'\25B8';position:absolute;left:4px;color:var(--accent);font-size:.75rem;top:7px}
+.stock-table{width:100%;border-collapse:collapse;margin-top:20px;font-size:.9rem}
+.stock-table th{padding:10px 14px;text-align:left;border-bottom:2px solid var(--border);color:var(--text-muted);font-weight:500;font-size:.78rem;letter-spacing:1px}
+.stock-table td{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+.stock-table tr:hover td{background:rgba(56,189,248,0.03)}
+.stock-name{font-weight:600;color:var(--text)}
+.stock-code{color:var(--text-muted);font-size:.82rem}
+.stock-reason{color:var(--text-muted);font-size:.85rem;line-height:1.55;max-width:520px}
+.stock-tier{display:inline-block;font-size:.72rem;padding:2px 10px;border-radius:100px;font-weight:600;white-space:nowrap}
+.tier-core{background:rgba(56,189,248,0.15);color:var(--accent)}
+.tier-key{background:rgba(139,92,246,0.15);color:var(--accent2)}
+.tier-related{background:rgba(107,114,128,0.2);color:#9ca3af}
+/* 两边通吃徽章 (华为链 + 海外 MSA 链) */
+.dual-badge{display:inline-block;font-size:.68rem;padding:2px 8px;border-radius:100px;font-weight:700;margin-left:6px;background:linear-gradient(135deg,rgba(245,158,11,0.2),rgba(139,92,246,0.2));color:#fbbf24;border:1px solid rgba(245,158,11,0.4);white-space:nowrap;vertical-align:middle}
+.dual-badge::before{content:'⇋ ';font-size:.75rem}
+.dual-legend{margin:16px 0;padding:12px 16px;background:linear-gradient(135deg,rgba(245,158,11,0.05),rgba(139,92,246,0.05));border:1px solid rgba(245,158,11,0.2);border-radius:8px;font-size:.85rem;color:var(--text-muted)}
+.dual-legend strong{color:#fbbf24}
+.highlight-box{background:rgba(56,189,248,0.06);border:1px solid rgba(56,189,248,0.18);border-radius:8px;padding:16px 20px;margin:16px 0;font-size:.9rem;color:var(--accent)}
+.highlight-box strong{color:var(--text)}
+.source-block{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;margin-top:48px}
+.source-block h3{font-size:1.1rem;font-weight:700;margin-bottom:16px}
+.source-block ol{padding-left:20px;color:var(--text-muted);font-size:.88rem;line-height:2}
+.source-block ol li::marker{color:var(--accent)}
+.disclaimer{text-align:center;color:#475569;font-size:.78rem;margin-top:48px;padding:32px 0;border-top:1px solid var(--border);line-height:1.8}
+.disclaimer strong{color:var(--text-muted)}
+.summary-matrix{overflow-x:auto;margin:32px 0}
+.summary-matrix table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:900px}
+.summary-matrix th{padding:12px 14px;text-align:left;border-bottom:2px solid var(--border);color:var(--text-muted);font-weight:600;font-size:.78rem;letter-spacing:1px;background:rgba(17,24,39,0.6)}
+.summary-matrix th.center{text-align:center}
+.summary-matrix td{padding:12px 14px;border-bottom:1px solid var(--border)}
+.summary-matrix td.center{text-align:center}
+.summary-matrix tr:hover td{background:rgba(56,189,248,0.03)}
+.val-critical{color:var(--red)}
+.val-warn{color:var(--yellow)}
+.val-good{color:var(--green)}
+
+/* MSA 时间轴 */
+.timeline{position:relative;padding-left:32px;margin:24px 0}
+.timeline::before{content:'';position:absolute;left:12px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--accent),var(--accent2))}
+.timeline-item{position:relative;padding:0 0 24px 0}
+.timeline-item::before{content:'';position:absolute;left:-25px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--accent);border:2px solid var(--bg)}
+.timeline-date{font-size:.82rem;color:var(--accent);font-weight:700;margin-bottom:6px}
+.timeline-title{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:6px}
+.timeline-desc{font-size:.9rem;color:var(--text-muted);line-height:1.65}
+
+/* 对比表格 CPO vs NPO vs 可插拔 */
+.compare-table{overflow-x:auto;margin:20px 0}
+.compare-table table{width:100%;border-collapse:collapse;font-size:.9rem;min-width:720px}
+.compare-table th{padding:14px;text-align:left;border-bottom:2px solid var(--border);color:var(--text-muted);font-weight:600;font-size:.8rem;letter-spacing:1px}
+.compare-table th.center,.compare-table td.center{text-align:center}
+.compare-table td{padding:14px;border-bottom:1px solid var(--border);color:var(--text-muted)}
+.compare-table td.tag-good{color:var(--green);font-weight:600}
+.compare-table td.tag-mid{color:var(--yellow);font-weight:600}
+.compare-table td.tag-bad{color:var(--red);font-weight:600}
+.compare-table th:first-child{color:var(--text);font-weight:700}
+
+/* MSA 成员卡片 */
+.member-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:20px 0}
+.member-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;text-align:center;transition:.25s}
+.member-card:hover{border-color:var(--accent);background:var(--bg-card-hover)}
+.member-card .m-name{font-weight:700;font-size:.95rem;color:var(--text)}
+.member-card .m-role{font-size:.72rem;color:var(--text-muted);margin-top:4px;line-height:1.5}
+
+/* 复制股票代码按钮 */
+.copy-btn-wrap{margin:12px 0 4px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.copy-codes-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;font-size:.82rem;font-weight:600;background:rgba(56,189,248,0.1);color:var(--accent);border:1px solid rgba(56,189,248,0.3);border-radius:6px;cursor:pointer;transition:.2s;font-family:inherit}
+.copy-codes-btn:hover{background:rgba(56,189,248,0.2);border-color:var(--accent)}
+.copy-codes-btn.copied{background:rgba(16,185,129,0.15);color:var(--green);border-color:rgba(16,185,129,0.4)}
+.copy-codes-btn .icon{font-size:.9rem}
+.copy-hint{font-size:.75rem;color:var(--text-muted)}
+</style>
+</head>
+<body>
+<div class="top-bar">
+<div class="breadcrumb"><a href="index.html">题材</a> &rsaquo; <span>NPO 光互连 MSA 产业链分析</span></div>
+<div class="date">报告日期：2026-07-09</div>
+</div>
+<div class="container">
+<div class="header">
+<div class="tag">深度研究 &middot; 光互连范式变革</div>
+<h1>近封装光学 NPO 光互连 MSA 产业链分析</h1>
+<p class="subtitle">拆解 2025 年 8 月由博通、AMD、Astera Labs、Marvell、Micas 等联合发起的 <strong>Near-Packaged Optics MSA</strong>，从光引擎、可插拔连接、封装工艺到光芯片/材料的 A 股受益标的图谱</p>
+<div class="meta-row">
+<div class="meta-item"><div class="m-label">MSA 发起方</div><div class="m-value">5+</div></div>
+<div class="meta-item"><div class="m-label">覆盖子赛道</div><div class="m-value">7+1</div></div>
+<div class="meta-item"><div class="m-label">A股核心标的</div><div class="m-value">32+</div></div>
+<div class="meta-item"><div class="m-label">2030 光互连市场</div><div class="m-value">$500亿+</div></div>
+</div>
+</div>
+
+<div class="overview-grid">
+<div class="overview-card"><div class="ov-value">3.2T / 6.4T</div><div class="ov-label">NPO/CPO 目标通道速率</div></div>
+<div class="overview-card"><div class="ov-value">-30%~50%</div><div class="ov-label">功耗较可插拔光模块下降幅度</div></div>
+<div class="overview-card"><div class="ov-value">2027-2028</div><div class="ov-label">NPO 首批产品预期量产窗口</div></div>
+<div class="overview-card"><div class="ov-value">MSA1.0</div><div class="ov-label">2025-08 首版规范已发布</div></div>
+</div>
+
+<div class="executive-summary">
+<h2>&#9654; 核心结论</h2>
+<p><strong>NPO（Near-Packaged Optics，近封装光学）是 CPO 到可插拔光模块之间的"渐进方案"</strong>——把光引擎放在距离 ASIC/交换芯片几厘米的位置（同一 PCB 或同一基板边缘），既显著降低功耗与延迟，又保留了光引擎的可维修性和产业生态兼容性。2025 年 8 月，博通、AMD、Astera Labs、Marvell、Micas Networks 等联合发起 <strong>NPO MSA</strong>，标志着行业开始为下一代 AI 集群光互连制定统一标准。</p>
+<p><strong>为什么 NPO 是"下一代 AI 集群光互连"的必经之路：</strong>(1) 单卡 GPU 功耗从 700W 冲向 2kW+，可插拔光模块的功耗/散热压力将吃掉 30%+ 系统预算；(2) CPO 直接把光引擎搬到 XPU 封装内，代价是良率损失、维修不便和产业链重构；(3) NPO 保留光引擎的独立模块形态，可以像 SFP 一样更换，但把 SerDes 传输距离从 &gt;1 米压到 &lt;10 厘米，功耗下降 30-50%，是从 "可插拔" 到 "CPO" 之间最平滑的过渡。</p>
+<p><strong>A 股受益逻辑三条主线：</strong>(1) <strong>光引擎与光模块升级</strong>——中际旭创、新易盛、天孚通信具备 NPO 光引擎参与能力；(2) <strong>光纤连接与光背板</strong>——太辰光/长飞光纤等 MPO/MT 高密光纤连接件供应商；(3) <strong>先进封装与硅光</strong>——源杰科技、光库科技、仕佳光子等硅光/光芯片，长电/通富的 2.5D 共封装能力。</p>
+</div>
+
+<div class="section-title"><span class="section-num num-4">&equiv;</span>NPO MSA 关键时间线</div>
+<div class="analysis-block"><div class="ab-body">
+<div class="timeline">
+
+<div class="timeline-item">
+<div class="timeline-date">2023 Q1 &middot; 缘起</div>
+<div class="timeline-title">博通 Bailly 51.2T CPO 交换机首次亮相 OFC</div>
+<div class="timeline-desc">博通在 OFC 2023 展示业内首款 51.2T CPO 交换机，验证了"光引擎与 ASIC 共封装"的技术可行性，但 CPO 的可维修性、产业生态兼容性仍存质疑。业界开始思考"折中方案"——将光引擎放在 ASIC 附近但不共封装。</div>
+</div>
+
+<div class="timeline-item">
+<div class="timeline-date">2024 Q2 &middot; 概念成型</div>
+<div class="timeline-title">"Near-Packaged Optics"概念获广泛认可</div>
+<div class="timeline-desc">Meta、微软等超大规模数据中心运营商在 OCP Summit 明确表态：CPO 良率与维修问题短期内难解决，希望产业界推动 NPO（近封装光学）作为过渡方案。Astera Labs、Marvell 等 SerDes 与光互连芯片厂商开始布局 NPO 参考设计。</div>
+</div>
+
+<div class="timeline-item">
+<div class="timeline-date">2025 Q1 &middot; 生态动员</div>
+<div class="timeline-title">OFC 2025 上多家厂商展示 NPO 原型</div>
+<div class="timeline-desc">中际旭创、新易盛、Coherent 等在 OFC 2025 展示 1.6T/3.2T NPO 光引擎原型，采用 LPO/CPO 混合架构，功耗较传统可插拔光模块下降 40%+。NVIDIA 在 GTC 2025 表态未来 Rubin 平台将支持 NPO 接口。</div>
+</div>
+
+<div class="timeline-item">
+<div class="timeline-date">2025 Q3 &middot; MSA 发起</div>
+<div class="timeline-title">NPO MSA 1.0 规范发布</div>
+<div class="timeline-desc">2025 年 8 月，由博通、AMD、Astera Labs、Marvell、Micas Networks 等联合发起 Near-Packaged Optics MSA，发布 1.0 版本规范，统一光引擎的机械尺寸、电接口（XSR/USR SerDes）、光接口（MPO-16/32）、供电与管理协议。首批目标：3.2T 单光引擎，功耗 &lt;15pJ/bit。</div>
+</div>
+
+<div class="timeline-item">
+<div class="timeline-date">2026 Q2 &middot; 客户端验证</div>
+<div class="timeline-title">NPO 光引擎进入头部客户送样阶段</div>
+<div class="timeline-desc">中际旭创、Coherent、新易盛等宣布 NPO 光引擎工程样品交付超大规模数据中心客户，用于 51.2T/102.4T 交换机与下一代 AI 集群互联原型验证。台积电、长电、通富开始承接 NPO 光引擎的 2.5D 集成封装。</div>
+</div>
+
+<div class="timeline-item">
+<div class="timeline-date">2027-2028 &middot; 量产窗口</div>
+<div class="timeline-title">首批 NPO 商用部署预期落地</div>
+<div class="timeline-desc">102.4T 交换机与 Rubin/Rubin Ultra 等下一代 GPU 平台预计 2027-2028 年批量部署，NPO 将作为主流互联方案之一。CPO 与 NPO 并行发展，市场分化：CPO 主打极致性能（Scale-Up），NPO 主打灵活性 + 快速迭代（Scale-Out）。</div>
+</div>
+
+</div>
+</div></div>
+
+<div class="section-title"><span class="section-num num-4">&equiv;</span>NPO MSA 核心发起方与生态</div>
+<div class="analysis-block"><div class="ab-body">
+<p style="margin-bottom:16px">首批 MSA 核心成员覆盖交换 ASIC、AI 芯片、SerDes / Retimer、光引擎、系统集成商等关键角色：</p>
+<div class="member-grid">
+<div class="member-card"><div class="m-name">Broadcom</div><div class="m-role">交换 ASIC 龙头<br>Tomahawk / Jericho 系列</div></div>
+<div class="member-card"><div class="m-name">AMD</div><div class="m-role">AI 加速器<br>MI300/MI400 系列</div></div>
+<div class="member-card"><div class="m-name">Astera Labs</div><div class="m-role">PCIe/CXL Retimer<br>AI 互连 IP 平台</div></div>
+<div class="member-card"><div class="m-name">Marvell</div><div class="m-role">高速 SerDes + 硅光<br>光 DSP 龙头</div></div>
+<div class="member-card"><div class="m-name">Micas Networks</div><div class="m-role">白盒交换机<br>Broadcom 亲密盟友</div></div>
+<div class="member-card"><div class="m-name">Coherent</div><div class="m-role">光模块 &amp; 光引擎<br>硅光平台</div></div>
+<div class="member-card"><div class="m-name">TE Connectivity</div><div class="m-role">高密光/电连接器<br>光背板</div></div>
+<div class="member-card"><div class="m-name">Molex / Amphenol</div><div class="m-role">MPO/MT 连接件<br>Cable Assembly</div></div>
+</div>
+<div class="highlight-box"><strong>关键判断：</strong>NPO MSA 与 CPO Consortium 是两条并行的技术路线。<strong>NPO 更接近产业界主流</strong>——保留光引擎独立模块形态，产业生态兼容性极强，A 股光模块厂商（中际旭创、新易盛、天孚通信）可以直接沿用现有工艺 + 客户关系承接 NPO 光引擎订单，弹性远优于 CPO。</div>
+</div></div>
+
+<div class="section-title"><span class="section-num num-1">&equiv;</span>华为链 NPO 专题：另起炉灶还是兼容并进？</div>
+<div class="analysis-block">
+<div class="ab-header">
+<div class="ab-left"><div class="ab-title">华为的光互连路径：昇腾超节点 + 灵衢总线 + 自研光引擎</div><div class="ab-eng">Huawei UnifiedBus &middot; CloudMatrix &middot; Ascend SuperPod &middot; Self-developed Optical Engine</div></div>
+<div class="severity"><div class="severity-dots"><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span></div><span class="severity-label s-critical">国产平行体系</span></div>
+</div>
+<div class="ab-body">
+
+<h3>&#9654; 一、华为为何不在 NPO MSA 名单里？</h3>
+<p>NPO MSA 由博通、AMD、Astera、Marvell、Micas 联合发起，本质是<strong>西方交换 ASIC 与 AI 芯片阵营对英伟达 NVLink/InfiniBand 私有生态的联合反制</strong>。华为因中美科技脱钩、Broadcom/Marvell 芯片供货受限等原因，<strong>无法在同一物理层规范下与 MSA 深度绑定</strong>。但华为并未缺席"近封装光学"这一技术路线——只是走的是"平行赛道"。</p>
+
+<h3>&#9654; 二、华为的 NPO 技术路径：CloudMatrix + 灵衢总线</h3>
+<p>华为在 2024-2025 年推出的 <strong>CloudMatrix 384 超节点</strong>和昇腾 CANN 生态，本质上已经在"变相实现 NPO 架构"：</p>
+<ul>
+<li><strong>CloudMatrix 384 超节点</strong>——384 颗昇腾 910C 通过全光互联组成一个 Scale-Up 域，单节点光模块用量数万只，光互连密度远超传统 AI 集群。已在实际部署中验证近封装光路的功耗与延迟优势。</li>
+<li><strong>灵衢总线 (UnifiedBus)</strong>——华为自研的高速 SerDes + 光互连协议，对标 NVLink + InfiniBand。灵衢 2.0 单端口速率已达 224G/lane，为下一代昇腾芯片的近封装光引擎预留接口。</li>
+<li><strong>昇腾 950/960 平台</strong>——市场传闻华为下一代昇腾平台将引入"近封装光模块"或"共封装光学"架构，光互连从面板迁移到基板边缘，产业界普遍认为落地窗口在 <strong>2027-2028</strong>，与 NPO MSA 的商用时间基本同步。</li>
+</ul>
+
+<h3>&#9654; 三、华为 NPO 路径 vs NPO MSA 对比</h3>
+<div class="compare-table"><table>
+<thead><tr><th>维度</th><th class="center">NPO MSA (西方阵营)</th><th class="center">华为 CloudMatrix + 灵衢 (国产)</th></tr></thead>
+<tbody>
+<tr><td><strong>标准制定</strong></td><td class="center">MSA 开放规范</td><td class="center">华为主导 + 灵衢联盟</td></tr>
+<tr><td><strong>核心 AI 芯片</strong></td><td class="center">AMD MI400 / Broadcom TPU</td><td class="center">昇腾 910C / 950 / 960</td></tr>
+<tr><td><strong>SerDes 供应</strong></td><td class="center">Broadcom / Marvell / Astera</td><td class="center tag-good">华为海思自研 (灵衢)</td></tr>
+<tr><td><strong>光引擎供应链</strong></td><td class="center">Coherent / 中际旭创 / 新易盛</td><td class="center tag-good">光迅科技 / 华工科技 / 华为自研</td></tr>
+<tr><td><strong>光芯片</strong></td><td class="center">Marvell / Coherent 硅光</td><td class="center tag-good">源杰科技 / 光迅 / 华为海思光芯片</td></tr>
+<tr><td><strong>预期量产</strong></td><td class="center">2027-2028</td><td class="center">2027-2028 (昇腾 950 世代)</td></tr>
+<tr><td><strong>组网协议</strong></td><td class="center">Ethernet + 私有扩展</td><td class="center">灵衢 UnifiedBus (自研)</td></tr>
+<tr><td><strong>典型应用</strong></td><td class="center">北美超大规模数据中心</td><td class="center">国内智算中心 / 政企 AI / 三大运营商</td></tr>
+</tbody></table></div>
+
+<h3>&#9654; 四、华为链 A 股核心受益标的</h3>
+<p>华为 NPO 路径与 MSA 路径可能有部分标的重叠（如源杰科技、光库科技），但<strong>华为链有独立的"华系深度绑定"标的池</strong>，弹性来自昇腾超节点扩产 + 国产光互连自主可控双重驱动：</p>
+<div class="dual-legend"><strong>⇋ 两边通吃</strong>标记：既是华为链核心供应商，同时也为海外 MSA 链（英伟达/博通/AMD 等超大规模数据中心）供货的稀缺标的——享有<strong>国产替代 β + 全球算力 α</strong> 双重弹性，是产业链中确定性最强的一类。</div>
+<table class="stock-table">
+<thead><tr><th style="width:160px">标的</th><th style="width:80px">层级</th><th>华为链 NPO 绑定逻辑</th></tr></thead>
+<tbody>
+<tr><td><span class="stock-name">光迅科技</span><br><span class="stock-code">002281.SZ</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">华为体系光模块+光芯片<strong>金牌供应商</strong>，央企背景。25G/50G/100G 光模块深度配套昇腾服务器，激光器/探测器芯片自研突破。CloudMatrix 384 超节点光互连主力供应商之一，昇腾 950 世代 NPO 光引擎华为体系首选承接方。是华为链 NPO 弹性<strong>最纯粹</strong>标的</td></tr>
+<tr><td><span class="stock-name">华工科技</span><br><span class="stock-code">000988.SZ</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">华为长期光模块合作伙伴，400G/800G 光模块进入华为供应链。华为智算中心 + 运营商光网络双线布局，昇腾超节点扩产直接受益。切入 1.6T 光模块，NPO 光引擎华为体系第二供应源候选</td></tr>
+<tr><td><span class="stock-name">中际旭创</span><span class="dual-badge">两边通吃</span><br><span class="stock-code">300308.SZ</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">全球光模块龙头，海外营收占比 80%+（AWS/Meta/Microsoft/Google/NVIDIA 生态），同时国内华为体系也是重要客户。1.6T 光模块与 NPO 光引擎能力可<strong>同时供应 MSA 阵营与华为阵营</strong>，两边通吃的稀缺标的</td></tr>
+<tr><td><span class="stock-name">天孚通信</span><span class="dual-badge">两边通吃</span><br><span class="stock-code">300394.SZ</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">光引擎核心器件 OEM 全球龙头，向 <strong>Coherent/Lumentum/中际旭创/新易盛（海外链）+ 光迅/华工（华为链）</strong>同步供应 TOSA/ROSA/COB 关键器件。华为 NPO 光引擎国产化路径的隐形受益方，也是海外 NPO 光引擎的核心 OEM</td></tr>
+<tr><td><span class="stock-name">源杰科技</span><span class="dual-badge">两边通吃</span><br><span class="stock-code">688498.SH</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">国内 EML/DFB 激光器芯片龙头。中美芯片脱钩背景下，华为体系光模块厂商<strong>必须转向国产激光器芯片</strong>——源杰是华为链光芯片国产化关键突破点；同时作为中际旭创/新易盛的国产激光器供应商，切入海外 MSA 链光引擎供应</td></tr>
+<tr><td><span class="stock-name">仕佳光子</span><span class="dual-badge">两边通吃</span><br><span class="stock-code">688313.SH</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">PLC 分路器全球市占率超 50%/AWG 波分复用器龙头，华为光传输设备核心供应商；PLC 器件同时供应海外光模块龙头。昇腾超节点 + 海外 NPO 光引擎密集光互连架构下，PLC/AWG 用量倍增</td></tr>
+<tr><td><span class="stock-name">太辰光</span><span class="dual-badge">两边通吃</span><br><span class="stock-code">300570.SZ</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">MPO/MT 高密光纤连接件龙头，<strong>同时供应华为智算中心与北美超大规模数据中心（AWS/Meta/Google）</strong>。华为 CloudMatrix 384 超节点 + 海外 51.2T/102.4T NPO 交换机内部 MPO 连接件用量激增，两端同步受益</td></tr>
+<tr><td><span class="stock-name">长飞光纤</span><span class="dual-badge">两边通吃</span><br><span class="stock-code">601869.SH</span></td><td><span class="stock-tier tier-related">相关</span></td><td class="stock-reason">华为核心光纤供应商，同时海外数据中心特种光纤 + MPO 集束跳线出货规模领先。昇腾超节点 + 海外 AI 集群密集光互连驱动数据中心内部高密光缆需求增长</td></tr>
+<tr><td><span class="stock-name">紫光股份</span><br><span class="stock-code">000938.SZ</span></td><td><span class="stock-tier tier-related">相关</span></td><td class="stock-reason">旗下新华三是国内 AI 交换机龙头，与华为在交换机领域既竞争又互补。若华为 NPO 光引擎方案对外授权，新华三是国内白牌交换机主要采用者</td></tr>
+<tr><td><span class="stock-name">深南电路</span><span class="dual-badge">两边通吃</span><br><span class="stock-code">002916.SZ</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">华为高端 PCB + 封装基板核心供应商；同时是国内唯一 FC-BGA (ABF) 载板量产商，向<strong>海外 AI 芯片 (含 AMD/博通 等 MSA 阵营) </strong>的封装基板供应链延伸。昇腾芯片封装基板 + NPO 光引擎周边高速 PCB 双重受益</td></tr>
+<tr><td><span class="stock-name">沪电股份</span><span class="dual-badge">两边通吃</span><br><span class="stock-code">002463.SZ</span></td><td><span class="stock-tier tier-related">相关</span></td><td class="stock-reason">高多层 PCB 龙头，<strong>核心业务在海外 AI 服务器（NVIDIA/AMD/博通 生态）</strong>，同时华为服务器与交换机高速 PCB 也是主力供应商。海外 MSA 链 NPO 交换机主板+华为昇腾平台扩产同步受益</td></tr>
+</tbody></table>
+
+<h3>&#9654; 五、华为链 NPO 三大关键判断</h3>
+<ul>
+<li><strong>判断一：华为不会跟 MSA 兼容，但会有"事实标准"的对齐。</strong>灵衢 UnifiedBus 与 MSA 在物理层与协议层可能存在部分技术共识（如 224G SerDes、MPO-16 光接口），但生态与供应链完全独立。<strong>华为链标的和 MSA 链标的的估值逻辑要分开看</strong>。</li>
+<li><strong>判断二：光迅+华工是华为链 NPO 的"双子星"。</strong>光迅央企背景+光芯片自研，华工华为长期合作+光模块能力，两家将承接华为 NPO 光引擎的主要份额。<strong>光迅在光芯片端更强，华工在光模块端更强</strong>，各有侧重。</li>
+<li><strong>判断三：源杰科技是"华为链最纯粹的光芯片标的"。</strong>华为体系光模块厂商必须实现光芯片国产替代，源杰是当前唯一具备批量能力的选项。100G EML 量产 = 华为 NPO 光引擎国产化的关键里程碑。</li>
+</ul>
+
+<div class="highlight-box"><strong>核心洞察：</strong>华为链 NPO 与 MSA 链 NPO 是<strong>"平行赛道"而非"竞争替代"</strong>——两者在国内国际市场分别独立成长，都受益于 AI 集群近封装光互连的大趋势。<strong>"两边通吃"的标的（如中际旭创、天孚通信、源杰科技、太辰光）享有最大 α</strong>，"华为纯血"标的（光迅、华工）享有国产替代 β。</div>
+
+</div>
+</div>
+
+<div class="section-title"><span class="section-num num-4">&equiv;</span>可插拔光模块 vs NPO vs CPO 技术对比</div>
+<div class="analysis-block"><div class="ab-body">
+<div class="compare-table"><table>
+<thead><tr><th>维度</th><th class="center">可插拔光模块 (Pluggable)</th><th class="center">NPO 近封装光学</th><th class="center">CPO 共封装光学</th></tr></thead>
+<tbody>
+<tr><td><strong>光引擎位置</strong></td><td class="center">面板 (Faceplate)</td><td class="center">PCB / 基板边缘 (2-10cm)</td><td class="center">ASIC 封装内</td></tr>
+<tr><td><strong>SerDes 传输距离</strong></td><td class="center">&gt;1 米</td><td class="center">&lt;10 厘米</td><td class="center">&lt;1 厘米</td></tr>
+<tr><td><strong>功耗 (pJ/bit)</strong></td><td class="center tag-bad">25-30</td><td class="center tag-mid">10-15</td><td class="center tag-good">5-8</td></tr>
+<tr><td><strong>延迟</strong></td><td class="center tag-bad">高</td><td class="center tag-mid">中</td><td class="center tag-good">极低</td></tr>
+<tr><td><strong>可维修性</strong></td><td class="center tag-good">极高 (热插拔)</td><td class="center tag-good">高 (可现场更换)</td><td class="center tag-bad">极低 (需换整颗XPU)</td></tr>
+<tr><td><strong>良率 (系统级)</strong></td><td class="center tag-good">成熟</td><td class="center tag-mid">较成熟</td><td class="center tag-bad">良率是最大瓶颈</td></tr>
+<tr><td><strong>产业生态兼容性</strong></td><td class="center tag-good">全生态</td><td class="center tag-good">兼容现有光模块厂商</td><td class="center tag-bad">需重构供应链</td></tr>
+<tr><td><strong>量产时间</strong></td><td class="center">现役</td><td class="center">2027-2028</td><td class="center">2026 试产, 2028+ 规模化</td></tr>
+<tr><td><strong>主要推动方</strong></td><td class="center">全体光模块厂商</td><td class="center">NPO MSA 联盟</td><td class="center">博通 CPO 联盟 / TSMC COUPE</td></tr>
+<tr><td><strong>典型应用场景</strong></td><td class="center">通用数据中心</td><td class="center">AI 集群 Scale-Out</td><td class="center">AI 集群 Scale-Up</td></tr>
+</tbody></table></div>
+<div class="highlight-box"><strong>核心洞察：</strong>NPO 是"渐进式优化"路线，CPO 是"颠覆式重构"路线。对 A 股光模块厂商而言，<strong>NPO 是"确定性红利"</strong>——现有客户关系、工艺经验、产能设施都能复用；CPO 是"不确定性机会"——需要重新绑定台积电 COUPE 生态或英伟达自研平台。<strong>NPO MSA 的落地节奏更快、A 股参与深度更高</strong>。</div>
+</div></div>
+
+<div class="section-title"><span class="section-num num-3">&equiv;</span>NPO 光互连 7 大赛道 &times; A股受益矩阵</div>
+<div class="analysis-block"><div class="ab-body">
+<div class="summary-matrix"><table>
+<thead><tr><th>赛道</th><th class="center">MSA 参与深度</th><th class="center">NPO 弹性</th><th class="center">国产替代空间</th><th class="center">量产成熟度</th><th>A股核心标的</th></tr></thead>
+<tbody>
+<tr><td class="stock-name">1. NPO 光引擎 &amp; 高速光模块</td><td class="center val-critical">★★★★★</td><td class="center val-critical">★★★★★</td><td class="center val-warn">★★★</td><td class="center val-good">已有工程样品</td><td>中际旭创、新易盛、天孚通信、光迅科技</td></tr>
+<tr><td class="stock-name">2. 硅光芯片 &amp; 光电共封装</td><td class="center val-critical">★★★★★</td><td class="center val-critical">★★★★★</td><td class="center val-critical">★★★★</td><td class="center val-warn">批量导入中</td><td>源杰科技、仕佳光子、长光华芯、光库科技</td></tr>
+<tr><td class="stock-name">3. MPO/MT 高密光纤连接件</td><td class="center val-critical">★★★★★</td><td class="center val-warn">★★★★</td><td class="center val-warn">★★★</td><td class="center val-good">规模量产</td><td>太辰光、长飞光纤、中天科技、亨通光电</td></tr>
+<tr><td class="stock-name">4. 光引擎封装基板 &amp; 光电PCB</td><td class="center val-warn">★★★★</td><td class="center val-critical">★★★★★</td><td class="center val-critical">★★★★</td><td class="center val-warn">研发验证</td><td>深南电路、沪电股份、兴森科技、生益科技</td></tr>
+<tr><td class="stock-name">5. 光引擎 2.5D 集成封装</td><td class="center val-warn">★★★★</td><td class="center val-warn">★★★★</td><td class="center val-critical">★★★★</td><td class="center val-warn">工艺开发中</td><td>长电科技、通富微电、甬矽电子</td></tr>
+<tr><td class="stock-name">6. 激光器 / EML / VCSEL 芯片</td><td class="center val-warn">★★★</td><td class="center val-warn">★★★★</td><td class="center val-critical">★★★★★</td><td class="center val-warn">加速国产化</td><td>源杰科技、长光华芯、光迅科技</td></tr>
+<tr><td class="stock-name">7. 光模块材料 (聚合物/隔离器)</td><td class="center">★★</td><td class="center val-warn">★★★</td><td class="center val-warn">★★★</td><td class="center val-good">量产</td><td>腾景科技、光库科技、天孚通信</td></tr>
+</tbody></table></div>
+</div></div>
+
+<div class="section-title"><span class="section-num num-1">1</span>NPO 光引擎 & 高速光模块</div>
+<div class="analysis-block">
+<div class="ab-header">
+<div class="ab-left"><div class="ab-title">NPO MSA 最核心环节:从可插拔到近封装的直接受益者</div><div class="ab-eng">NPO Optical Engine &middot; 1.6T / 3.2T / 6.4T &middot; LPO Hybrid</div></div>
+<div class="severity"><div class="severity-dots"><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span></div><span class="severity-label s-critical">MSA 直接受益</span></div>
+</div>
+<div class="ab-body">
+
+<h3>&#9654; 赛道逻辑</h3>
+<p><strong>NPO 光引擎 = 可插拔光模块的"下一代形态"。</strong>核心变化：光引擎从面板 (Faceplate) 迁移到 ASIC 附近的 PCB / 基板边缘，通过 XSR/USR SerDes 与交换 ASIC 直连，SerDes 传输距离从 &gt;1 米压至 &lt;10 厘米，功耗从 25-30pJ/bit 降到 10-15pJ/bit。<strong>光引擎的核心工艺（TOSA/ROSA、DSP、驱动器、TIA、封装）与传统 800G/1.6T 光模块完全一致</strong>，只是形态和电接口重新定义。</p>
+<p><strong>为什么中际旭创/新易盛/天孚通信是"确定性受益方"：</strong>(1) MSA 规范复用现有光模块工艺，A 股龙头具备完整量产能力；(2) 现有超大规模数据中心客户关系（AWS/Meta/Microsoft/Google/字节/腾讯）可以直接承接 NPO 光引擎订单；(3) NPO 光引擎单通道价值量与 800G 光模块相当（$500-800/通道），但单交换机部署密度提升 4-8 倍，<strong>单交换机光引擎价值量提升 3-5 倍</strong>。</p>
+<ul>
+<li>2027 年全球 NPO 光引擎市场规模预计 $30-50 亿美元</li>
+<li>中际旭创 800G/1.6T 光模块全球市占率第一，NPO 光引擎有望延续领先地位</li>
+<li>新易盛 1.6T 光模块产能全球前三，率先进入 NPO 客户端验证</li>
+<li>天孚通信是光引擎核心器件全球龙头，NPO MSA 光引擎受益弹性极大</li>
+</ul>
+<p style="color:var(--text-muted);font-size:.85rem;margin-top:12px;padding:10px 16px;background:rgba(56,189,248,0.04);border-radius:8px"><strong>🔗 绑定关系链：</strong>绑定关系：<strong>中际旭创/新易盛 → 北美超大规模数据中心 NPO 光引擎主力供应商候选</strong>；<strong>天孚通信 → 光引擎核心器件全球最大 OEM</strong>；<strong>光迅科技 → 华为体系 NPO 光引擎主力承接方</strong>。</p>
+<table class="stock-table">
+<thead><tr><th style="width:140px">标的</th><th style="width:80px">层级</th><th>受益逻辑与绑定关系</th></tr></thead>
+<tbody><tr><td><span class="stock-name">中际旭创</span><br><span class="stock-code">300308.SZ</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">全球光模块龙头，800G 光模块出货量全球第一，1.6T 光模块率先量产。已在 OFC 2025 展示 NPO 光引擎原型，与博通/AMD/Marvell 深度合作，有望成为 NPO MSA 首批光引擎主力供应商。海外超大规模数据中心客户关系可直接迁移到 NPO 订单</td></tr>
+<tr><td><span class="stock-name">新易盛</span><br><span class="stock-code">300502.SZ</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">1.6T 光模块出货量快速爬坡，海外营收占比高达 80%+。深度绑定亚马逊/微软等超大规模数据中心，NPO MSA 光引擎主要参与方之一。3.2T 光引擎研发进度行业前列</td></tr>
+<tr><td><span class="stock-name">天孚通信</span><br><span class="stock-code">300394.SZ</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">光引擎核心器件（TOSA/ROSA/COB/PLC）全球龙头，为中际旭创/Coherent/Lumentum 等提供关键光电子器件。NPO 光引擎结构对天孚</td></tr>
+<tr><td><span class="stock-name">光迅科技</span><br><span class="stock-code">002281.SZ</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">央企背景光模块+光芯片龙头，华为金牌供应商。25G/100G/400G/800G 光模块全系列覆盖，激光器/探测器芯片自研。NPO 光引擎华为体系主力承接方候选</td></tr>
+</tbody>
+</table>
+<div class="highlight-box"><strong>关键判断：</strong><strong>中际旭创 + 新易盛 + 天孚通信是 A 股 NPO 光引擎的"核心三剑客"</strong>——工艺经验、客户关系、产能设施可完全复用于 NPO，是 MSA 落地弹性最直接的受益方。</div>
+</div>
+</div>
+
+<div class="section-title"><span class="section-num num-1">2</span>硅光芯片 & 光电共封装</div>
+<div class="analysis-block">
+<div class="ab-header">
+<div class="ab-left"><div class="ab-title">NPO 光引擎的『心脏』：硅光平台的战略突破</div><div class="ab-eng">Silicon Photonics &middot; PIC &middot; Modulator &middot; Photodetector</div></div>
+<div class="severity"><div class="severity-dots"><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span></div><span class="severity-label s-critical">极高战略价值</span></div>
+</div>
+<div class="ab-body">
+
+<h3>&#9654; 赛道逻辑</h3>
+<p><strong>硅光是 NPO / CPO 共同的技术底座。</strong>NPO 光引擎的功耗下降 50%+ 主要来自"硅光集成"——将激光器、调制器、光电探测器、波分复用器集成到同一硅基芯片上，减少器件间的光耦合损耗。传统光模块的分立器件方案在 NPO 场景下功耗与尺寸都无法接受。<strong>硅光 PIC 芯片 = NPO 光引擎的"心脏"</strong>。</p>
+<p><strong>A 股硅光产业链的"从 0 到 1"突破：</strong>(1) <strong>源杰科技</strong>——国内 EML/DFB 激光器芯片龙头，25G/50G EML 已批量出货，100G EML 研发进度国内第一；(2) <strong>仕佳光子</strong>——PLC 光分路器 + AWG 波分复用器龙头，硅光集成波导器件国产替代；(3) <strong>长光华芯</strong>——VCSEL 芯片龙头，短距互连方案核心供应商；(4) <strong>光库科技</strong>——铌酸锂调制器龙头，高速光调制器国内稀缺。</p>
+<ul>
+<li>硅光芯片是 NPO/CPO 良率与成本的"决定性变量"</li>
+<li>2027 年全球硅光市场规模预计突破 $80 亿美元（Yole 口径）</li>
+<li>国产硅光芯片自给率不足 10%，替代空间巨大</li>
+<li>100G/200G EML、薄膜铌酸锂调制器是国产化关键突破口</li>
+</ul>
+<p style="color:var(--text-muted);font-size:.85rem;margin-top:12px;padding:10px 16px;background:rgba(56,189,248,0.04);border-radius:8px"><strong>🔗 绑定关系链：</strong>绑定关系：<strong>源杰科技 → 中际旭创/新易盛/光迅科技 EML/DFB 激光器主力供应商</strong>；<strong>仕佳光子 → 硅光集成 PLC/AWG 关键器件</strong>；<strong>光库科技 → 铌酸锂高速调制器（NPO 光引擎高速方案关键）</strong>。</p>
+<table class="stock-table">
+<thead><tr><th style="width:140px">标的</th><th style="width:80px">层级</th><th>受益逻辑与绑定关系</th></tr></thead>
+<tbody><tr><td><span class="stock-name">源杰科技</span><br><span class="stock-code">688498.SH</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">国内 EML/DFB 激光器芯片龙头，25G/50G EML 批量出货，100G EML 研发进度国内领先。为中际旭创、新易盛、光迅科技等提供核心激光器芯片。NPO 光引擎高速方案的国产化关键突破口</td></tr>
+<tr><td><span class="stock-name">仕佳光子</span><br><span class="stock-code">688313.SH</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">PLC 光分路器全球市占率超 50%，AWG 波分复用器国内龙头。硅光集成波导器件的关键供应商，NPO 光引擎多通道复用架构核心受益标的</td></tr>
+<tr><td><span class="stock-name">长光华芯</span><br><span class="stock-code">688048.SH</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">VCSEL 激光器芯片龙头，短距光互连方案核心供应商。多模光引擎 + AI 集群短距互连场景关键器件，向 EML 高端产品线拓展</td></tr>
+<tr><td><span class="stock-name">光库科技</span><br><span class="stock-code">300620.SZ</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">铌酸锂调制器全球领先，薄膜铌酸锂（TFLN）平台稀缺。高速光调制器国内稀缺标的，NPO 高速通道（3.2T/6.4T）关键器件供应商</td></tr>
+</tbody>
+</table>
+<div class="highlight-box"><strong>关键判断：</strong><strong>源杰 + 仕佳 + 光库是国产硅光的"三大突破点"</strong>——分别对应激光器、无源器件、调制器三大核心元件。NPO 光引擎国产化路径必须依赖这三家公司的能力突破。</div>
+</div>
+</div>
+
+<div class="section-title"><span class="section-num num-2">3</span>MPO/MT 高密光纤连接件</div>
+<div class="analysis-block">
+<div class="ab-header">
+<div class="ab-left"><div class="ab-title">NPO 光引擎的『接口标准』：光纤连接密度倍增</div><div class="ab-eng">MPO-16 / MPO-32 &middot; MT Ferrule &middot; SN/MDC &middot; Optical Backplane</div></div>
+<div class="severity"><div class="severity-dots"><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot empty"></span></div><span class="severity-label s-very-high">MSA 关键标准</span></div>
+</div>
+<div class="ab-body">
+
+<h3>&#9654; 赛道逻辑</h3>
+<p><strong>NPO MSA 1.0 规范明确采用 MPO-16 / MPO-32 作为标准光接口。</strong>相比传统 LC 双工连接器，MPO-16/32 单接口可容纳 16-32 芯光纤，光纤密度提升 8-16 倍。NPO 光引擎单侧出光通道数量激增（3.2T 光引擎需要 32 芯光纤，6.4T 需要 64 芯），MPO/MT 连接件用量倍增。</p>
+<p><strong>MPO/MT 高密光纤连接件的"技术门槛"：</strong>(1) 陶瓷插芯（MT Ferrule）加工精度要求达到 &lt;1μm；(2) 多芯端面研磨与光学检测；(3) 低插损（&lt;0.35dB）与高回损（&gt;60dB）；(4) 大批量制造的良率控制。<strong>A 股 MPO 连接件与全球第一梯队差距仅剩 20-30%</strong>，是光纤连接件国产替代确定性最高的细分赛道。</p>
+<ul>
+<li>MPO-16 光纤连接件单价约 $50-100，MPO-32 约 $150-250</li>
+<li>单台 51.2T 交换机 MPO/MT 连接件价值量约 $2000-4000</li>
+<li>102.4T 交换机 MPO 连接件价值量翻倍至 $4000-8000</li>
+<li>太辰光是国内 MPO 连接件出货量最大的厂商，已进入海外主流客户供应链</li>
+</ul>
+<p style="color:var(--text-muted);font-size:.85rem;margin-top:12px;padding:10px 16px;background:rgba(56,189,248,0.04);border-radius:8px"><strong>🔗 绑定关系链：</strong>绑定关系：<strong>太辰光 → 全球 MPO 连接件出货量前列, 直接供货中际旭创/北美超大规模数据中心</strong>；<strong>长飞光纤 → 特种光纤 (少模/多模) + MPO 集束跳线</strong>；<strong>中天/亨通 → 光纤预制棒 + 高密光缆</strong>。</p>
+<table class="stock-table">
+<thead><tr><th style="width:140px">标的</th><th style="width:80px">层级</th><th>受益逻辑与绑定关系</th></tr></thead>
+<tbody><tr><td><span class="stock-name">太辰光</span><br><span class="stock-code">300570.SZ</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">国内 MPO/MT 光纤连接件龙头，MPO-16/32 高密连接件已批量出货北美超大规模数据中心。NPO MSA 光接口标准化后直接受益，2027 年 NPO 部署放量带动 MPO 用量倍增</td></tr>
+<tr><td><span class="stock-name">长飞光纤</span><br><span class="stock-code">601869.SH</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">全球光纤龙头，少模/多模特种光纤 + MPO 集束跳线布局完善。NPO 光引擎多通道复用架构下，特种光纤需求提升</td></tr>
+<tr><td><span class="stock-name">中天科技</span><br><span class="stock-code">600522.SH</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">光纤预制棒 + 高密光缆全产业链龙头，数据中心互联光纤主力供应商。NPO 光引擎驱动数据中心内部高密光缆需求快速增长</td></tr>
+<tr><td><span class="stock-name">亨通光电</span><br><span class="stock-code">600487.SH</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">光纤光缆龙头，海底光缆全球市占率领先。数据中心高密光缆 + 特种光纤深度布局，AI 集群互联受益弹性显著</td></tr>
+</tbody>
+</table>
+<div class="highlight-box"><strong>关键判断：</strong><strong>太辰光是 A 股 MPO 连接件"确定性最强"的标的</strong>——已进入海外主流客户供应链，产品与 NPO MSA 标准直接对齐，NPO 光引擎放量将带动 MPO 用量倍增。</div>
+</div>
+</div>
+
+<div class="section-title"><span class="section-num num-1">4</span>光引擎封装基板 & 光电PCB</div>
+<div class="analysis-block">
+<div class="ab-header">
+<div class="ab-left"><div class="ab-title">NPO 光引擎与 ASIC 共同承载：高密度电光互联基板</div><div class="ab-eng">Substrate for Optical Engine &middot; Optical PCB &middot; Glass Substrate</div></div>
+<div class="severity"><div class="severity-dots"><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot empty"></span></div><span class="severity-label s-very-high">结构性受益</span></div>
+</div>
+<div class="ab-body">
+
+<h3>&#9654; 赛道逻辑</h3>
+<p><strong>NPO 光引擎放在 ASIC 附近，对承载基板提出全新要求。</strong>NPO 光引擎与 ASIC 共同集成在 2.5D 中介层（有机基板或玻璃基板）上，或者放在 ASIC 封装的边缘。这种"电光混合封装"需要基板同时具备：(1) 高密度电互连（HDI）——支持 XSR/USR SerDes 短距高速传输；(2) 低插损光波导集成——部分方案在基板中集成光波导；(3) 高精度对准结构——支持光引擎与光纤的自动化装配。</p>
+<p><strong>A 股 PCB / 基板厂商的价值增量：</strong>(1) 高多层高速 PCB（沪电股份、深南电路）——NPO 光引擎所在的主板需支持 XSR/USR SerDes；(2) 有机 ABF 载板（深南电路、兴森科技）——NPO 光引擎与 ASIC 2.5D 集成基板；(3) 高频高速覆铜板（生益科技）——所有 NPO 系统的基础材料；(4) 玻璃基板——长期看是 NPO/CPO 的终极方案，Corning 与国内厂商正在布局。</p>
+<ul>
+<li>NPO 光引擎周边基板价值量比传统方案提升 2-3 倍</li>
+<li>沪电股份是全球 AI 服务器 PCB 龙头，深度受益 NPO 结构升级</li>
+<li>深南电路 ABF 载板国产替代先行者，NPO 光引擎与 ASIC 集成基板主力候选</li>
+<li>兴森科技 FC-BGA 载板从 0 到 1 突破，NPO 集成基板研发跟进</li>
+</ul>
+<p style="color:var(--text-muted);font-size:.85rem;margin-top:12px;padding:10px 16px;background:rgba(56,189,248,0.04);border-radius:8px"><strong>🔗 绑定关系链：</strong>绑定关系：<strong>沪电股份/深南电路 → AI 服务器 + NPO 交换机高速 PCB 主力供应商</strong>；<strong>深南电路/兴森科技 → NPO 光引擎+ASIC 2.5D 集成 ABF 载板</strong>；<strong>生益科技 → NPO 基板上游 CCL 材料</strong>。</p>
+<table class="stock-table">
+<thead><tr><th style="width:140px">标的</th><th style="width:80px">层级</th><th>受益逻辑与绑定关系</th></tr></thead>
+<tbody><tr><td><span class="stock-name">沪电股份</span><br><span class="stock-code">002463.SZ</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">全球高多层 PCB 龙头，AI 服务器/交换机高多层板核心供应商。NPO 光引擎与交换 ASIC 集成的主板高速 PCB 主力候选。1.6T/3.2T 交换机 PCB 价值量快速提升</td></tr>
+<tr><td><span class="stock-name">深南电路</span><br><span class="stock-code">002916.SZ</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">国内 PCB + ABF 载板双龙头。NPO 光引擎与 ASIC 的 2.5D 集成基板主力候选，广州基地 ABF 载板 2027 年扩至 6 万片/月。NPO 结构化升级最直接受益标的</td></tr>
+<tr><td><span class="stock-name">兴森科技</span><br><span class="stock-code">002436.SZ</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">ABF 载板从 0 到 1 突破，珠海基地聚焦 FC-BGA 载板。NPO 光引擎+ASIC 集成基板研发跟进，市值弹性大</td></tr>
+<tr><td><span class="stock-name">生益科技</span><br><span class="stock-code">600183.SH</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">高频高速覆铜板（CCL）龙头，NPO 光引擎主板 + ABF 载板上游核心材料供应商。NPO 结构升级驱动高速 CCL 用量提升</td></tr>
+</tbody>
+</table>
+<div class="highlight-box"><strong>关键判断：</strong><strong>沪电股份 + 深南电路是 NPO 结构升级的"隐形冠军"</strong>——NPO 光引擎与 ASIC 集成对承载基板的性能要求显著提升，单交换机 PCB / 载板价值量翻倍。</div>
+</div>
+</div>
+
+<div class="section-title"><span class="section-num num-2">5</span>光引擎 2.5D 集成封装</div>
+<div class="analysis-block">
+<div class="ab-header">
+<div class="ab-left"><div class="ab-title">NPO 光电共封装的关键工艺：封测厂的新增量</div><div class="ab-eng">2.5D Photonic Integration &middot; Fiber Attach &middot; Optical Alignment</div></div>
+<div class="severity"><div class="severity-dots"><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot empty"></span></div><span class="severity-label s-very-high">工艺增量</span></div>
+</div>
+<div class="ab-body">
+
+<h3>&#9654; 赛道逻辑</h3>
+<p><strong>NPO 光引擎的封装比传统光模块复杂 3-5 倍。</strong>核心工艺包括：(1) 光芯片与电芯片的 2.5D 集成（光 DSP + 硅光 PIC + 激光器）；(2) 光纤阵列（Fiber Array）与光引擎的高精度对准装配；(3) 环氧胶固化 + 应力测试；(4) 光电共测。<strong>NPO 光引擎产能瓶颈从光模块本身，转移到 2.5D 集成封装环节</strong>。</p>
+<p><strong>A 股封测厂的新增量：</strong>(1) 长电科技 XDFOI 平台可直接支持 NPO 光引擎 2.5D 集成，与光模块厂商合作模式清晰；(2) 通富微电依托 AMD 合作经验，具备 2.5D 光电共封装能力；(3) 甬矽电子在先进封装赛道快速追赶，可能承接部分中低端 NPO 集成订单。<strong>NPO 光引擎封装单价约 $150-300/颗，2027 年市场规模预计 $10-20 亿美元</strong>。</p>
+<ul>
+<li>NPO 光引擎 2.5D 集成是新增封装赛道，与传统封装工艺高度协同</li>
+<li>长电 XDFOI 平台已量产 4nm 芯片封装，工艺基础完善</li>
+<li>通富微电 AMD 合作经验可延伸到 NPO 光电共封装</li>
+</ul>
+<p style="color:var(--text-muted);font-size:.85rem;margin-top:12px;padding:10px 16px;background:rgba(56,189,248,0.04);border-radius:8px"><strong>🔗 绑定关系链：</strong>绑定关系：<strong>长电科技 → NPO 光引擎 2.5D 集成主力候选</strong>；<strong>通富微电 → 依托 AMD 合作扩展至 NPO 光电共封装</strong>。</p>
+<table class="stock-table">
+<thead><tr><th style="width:140px">标的</th><th style="width:80px">层级</th><th>受益逻辑与绑定关系</th></tr></thead>
+<tbody><tr><td><span class="stock-name">长电科技</span><br><span class="stock-code">600584.SH</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">大陆最大封测厂，XDFOI 2.5D/3D 封装平台可直接支持 NPO 光引擎集成。与光模块厂商合作模式清晰，是 NPO 光引擎 2.5D 集成封装的主力候选</td></tr>
+<tr><td><span class="stock-name">通富微电</span><br><span class="stock-code">002156.SZ</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">AMD 主力封测合作伙伴，2.5D 封装经验丰富。可依托与 AMD/Xilinx 的合作，切入 NPO 光电共封装赛道</td></tr>
+<tr><td><span class="stock-name">甬矽电子</span><br><span class="stock-code">688362.SH</span></td><td><span class="stock-tier tier-related">相关</span></td><td class="stock-reason">国内先进封装新锐，Bumping/FC-BGA 能力持续突破。可能承接部分 NPO 光引擎中低端集成订单，市值弹性大</td></tr>
+</tbody>
+</table>
+<div class="highlight-box"><strong>关键判断：</strong><strong>NPO 光引擎的 2.5D 集成是 A 股封测厂的"新增量赛道"</strong>——不与现有 CoWoS 抢产能，与光模块厂商形成互补合作关系。</div>
+</div>
+</div>
+
+<div class="section-title"><span class="section-num num-2">6</span>激光器 / EML / VCSEL 芯片</div>
+<div class="analysis-block">
+<div class="ab-header">
+<div class="ab-left"><div class="ab-title">光引擎『光源』：单波长速率与国产化双升级</div><div class="ab-eng">EML &middot; DFB &middot; VCSEL &middot; PD &middot; APD</div></div>
+<div class="severity"><div class="severity-dots"><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot empty"></span><span class="severity-dot empty"></span></div><span class="severity-label s-high">国产化关键</span></div>
+</div>
+<div class="ab-body">
+
+<h3>&#9654; 赛道逻辑</h3>
+<p><strong>激光器芯片是光引擎最"卡脖子"的环节。</strong>NPO 光引擎需要 100G/200G 单波长 EML 激光器，才能在有限的光纤芯数内实现 3.2T/6.4T 的总带宽。目前 100G EML 主要由日本住友、三菱电机、日本电气等垄断，国产替代率不足 20%。</p>
+<p><strong>A 股激光器芯片的国产化路径：</strong>(1) <strong>源杰科技</strong>——25G/50G EML/DFB 已批量出货，100G EML 研发国内进度最快；(2) <strong>长光华芯</strong>——VCSEL 芯片龙头，多模短距互连场景不可或缺；(3) <strong>光迅科技</strong>——激光器 + 探测器芯片全布局，国资背景 + 华为深度合作。<strong>2027 年国产激光器芯片市占率有望从 &lt;20% 提升至 40%+</strong>，弹性极大。</p>
+<ul>
+<li>光引擎中激光器芯片价值量占比 15-25%</li>
+<li>100G EML 单价约 $30-50，200G EML 预计 $80-120</li>
+<li>国内 200G EML 研发已启动，2027-2028 年有望量产</li>
+</ul>
+<p style="color:var(--text-muted);font-size:.85rem;margin-top:12px;padding:10px 16px;background:rgba(56,189,248,0.04);border-radius:8px"><strong>🔗 绑定关系链：</strong>绑定关系：<strong>源杰科技 → 中际旭创/新易盛/光迅科技 EML 激光器主力供应商</strong>；<strong>长光华芯 → 中短距光引擎 VCSEL 芯片主力供应商</strong>。</p>
+<table class="stock-table">
+<thead><tr><th style="width:140px">标的</th><th style="width:80px">层级</th><th>受益逻辑与绑定关系</th></tr></thead>
+<tbody><tr><td><span class="stock-name">源杰科技</span><br><span class="stock-code">688498.SH</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">国内 EML/DFB 激光器芯片龙头。25G/50G EML 批量出货，100G EML 研发进度国内领先。NPO 光引擎国产化关键突破口</td></tr>
+<tr><td><span class="stock-name">长光华芯</span><br><span class="stock-code">688048.SH</span></td><td><span class="stock-tier tier-core">核心</span></td><td class="stock-reason">VCSEL 激光器芯片龙头，多模短距光互连方案核心供应商。向 EML 高端产品线延伸，AI 集群短距互连场景不可替代</td></tr>
+<tr><td><span class="stock-name">光迅科技</span><br><span class="stock-code">002281.SZ</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">央企背景光模块+光芯片龙头，激光器+探测器全布局。华为金牌供应商，国产化路线核心受益标的</td></tr>
+</tbody>
+</table>
+<div class="highlight-box"><strong>关键判断：</strong><strong>源杰科技是 100G EML 国产化"最纯粹标的"</strong>——若 2027 年 100G EML 量产成功，将打破日本垄断格局，市值弹性极大。</div>
+</div>
+</div>
+
+<div class="section-title"><span class="section-num num-3">7</span>光模块材料（隔离器 / 微透镜 / 环氧胶）</div>
+<div class="analysis-block">
+<div class="ab-header">
+<div class="ab-left"><div class="ab-title">光引擎的『底层耗材』：小而不可或缺</div><div class="ab-eng">Isolator &middot; Micro-lens &middot; Optical Adhesive &middot; Polymer Waveguide</div></div>
+<div class="severity"><div class="severity-dots"><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot fill"></span><span class="severity-dot empty"></span><span class="severity-dot empty"></span></div><span class="severity-label s-high">配套受益</span></div>
+</div>
+<div class="ab-body">
+
+<h3>&#9654; 赛道逻辑</h3>
+<p><strong>NPO 光引擎的高密集成对光学材料提出全新要求。</strong>(1) 微透镜阵列 (Micro-lens Array) 用于光引擎与光纤耦合，精度要求 μm 级；(2) 光学隔离器 (Isolator) 防止反射光损伤激光器；(3) 低折射率环氧胶用于光引擎密封与光路封装；(4) 聚合物光波导可作为芯片间短距光路。</p>
+<p><strong>A 股相关标的：</strong>(1) <strong>腾景科技</strong>——精密光学元件（微透镜、隔离器）主力供应商，NPO 光引擎材料端受益弹性显著；(2) <strong>光库科技</strong>——铌酸锂调制器同时布局 PLC / 光波导器件；(3) <strong>天孚通信</strong>——光引擎材料端综合布局，具备一体化交付能力。</p>
+<ul>
+<li>NPO 光引擎单颗材料成本约 $10-30，2027 年市场规模约 $5-10 亿美元</li>
+<li>腾景科技已进入海外光模块龙头供应链</li>
+</ul>
+<p style="color:var(--text-muted);font-size:.85rem;margin-top:12px;padding:10px 16px;background:rgba(56,189,248,0.04);border-radius:8px"><strong>🔗 绑定关系链：</strong>绑定关系：<strong>腾景科技 → 光引擎微透镜/隔离器材料主力供应商</strong>；<strong>光库科技/天孚通信 → 光引擎材料综合方案</strong>。</p>
+<table class="stock-table">
+<thead><tr><th style="width:140px">标的</th><th style="width:80px">层级</th><th>受益逻辑与绑定关系</th></tr></thead>
+<tbody><tr><td><span class="stock-name">腾景科技</span><br><span class="stock-code">688195.SH</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">精密光学元件龙头，微透镜阵列、光学隔离器、光滤片等 NPO 光引擎关键光学材料供应商。已进入海外光模块龙头供应链</td></tr>
+<tr><td><span class="stock-name">光库科技</span><br><span class="stock-code">300620.SZ</span></td><td><span class="stock-tier tier-key">关键</span></td><td class="stock-reason">铌酸锂调制器 + PLC / 光波导器件综合布局，NPO 光引擎材料端稀缺标的</td></tr>
+<tr><td><span class="stock-name">天孚通信</span><br><span class="stock-code">300394.SZ</span></td><td><span class="stock-tier tier-related">相关</span></td><td class="stock-reason">光引擎材料端一体化交付，微透镜/隔离器/PLC 均有布局。NPO 光引擎材料综合方案供应商</td></tr>
+</tbody>
+</table>
+<div class="highlight-box"><strong>关键判断：</strong><strong>腾景科技是"NPO 光引擎材料端"最直接受益标的</strong>——微透镜/隔离器价值量随 NPO 光引擎放量线性增长。</div>
+</div>
+</div>
+
+<div class="section-title"><span class="section-num num-4">&star;</span>综合推荐：NPO 光互连 MSA 产业链 TOP 15 标的</div>
+<div class="analysis-block"><div class="ab-body">
+<p style="margin-bottom:20px;">综合<strong>MSA 参与深度、赛道稀缺性、受益弹性和量产成熟度</strong>，筛选出以下 15 只核心标的。排序优先考虑<strong>NPO 光引擎的直接参与方 + 硅光/材料端的国产化突破点</strong>。</p>
+<div class="summary-matrix"><table>
+<thead><tr><th style="width:36px">#</th><th>标的</th><th>代码</th><th>所属赛道</th><th class="center">绑定客户/生态</th><th class="center">受益弹性</th><th>核心逻辑一句话</th></tr></thead>
+<tbody><tr><td>1</td><td class="stock-name">中际旭创</td><td class="stock-code">300308</td><td>NPO光引擎</td><td class="center">博通/AMD/AWS</td><td class="center" style="color:#38bdf8">★★★★★</td><td style="color:var(--text-muted);">全球光模块龙头，NPO 光引擎主力供应商候选，客户+工艺双重复用</td></tr>
+<tr><td>2</td><td class="stock-name">新易盛</td><td class="stock-code">300502</td><td>NPO光引擎</td><td class="center">超大规模数据中心</td><td class="center" style="color:#38bdf8">★★★★★</td><td style="color:var(--text-muted);">1.6T光模块产能全球前三，NPO MSA 光引擎参与方</td></tr>
+<tr><td>3</td><td class="stock-name">天孚通信</td><td class="stock-code">300394</td><td>光引擎核心器件</td><td class="center">中际旭创/Coherent</td><td class="center" style="color:#38bdf8">★★★★★</td><td style="color:var(--text-muted);">光引擎核心器件全球龙头，NPO 结构升级弹性最大</td></tr>
+<tr><td>4</td><td class="stock-name">源杰科技</td><td class="stock-code">688498</td><td>激光器芯片</td><td class="center">中际旭创/新易盛</td><td class="center" style="color:#38bdf8">★★★★★</td><td style="color:var(--text-muted);">国内 EML 激光器龙头，100G EML 国产化关键突破口</td></tr>
+<tr><td>5</td><td class="stock-name">太辰光</td><td class="stock-code">300570</td><td>MPO连接件</td><td class="center">北美数据中心</td><td class="center" style="color:#38bdf8">★★★★★</td><td style="color:var(--text-muted);">MPO/MT 连接件国内龙头，NPO MSA 光接口标准化直接受益</td></tr>
+<tr><td>6</td><td class="stock-name">深南电路</td><td class="stock-code">002916</td><td>光引擎基板</td><td class="center">AI/交换机</td><td class="center" style="color:#38bdf8">★★★★★</td><td style="color:var(--text-muted);">ABF载板+高速PCB双龙头，NPO 结构升级直接受益</td></tr>
+<tr><td>7</td><td class="stock-name">仕佳光子</td><td class="stock-code">688313</td><td>硅光无源器件</td><td class="center">光模块龙头</td><td class="center" style="color:#38bdf8">★★★★☆</td><td style="color:var(--text-muted);">PLC/AWG 波分复用龙头，NPO 多通道复用架构核心受益</td></tr>
+<tr><td>8</td><td class="stock-name">光库科技</td><td class="stock-code">300620</td><td>铌酸锂调制器</td><td class="center">高速光引擎</td><td class="center" style="color:#38bdf8">★★★★☆</td><td style="color:var(--text-muted);">铌酸锂调制器国内稀缺，NPO 高速通道关键器件</td></tr>
+<tr><td>9</td><td class="stock-name">光迅科技</td><td class="stock-code">002281</td><td>光模块+芯片</td><td class="center">华为体系</td><td class="center" style="color:#38bdf8">★★★★★</td><td style="color:var(--text-muted);">央企背景光模块+光芯片，华为链 NPO 弹性最纯粹标的</td></tr>
+<tr><td>10</td><td class="stock-name">沪电股份</td><td class="stock-code">002463</td><td>高速PCB</td><td class="center">交换机/AI服务器</td><td class="center" style="color:#38bdf8">★★★★☆</td><td style="color:var(--text-muted);">高多层 PCB 龙头，NPO 交换机主板高速 PCB 核心供应商</td></tr>
+<tr><td>11</td><td class="stock-name">长电科技</td><td class="stock-code">600584</td><td>光引擎2.5D封装</td><td class="center">光模块厂商</td><td class="center" style="color:#38bdf8">★★★★☆</td><td style="color:var(--text-muted);">XDFOI 2.5D 平台可直接支持 NPO 光引擎集成</td></tr>
+<tr><td>12</td><td class="stock-name">华工科技</td><td class="stock-code">000988</td><td>光模块</td><td class="center">华为体系</td><td class="center" style="color:#38bdf8">★★★★☆</td><td style="color:var(--text-muted);">华为长期光模块合作伙伴，昇腾超节点光互连主力承接方</td></tr>
+<tr><td>13</td><td class="stock-name">长光华芯</td><td class="stock-code">688048</td><td>VCSEL芯片</td><td class="center">AI集群短距互连</td><td class="center" style="color:#38bdf8">★★★★☆</td><td style="color:var(--text-muted);">VCSEL 芯片龙头，AI 集群短距互连场景不可替代</td></tr>
+<tr><td>14</td><td class="stock-name">长飞光纤</td><td class="stock-code">601869</td><td>特种光纤</td><td class="center">数据中心</td><td class="center" style="color:#38bdf8">★★★☆☆</td><td style="color:var(--text-muted);">特种光纤+MPO集束跳线，NPO 多通道架构关键材料</td></tr>
+<tr><td>15</td><td class="stock-name">腾景科技</td><td class="stock-code">688195</td><td>光学元件</td><td class="center">海外光模块</td><td class="center" style="color:#38bdf8">★★★☆☆</td><td style="color:var(--text-muted);">精密光学元件龙头，NPO 光引擎材料端直接受益</td></tr>
+</tbody>
+</table></div>
+</div></div>
+
+<div class="section-title"><span class="section-num num-4">&equiv;</span>投资逻辑框架：三层筛选标准</div>
+<div class="analysis-block"><div class="ab-body">
+
+<h3>&#9654; 第一层：MSA 参与深度（Ecosystem Depth）</h3>
+<p>优先关注<strong>已进入 MSA 核心成员供应链或送样验证</strong>的标的：</p>
+<ul>
+<li><strong>中际旭创/新易盛</strong>——OFC 2025 已展示 NPO 光引擎原型，深度参与博通/AMD 生态</li>
+<li><strong>天孚通信</strong>——光引擎核心器件全球最大 OEM，NPO 光引擎的"隐形冠军"</li>
+<li><strong>太辰光</strong>——MPO/MT 连接件产品与 MSA 光接口标准直接对齐</li>
+<li><strong>深南电路</strong>——ABF 载板 + 高速 PCB 双龙头，NPO 结构升级最直接受益</li>
+</ul>
+
+<h3>&#9654; 第二层：稀缺性护城河（Moat by Scarcity）</h3>
+<p>在特定赛道中<strong>不可替代</strong>或<strong>国产化路径关键</strong>：</p>
+<ul>
+<li><strong>源杰科技</strong>——国内唯一批量出货 25G/50G EML 的厂商，100G EML 国产化关键</li>
+<li><strong>光库科技</strong>——国内唯一具备铌酸锂调制器批量能力，NPO 高速通道方案关键</li>
+<li><strong>仕佳光子</strong>——PLC 光分路器全球市占率超 50%，硅光无源器件国产替代</li>
+<li><strong>长光华芯</strong>——VCSEL 激光器芯片龙头，短距光互连场景不可或缺</li>
+</ul>
+
+<h3>&#9654; 第三层：弹性测算方向（Elasticity Direction）</h3>
+<p>以下为方向性测算，非精确量化：</p>
+<ul>
+<li>NPO 光引擎单交换机价值量约为传统 800G 光模块方案的 3-5 倍</li>
+<li>每 100 台 51.2T NPO 交换机部署 → MPO/MT 连接件增量需求约 $200-400 万</li>
+<li>100G EML 国产化率每提升 10% → 源杰科技营收增量约 3-5 亿元</li>
+<li>NPO 光引擎放量 → ABF 载板高端产品单价提升 30%+</li>
+</ul>
+
+</div></div>
+
+<div class="section-title"><span class="section-num num-1">!</span>风险提示</div>
+<div class="analysis-block"><div class="ab-body">
+<h3>&#9654; 主要风险</h3>
+<ul>
+<li><strong>技术路线风险：</strong>NPO 与 CPO 并行发展，若超大规模数据中心运营商直接跳过 NPO 转向 CPO，NPO 光引擎的市场规模可能低于预期</li>
+<li><strong>MSA 落地进度风险：</strong>MSA 1.0 规范仅为初版，后续版本演进+首批产品量产存在不确定性，2027-2028 年商用节点可能推迟</li>
+<li><strong>客户集中风险：</strong>NPO 光引擎主要客户为北美超大规模数据中心（AWS/Meta/Microsoft/Google），单一客户砍单或架构变化会显著影响供应链</li>
+<li><strong>硅光良率风险：</strong>硅光芯片良率与成本是 NPO 光引擎的决定性变量，良率爬坡未达预期可能拖累量产节奏</li>
+<li><strong>地缘政治风险：</strong>美国对华半导体出口管制可能限制国内厂商获取高端硅光工艺，影响国产替代进度</li>
+<li><strong>激光器国产化不及预期：</strong>100G EML 国产化涉及长期材料+工艺积累，若日本厂商加速扩产，国产替代空间可能被压缩</li>
+<li><strong>估值风险：</strong>NPO 主题受关注后部分标的估值已提前反映预期，需关注业绩兑现节奏与订单实际落地情况</li>
+</ul>
+</div></div>
+
+<div class="source-block">
+<h3>&#9654; 主要数据来源与参考</h3>
+<ol>
+<li><strong>NPO MSA 联盟</strong> — Near-Packaged Optics MSA 1.0 Specification (2025-08)</li>
+<li><strong>Broadcom</strong> — Bailly 51.2T CPO Switch White Paper &amp; NPO Reference Design</li>
+<li><strong>Marvell Technology</strong> — 3.2T Optical DSP &amp; NPO Roadmap (2025-2027)</li>
+<li><strong>Astera Labs</strong> — Aries Retimer &amp; NPO Interconnect Architecture</li>
+<li><strong>Yole Intelligence</strong> — Co-Packaged Optics &amp; Near-Packaged Optics Market Report 2025-2028</li>
+<li><strong>LightCounting</strong> — Optical Communications Market Forecast 2026-2030</li>
+<li><strong>OFC 2025</strong> — Conference Papers on NPO / CPO / LPO</li>
+<li><strong>Open Compute Project</strong> — OCP Summit 2024/2025 Optical Interconnect Track</li>
+<li><strong>OIF / IEEE 802.3</strong> — 224G SerDes &amp; 1.6T Ethernet Standards</li>
+<li><strong>上市公司公告</strong> — 中际旭创/新易盛/天孚通信/源杰科技/太辰光等公开信息</li>
+<li><strong>中信证券</strong> — 《NPO/CPO：AI 集群互联的必经之路》(2026.04)</li>
+<li><strong>国盛证券</strong> — 《光互连产业链深度：从可插拔到 CPO》(2026.03)</li>
+<li><strong>华泰证券</strong> — 《硅光产业链：AI 算力的下一个战略要塞》(2026.05)</li>
+<li><strong>方正证券</strong> — 《MPO 高密光纤连接件：被忽略的 AI 互联底层耗材》(2026.06)</li>
+</ol>
+<p style="color:var(--text-muted);font-size:.8rem;margin-top:12px;">注：以上来源为行业公开信息与上市公司公告综合整理。NPO MSA 具体成员名单与规范细节以官方最新版本为准。绑定关系判断基于公开可查的供应链信息，部分细节可能随时间变化，以公司最新公告为准。</p>
+</div>
+
+<div class="disclaimer">
+<strong>免责声明</strong><br>
+本报告仅为行业研究视角下的 NPO 光互连 MSA 产业链格局分析和受益标的梳理，<strong>不构成任何投资建议</strong>。<br>
+MSA 参与关系与客户合作信息基于公开资料整理，存在技术路线演变、供应链调整或合作关系变化的风险。<br>
+NPO 与 CPO 属于竞争性技术路线，最终市场格局与量产节奏存在不确定性。<br>
+个股标的仅为行业受益逻辑分析，不构成买卖推荐。投资有风险，入市需谨慎。<br><br>
+&copy; 2026-07-09 &middot; 近封装光学 NPO 光互连 MSA 产业链分析 &middot; 仅限研究参考
+</div>
+
+</div>
+<script>
+(function(){
+  // 自动为每个含股票代码的表格前插入"复制股票代码"按钮
+  // 匹配规则：table 内出现 6 位纯数字（A股/科创板/北交所代码），可带 .SH/.SZ/.BJ 后缀
+  var CODE_RE = /\b(\d{6})(?:\.[A-Z]{2})?\b/g;
+
+  function extractCodes(table){
+    var codes = [];
+    var seen = {};
+    // 逐个 tbody 行扫描，避免匹配到表头/说明
+    var rows = table.querySelectorAll('tbody tr');
+    rows.forEach(function(tr){
+      var text = tr.textContent || '';
+      var m;
+      CODE_RE.lastIndex = 0;
+      while ((m = CODE_RE.exec(text)) !== null){
+        var code = m[1];
+        if (!seen[code]){ seen[code] = 1; codes.push(code); }
+      }
+    });
+    return codes;
+  }
+
+  function makeButton(codes, table){
+    var wrap = document.createElement('div');
+    wrap.className = 'copy-btn-wrap';
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'copy-codes-btn';
+    btn.innerHTML = '<span class="icon">&#128203;</span><span class="label">复制股票代码 (' + codes.length + ')</span>';
+    var hint = document.createElement('span');
+    hint.className = 'copy-hint';
+    hint.textContent = '格式: 逗号分隔';
+    wrap.appendChild(btn);
+    wrap.appendChild(hint);
+
+    btn.addEventListener('click', function(){
+      var text = codes.join(',');
+      var doneOk = function(){
+        btn.classList.add('copied');
+        btn.querySelector('.label').textContent = '已复制 ' + codes.length + ' 只 ✓';
+        setTimeout(function(){
+          btn.classList.remove('copied');
+          btn.querySelector('.label').textContent = '复制股票代码 (' + codes.length + ')';
+        }, 2000);
+      };
+      var doneFail = function(){
+        btn.querySelector('.label').textContent = '复制失败，请手动选择';
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(doneOk).catch(function(){
+          fallbackCopy(text) ? doneOk() : doneFail();
+        });
+      } else {
+        fallbackCopy(text) ? doneOk() : doneFail();
+      }
+    });
+
+    return wrap;
+  }
+
+  function fallbackCopy(text){
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      return ok;
+    } catch(e){ return false; }
+  }
+
+  // 扫描所有 stock-table 和 summary-matrix 内的 table
+  var tables = document.querySelectorAll('.stock-table, .summary-matrix table');
+  tables.forEach(function(table){
+    var codes = extractCodes(table);
+    if (codes.length < 2) return;  // 少于 2 只不加按钮
+    var btn = makeButton(codes, table);
+    // 插到表格前面，找到表格的容器（.summary-matrix 或表格本身的父节点）
+    var host = table.closest('.summary-matrix') || table;
+    host.parentNode.insertBefore(btn, host);
+  });
+})();
+</script>
+</body>
+</html>

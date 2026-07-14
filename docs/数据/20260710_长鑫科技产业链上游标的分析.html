@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>长鑫科技产业链 · 上游标的深度梳理 | 2026-07-10</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: #0a0e17; color: #e0e6f0; line-height: 1.6; min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+        .back-link { display: inline-block; color: #8892a8; text-decoration: none;
+            font-size: 13px; padding: 6px 12px; border: 1px solid #1e293b; border-radius: 8px;
+            margin-bottom: 24px; transition: all 0.2s; }
+        .back-link:hover { color: #ef4444; border-color: #ef4444; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 { font-size: 36px; font-weight: 700;
+            background: linear-gradient(135deg, #ef4444, #f97316, #fbbf24);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 12px; }
+        .header .subtitle { font-size: 15px; color: #8892a8; max-width: 800px; margin: 0 auto; line-height: 1.7; }
+        .header .topic-tags { display: flex; gap: 10px; justify-content: center; margin-top: 18px; flex-wrap: wrap; }
+        .header .topic-tag { font-size: 12px; padding: 5px 14px; border-radius: 20px; font-weight: 500; }
+        .tag-red { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.25); }
+        .tag-orange { background: rgba(249,115,22,0.15); color: #f97316; border: 1px solid rgba(249,115,22,0.25); }
+        .tag-yellow { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); }
+        .tag-blue { background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.25); }
+        .header .update-time { font-size: 12px; color: #5a6478; margin-top: 12px; }
+
+        .section-title { font-size: 22px; font-weight: 600; color: #e0e6f0;
+            margin: 48px 0 22px; padding-left: 14px; border-left: 4px solid #ef4444; }
+        .sub-section-title { font-size: 17px; font-weight: 600; color: #f97316;
+            margin: 28px 0 16px; padding-left: 12px; border-left: 3px solid #f97316; }
+
+        /* 高亮区 */
+        .highlight-box { background: linear-gradient(135deg, rgba(239,68,68,0.08), rgba(249,115,22,0.05));
+            border: 1px solid rgba(239,68,68,0.25); border-radius: 14px;
+            padding: 24px 28px; margin-bottom: 32px; }
+        .highlight-box .hl-title { font-size: 16px; font-weight: 600; color: #ef4444;
+            margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .highlight-box .hl-desc { font-size: 14px; color: #c8d0e0; line-height: 1.85; }
+        .highlight-box strong { color: #f97316; font-weight: 700; }
+        .highlight-box .hl-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 14px; margin-top: 18px; }
+        .hl-stat { background: rgba(10,14,23,0.6); border: 1px solid rgba(239,68,68,0.15);
+            border-radius: 10px; padding: 12px 16px; }
+        .hl-stat .k { font-size: 12px; color: #8892a8; margin-bottom: 4px; }
+        .hl-stat .v { font-size: 20px; font-weight: 700; color: #ef4444; }
+
+        /* 流程图 */
+        .flow-diagram { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+            background: #111827; border-radius: 14px; border: 1px solid #1e293b; overflow: hidden; }
+        .flow-step { padding: 22px 18px; position: relative; }
+        .flow-step:not(:last-child) { border-right: 1px solid #1e293b; }
+        .flow-step:not(:last-child)::after { content: '→'; position: absolute; right: -12px; top: 50%;
+            transform: translateY(-50%); font-size: 24px; color: #4b5563; z-index: 2;
+            background: #0a0e17; padding: 0 2px; }
+        .flow-step .step-label { display: inline-block; font-size: 12px; font-weight: 700;
+            padding: 4px 10px; border-radius: 12px; margin-bottom: 12px; letter-spacing: 1px; }
+        .flow-step:nth-child(1) .step-label { background: rgba(239,68,68,0.15); color: #ef4444; }
+        .flow-step:nth-child(2) .step-label { background: rgba(249,115,22,0.15); color: #f97316; }
+        .flow-step:nth-child(3) .step-label { background: rgba(251,191,36,0.15); color: #fbbf24; }
+        .flow-step:nth-child(4) .step-label { background: rgba(139,92,246,0.15); color: #8b5cf6; }
+        .flow-step .step-title { font-size: 16px; font-weight: 600; color: #e0e6f0; margin-bottom: 8px; }
+        .flow-step .step-desc { font-size: 12px; color: #8892a8; margin-bottom: 12px; line-height: 1.6; }
+        .flow-step .step-items { display: flex; flex-wrap: wrap; gap: 5px; }
+        .flow-step .step-item { font-size: 11px; padding: 3px 8px; border-radius: 8px;
+            background: rgba(255,255,255,0.05); color: #a0aec0; border: 1px solid rgba(255,255,255,0.08); }
+
+        /* 公司卡片 */
+        .company-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 16px; margin-bottom: 24px; }
+        .company-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 12px; padding: 20px; transition: all 0.2s; }
+        .company-card:hover { border-color: #ef4444; transform: translateY(-2px); }
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .card-title { font-size: 17px; font-weight: 700; color: #e0e6f0; }
+        .card-code { font-size: 12px; padding: 3px 9px; border-radius: 6px;
+            background: rgba(239,68,68,0.12); color: #ef4444; white-space: nowrap; font-weight: 600; }
+        .card-tag { display: inline-block; font-size: 11px; padding: 3px 9px; border-radius: 6px;
+            background: rgba(249,115,22,0.12); color: #f97316; margin-bottom: 10px; font-weight: 600; }
+        .card-desc { font-size: 13px; color: #a0aec0; line-height: 1.7; margin-bottom: 12px; }
+        .card-data-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px;
+            padding: 10px 12px; background: rgba(255,255,255,0.03); border-radius: 8px;
+            border-left: 3px solid #f97316; margin-bottom: 10px; }
+        .data-item { display: flex; flex-direction: column; gap: 2px; }
+        .data-item .label { font-size: 11px; color: #8892a8; }
+        .data-item .value { font-size: 12px; color: #e0e6f0; font-weight: 600; }
+
+        /* 财务标签 */
+        .finance-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+        .f-tag { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 12px;
+            font-size: 11px; font-weight: 600; gap: 4px; }
+        .f-tag .tag-icon { font-size: 12px; }
+        .margin-high { background: rgba(52,211,153,0.15); color: #34d399; }
+        .margin-mid { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .margin-low { background: rgba(251,191,36,0.15); color: #fbbf24; }
+        .growth-high { background: rgba(239,68,68,0.15); color: #ef4444; }
+        .growth-mid { background: rgba(249,115,22,0.15); color: #f97316; }
+        .growth-low { background: rgba(202,138,4,0.15); color: #ca8a04; }
+        .profit { background: rgba(147,197,253,0.15); color: #93c5fd; }
+        .loss { background: rgba(248,113,113,0.15); color: #f87171; }
+
+        /* 评级行 */
+        .rating-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .rating-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 8px; padding: 8px 10px; }
+        .rating-item .r-label { font-size: 11px; color: #8892a8; margin-bottom: 3px; }
+        .rating-item .stars { font-size: 14px; font-weight: 700; letter-spacing: 2px; }
+        .rating-item.determ .stars { color: #ef4444; }
+        .rating-item.elastic .stars { color: #f97316; }
+        .stars .empty { color: #374151; }
+
+        /* 对比表 */
+        .compare-table { width: 100%; border-collapse: collapse; background: #111827;
+            border: 1px solid #1e293b; border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
+        .compare-table th { background: rgba(239,68,68,0.1); color: #ef4444; font-size: 13px;
+            font-weight: 600; padding: 12px 14px; text-align: left; border-bottom: 1px solid #1e293b; }
+        .compare-table td { padding: 12px 14px; font-size: 12.5px; color: #a0aec0;
+            border-bottom: 1px solid rgba(30,41,59,0.5); line-height: 1.55; vertical-align: middle; }
+        .compare-table tr:last-child td { border-bottom: none; }
+        .compare-table .col-name { color: #e0e6f0; font-weight: 600; white-space: nowrap; }
+        .compare-table .row-group { background: rgba(249,115,22,0.08); color: #f97316;
+            font-weight: 700; text-align: center; vertical-align: middle; white-space: nowrap; }
+        .val-high { color: #34d399; font-weight: 600; }
+        .val-mid { color: #60a5fa; font-weight: 600; }
+        .val-low { color: #fbbf24; font-weight: 600; }
+        .val-red { color: #ef4444; font-weight: 600; }
+        .val-orange { color: #f97316; font-weight: 600; }
+        .val-loss { color: #f87171; font-weight: 600; }
+
+        /* 关系图 */
+        .relation-diagram { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 28px; margin-bottom: 24px; }
+        .rel-center { text-align: center; margin: 12px 0 24px; }
+        .rel-center .center-node { display: inline-block; padding: 16px 40px; border-radius: 14px;
+            background: linear-gradient(135deg, #ef4444, #f97316); color: #fff;
+            font-size: 20px; font-weight: 700; box-shadow: 0 4px 20px rgba(239,68,68,0.4); }
+        .rel-center .center-sub { font-size: 12px; color: #8892a8; margin-top: 8px; }
+        .rel-groups { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .rel-group { border: 1px solid #1e293b; border-radius: 12px; padding: 16px; background: rgba(255,255,255,0.02); }
+        .rel-group.equip { border-color: rgba(239,68,68,0.3); }
+        .rel-group.material { border-color: rgba(251,191,36,0.3); }
+        .rel-group.parts { border-color: rgba(249,115,22,0.3); }
+        .rel-group.eda { border-color: rgba(139,92,246,0.3); }
+        .rel-group .rg-title { font-size: 13px; font-weight: 700; letter-spacing: 1px;
+            padding-bottom: 8px; margin-bottom: 12px; border-bottom: 1px solid #1e293b; }
+        .rel-group.equip .rg-title { color: #ef4444; border-color: rgba(239,68,68,0.2); }
+        .rel-group.material .rg-title { color: #fbbf24; border-color: rgba(251,191,36,0.2); }
+        .rel-group.parts .rg-title { color: #f97316; border-color: rgba(249,115,22,0.2); }
+        .rel-group.eda .rg-title { color: #8b5cf6; border-color: rgba(139,92,246,0.2); }
+        .rel-nodes { display: flex; flex-wrap: wrap; gap: 8px; }
+        .rel-node { padding: 6px 12px; border-radius: 8px; font-size: 12px;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #c8d0e0; }
+        .rel-node .n-code { font-size: 10px; color: #8892a8; margin-left: 5px; }
+
+        /* focus card */
+        .focus-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px; margin-bottom: 24px; }
+        .focus-card { background: linear-gradient(135deg, #111827, #1a2332);
+            border: 1px solid #1e293b; border-radius: 12px; padding: 20px;
+            position: relative; overflow: hidden; }
+        .focus-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .focus-card:nth-child(1)::before { background: linear-gradient(90deg, #ef4444, #f87171); }
+        .focus-card:nth-child(2)::before { background: linear-gradient(90deg, #f97316, #fb923c); }
+        .focus-card:nth-child(3)::before { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+        .focus-card:nth-child(4)::before { background: linear-gradient(90deg, #34d399, #22c55e); }
+        .focus-card:nth-child(5)::before { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+        .focus-card:nth-child(6)::before { background: linear-gradient(90deg, #8b5cf6, #a855f7); }
+        .focus-card .f-num { position: absolute; top: 10px; right: 16px; font-size: 42px;
+            font-weight: 800; color: rgba(255,255,255,0.04); }
+        .focus-card .f-name { font-size: 15px; font-weight: 700; color: #e0e6f0; margin-bottom: 6px; }
+        .focus-card .f-desc { font-size: 12.5px; color: #8892a8; line-height: 1.75; }
+
+        /* 风险 */
+        .risk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 16px; margin-bottom: 24px; }
+        .risk-card { background: #111827; border: 1px solid #1e293b; border-radius: 12px;
+            padding: 18px 20px; border-left: 3px solid #f87171; }
+        .risk-card .r-title { font-size: 15px; font-weight: 600; color: #f87171; margin-bottom: 8px; }
+        .risk-card .r-desc { font-size: 13px; color: #8892a8; line-height: 1.7; }
+
+        /* Footer */
+        .footer { text-align: center; padding: 32px 20px; margin-top: 40px;
+            border-top: 1px solid #1e293b; color: #5a6478; font-size: 12px; line-height: 1.8; }
+        .footer .disclaimer { color: #f87171; margin-top: 8px; font-weight: 500; }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 26px; }
+            .flow-diagram { grid-template-columns: 1fr; }
+            .flow-step:not(:last-child) { border-right: none; border-bottom: 1px solid #1e293b; }
+            .flow-step:not(:last-child)::after { content: '↓'; right: 50%; top: auto; bottom: -12px; transform: translateX(50%); }
+            .rel-groups { grid-template-columns: 1fr; }
+            .company-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a href="index.html" class="back-link">← 数据导航</a>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>长鑫科技产业链 · 上游标的深度梳理</h1>
+        <div class="subtitle">
+            CXMT（合肥长鑫）作为中国最大DRAM存储厂商，2026年DDR5/LPDDR5/HBM2产能爬坡拉动上游国产化，
+            百亿级Capex重塑半导体设备、材料、零部件、EDA/IP四大环节格局。
+        </div>
+        <div class="topic-tags">
+            <span class="topic-tag tag-red">存储自主可控</span>
+            <span class="topic-tag tag-orange">半导体设备</span>
+            <span class="topic-tag tag-yellow">半导体材料</span>
+            <span class="topic-tag tag-blue">HBM国产化</span>
+        </div>
+        <div class="update-time">整理时间：2026-07-10 · 数据来源：公开资料整理（长鑫科技官网、上市公司公告、券商研报）</div>
+    </div>
+
+    <!-- 区块2：CXMT背景速览 -->
+    <div class="highlight-box">
+        <div class="hl-title">🎯 CXMT（长鑫科技）背景速览</div>
+        <div class="hl-desc">
+            <strong>长鑫科技（CXMT / 合肥长鑫）</strong>是中国最大的<strong>DRAM存储器</strong>制造商，母公司为<strong>睿力集成电路</strong>（拟IPO），
+            2016年成立，总部合肥。目前已量产DDR4/LPDDR4X，2025年DDR5产品面世，2026年重点推进 <strong>DDR5 / LPDDR5 / HBM2</strong> 产能爬坡。
+            公司拥有<strong>合肥 + 北京</strong>双基地，规划总产能超30万片/月（12英寸），是国产DRAM自主可控的核心载体。
+            由于自2022年起海外先进设备/材料受出口管制，长鑫上游供应链快速国产化，
+            <strong>百亿级Capex（据市场估算2026-2028年设备+材料采购总额超千亿元）</strong>正拉动A股半导体设备、材料、零部件、EDA/IP四大环节的国产替代进程。
+            <div class="hl-stats">
+                <div class="hl-stat"><div class="k">2026E 总产能</div><div class="v">~30万片/月</div></div>
+                <div class="hl-stat"><div class="k">HBM2 目标量产</div><div class="v">2026H2</div></div>
+                <div class="hl-stat"><div class="k">2026 Capex（估算）</div><div class="v">~500亿元</div></div>
+                <div class="hl-stat"><div class="k">上游国产化目标</div><div class="v">>60%</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 区块3：上游产业链全景流程图 -->
+    <div class="section-title">上游产业链全景</div>
+    <div class="flow-diagram">
+        <div class="flow-step">
+            <span class="step-label">环节 01</span>
+            <div class="step-title">半导体设备</div>
+            <div class="step-desc">DRAM晶圆制造的核心装备，Capex占比~70%</div>
+            <div class="step-items">
+                <span class="step-item">刻蚀</span><span class="step-item">薄膜沉积</span>
+                <span class="step-item">CMP抛光</span><span class="step-item">清洗</span>
+                <span class="step-item">涂胶显影</span><span class="step-item">量测</span>
+                <span class="step-item">测试</span>
+            </div>
+        </div>
+        <div class="flow-step">
+            <span class="step-label">环节 02</span>
+            <div class="step-title">半导体材料</div>
+            <div class="step-desc">晶圆制造消耗品，产能爬坡直接拉动需求</div>
+            <div class="step-items">
+                <span class="step-item">大硅片</span><span class="step-item">前驱体</span>
+                <span class="step-item">电子特气</span><span class="step-item">湿电子化学品</span>
+                <span class="step-item">光刻胶</span><span class="step-item">CMP抛光液</span>
+                <span class="step-item">CMP抛光垫</span><span class="step-item">溅射靶材</span>
+            </div>
+        </div>
+        <div class="flow-step">
+            <span class="step-label">环节 03</span>
+            <div class="step-title">零部件</div>
+            <div class="step-desc">设备维保/新增装机的关键卡脖子环节</div>
+            <div class="step-items">
+                <span class="step-item">腔体</span><span class="step-item">气体管路</span>
+                <span class="step-item">静电吸盘</span><span class="step-item">高纯工艺系统</span>
+                <span class="step-item">阀门</span><span class="step-item">流体控制</span>
+            </div>
+        </div>
+        <div class="flow-step">
+            <span class="step-label">环节 04</span>
+            <div class="step-title">EDA / IP</div>
+            <div class="step-desc">存储芯片设计工具与IP授权，国产EDA突破点</div>
+            <div class="step-items">
+                <span class="step-item">存储EDA</span><span class="step-item">器件建模</span>
+                <span class="step-item">DFT/OPC</span><span class="step-item">IP授权</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 区块4：公司卡片区 -->
+    <div class="section-title">上游核心A股标的（双满星筛选）</div>
+
+    <!-- 半导体设备 -->
+    <div class="sub-section-title">一、半导体设备（8家）</div>
+    <div class="company-grid">
+
+        <div class="company-card">
+            <div class="card-header">
+                <div class="card-title">北方华创</div>
+                <div class="card-code">002371.SZ</div>
+            </div>
+            <span class="card-tag">刻蚀/PVD/CVD 平台型龙头</span>
+            <div class="card-desc">国内平台型半导体设备龙头，产品覆盖刻蚀、PVD、CVD、氧化炉、清洗等多品类，是长鑫科技核心设备供应商之一，累计中标金额位居国产设备厂第一。</div>
+            <div class="card-data-row">
+                <div class="data-item"><span class="label">核心产品</span><span class="value">刻蚀/PVD/CVD/氧化/清洗</span></div>
+                <div class="data-item"><span class="label">长鑫供货</span><span class="value">多品类核心供应商</span></div>
+                <div class="data-item"><span class="label">技术壁垒</span><span class="value">平台化+全流程覆盖</span></div>
+                <div class="data-item"><span class="label">国产化率</span><span class="value">部分品类>50%</span></div>
+            </div>
+            <div class="finance-tags">
+                <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利率~40%</span>
+                <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~35%</span>
+                <span class="f-tag profit"><span class="tag-icon">✓</span>持续盈利</span>
+            </div>
+            <div class="rating-row">
+                <div class="rating-item determ"><div class="r-label">受益确定性</div><div class="stars">★★★</div></div>
+                <div class="rating-item elastic"><div class="r-label">弹性空间</div><div class="stars">★★★</div></div>
+            </div>
+        </div>
+
+        <div class="company-card">
+            <div class="card-header">
+                <div class="card-title">中微公司</div>
+                <div class="card-code">688012.SH</div>
+            </div>
+            <span class="card-tag">CCP刻蚀龙头</span>
+            <div class="card-desc">介质刻蚀设备国产化领导者，CCP刻蚀技术接近国际先进水平，长鑫刻蚀设备主力供应商，MOCVD装机量全球领先。</div>
+            <div class="card-data-row">
+                <div class="data-item"><span class="label">核心产品</span><span class="value">CCP/ICP刻蚀、MOCVD</span></div>
+                <div class="data-item"><span class="label">长鑫供货</span><span class="value">刻蚀设备主力</span></div>
+                <div class="data-item"><span class="label">技术壁垒</span><span class="value">高深宽比刻蚀突破</span></div>
+                <div class="data-item"><span class="label">国产化率</span><span class="value">介质刻蚀~40%</span></div>
+            </div>
+            <div class="finance-tags">
+                <span class="f-tag margin-high"><span class="tag-icon">💰</span>毛利率~44%</span>
+                <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~30%</span>
+                <span class="f-tag profit"><span class="tag-icon">✓</span>盈利稳定</span>
+            </div>
+            <div class="rating-row">
+                <div class="rating-item determ"><div class="r-label">受益确定性</div><div class="stars">★★★</div></div>
+                <div class="rating-item elastic"><div class="r-label">弹性空间</div><div class="stars">★★★</div></div>
+            </div>
+        </div>
+
+        <div class="company-card">
+            <div class="card-header">
+                <div class="card-title">拓荆科技</div>
+                <div class="card-code">688072.SH</div>
+            </div>
+            <span class="card-tag">PECVD/ALD 薄膜沉积龙头</span>
+            <div class="card-desc">国产薄膜沉积设备龙头，PECVD/ALD在长鑫DRAM产线批量应用，是长鑫大客户订单占比最高的国产设备厂之一，混合键合设备切入HBM赛道。</div>
+            <div class="card-data-row">
+                <div class="data-item"><span class="label">核心产品</span><span class="value">PECVD/ALD/SACVD</span></div>
+                <div class="data-item"><span class="label">长鑫供货</span><span class="value">薄膜设备核心</span></div>
+                <div class="data-item"><span class="label">技术壁垒</span><span class="value">HBM混合键合突破</span></div>
+                <div class="data-item"><span class="label">国产化率</span><span class="value">薄膜~30%</span></div>
+            </div>
+            <div class="finance-tags">
+                <span class="f-tag margin-high"><span class="tag-icon">💰</span>毛利率~45%</span>
+                <span class="f-tag growth-high"><span class="tag-icon">📈</span>营收增速>50%</span>
+                <span class="f-tag profit"><span class="tag-icon">✓</span>持续盈利</span>
+            </div>
+            <div class="rating-row">
+                <div class="rating-item determ"><div class="r-label">受益确定性</div><div class="stars">★★★</div></div>
+                <div class="rating-item elastic"><div class="r-label">弹性空间</div><div class="stars">★★★</div></div>
+            </div>
+        </div>
+
+        <div class="company-card">
+            <div class="card-header">
+                <div class="card-title">华海清科</div>
+                <div class="card-code">688120.SH</div>
+            </div>
+            <span class="card-tag">CMP设备国产独家</span>
+            <div class="card-desc">国内唯一实现12英寸CMP设备量产的厂商，长鑫抛光设备核心供应商，市占率超90%国产份额，切入减薄设备打开HBM/先进封装空间。</div>
+            <div class="card-data-row">
+                <div class="data-item"><span class="label">核心产品</span><span class="value">CMP抛光/减薄/清洗</span></div>
+                <div class="data-item"><span class="label">长鑫供货</span><span class="value">CMP核心供应商</span></div>
+                <div class="data-item"><span class="label">技术壁垒</span><span class="value">CMP国内独家</span></div>
+                <div class="data-item"><span class="label">国产化率</span><span class="value">CMP国产>90%</span></div>
+            </div>
+            <div class="finance-tags">
+                <span class="f-tag margin-high"><span class="tag-icon">💰</span>毛利率~46%</span>
+                <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~30%</span>
+                <span class="f-tag profit"><span class="tag-icon">✓</span>盈利稳健</span>
+            </div>
+            <div class="rating-row">
+                <div class="rating-item determ"><div class="r-label">受益确定性</div><div class="stars">★★★</div></div>
+                <div class="rating-item elastic"><div class="r-label">弹性空间</div><div class="stars">★★★</div></div>
+            </div>
+        </div>
+
+        <div class="company-card">
+            <div class="card-header">
+                <div class="card-title">精测电子</div>
+                <div class="card-code">300567.SZ</div>
+            </div>
+            <span class="card-tag">前道量测国产先锋</span>
+            <div class="card-desc">前道量测设备国产替代先锋，覆盖膜厚/OCD/电子束等品类，长鑫量测设备核心供应商，打破KLA/AMAT垄断的稀缺国产标的。</div>
+            <div class="card-data-row">
+                <div class="data-item"><span class="label">核心产品</span><span class="value">膜厚/OCD/电子束量测</span></div>
+                <div class="data-item"><span class="label">长鑫供货</span><span class="value">量测设备供应商</span></div>
+                <div class="data-item"><span class="label">技术壁垒</span><span class="value">前道量测国产化</span></div>
+                <div class="data-item"><span class="label">国产化率</span><span class="value">量测<10%</span></div>
+            </div>
+            <div class="finance-tags">
+                <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利率~38%</span>
+                <span class="f-tag growth-high"><span class="tag-icon">📈</span>半导体订单>60%</span>
+                <span class="f-tag profit"><span class="tag-icon">✓</span>扭亏改善</span>
+            </div>
+            <div class="rating-row">
+                <div class="rating-item determ"><div class="r-label">受益确定性</div><div class="stars">★★★</div></div>
+                <div class="rating-item elastic"><div class="r-label">弹性空间</div><div class="stars">★★★</div></div>
+            </div>
+        </div>
+
+        <div class="company-card">
+            <div class="card-header">
+                <div class="card-title">芯源微</div>
+                <div class="card-code">688037.SH</div>
+            </div>
+            <span class="card-tag">涂胶显影国产独家</span>
+            <div class="card-desc">国内唯一实现前道涂胶显影设备量产的厂商，打破TEL全球垄断，长鑫核心涂胶显影供应商，HBM混合键合前道设备布局。</div>
+            <div class="card-data-row">
+                <div class="data-item"><span class="label">核心产品</span><span class="value">涂胶显影/单片清洗</span></div>
+                <div class="data-item"><span class="label">长鑫供货</span><span class="value">Track设备独家</span></div>
+                <div class="data-item"><span class="label">技术壁垒</span><span class="value">前道Track国产独家</span></div>
+                <div class="data-item"><span class="label">国产化率</span><span class="value">Track~15%</span></div>
+            </div>
+            <div class="finance-tags">
+                <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利率~40%</span>
+                <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~30%</span>
+                <span class="f-tag profit"><span class="tag-icon">✓</span>盈利改善</span>
+            </div>
+            <div class="rating-row">
+                <div class="rating-item determ"><div class="r-label">受益确定性</div><div class="stars">★★★</div></div>
+                <div class="rating-item elastic"><div class="r-label">弹性空间</div><div class="stars">★★★</div></div>
+            </div>
+        </div>
+
+        <div class="company-card">
+            <div class="card-header">
+                <div class="card-title">至纯科技</div>
+                <div class="card-code">603690.SH</div>
+            </div>
+            <span class="card-tag">湿法清洗+高纯工艺系统</span>
+            <div class="card-desc">湿法清洗设备+高纯工艺系统双主业，长鑫双料供应商，高纯工艺系统作为Fab厂房建设核心配套受益产能扩张。</div>
+            <div class="card-data-row">
+                <div class="data-item"><span class="label">核心产品</span><span class="value">湿法清洗/高纯系统</span></div>
+                <div class="data-item"><span class="label">长鑫供货</span><span class="value">清洗+高纯双供</span></div>
+                <div class="data-item"><span class="label">技术壁垒</span><span class="value">槽式/单片全覆盖</span></div>
+                <div class="data-item"><span class="label">国产化率</span><span class="value">清洗~30%</span></div>
+            </div>
+            <div class="finance-tags">
+                <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利率~28%</span>
+                <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~25%</span>
+                <span class="f-tag profit"><span class="tag-icon">✓</span>盈利稳健</span>
+            </div>
+            <div class="rating-row">
+                <div class="rating-item determ"><div class="r-label">受益确定性</div><div class="stars">★★★</div></div>
+                <div class="rating-item elastic"><div class="r-label">弹性空间</div><div class="stars">★★★</div></div>
+            </div>
+        </div>
+
+        <div class="company-card">
+            <div class="card-header">
+                <div class="card-title">长川科技</div>
+                <div class="card-code">300604.SZ</div>
+            </div>
+            <span class="card-tag">存储测试机国产化</span>
+            <div class="card-desc">国产测试机龙头，SoC测试机+存储测试机双平台，覆盖长鑫DRAM测试需求，是国产替代Teradyne/Advantest的稀缺标的。</div>
+            <div class="card-data-row">
+                <div class="data-item"><span class="label">核心产品</span><span class="value">SoC/存储测试机、分选机</span></div>
+                <div class="data-item"><span class="label">长鑫供货</span><span class="value">存储测试设备</span></div>
+                <div class="data-item"><span class="label">技术壁垒</span><span class="value">存储ATE国产突破</span></div>
+                <div class="data-item"><span class="label">国产化率</span><span class="value">测试机~15%</span></div>
+            </div>
+            <div class="rating-row">
+                <div class="rating-item determ"><div class="r-label">受益确定性</div><div class="stars">★★★</div></div>
+                <div class="rating-item elastic"><div class="r-label">弹性空间</div><div class="stars">★★★</div></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 半导体材料 -->
+    <div class="sub-section-title">二、半导体材料（10家）</div>
+    <div class="company-grid">
+
+        <div class="company-card">
+            <div class="card-header">
+                <div class="card-title">沪硅产业</div>
+                <div class="card-code">688126.SH</div>
+            </div>
+            <span class="card-tag">12英寸大硅片龙头</span>
+            <div class="card-desc">国内12英寸半导体硅片龙头，长鑫硅片核心供应商，正积极扩产以配套国内DRAM晶圆厂产能爬坡，国产大硅片稀缺标的。</div>
+            <div class="card-data-row">
+                <div class="data-item"><span class="label">核心产品</span><span class="value">12英寸/8英寸硅片</span></div>
+                <div class="data-item"><span class="label">长鑫供货</span><span class="value">硅片核心供应商</span></div>
+                <div class="data-item"><span class="label">技术壁垒</span><span class="value">12英寸国产先驱</span></div>
+                <div class="data-item"><span class="label">国产化率</span><span class="value">12英寸~10%</span></div>
+            </div>
+            <div class="finance-tags">
+                <span class="f-tag margin-low"><span class="tag-icon">💰</span>毛利率~15%</span>
+                <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~25%</span>
+                <span class="f-tag loss"><span class="tag-icon">✗</span>产能爬坡亏损</span>
+            </div>
+            <div class="rating-row">
+                <div class="rating-item determ"><div class="r-label">受益确定性</div><div class="stars">★★★</div></div>
+                <div class="rating-item elastic"><div class="r-label">弹性空间</div><div class="stars">★★★</div></div>
+            </div>
+        </div>
+
+        <div class="company-card">
+            <div class="card-header">
+                <div class="card-title">立昂微</div>
+                <div class="card-code">605358.SH</div>
+            </div>
+            <span class="card-tag">12英寸硅片+功率器件</span>
+            <div class="card-desc">半导体硅片+功率器件双主业，12英寸硅片产能持续扩张，存储产业链核心供应商，硅片业务是长鑫等国内Fab的国产化替代主力。</div>
+            <div class="card-data-row">
+                <div class="data-item"><span class="label">核心产品</span><span class="value">12英寸硅片、外延片</span></div>
+                <div class="data-item"><span class="label">长鑫供货</span><span class="value">硅片供应</span></div>
+                <div class="data-item"><span class="label">技术壁垒</span><span class="value">硅片+功率一体化</span></div>
+                <div class="data-item"><span class="label">国产化率</span><span class="value">8英寸~40%</span></div>
+            </div>
+            <div class="finance-tags">
+                <span class="f-tag margin-low"><span class="tag-icon">💰</span>毛利率~18%</span>
+                <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~22%</span>
+                <span class="f-tag profit"><span class="tag-icon">✓</span>微利改善</span>
+            </div>
+            <div class="rating-row">
+                <div class="rating-item determ"><div class="r-label">受益确定性</div><div class="stars">★★★</div></div>
+                <div class="rating-item elastic"><div class="r-label">弹性空间</div><div class="stars">★★★</div></div>
+            </div>
+        </div>
+
+        <div class="company-card">
+            <div class="card-header">
+                <div class="card-title">雅克科技</div>
+                <div class="card-code">002409.SZ</div>
+            </div>
+            <span class="card-tag">前驱体+四大材料平台</span>
+            <div class="card-desc">半导体前驱体材料国产龙头，SOD/LTO/球硅/前驱体四大材料平台，与长鑫深度绑定，DRAM高K/HKMG前驱体核心供应商。</div>
+            <div class="card-data-row">
+                <div class="data-item"><span class="label">核心产品</span><span class="value">前驱体/SOD/LTO/球硅</span></div>
+                <div class="data-item"><span class="label">长鑫供货</span><span class="value">前驱体深度绑定</span></div>
+                <div class="data-item"><span class="label">技术壁垒</span><span class="value">DRAM高K前驱体</span></div>
+                <div class="data-item"><span class="label">国产化率</span><span class="value">前驱体~25%</span></div>
+            </div>
+            <div class="finance-tags">
+                <span class="f-tag margin-high"><span class="tag-icon">💰</span>毛利率~42%</span>
+                <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~28%</span>
+                <span class="f-tag profit"><span class="tag-icon">✓</span>盈利稳定</span>
+            </div>
+            <div class="rating-row">
+                <div class="rating-item determ"><div class="r-label">受益确定性</div><div class="stars">★★★</div></div>
+                <div class="rating-item elastic"><div class="r-label">弹性空间</div><div class="stars">★★★</div></div>
+            </div>
+        </div>
+
+        <div class="company-card">
+            <div class="card-header">
+                <div class="card-title">江化微</div>
+                <div class="card-code">603078.SH</div>
+            </div>
+            <span class="card-tag">湿电子化学品</span>
+            <div class="card-desc">湿电子化学品国产龙头之一，产品覆盖G4/G5高纯级别，长鑫供应商，DRAM产能扩张直接拉动酸/碱/溶剂消耗量增长。</div>
+            <div class="card-data-row">
+                <div class="data-item"><span class="label">核心产品</span><span class="value">高纯化学品/显影液</span></div>
+                <div class="data-item"><span class="label">长鑫供货</span><span class="value">湿化学品供应</span></div>
+                <div class="data-item"><span class="label">技术壁垒</span><span class="value">G4/G5高纯突破</span></div>
+                <div class="data-item"><span class="label">国产化率</span><span class="value">湿化学品~35%</span></div>
+            </div>
+            <div class="finance-tags">
+                <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利率~28%</span>
+                <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~30%</span>
+                <span class="f-tag profit"><span class="tag-icon">✓</span>持续盈利</span>
+            </div>
+            <div class="rating-row">
+                <div class="rating-item determ"><div class="r-label">受益确定性</div><div class="stars">★★★</div></div>
+                <div class="rating-item elastic"><div class="r-label">弹性空间</div><div class="stars">★★★</div></div>
+            </div>
+        </div>
+
+        <div class="company-card">
+            <div class="card-header">
+                <div class="card-title">华特气体</div>
+                <div class="card-code">688268.SH</div>
+            </div>
+            <span class="card-tag">特种电子气体</span>
+            <div class="card-desc">国产特种电子气体龙头，长鑫核心气体供应商，覆盖DRAM刻蚀/沉积/掺杂等关键工艺，打破美/日/德气体巨头的稀缺标的。</div>
+            <div class="card-data-row">
+                <div class="data-item"><span class="label">核心产品</span><span class="value">特种气体/混合气体</span></div>
+                <div class="data-item"><span class="label">长鑫供货</span><span class="value">核心气体供应商</span></div>
+                <div class="data-item"><span class="label">技术壁垒</span><span class="value">100+品种覆盖</span></div>
+                <div class="data-item"><span class="label">国产化率</span><span class="value">特气~30%</span></div>
+            </div>
+            <div class="finance-tags">
+                <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利率~30%</span>
+                <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~25%</span>
+                <span class="f-tag profit"><span class="tag-icon">✓</span>持续盈利</span>
+            </div>
+            <div class="rating-row">
+                <div class="rating-item determ"><div class="r-label">受益确定性</div><div class="stars">★★★</div></div>
+                <div class="rating-item elastic"><div class="r-label">弹性空间</div><div class="stars">★★★</div></div>
+            </div>
+        </div>
+
+        <div class="company-card">
+            <div class="card-header">
+                <div class="card-title">金宏气体</div>
+                <div class="card-code">688106.SH</div>
+            </div>
+            <span class="card-tag">现场制气+特气</span>
+            <div class="card-desc">工业气体综合服务商，现场制气+特种气体双主业，存储产业链核心供应商，Fab厂大宗气体供应受益产能扩张。</div>
+            <div class="card-data-row">
+                <div class="data-item"><span class="label">核心产品</span><span class="value">现场制气/超纯氨/特气</span></div>
+                <div class="data-item"><span class="label">长鑫供货</span><span class="value">大宗气体/特气</span></div>
+                <div class="data-item"><span class="label">技术壁垒</span><span class="value">现场制气全国布局</span></div>
+                <div class="data-item"><span class="label">国产化率</span><span class="value">大宗气~50%</span></div>
+            </div>
+            <div class="finance-tags">
+                <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利率~29%</span>
+                <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~25%</span>
+                <span class="f-tag profit"><span class="tag-icon">✓</span>盈利稳定</span>
+            </div>
+            <div class="rating-row">
+                <div class="rating-item determ"><div class="r-label">受益确定性</div><div class="stars">★★★</div></div>
+                <div class="rating-item elastic"><div class="r-label">弹性空间</div><div class="stars">★★★</div></div>
+            </div>
+        </div>
+
+        <div class="company-card">
+            <div class="card-header">
+                <div class="card-title">南大光电</div>
+                <div class="card-code">300346.SZ</div>
+            </div>
+            <span class="card-tag">ArF光刻胶+MO源</span>
+            <div class="card-desc">国内ArF光刻胶取得突破的先锋企业，MO源全球领先，前驱体+电子特气布局完善，DRAM光刻胶国产化核心受益标的。</div>
+            <div class="card-data-row">
+                <div class="data-item"><span class="label">核心产品</span><span class="value">ArF光刻胶/MO源/前驱体</span></div>
+                <div class="data-item"><span class="label">长鑫供货</span><span class="value">光刻胶/前驱体</span></div>
+                <div class="data-item"><span class="label">技术壁垒</span><span class="value">ArF国产突破</span></div>
+                <div class="data-item"><span class="label">国产化率</span><span class="value">ArF光刻胶<5%</span></div>
+            </div>
+            <div class="finance-tags">
+                <span class="f-tag margin-high"><span class="tag-icon">💰</span>毛利率~45%</span>
+                <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~30%</span>
+                <span class="f-tag profit"><span class="tag-icon">✓</span>持续盈利</span>
+            </div>
+            <div class="rating-row">
+                <div class="rating-item determ"><div class="r-label">受益确定性</div><div class="stars">★★★</div></div>
+                <div class="rating-item elastic"><div class="r-label">弹性空间</div><div class="stars">★★★</div></div>
+            </div>
+        </div>
+
+        <div class="company-card">
+            <div class="card-header">
+                <div class="card-title">安集科技</div>
+                <div class="card-code">688019.SH</div>
+            </div>
+            <span class="card-tag">CMP抛光液国产龙头</span>
+            <div class="card-desc">国产CMP抛光液龙头，覆盖铜/钨/铝/介质等全品类，长鑫抛光液核心供应商，DRAM/HBM工艺持续导入受益产能扩张。</div>
+            <div class="card-data-row">
+                <div class="data-item"><span class="label">核心产品</span><span class="value">CMP抛光液/清洗液</span></div>
+                <div class="data-item"><span class="label">长鑫供货</span><span class="value">抛光液核心供应</span></div>
+                <div class="data-item"><span class="label">技术壁垒</span><span class="value">全品类抛光液</span></div>
+                <div class="data-item"><span class="label">国产化率</span><span class="value">抛光液~30%</span></div>
+            </div>
+            <div class="finance-tags">
+                <span class="f-tag margin-high"><span class="tag-icon">💰</span>毛利率~55%</span>
+                <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~30%</span>
+                <span class="f-tag profit"><span class="tag-icon">✓</span>高盈利</span>
+            </div>
+            <div class="rating-row">
+                <div class="rating-item determ"><div class="r-label">受益确定性</div><div class="stars">★★★</div></div>
+                <div class="rating-item elastic"><div class="r-label">弹性空间</div><div class="stars">★★★</div></div>
+            </div>
+        </div>
+
+        <div class="company-card">
+            <div class="card-header">
+                <div class="card-title">鼎龙股份</div>
+                <div class="card-code">300054.SZ</div>
+            </div>
+            <span class="card-tag">CMP抛光垫国产独家</span>
+            <div class="card-desc">国内唯一实现CMP抛光垫量产的厂商，长鑫核心供应商，打破陶氏垄断的稀缺标的，YPI/PSPI等半导体材料快速放量。</div>
+            <div class="card-data-row">
+                <div class="data-item"><span class="label">核心产品</span><span class="value">CMP抛光垫/YPI/PSPI</span></div>
+                <div class="data-item"><span class="label">长鑫供货</span><span class="value">抛光垫独家供应</span></div>
+                <div class="data-item"><span class="label">技术壁垒</span><span class="value">CMP Pad国产独家</span></div>
+                <div class="data-item"><span class="label">国产化率</span><span class="value">抛光垫~15%</span></div>
+            </div>
+            <div class="finance-tags">
+                <span class="f-tag margin-high"><span class="tag-icon">💰</span>毛利率~42%</span>
+                <span class="f-tag growth-high"><span class="tag-icon">📈</span>半导体业务>60%</span>
+                <span class="f-tag profit"><span class="tag-icon">✓</span>盈利改善</span>
+            </div>
+            <div class="rating-row">
+                <div class="rating-item determ"><div class="r-label">受益确定性</div><div class="stars">★★★</div></div>
+                <div class="rating-item elastic"><div class="r-label">弹性空间</div><div class="stars">★★★</div></div>
+            </div>
+        </div>
+
+        <div class="company-card">
+            <div class="card-header">
+                <div class="card-title">江丰电子</div>
+                <div class="card-code">300666.SZ</div>
+            </div>
+            <span class="card-tag">溅射靶材国产龙头</span>
+            <div class="card-desc">国产半导体靶材龙头，长鑫核心供应商，覆盖铝/钛/钽/铜等主流靶材品类，先进制程用高纯靶材实现国内独家突破。</div>
+            <div class="card-data-row">
+                <div class="data-item"><span class="label">核心产品</span><span class="value">铝/钛/钽/铜靶材</span></div>
+                <div class="data-item"><span class="label">长鑫供货</span><span class="value">靶材核心供应</span></div>
+                <div class="data-item"><span class="label">技术壁垒</span><span class="value">超高纯金属提纯</span></div>
+                <div class="data-item"><span class="label">国产化率</span><span class="value">靶材~30%</span></div>
+            </div>
+            <div class="finance-tags">
+                <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利率~28%</span>
+                <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~25%</span>
+                <span class="f-tag profit"><span class="tag-icon">✓</span>盈利稳定</span>
+            </div>
+            <div class="rating-row">
+                <div class="rating-item determ"><div class="r-label">受益确定性</div><div class="stars">★★★</div></div>
+                <div class="rating-item elastic"><div class="r-label">弹性空间</div><div class="stars">★★★</div></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 零部件 -->
+    <div class="sub-section-title">三、零部件（3家）</div>
+    <div class="company-grid">
+
+        <div class="company-card">
+            <div class="card-header">
+                <div class="card-title">富创精密</div>
+                <div class="card-code">688409.SH</div>
+            </div>
+            <span class="card-tag">半导体精密零部件龙头</span>
+            <div class="card-desc">国产半导体精密零部件龙头，为北方华创、中微、拓荆等设备厂配套供应腔体/气体管路/工艺件，间接受益长鑫扩产。</div>
+            <div class="card-data-row">
+                <div class="data-item"><span class="label">核心产品</span><span class="value">腔体/气体管路/工艺件</span></div>
+                <div class="data-item"><span class="label">下游客户</span><span class="value">北方华创/中微/拓荆</span></div>
+                <div class="data-item"><span class="label">技术壁垒</span><span class="value">精密加工+表面处理</span></div>
+                <div class="data-item"><span class="label">国产化率</span><span class="value">零部件~20%</span></div>
+            </div>
+            <div class="finance-tags">
+                <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利率~30%</span>
+                <span class="f-tag growth-high"><span class="tag-icon">📈</span>营收增速>40%</span>
+                <span class="f-tag profit"><span class="tag-icon">✓</span>盈利稳健</span>
+            </div>
+            <div class="rating-row">
+                <div class="rating-item determ"><div class="r-label">受益确定性</div><div class="stars">★★★</div></div>
+                <div class="rating-item elastic"><div class="r-label">弹性空间</div><div class="stars">★★★</div></div>
+            </div>
+        </div>
+
+        <div class="company-card">
+            <div class="card-header">
+                <div class="card-title">新莱应材</div>
+                <div class="card-code">300260.SZ</div>
+            </div>
+            <span class="card-tag">超高纯真空/流体控制</span>
+            <div class="card-desc">超高纯真空/流体控制零部件龙头，长鑫Fab厂高纯管路系统核心供应商，切入半导体设备零部件国产替代。</div>
+            <div class="card-data-row">
+                <div class="data-item"><span class="label">核心产品</span><span class="value">真空阀门/高纯管件</span></div>
+                <div class="data-item"><span class="label">下游客户</span><span class="value">Fab厂/设备厂</span></div>
+                <div class="data-item"><span class="label">技术壁垒</span><span class="value">EP级超高纯处理</span></div>
+                <div class="data-item"><span class="label">国产化率</span><span class="value">流体控制~25%</span></div>
+            </div>
+            <div class="finance-tags">
+                <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利率~32%</span>
+                <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~28%</span>
+                <span class="f-tag profit"><span class="tag-icon">✓</span>持续盈利</span>
+            </div>
+            <div class="rating-row">
+                <div class="rating-item determ"><div class="r-label">受益确定性</div><div class="stars">★★★</div></div>
+                <div class="rating-item elastic"><div class="r-label">弹性空间</div><div class="stars">★★★</div></div>
+            </div>
+        </div>
+
+        <div class="company-card">
+            <div class="card-header">
+                <div class="card-title">正帆科技</div>
+                <div class="card-code">688596.SH</div>
+            </div>
+            <span class="card-tag">高纯工艺系统+电子特气</span>
+            <div class="card-desc">半导体高纯工艺系统龙头，横向延伸电子特气+MO源+前驱体材料，Fab厂建设+运营双阶段受益长鑫扩产。</div>
+            <div class="card-data-row">
+                <div class="data-item"><span class="label">核心产品</span><span class="value">高纯系统/特气/前驱体</span></div>
+                <div class="data-item"><span class="label">长鑫供货</span><span class="value">高纯工艺+气体</span></div>
+                <div class="data-item"><span class="label">技术壁垒</span><span class="value">系统集成+材料一体化</span></div>
+                <div class="data-item"><span class="label">国产化率</span><span class="value">高纯系统~40%</span></div>
+            </div>
+            <div class="finance-tags">
+                <span class="f-tag margin-mid"><span class="tag-icon">💰</span>毛利率~28%</span>
+                <span class="f-tag growth-high"><span class="tag-icon">📈</span>营收增速~45%</span>
+                <span class="f-tag profit"><span class="tag-icon">✓</span>盈利稳健</span>
+            </div>
+            <div class="rating-row">
+                <div class="rating-item determ"><div class="r-label">受益确定性</div><div class="stars">★★★</div></div>
+                <div class="rating-item elastic"><div class="r-label">弹性空间</div><div class="stars">★★★</div></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- EDA / IP -->
+    <div class="sub-section-title">四、EDA / IP（2家）</div>
+    <div class="company-grid">
+
+        <div class="company-card">
+            <div class="card-header">
+                <div class="card-title">华大九天</div>
+                <div class="card-code">301269.SZ</div>
+            </div>
+            <span class="card-tag">DRAM存储EDA国产龙头</span>
+            <div class="card-desc">国产EDA龙头，模拟全流程EDA国内独家，存储/DRAM设计EDA与长鑫合作，是国产EDA突破三巨头封锁的核心受益标的。</div>
+            <div class="card-data-row">
+                <div class="data-item"><span class="label">核心产品</span><span class="value">模拟/存储EDA全流程</span></div>
+                <div class="data-item"><span class="label">长鑫合作</span><span class="value">存储EDA合作方</span></div>
+                <div class="data-item"><span class="label">技术壁垒</span><span class="value">模拟EDA国内独家</span></div>
+                <div class="data-item"><span class="label">国产化率</span><span class="value">EDA<15%</span></div>
+            </div>
+            <div class="finance-tags">
+                <span class="f-tag margin-high"><span class="tag-icon">💰</span>毛利率~65%</span>
+                <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~25%</span>
+                <span class="f-tag profit"><span class="tag-icon">✓</span>持续盈利</span>
+            </div>
+            <div class="rating-row">
+                <div class="rating-item determ"><div class="r-label">受益确定性</div><div class="stars">★★★</div></div>
+                <div class="rating-item elastic"><div class="r-label">弹性空间</div><div class="stars">★★★</div></div>
+            </div>
+        </div>
+
+        <div class="company-card">
+            <div class="card-header">
+                <div class="card-title">概伦电子</div>
+                <div class="card-code">688206.SH</div>
+            </div>
+            <span class="card-tag">器件建模+存储EDA</span>
+            <div class="card-desc">器件建模EDA国产领先厂商，存储EDA工具持续拓展，是DRAM器件模型/设计流程国产替代的关键工具供应商。</div>
+            <div class="card-data-row">
+                <div class="data-item"><span class="label">核心产品</span><span class="value">器件建模/DTCO/存储EDA</span></div>
+                <div class="data-item"><span class="label">长鑫合作</span><span class="value">建模工具协同</span></div>
+                <div class="data-item"><span class="label">技术壁垒</span><span class="value">器件建模全球领先</span></div>
+                <div class="data-item"><span class="label">国产化率</span><span class="value">建模工具~30%</span></div>
+            </div>
+            <div class="finance-tags">
+                <span class="f-tag margin-high"><span class="tag-icon">💰</span>毛利率~60%</span>
+                <span class="f-tag growth-mid"><span class="tag-icon">📈</span>营收增速~25%</span>
+                <span class="f-tag profit"><span class="tag-icon">✓</span>持续盈利</span>
+            </div>
+            <div class="rating-row">
+                <div class="rating-item determ"><div class="r-label">受益确定性</div><div class="stars">★★★</div></div>
+                <div class="rating-item elastic"><div class="r-label">弹性空间</div><div class="stars">★★★</div></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 区块5：国产化率对比表 -->
+    <div class="section-title">上游各细分领域国产化率对比</div>
+    <table class="compare-table">
+        <thead>
+            <tr>
+                <th>细分品类</th>
+                <th>国产化率现状</th>
+                <th>长鑫采用国产比例目标</th>
+                <th>代表A股标的</th>
+                <th>突破难度</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td class="col-name">刻蚀设备</td><td class="val-orange">~40%</td><td class="val-red">>60%</td><td>中微公司、北方华创</td><td class="val-mid">中</td></tr>
+            <tr><td class="col-name">薄膜沉积</td><td class="val-orange">~30%</td><td class="val-red">>50%</td><td>拓荆科技、北方华创</td><td class="val-mid">中</td></tr>
+            <tr><td class="col-name">CMP设备</td><td class="val-high">>90%（国产）</td><td class="val-red">>90%</td><td>华海清科</td><td class="val-high">低</td></tr>
+            <tr><td class="col-name">清洗设备</td><td class="val-orange">~30%</td><td class="val-red">>60%</td><td>至纯科技、北方华创</td><td class="val-mid">中</td></tr>
+            <tr><td class="col-name">涂胶显影(Track)</td><td class="val-low">~15%</td><td class="val-orange">>40%</td><td>芯源微</td><td class="val-orange">中高</td></tr>
+            <tr><td class="col-name">前道量测</td><td class="val-low"><10%</td><td class="val-orange">>30%</td><td>精测电子</td><td class="val-loss">高</td></tr>
+            <tr><td class="col-name">测试机</td><td class="val-low">~15%</td><td class="val-orange">>40%</td><td>长川科技</td><td class="val-orange">中高</td></tr>
+            <tr><td class="col-name">12英寸大硅片</td><td class="val-low">~10%</td><td class="val-orange">>30%</td><td>沪硅产业、立昂微</td><td class="val-orange">中高</td></tr>
+            <tr><td class="col-name">前驱体材料</td><td class="val-orange">~25%</td><td class="val-red">>50%</td><td>雅克科技、南大光电</td><td class="val-mid">中</td></tr>
+            <tr><td class="col-name">湿电子化学品</td><td class="val-orange">~35%</td><td class="val-red">>60%</td><td>江化微</td><td class="val-mid">中</td></tr>
+            <tr><td class="col-name">电子特气</td><td class="val-orange">~30%</td><td class="val-red">>50%</td><td>华特气体、金宏气体</td><td class="val-mid">中</td></tr>
+            <tr><td class="col-name">ArF光刻胶</td><td class="val-low"><5%</td><td class="val-orange">>20%</td><td>南大光电</td><td class="val-loss">高</td></tr>
+            <tr><td class="col-name">CMP抛光液</td><td class="val-orange">~30%</td><td class="val-red">>60%</td><td>安集科技</td><td class="val-mid">中</td></tr>
+            <tr><td class="col-name">CMP抛光垫</td><td class="val-low">~15%</td><td class="val-orange">>40%</td><td>鼎龙股份</td><td class="val-orange">中高</td></tr>
+            <tr><td class="col-name">溅射靶材</td><td class="val-orange">~30%</td><td class="val-red">>50%</td><td>江丰电子</td><td class="val-mid">中</td></tr>
+            <tr><td class="col-name">精密零部件</td><td class="val-low">~20%</td><td class="val-orange">>40%</td><td>富创精密、新莱应材、正帆科技</td><td class="val-orange">中高</td></tr>
+            <tr><td class="col-name">EDA工具</td><td class="val-low"><15%</td><td class="val-orange">>30%</td><td>华大九天、概伦电子</td><td class="val-loss">高</td></tr>
+        </tbody>
+    </table>
+
+    <!-- 区块6：产业链关系图 -->
+    <div class="section-title">长鑫科技产业链关系图</div>
+    <div class="relation-diagram">
+        <div class="rel-center">
+            <div class="center-node">长鑫科技 CXMT</div>
+            <div class="center-sub">中国最大DRAM存储厂 · DDR5 / LPDDR5 / HBM2</div>
+        </div>
+        <div class="rel-groups">
+            <div class="rel-group equip">
+                <div class="rg-title">🔴 半导体设备</div>
+                <div class="rel-nodes">
+                    <div class="rel-node">北方华创<span class="n-code">002371</span></div>
+                    <div class="rel-node">中微公司<span class="n-code">688012</span></div>
+                    <div class="rel-node">拓荆科技<span class="n-code">688072</span></div>
+                    <div class="rel-node">华海清科<span class="n-code">688120</span></div>
+                    <div class="rel-node">精测电子<span class="n-code">300567</span></div>
+                    <div class="rel-node">芯源微<span class="n-code">688037</span></div>
+                    <div class="rel-node">至纯科技<span class="n-code">603690</span></div>
+                    <div class="rel-node">长川科技<span class="n-code">300604</span></div>
+                </div>
+            </div>
+            <div class="rel-group material">
+                <div class="rg-title">🟡 半导体材料</div>
+                <div class="rel-nodes">
+                    <div class="rel-node">沪硅产业<span class="n-code">688126</span></div>
+                    <div class="rel-node">立昂微<span class="n-code">605358</span></div>
+                    <div class="rel-node">雅克科技<span class="n-code">002409</span></div>
+                    <div class="rel-node">江化微<span class="n-code">603078</span></div>
+                    <div class="rel-node">华特气体<span class="n-code">688268</span></div>
+                    <div class="rel-node">金宏气体<span class="n-code">688106</span></div>
+                    <div class="rel-node">南大光电<span class="n-code">300346</span></div>
+                    <div class="rel-node">安集科技<span class="n-code">688019</span></div>
+                    <div class="rel-node">鼎龙股份<span class="n-code">300054</span></div>
+                    <div class="rel-node">江丰电子<span class="n-code">300666</span></div>
+                </div>
+            </div>
+            <div class="rel-group parts">
+                <div class="rg-title">🟠 零部件</div>
+                <div class="rel-nodes">
+                    <div class="rel-node">富创精密<span class="n-code">688409</span></div>
+                    <div class="rel-node">新莱应材<span class="n-code">300260</span></div>
+                    <div class="rel-node">正帆科技<span class="n-code">688596</span></div>
+                </div>
+            </div>
+            <div class="rel-group eda">
+                <div class="rg-title">🟣 EDA / IP</div>
+                <div class="rel-nodes">
+                    <div class="rel-node">华大九天<span class="n-code">301269</span></div>
+                    <div class="rel-node">概伦电子<span class="n-code">688206</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 区块7：财务指标速览表 -->
+    <div class="section-title">上游产业链财务指标速览</div>
+    <table class="compare-table">
+        <thead>
+            <tr>
+                <th>产业链环节</th>
+                <th>公司</th>
+                <th>毛利率</th>
+                <th>净利率</th>
+                <th>营收增速</th>
+                <th>利润增速</th>
+                <th>盈利特征</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td class="row-group" rowspan="8">半导体<br>设备</td>
+                <td class="col-name">北方华创</td><td class="val-mid">~40%</td><td class="val-mid">~18%</td><td class="val-orange">~35%</td><td class="val-orange">~40%</td><td>平台化龙头，规模效应释放</td></tr>
+            <tr><td class="col-name">中微公司</td><td class="val-high">~44%</td><td class="val-mid">~18%</td><td class="val-orange">~30%</td><td class="val-orange">~30%</td><td>高毛利+高研发投入</td></tr>
+            <tr><td class="col-name">拓荆科技</td><td class="val-high">~45%</td><td class="val-mid">~18%</td><td class="val-red">>50%</td><td class="val-red">>60%</td><td>薄膜设备快速放量</td></tr>
+            <tr><td class="col-name">华海清科</td><td class="val-high">~46%</td><td class="val-high">~25%</td><td class="val-orange">~30%</td><td class="val-orange">~30%</td><td>CMP独家高盈利</td></tr>
+            <tr><td class="col-name">精测电子</td><td class="val-mid">~38%</td><td class="val-low">~5%</td><td class="val-orange">~30%</td><td class="val-red">扭亏</td><td>量测转型期，改善明显</td></tr>
+            <tr><td class="col-name">芯源微</td><td class="val-mid">~40%</td><td class="val-mid">~12%</td><td class="val-orange">~30%</td><td class="val-orange">~25%</td><td>Track独家，稳健盈利</td></tr>
+            <tr><td class="col-name">至纯科技</td><td class="val-mid">~28%</td><td class="val-low">~6%</td><td class="val-orange">~25%</td><td class="val-orange">~20%</td><td>双主业稳健增长</td></tr>
+            <tr><td class="col-name">长川科技</td><td class="val-high">~50%</td><td class="val-mid">~12%</td><td class="val-red">>60%</td><td class="val-red">扭亏</td><td>测试机拐点向上</td></tr>
+
+            <tr><td class="row-group" rowspan="10">半导体<br>材料</td>
+                <td class="col-name">沪硅产业</td><td class="val-low">~15%</td><td class="val-loss">亏损</td><td class="val-orange">~25%</td><td class="val-loss">亏损收窄</td><td>产能爬坡期，先规模后利润</td></tr>
+            <tr><td class="col-name">立昂微</td><td class="val-low">~18%</td><td class="val-low">~3%</td><td class="val-orange">~22%</td><td class="val-orange">~25%</td><td>硅片+功率双周期</td></tr>
+            <tr><td class="col-name">雅克科技</td><td class="val-high">~42%</td><td class="val-mid">~14%</td><td class="val-orange">~28%</td><td class="val-orange">~30%</td><td>前驱体平台，高盈利</td></tr>
+            <tr><td class="col-name">江化微</td><td class="val-mid">~28%</td><td class="val-mid">~10%</td><td class="val-orange">~30%</td><td class="val-orange">~30%</td><td>湿化学品稳健放量</td></tr>
+            <tr><td class="col-name">华特气体</td><td class="val-mid">~30%</td><td class="val-mid">~12%</td><td class="val-orange">~25%</td><td class="val-orange">~25%</td><td>特气品类持续拓展</td></tr>
+            <tr><td class="col-name">金宏气体</td><td class="val-mid">~29%</td><td class="val-mid">~11%</td><td class="val-orange">~25%</td><td class="val-orange">~22%</td><td>现场制气+特气双轮</td></tr>
+            <tr><td class="col-name">南大光电</td><td class="val-high">~45%</td><td class="val-mid">~18%</td><td class="val-orange">~30%</td><td class="val-orange">~30%</td><td>ArF突破+MO源稳健</td></tr>
+            <tr><td class="col-name">安集科技</td><td class="val-high">~55%</td><td class="val-high">~28%</td><td class="val-orange">~30%</td><td class="val-orange">~35%</td><td>抛光液高毛利龙头</td></tr>
+            <tr><td class="col-name">鼎龙股份</td><td class="val-high">~42%</td><td class="val-mid">~12%</td><td class="val-red">>40%</td><td class="val-red">>50%</td><td>半导体材料快速放量</td></tr>
+            <tr><td class="col-name">江丰电子</td><td class="val-mid">~28%</td><td class="val-mid">~10%</td><td class="val-orange">~25%</td><td class="val-orange">~25%</td><td>靶材龙头稳健</td></tr>
+
+            <tr><td class="row-group" rowspan="3">零部件</td>
+                <td class="col-name">富创精密</td><td class="val-mid">~30%</td><td class="val-mid">~10%</td><td class="val-red">>40%</td><td class="val-red">>40%</td><td>零部件龙头快速扩产</td></tr>
+            <tr><td class="col-name">新莱应材</td><td class="val-mid">~32%</td><td class="val-mid">~11%</td><td class="val-orange">~28%</td><td class="val-orange">~25%</td><td>半导体业务持续放量</td></tr>
+            <tr><td class="col-name">正帆科技</td><td class="val-mid">~28%</td><td class="val-mid">~10%</td><td class="val-red">~45%</td><td class="val-red">~45%</td><td>Fab配套持续高增</td></tr>
+
+            <tr><td class="row-group" rowspan="2">EDA/IP</td>
+                <td class="col-name">华大九天</td><td class="val-high">~65%</td><td class="val-mid">~18%</td><td class="val-orange">~25%</td><td class="val-orange">~25%</td><td>模拟EDA国内独家</td></tr>
+            <tr><td class="col-name">概伦电子</td><td class="val-high">~60%</td><td class="val-mid">~15%</td><td class="val-orange">~25%</td><td class="val-orange">~20%</td><td>器件建模全球领先</td></tr>
+        </tbody>
+    </table>
+
+    <!-- 区块8：核心关注维度 -->
+    <div class="section-title">核心关注维度</div>
+    <div class="focus-grid">
+        <div class="focus-card">
+            <div class="f-num">01</div>
+            <div class="f-name">长鑫Capex节奏与季度招标</div>
+            <div class="f-desc">跟踪季度设备招标金额、中标厂商结构，作为国产设备/材料订单的先行指标，尤其关注单季度招标节奏的边际变化。</div>
+        </div>
+        <div class="focus-card">
+            <div class="f-num">02</div>
+            <div class="f-name">HBM2 产线量产进度</div>
+            <div class="f-desc">2026H2 HBM2 是否顺利量产直接决定拓荆科技(混合键合)、华海清科(减薄)等厂商的高附加值订单释放节奏。</div>
+        </div>
+        <div class="focus-card">
+            <div class="f-num">03</div>
+            <div class="f-name">国产设备验证通过率</div>
+            <div class="f-desc">长鑫DDR5产线上国产设备的良率验证、工艺稳定性验证进度，决定新增装机能否从低端节点扩散到主流节点。</div>
+        </div>
+        <div class="focus-card">
+            <div class="f-num">04</div>
+            <div class="f-name">材料国产化率突破节点</div>
+            <div class="f-desc">重点关注ArF光刻胶、CMP Pad、12英寸硅片这三个"卡脖子"材料的关键批次量产节点。</div>
+        </div>
+        <div class="focus-card">
+            <div class="f-num">05</div>
+            <div class="f-name">睿力集成IPO进度</div>
+            <div class="f-desc">母公司睿力集成拟IPO，若成功登陆资本市场将大幅提升长鑫的Capex能力和产业链话语权，产业链估值重塑。</div>
+        </div>
+        <div class="focus-card">
+            <div class="f-num">06</div>
+            <div class="f-name">中美出口管制变化</div>
+            <div class="f-desc">美国BIS对中国存储厂商的设备/EDA/软件出口管制变化，是国产替代节奏的最强外生变量。</div>
+        </div>
+    </div>
+
+    <!-- 区块9：风险提示 -->
+    <div class="section-title">风险提示</div>
+    <div class="risk-grid">
+        <div class="risk-card">
+            <div class="r-title">⚠ 存储周期波动风险</div>
+            <div class="r-desc">DRAM价格具有明显周期属性，若2026-2027全球存储需求走弱，长鑫Capex节奏可能放缓，直接影响上游订单。</div>
+        </div>
+        <div class="risk-card">
+            <div class="r-title">⚠ 技术验证周期风险</div>
+            <div class="r-desc">国产设备/材料需经历长鑫多轮工艺验证（3-12个月），验证不通过或推迟将导致订单确认节奏低于预期。</div>
+        </div>
+        <div class="risk-card">
+            <div class="r-title">⚠ 海外设备/材料替代风险</div>
+            <div class="r-desc">若出口管制缓和，长鑫可能继续采购AMAT/ASML/TEL等海外主流设备，国产厂商份额扩张受阻。</div>
+        </div>
+        <div class="risk-card">
+            <div class="r-title">⚠ 估值高企回调风险</div>
+            <div class="r-desc">半导体设备/材料板块PE普遍处于40-80倍高位，若业绩兑现不达预期，估值消化压力较大。</div>
+        </div>
+        <div class="risk-card">
+            <div class="r-title">⚠ 客户集中度风险</div>
+            <div class="r-desc">部分标的对长鑫/长江存储客户依赖度高（>30%），单一客户订单波动对业绩影响显著。</div>
+        </div>
+        <div class="risk-card">
+            <div class="r-title">⚠ 地缘政治风险</div>
+            <div class="r-desc">中美科技博弈升级、被列入实体清单等极端情况可能导致长鑫扩产受阻或核心零部件断供。</div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div>数据来源：公开资料整理（长鑫科技官网、上市公司年报/公告、券商研报） · 整理日期：2026-07-10</div>
+        <div class="disclaimer">仅为数据整理，不构成任何投资建议。股市有风险，投资需谨慎。</div>
+    </div>
+
+</div>
+</body>
+</html>

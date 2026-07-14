@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>锂电/能源金属板块 - A股公司清单与产业链关系</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #0a0e17; color: #e0e6f0; line-height: 1.6; min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+        .header { text-align: center; margin-bottom: 48px; }
+        .header h1 { font-size: 36px; font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa, #34d399, #f472b6);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 12px; }
+        .header .subtitle { font-size: 16px; color: #8892a8; }
+        .header .update-time { font-size: 13px; color: #5a6478; margin-top: 8px; }
+
+        .section-title { font-size: 22px; font-weight: 600; color: #c8d0e0;
+            margin-bottom: 24px; padding-left: 14px; border-left: 3px solid #60a5fa; }
+
+        /* 统计卡片 */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 16px; margin-bottom: 56px; }
+        .stat-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 12px; padding: 20px; }
+        .stat-card .stat-label { font-size: 13px; color: #5a6478; margin-bottom: 6px; }
+        .stat-card .stat-value { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+        .stat-card .stat-note { font-size: 12px; color: #5a6478; }
+        .stat-green .stat-value { color: #34d399; }
+        .stat-blue .stat-value { color: #60a5fa; }
+        .stat-pink .stat-value { color: #f472b6; }
+        .stat-yellow .stat-value { color: #fbbf24; }
+        .stat-purple .stat-value { color: #a78bfa; }
+        .stat-red .stat-value { color: #f87171; }
+
+        /* 流程图 */
+        .flow-section { margin-bottom: 56px; }
+        .flow-diagram { display: flex; align-items: stretch; gap: 0;
+            background: #111827; border-radius: 16px; border: 1px solid #1e293b; overflow: hidden; }
+        .flow-stage { flex: 1; padding: 28px 20px; position: relative; }
+        .flow-stage:not(:last-child)::after {
+            content: '→'; position: absolute; right: -14px; top: 50%;
+            transform: translateY(-50%); font-size: 28px; color: #4b5563; z-index: 2; }
+        .flow-stage:not(:last-child) { border-right: 1px solid #1e293b; }
+        .flow-stage .stage-label { font-size: 13px; font-weight: 600; letter-spacing: 1px;
+            margin-bottom: 12px; padding: 4px 12px; border-radius: 20px; display: inline-block; }
+        .flow-upstream .stage-label { background: rgba(16,185,129,0.15); color: #34d399; }
+        .flow-midstream .stage-label { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .flow-downstream .stage-label { background: rgba(244,114,182,0.15); color: #f472b6; }
+        .flow-end .stage-label { background: rgba(251,191,36,0.15); color: #fbbf24; }
+        .flow-stage .stage-title { font-size: 18px; font-weight: 600; color: #e0e6f0; margin-bottom: 8px; }
+        .flow-stage .stage-desc { font-size: 13px; color: #8892a8; }
+        .flow-stage .stage-products { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+        .flow-stage .product-tag { font-size: 12px; padding: 3px 10px; border-radius: 12px;
+            background: rgba(255,255,255,0.06); color: #a0aec0;
+            border: 1px solid rgba(255,255,255,0.08); }
+
+        /* 公司卡片 */
+        .companies-section { margin-bottom: 48px; }
+        .company-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; }
+        .company-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; transition: border-color 0.2s, transform 0.2s; }
+        .company-card:hover { border-color: #374151; transform: translateY(-2px); }
+        .company-card .card-header { display: flex; justify-content: space-between;
+            align-items: flex-start; margin-bottom: 14px; }
+        .company-card .card-name { font-size: 18px; font-weight: 600; color: #e0e6f0; }
+        .company-card .card-code { font-size: 13px; font-weight: 500; padding: 3px 10px;
+            border-radius: 8px; background: rgba(96,165,250,0.12); color: #60a5fa; white-space: nowrap; }
+        .company-card .card-position { font-size: 13px; padding: 3px 10px;
+            border-radius: 8px; display: inline-block; margin-bottom: 10px; }
+        .position-upstream { background: rgba(16,185,129,0.12); color: #34d399; }
+        .position-midstream { background: rgba(96,165,250,0.12); color: #60a5fa; }
+        .position-downstream { background: rgba(244,114,182,0.12); color: #f472b6; }
+        .company-card .card-desc { font-size: 14px; color: #8892a8; line-height: 1.7; margin-bottom: 12px; }
+        .company-card .card-data-row { display: flex; flex-wrap: wrap; gap: 8px 18px;
+            font-size: 13px; color: #c8d0e0; padding: 10px 14px;
+            background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 3px solid #374151; }
+        .company-card .card-data-row strong { color: #e0e6f0; margin-left: 2px; }
+        .rating-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+        .rating-card { border-radius: 10px; padding: 10px 12px; border: 1px solid; background: rgba(255,255,255,0.03); }
+        .rating-title { font-size: 12px; color: #8892a8; margin-bottom: 4px; }
+        .rating-level { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .rating-reason { font-size: 12px; color: #8892a8; line-height: 1.5; }
+        .rating-strong { border-color: rgba(52,211,153,0.35); background: rgba(16,185,129,0.08); }
+        .rating-strong .rating-level { color: #34d399; }
+        .rating-mid { border-color: rgba(96,165,250,0.35); background: rgba(96,165,250,0.08); }
+        .rating-mid .rating-level { color: #60a5fa; }
+        .rating-watch { border-color: rgba(251,191,36,0.35); background: rgba(251,191,36,0.08); }
+        .rating-watch .rating-level { color: #fbbf24; }
+        .rating-weak { border-color: rgba(248,113,113,0.35); background: rgba(248,113,113,0.06); }
+        .rating-weak .rating-level { color: #f87171; }
+        .rating-guide { margin-bottom: 56px; }
+
+        /* 关系图 */
+        .relation-section { margin-bottom: 56px; }
+        .relation-diagram { background: #111827; border: 1px solid #1e293b;
+            border-radius: 16px; padding: 32px; overflow-x: auto; }
+        .relation-row { display: flex; align-items: center; margin-bottom: 16px; }
+        .relation-row:last-child { margin-bottom: 0; }
+        .relation-label { min-width: 85px; font-size: 14px; font-weight: 600;
+            color: #8892a8; flex-shrink: 0; }
+        .relation-items { display: flex; flex-wrap: wrap; gap: 10px; }
+        .relation-node { padding: 8px 16px; border-radius: 10px; font-size: 14px;
+            font-weight: 500; border: 1px solid; }
+        .relation-node.upstream { background: rgba(16,185,129,0.08);
+            border-color: rgba(16,185,129,0.25); color: #34d399; }
+        .relation-node.midstream { background: rgba(96,165,250,0.08);
+            border-color: rgba(96,165,250,0.25); color: #60a5fa; }
+        .relation-node.downstream { background: rgba(244,114,182,0.08);
+            border-color: rgba(244,114,182,0.25); color: #f472b6; }
+        .relation-node.end { background: rgba(251,191,36,0.08);
+            border-color: rgba(251,191,36,0.25); color: #fbbf24; }
+        .relation-arrow { text-align: center; color: #4b5563; font-size: 20px; padding: 4px 0; }
+        .relation-node .node-code { font-size: 11px; opacity: 0.7; margin-left: 6px; }
+
+        /* 核心关注 */
+        .focus-section { margin-bottom: 40px; }
+        .focus-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .focus-card { background: linear-gradient(135deg, #111827, #1a2332);
+            border: 1px solid #1e293b; border-radius: 14px; padding: 24px;
+            position: relative; overflow: hidden; }
+        .focus-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .focus-card:nth-child(1)::before { background: linear-gradient(90deg, #34d399, #10b981); }
+        .focus-card:nth-child(2)::before { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+        .focus-card:nth-child(3)::before { background: linear-gradient(90deg, #a78bfa, #8b5cf6); }
+        .focus-card:nth-child(4)::before { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+        .focus-card:nth-child(5)::before { background: linear-gradient(90deg, #f472b6, #ec4899); }
+        .focus-card:nth-child(6)::before { background: linear-gradient(90deg, #f87171, #ef4444); }
+        .focus-card .focus-rank { font-size: 48px; font-weight: 800;
+            color: rgba(255,255,255,0.04); position: absolute; top: 8px; right: 16px; }
+        .focus-card .focus-name { font-size: 18px; font-weight: 600; color: #e0e6f0; margin-bottom: 4px; }
+        .focus-card .focus-code { font-size: 13px; color: #60a5fa; margin-bottom: 10px; }
+        .focus-card .focus-reason { font-size: 14px; color: #8892a8; line-height: 1.7; }
+
+        /* 逻辑卡片 */
+        .logic-section { margin-bottom: 56px; }
+        .logic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+        .logic-card { background: #111827; border: 1px solid #1e293b;
+            border-radius: 14px; padding: 24px; }
+        .logic-card .logic-icon { font-size: 28px; margin-bottom: 12px; }
+        .logic-card .logic-title { font-size: 17px; font-weight: 600; color: #e0e6f0; margin-bottom: 8px; }
+        .logic-card .logic-desc { font-size: 14px; color: #8892a8; line-height: 1.7; }
+        .logic-card .logic-tag { display: inline-block; font-size: 12px; padding: 2px 10px;
+            border-radius: 8px; margin-top: 10px; margin-right: 6px; }
+        .tag-green { background: rgba(16,185,129,0.12); color: #34d399; }
+        .tag-blue { background: rgba(96,165,250,0.12); color: #60a5fa; }
+        .tag-pink { background: rgba(244,114,182,0.12); color: #f472b6; }
+        .tag-yellow { background: rgba(251,191,36,0.12); color: #fbbf24; }
+        .tag-red { background: rgba(248,113,113,0.12); color: #f87171; }
+
+        /* 表格 */
+        .table-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid #1e293b; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9em; min-width: 500px; }
+        thead th { background: #111827; color: #8892a8; font-weight: 500;
+            padding: 12px 14px; text-align: center; white-space: nowrap;
+            border-bottom: 2px solid #1e293b; position: sticky; top: 0; }
+        tbody td { padding: 10px 14px; border-bottom: 1px solid #1e293b; text-align: center; }
+        tbody tr:hover { background: rgba(255,255,255,0.03); }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            .header h1 { font-size: 26px; }
+            .flow-diagram { flex-direction: column; }
+            .flow-stage:not(:last-child)::after { content: '↓'; right: auto; bottom: -16px; top: auto;
+                left: 50%; transform: translateX(-50%); }
+            .flow-stage:not(:last-child) { border-right: none; border-bottom: 1px solid #1e293b; }
+            .company-grid { grid-template-columns: 1fr; }
+            .rating-row { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .focus-cards { grid-template-columns: 1fr; }
+            .logic-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>锂电 / 能源金属板块</h1>
+            <div class="subtitle">A股相关公司清单与产业链关系 · 覆盖上游锂资源、稀土磁材、镍钴前驱体、正负极材料、电解液隔膜、电池龙头七大细分领域</div>
+            <div class="update-time">数据更新时间：2026-06-12 12:57 | 数据来源：东方财富</div>
+        </div>
+
+        <!-- 行业供需概览 -->
+        <div class="overview-section">
+            <div class="section-title">行业供需概览</div>
+            <div class="stats-grid"><div class="stat-card stat-green">
+        <div class="stat-label">锂电/能源金属Q1业绩</div>
+        <div class="stat-value">业绩爆发</div>
+        <div class="stat-note">天齐+1699% / 赣锋+616% / 天赐+1005% / 湖南裕能+1337%</div>
+    </div>
+    <div class="stat-card stat-blue">
+        <div class="stat-label">机构预测碳酸锂价格</div>
+        <div class="stat-value">15~16万</div>
+        <div class="stat-note">公开研报口径：2026年阶段性价格中枢维持高位</div>
+    </div>
+    <div class="stat-card stat-pink">
+        <div class="stat-label">储能电池需求</div>
+        <div class="stat-value">+47%YoY</div>
+        <div class="stat-note">2026年全球795GWh，中国+22% 欧洲+56%</div>
+    </div>
+    <div class="stat-card stat-yellow">
+        <div class="stat-label">动力电池需求</div>
+        <div class="stat-value">+22%YoY</div>
+        <div class="stat-note">全球1678GWh，欧洲+34%引领增长</div>
+    </div>
+    <div class="stat-card stat-purple">
+        <div class="stat-label">机构核心判断</div>
+        <div class="stat-value">供需共振</div>
+        <div class="stat-note">锂电产业迈入供需格局优化、需求共振向上的新周期</div>
+    </div></div>
+        </div>
+
+        <!-- 实时行情概览 -->
+        <div class="overview-section">
+            <div class="section-title">今日实时行情概览</div>
+            <div class="stats-grid"><div class="stat-card stat-green">
+        <div class="stat-label">今日平均涨跌</div>
+        <div class="stat-value">+4.96%</div>
+        <div class="stat-note">覆盖 38 只核心标的</div>
+    </div>
+    <div class="stat-card stat-blue">
+        <div class="stat-label">上涨 / 下跌家数</div>
+        <div class="stat-value">37 / 1</div>
+        <div class="stat-note">上涨占比 97%</div>
+    </div>
+    <div class="stat-card stat-pink">
+        <div class="stat-label">总成交额</div>
+        <div class="stat-value">933.69亿</div>
+        <div class="stat-note">板块资金活跃度</div>
+    </div>
+    <div class="stat-card stat-yellow">
+        <div class="stat-label">总市值</div>
+        <div class="stat-value">4.01万亿</div>
+        <div class="stat-note">七大细分领域合计</div>
+    </div>
+    <div class="stat-card stat-purple">
+        <div class="stat-label">强势股TOP1</div>
+        <div class="stat-value">盛屯矿业 +10.0%</div>
+        <div class="stat-note">今日涨幅最大标的</div>
+    </div></div>
+        </div>
+
+        <!-- 核心驱动逻辑 -->
+        <div class="logic-section">
+        <div class="section-title">核心驱动逻辑</div>
+        <div class="logic-grid">
+            <div class="logic-card">
+                <div class="logic-icon">🚀</div>
+                <div class="logic-title">需求端：万亿级储能+新能源车双轮驱动</div>
+                <div class="logic-desc">2026年全球锂电池需求预计2629GWh（+28%），其中动力1678GWh（+22%）、储能795GWh（+47%）。全球储能需求爆发+欧洲新能源车高景气+国内单车带电量提升，三大因素共振推动行业持续高景气。</div>
+                <span class="logic-tag tag-green">动力+22%</span>
+                <span class="logic-tag tag-blue">储能+47%</span>
+                <span class="logic-tag tag-pink">合计+28%</span>
+            </div>
+            <div class="logic-card">
+                <div class="logic-icon">⚙️</div>
+                <div class="logic-title">供给端：锂矿紧缺+产能出清，价格中枢上移</div>
+                <div class="logic-desc">上游锂矿建设周期长于锂盐加工，津巴布韦禁矿+澳洲柴油供应风险进一步收紧供给。中游材料环节产能利用率由50%-70%升至70%-90%，部分旺季出现紧平衡，2026年锂电中游或迎来价格普涨。</div>
+                <span class="logic-tag tag-green">锂矿偏紧</span>
+                <span class="logic-tag tag-blue">产能出清</span>
+                <span class="logic-tag tag-pink">价格普涨</span>
+            </div>
+            <div class="logic-card">
+                <div class="logic-icon">📈</div>
+                <div class="logic-title">利润端：2026Q1业绩井喷，估值历史低位</div>
+                <div class="logic-desc">锂电板块Q1收入同比+50%、存货同比+53%，确认"主动补库"繁荣期。天齐+1699%、天赐+1005%、湖南裕能+1337%——Q1业绩全面爆发。板块年均PE约25/18/14倍（26-28年），仍处估值洼地，利润高增有望持续消化PE。</div>
+                <span class="logic-tag tag-green">Q1暴增</span>
+                <span class="logic-tag tag-blue">主动补库</span>
+                <span class="logic-tag tag-pink">PE 14-25x</span>
+            </div>
+        </div>
+    </div>
+
+        <!-- 产业链全景 -->
+        <div class="flow-section">
+        <div class="section-title">产业链全景</div>
+        <div class="flow-diagram">
+            <div class="flow-stage flow-upstream">
+                <span class="stage-label">上游</span>
+                <div class="stage-title">锂钴镍资源</div>
+                <div class="stage-desc">锂、钴、镍、稀土等能源金属的矿山开采与盐湖提锂，资源禀赋决定成本优势，是本轮涨价周期弹性最大的环节。</div>
+                <div class="stage-products">
+                    <span class="product-tag">锂辉石</span>
+                    <span class="product-tag">盐湖提锂</span>
+                    <span class="product-tag">云母提锂</span>
+                    <span class="product-tag">钴矿</span>
+                    <span class="product-tag">稀土矿</span>
+                    <span class="product-tag">镍矿</span>
+                </div>
+            </div>
+            <div class="flow-stage flow-midstream">
+                <span class="stage-label">中游</span>
+                <div class="stage-title">正极/负极/电解液/隔膜</div>
+                <div class="stage-desc">电池四大主材制造环节。磷酸铁锂+高镍三元双路线，人造石墨+硅碳负极升级，六氟磷酸锂+LiFSI新型锂盐，湿法+干法隔膜。产能出清后盈利修复确定性强。</div>
+                <div class="stage-products">
+                    <span class="product-tag">磷酸铁锂</span>
+                    <span class="product-tag">三元正极</span>
+                    <span class="product-tag">人造石墨</span>
+                    <span class="product-tag">六氟磷酸锂</span>
+                    <span class="product-tag">湿法隔膜</span>
+                    <span class="product-tag">锂电铜箔</span>
+                </div>
+            </div>
+            <div class="flow-stage flow-downstream">
+                <span class="stage-label">下游</span>
+                <div class="stage-title">电池电芯制造</div>
+                <div class="stage-desc">动力电池+储能电池+消费电池的研发、制造与系统集成。技术迭代与规模效应驱动成本持续下降，龙头集中度持续提升。</div>
+                <div class="stage-products">
+                    <span class="product-tag">方形电池</span>
+                    <span class="product-tag">大圆柱4680</span>
+                    <span class="product-tag">固态电池</span>
+                    <span class="product-tag">钠离子电池</span>
+                    <span class="product-tag">储能电芯</span>
+                </div>
+            </div>
+            <div class="flow-stage flow-end">
+                <span class="stage-label">终端</span>
+                <div class="stage-title">应用场景</div>
+                <div class="stage-desc">新能源车、储能电站、AI数据中心备电、消费电子、电动工具、人形机器人等多场景终端应用。</div>
+                <div class="stage-products">
+                    <span class="product-tag">新能源车</span>
+                    <span class="product-tag">储能电站</span>
+                    <span class="product-tag">AI数据中心</span>
+                    <span class="product-tag">消费电子</span>
+                    <span class="product-tag">机器人</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- 买入评级说明 -->
+        <div class="rating-guide">
+        <div class="section-title">买入评级说明</div>
+        <div class="logic-grid">
+            <div class="logic-card">
+                <div class="logic-title">★★★ ★★☆ ★☆☆ ☆☆☆</div>
+                <div class="logic-desc">高关注 → 关注 → 观望 → 暂缓。基于成交额、市值、估值、涨跌幅综合打分排序，供快速扫描参考。</div>
+                <span class="logic-tag tag-green">★★★</span><span class="logic-tag tag-blue">★★☆</span><span class="logic-tag tag-yellow">★☆☆</span><span class="logic-tag tag-red">☆☆☆</span>
+            </div>
+            <div class="logic-card">
+                <div class="logic-title">左侧 / 右侧</div>
+                <div class="logic-desc">左侧偏低吸（看回调幅度+估值），右侧偏趋势确认（看涨跌幅+成交活跃度）。两侧独立评分，可能得出不同星级。</div>
+                <span class="logic-tag tag-green">低吸</span><span class="logic-tag tag-blue">趋势</span>
+            </div>
+        </div>
+    </div>
+
+        <!-- 公司清单 -->
+        <h2 class="section-title" style="margin-top:56px">核心标的一览（按细分领域）</h2>
+        <div class="companies-section">
+            <div class="section-title">上游锂资源</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">中矿资源</div>
+                    <div class="card-code">002738</div>
+                </div>
+                <span class="card-position position-upstream">上游锂资源</span>
+                <div class="card-desc">锂铯铷多金属资源商，海外矿山布局完善，方正证券重点推荐。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>62.16</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+5.80%</span></span>
+                    <span>成交 <strong>19.00亿</strong></span>
+                    <span>PE <strong>22.1</strong></span>
+                    <span>市值 <strong>448.48亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 估值相对可控 / 短线涨幅偏大</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 估值相对可控 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">永兴材料</div>
+                    <div class="card-code">002756</div>
+                </div>
+                <span class="card-position position-upstream">上游锂资源</span>
+                <div class="card-desc">云母提锂龙头，成本优势突出。受益锂价回升，盈利弹性释放。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>66.43</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+5.73%</span></span>
+                    <span>成交 <strong>12.10亿</strong></span>
+                    <span>PE <strong>18.3</strong></span>
+                    <span>市值 <strong>358.13亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 估值相对可控 / 短线涨幅偏大</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 估值相对可控 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">西藏矿业</div>
+                    <div class="card-code">000762</div>
+                </div>
+                <span class="card-position position-upstream">上游锂资源</span>
+                <div class="card-desc">扎布耶盐湖锂资源开发主体，西藏盐湖提锂核心标的。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>31.04</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+5.65%</span></span>
+                    <span>成交 <strong>9.56亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">212.9</span></strong></span>
+                    <span>市值 <strong>161.66亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">流动性尚可 / 短线涨幅偏大</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">流动性尚可 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">融捷股份</div>
+                    <div class="card-code">002192</div>
+                </div>
+                <span class="card-position position-upstream">上游锂资源</span>
+                <div class="card-desc">锂矿+锂盐一体化高弹性标的。2026Q1净利+1296%，营收+296%，业绩爆发力极强。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>88.15</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+5.51%</span></span>
+                    <span>成交 <strong>25.37亿</strong></span>
+                    <span>PE <strong>20.6</strong></span>
+                    <span>市值 <strong>228.89亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 估值相对可控 / 短线涨幅偏大</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 估值相对可控 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">盐湖股份</div>
+                    <div class="card-code">000792</div>
+                </div>
+                <span class="card-position position-upstream">上游锂资源</span>
+                <div class="card-desc">国内盐湖提锂成本最低，察尔汗盐湖资源独家，钾肥+锂盐双主业。PB近5年低位，社保长线持仓。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>32.04</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+5.36%</span></span>
+                    <span>成交 <strong>31.21亿</strong></span>
+                    <span>PE <strong>14.0</strong></span>
+                    <span>市值 <strong>1695.42亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">盛新锂能</div>
+                    <div class="card-code">002240</div>
+                </div>
+                <span class="card-position position-upstream">上游锂资源</span>
+                <div class="card-desc">锂盐产能持续扩张，资源自给率提升。受益锂盐涨价周期。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>53.37</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+4.69%</span></span>
+                    <span>成交 <strong>36.77亿</strong></span>
+                    <span>PE <strong>26.3</strong></span>
+                    <span>市值 <strong>488.49亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 估值相对可控 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">天齐锂业</div>
+                    <div class="card-code">002466</div>
+                </div>
+                <span class="card-position position-upstream">上游锂资源</span>
+                <div class="card-desc">全球硬岩锂龙头，控股澳洲格林布什锂矿（全球最优锂矿），电池级锂盐头部供应商。2026Q1净利+1699%，锂价上行业绩弹性最大。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>63.16</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+3.54%</span></span>
+                    <span>成交 <strong>40.70亿</strong></span>
+                    <span>PE <strong>14.4</strong></span>
+                    <span>市值 <strong>1082.07亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">江特电机</div>
+                    <div class="card-code">002176</div>
+                </div>
+                <span class="card-position position-upstream">上游锂资源</span>
+                <div class="card-desc">宜春云母提锂老牌企业，锂矿+电机双主业布局。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>11.47</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+3.15%</span></span>
+                    <span>成交 <strong>10.88亿</strong></span>
+                    <span>PE <strong><span style="color:#8892a8">-27.2</span></strong></span>
+                    <span>市值 <strong>195.72亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">成交活跃 / 利润为负</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 利润为负 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">赣锋锂业</div>
+                    <div class="card-code">002460</div>
+                </div>
+                <span class="card-position position-upstream">上游锂资源</span>
+                <div class="card-desc">全球锂生态龙头，覆盖锂矿开采→锂盐加工→锂电池→回收全产业链，固态电池硫化物路线领先。2026Q1净利暴增，锂盐产能全球第一梯队。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>72.02</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+2.97%</span></span>
+                    <span>成交 <strong>38.88亿</strong></span>
+                    <span>PE <strong>20.6</strong></span>
+                    <span>市值 <strong>1510.04亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">稀土磁材</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">中国稀土</div>
+                    <div class="card-code">000831</div>
+                </div>
+                <span class="card-position position-upstream">稀土磁材</span>
+                <div class="card-desc">中重稀土龙头，央企平台。2026Q1净利+91%，供给端缅甸停采+越南禁出口，战略价值凸显。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>57.65</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+7.18%</span></span>
+                    <span>成交 <strong>37.10亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">110.4</span></strong></span>
+                    <span>市值 <strong>611.79亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 短线涨幅偏大</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 强势但需防追高</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">金力永磁</div>
+                    <div class="card-code">300748</div>
+                </div>
+                <span class="card-position position-upstream">稀土磁材</span>
+                <div class="card-desc">高性能钕铁硼永磁龙头，受益机器人+新能源车+风电三重驱动。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>31.01</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+6.05%</span></span>
+                    <span>成交 <strong>8.83亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">55.3</span></strong></span>
+                    <span>市值 <strong>426.57亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">流动性尚可 / 估值偏高但可跟踪 / 短线涨幅偏大</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 估值偏高但可跟踪 / 强势但需防追高</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">北方稀土</div>
+                    <div class="card-code">600111</div>
+                </div>
+                <span class="card-position position-upstream">稀土磁材</span>
+                <div class="card-desc">全球轻稀土绝对龙头，配额占国内67%。2026Q1净利+113%，人形机器人+低空经济开辟第二增长曲线。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>50.20</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+5.64%</span></span>
+                    <span>成交 <strong>54.69亿</strong></span>
+                    <span>PE <strong>49.4</strong></span>
+                    <span>市值 <strong>1814.76亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值偏高但可跟踪</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值偏高但可跟踪</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">盛和资源</div>
+                    <div class="card-code">600392</div>
+                </div>
+                <span class="card-position position-upstream">稀土磁材</span>
+                <div class="card-desc">稀土全产业链布局，海外矿山资源广泛，受益稀土价格上行。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>26.41</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+4.51%</span></span>
+                    <span>成交 <strong>33.83亿</strong></span>
+                    <span>PE <strong>35.4</strong></span>
+                    <span>市值 <strong>462.92亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 估值偏高但可跟踪</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 估值偏高但可跟踪 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">正海磁材</div>
+                    <div class="card-code">300224</div>
+                </div>
+                <span class="card-position position-upstream">稀土磁材</span>
+                <div class="card-desc">钕铁硼永磁材料核心供应商，节能电机+新能源车驱动需求。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>12.77</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+3.99%</span></span>
+                    <span>成交 <strong>2.82亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">63.1</span></strong></span>
+                    <span>市值 <strong>118.85亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">信号不足</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">厦门钨业</div>
+                    <div class="card-code">600549</div>
+                </div>
+                <span class="card-position position-upstream">稀土磁材</span>
+                <div class="card-desc">稀土+钨双主业，新能源材料+硬质合金双轮驱动。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>69.12</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+2.49%</span></span>
+                    <span>成交 <strong>68.25亿</strong></span>
+                    <span>PE <strong>24.8</strong></span>
+                    <span>市值 <strong>1097.34亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">镍钴与前驱体</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">盛屯矿业</div>
+                    <div class="card-code">600711</div>
+                </div>
+                <span class="card-position position-upstream">镍钴与前驱体</span>
+                <div class="card-desc">钴镍资源布局，海外项目逐步放量，受益金属涨价周期。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>13.01</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+9.97%</span></span>
+                    <span>成交 <strong>19.76亿</strong></span>
+                    <span>PE <strong>9.8</strong></span>
+                    <span>市值 <strong>402.09亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 估值相对可控 / 短线涨幅偏大</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">华友钴业</div>
+                    <div class="card-code">603799</div>
+                </div>
+                <span class="card-position position-upstream">镍钴与前驱体</span>
+                <div class="card-desc">钴产品全球第一，镍钴锂铜全产业链布局。印尼镍产能落地+三元回暖，北向资金持续流入。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>51.70</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+8.77%</span></span>
+                    <span>成交 <strong>36.01亿</strong></span>
+                    <span>PE <strong>9.8</strong></span>
+                    <span>市值 <strong>980.61亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">腾远钴业</div>
+                    <div class="card-code">301219</div>
+                </div>
+                <span class="card-position position-upstream">镍钴与前驱体</span>
+                <div class="card-desc">钴盐龙头，刚果金资源布局，受益钴供给收缩+价格震荡走高。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>57.72</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+7.15%</span></span>
+                    <span>成交 <strong>5.93亿</strong></span>
+                    <span>PE <strong>10.4</strong></span>
+                    <span>市值 <strong>220.97亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">流动性尚可 / 估值相对可控 / 短线涨幅偏大</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">流动性尚可 / 估值相对可控 / 强势但需防追高</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">中伟新材</div>
+                    <div class="card-code">300919</div>
+                </div>
+                <span class="card-position position-upstream">镍钴与前驱体</span>
+                <div class="card-desc">全球三元前驱体绝对龙头，市占率24%连续6年全球第一。2026Q1净利预增+72%~92%，资源+材料一体化。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>48.20</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+5.59%</span></span>
+                    <span>成交 <strong>5.99亿</strong></span>
+                    <span>PE <strong>22.6</strong></span>
+                    <span>市值 <strong>502.37亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">格林美</div>
+                    <div class="card-code">002340</div>
+                </div>
+                <span class="card-position position-upstream">镍钴与前驱体</span>
+                <div class="card-desc">钴镍回收+前驱体城市矿山龙头，受益镍钴涨价+回收产业景气。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>7.45</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+4.49%</span></span>
+                    <span>成交 <strong>9.25亿</strong></span>
+                    <span>PE <strong>18.2</strong></span>
+                    <span>市值 <strong>380.13亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">流动性尚可 / 估值相对可控 / 趋势确认</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">正极材料</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">德方纳米</div>
+                    <div class="card-code">300769</div>
+                </div>
+                <span class="card-position position-midstream">正极材料</span>
+                <div class="card-desc">液相法纳米铁锂技术龙头，储能订单占比70%+，深度配套宁德/阳光电源。储能放量核心受益标的。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>65.38</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+7.15%</span></span>
+                    <span>成交 <strong>15.37亿</strong></span>
+                    <span>PE <strong>17.3</strong></span>
+                    <span>市值 <strong>183.19亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 估值相对可控 / 短线涨幅偏大</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 估值相对可控 / 强势但需防追高</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">湖南裕能</div>
+                    <div class="card-code">301358</div>
+                </div>
+                <span class="card-position position-midstream">正极材料</span>
+                <div class="card-desc">全球磷酸铁锂绝对龙头，市占率30%+。绑定宁德时代/比亚迪，磷矿一体化自供，成本行业最低。2026Q1净利+1337%。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>73.11</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+6.16%</span></span>
+                    <span>成交 <strong>13.75亿</strong></span>
+                    <span>PE <strong>11.4</strong></span>
+                    <span>市值 <strong>616.57亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">天华新能</div>
+                    <div class="card-code">300390</div>
+                </div>
+                <span class="card-position position-midstream">正极材料</span>
+                <div class="card-desc">氢氧化锂龙头，2026Q1净利+1472%。绑定宁德时代等头部电池厂，业绩爆发力极强。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>99.00</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+5.29%</span></span>
+                    <span>成交 <strong>57.35亿</strong></span>
+                    <span>PE <strong>21.2</strong></span>
+                    <span>市值 <strong>822.44亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">当升科技</div>
+                    <div class="card-code">300073</div>
+                </div>
+                <span class="card-position position-midstream">正极材料</span>
+                <div class="card-desc">海外三元正极龙头，海外客户占比超60%。锁定LG/三星长协，固态+钠电正极同步研发，北向资金重仓。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>50.13</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+4.13%</span></span>
+                    <span>成交 <strong>4.83亿</strong></span>
+                    <span>PE <strong>24.6</strong></span>
+                    <span>市值 <strong>272.85亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">流动性尚可 / 估值相对可控 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">容百科技</div>
+                    <div class="card-code">688005</div>
+                </div>
+                <span class="card-position position-midstream">正极材料</span>
+                <div class="card-desc">超高镍NCM811/9系全球龙头，国内高镍出货第一。固态正极材料提前量产，高端电车放量驱动需求回暖。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>32.12</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+2.65%</span></span>
+                    <span>成交 <strong>6.10亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">494.7</span></strong></span>
+                    <span>市值 <strong>229.57亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">流动性尚可</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">流动性尚可 / 趋势确认</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">负极材料</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">尚太科技</div>
+                    <div class="card-code">001301</div>
+                </div>
+                <span class="card-position position-midstream">负极材料</span>
+                <div class="card-desc">人造石墨负极新锐，绑定宁德时代成本优势突出，产能持续扩张。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>89.02</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+7.02%</span></span>
+                    <span>成交 <strong>3.57亿</strong></span>
+                    <span>PE <strong>32.1</strong></span>
+                    <span>市值 <strong>232.17亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">流动性尚可 / 估值偏高但可跟踪 / 短线涨幅偏大</div>
+    </div><div class="rating-card rating-watch">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 估值偏高但可跟踪 / 强势但需防追高</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">杉杉股份</div>
+                    <div class="card-code">600884</div>
+                </div>
+                <span class="card-position position-midstream">负极材料</span>
+                <div class="card-desc">全品类负极老牌龙头，天然+人造石墨双线布局。客户覆盖头部电池厂，估值处于历史极值。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>13.73</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+4.81%</span></span>
+                    <span>成交 <strong>8.27亿</strong></span>
+                    <span>PE <strong>23.3</strong></span>
+                    <span>市值 <strong>308.84亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">流动性尚可 / 估值相对可控 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">璞泰来</div>
+                    <div class="card-code">603659</div>
+                </div>
+                <span class="card-position position-midstream">负极材料</span>
+                <div class="card-desc">高端人造石墨全球龙头，快充负极核心供应商。绑定宁德/比亚迪，2026Q1净利+75%，负极+锂电设备一体化。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>28.51</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+4.70%</span></span>
+                    <span>成交 <strong>8.31亿</strong></span>
+                    <span>PE <strong>21.7</strong></span>
+                    <span>市值 <strong>611.20亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">电解液/隔膜/辅材</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">恩捷股份</div>
+                    <div class="card-code">002812</div>
+                </div>
+                <span class="card-position position-midstream">电解液/隔膜/辅材</span>
+                <div class="card-desc">湿法隔膜全球龙头，市占率近50%。海外营收70%，配套全球一线电池厂，布局固态电解质隔膜。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>64.99</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+5.85%</span></span>
+                    <span>成交 <strong>16.42亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">61.3</span></strong></span>
+                    <span>市值 <strong>638.29亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 短线涨幅偏大</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">鼎胜新材</div>
+                    <div class="card-code">603876</div>
+                </div>
+                <span class="card-position position-midstream">电解液/隔膜/辅材</span>
+                <div class="card-desc">锂电铝箔龙头，加工费稳健修复+下游需求增长。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>26.60</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+5.43%</span></span>
+                    <span>成交 <strong>5.04亿</strong></span>
+                    <span>PE <strong>31.9</strong></span>
+                    <span>市值 <strong>247.19亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">流动性尚可 / 估值偏高但可跟踪 / 短线涨幅偏大</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">流动性尚可 / 估值偏高但可跟踪 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">天赐材料</div>
+                    <div class="card-code">002709</div>
+                </div>
+                <span class="card-position position-midstream">电解液/隔膜/辅材</span>
+                <div class="card-desc">全球电解液龙头，市占率35%+。六氟磷酸锂自给率90%+，LiFSI量产领先，2026Q1净利+1005%。电解液涨价核心受益。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>50.18</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+3.55%</span></span>
+                    <span>成交 <strong>39.72亿</strong></span>
+                    <span>PE <strong>15.5</strong></span>
+                    <span>市值 <strong>1022.95亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">多氟多</div>
+                    <div class="card-code">002407</div>
+                </div>
+                <span class="card-position position-midstream">电解液/隔膜/辅材</span>
+                <div class="card-desc">六氟磷酸锂龙头，受益锂盐涨价+电解液需求回暖。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>39.46</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+3.33%</span></span>
+                    <span>成交 <strong>75.46亿</strong></span>
+                    <span>PE <strong>31.3</strong></span>
+                    <span>市值 <strong>469.74亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 估值偏高但可跟踪</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 估值偏高但可跟踪 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">星源材质</div>
+                    <div class="card-code">300568</div>
+                </div>
+                <span class="card-position position-midstream">电解液/隔膜/辅材</span>
+                <div class="card-desc">干湿法双路线龙头，储能干法隔膜领先。储能需求爆发+产能释放双驱动。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>18.01</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+3.27%</span></span>
+                    <span>成交 <strong>14.02亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">207.0</span></strong></span>
+                    <span>市值 <strong>242.36亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">新宙邦</div>
+                    <div class="card-code">300037</div>
+                </div>
+                <span class="card-position position-midstream">电解液/隔膜/辅材</span>
+                <div class="card-desc">海外电解液龙头，动力/储能电解液核心供应商。半导体化学品第二增长曲线，北向资金持续布局。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>74.65</strong></span>
+                    <span>涨跌 <span style="color:#f87171;font-weight:600">-1.26%</span></span>
+                    <span>成交 <strong>17.84亿</strong></span>
+                    <span>PE <strong>29.3</strong></span>
+                    <span>市值 <strong>562.78亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-strong">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div></div>
+        </div><div class="companies-section">
+            <div class="section-title">电池龙头</div>
+            <div class="company-grid"><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">欣旺达</div>
+                    <div class="card-code">300207</div>
+                </div>
+                <span class="card-position position-downstream">电池龙头</span>
+                <div class="card-desc">消费电芯+动力电池双主业，HEV电池国内领先。储能业务拓展迅速。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>20.22</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+5.70%</span></span>
+                    <span>成交 <strong>8.06亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">81.9</span></strong></span>
+                    <span>市值 <strong>373.56亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-weak">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">☆☆☆ 暂缓</div>
+        <div class="rating-reason">流动性尚可 / 短线涨幅偏大</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">流动性尚可 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">亿纬锂能</div>
+                    <div class="card-code">300014</div>
+                </div>
+                <span class="card-position position-downstream">电池龙头</span>
+                <div class="card-desc">大圆柱电池+储能电池双轮驱动，海外客户持续突破。消费电池+动力电池+储能三线并进。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>58.10</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+5.44%</span></span>
+                    <span>成交 <strong>24.43亿</strong></span>
+                    <span>PE <strong>21.8</strong></span>
+                    <span>市值 <strong>1262.69亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">国轩高科</div>
+                    <div class="card-code">002074</div>
+                </div>
+                <span class="card-position position-downstream">电池龙头</span>
+                <div class="card-desc">大众集团战略合作，铁锂电池产能放量。海外工厂陆续投产，储能业务快速增长。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>29.38</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+3.63%</span></span>
+                    <span>成交 <strong>6.39亿</strong></span>
+                    <span>PE <strong><span style="color:#fbbf24;font-weight:600">631.7</span></strong></span>
+                    <span>市值 <strong>533.02亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-watch">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★☆☆ 观望</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强</div>
+    </div><div class="rating-card rating-mid">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">流动性尚可 / 市值支撑较强 / 趋势确认</div>
+    </div></div>
+            </div><div class="company-card">
+                <div class="card-header">
+                    <div class="card-name">宁德时代</div>
+                    <div class="card-code">300750</div>
+                </div>
+                <span class="card-position position-downstream">电池龙头</span>
+                <div class="card-desc">全球动力+储能电池绝对王者。2026Q1业绩超预期，全球市占率独占鳌头，技术迭代与规模效应双击。</div>
+                <div class="card-data-row">
+                    <span>最新价 <strong>395.32</strong></span>
+                    <span>涨跌 <span style="color:#34d399;font-weight:600">+3.43%</span></span>
+                    <span>成交 <strong>101.83亿</strong></span>
+                    <span>PE <strong>22.1</strong></span>
+                    <span>市值 <strong>1.83万亿</strong></span>
+                </div>
+                <div class="rating-row"><div class="rating-card rating-mid">
+        <div class="rating-title">左侧买入</div>
+        <div class="rating-level">★★☆ 关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div><div class="rating-card rating-strong">
+        <div class="rating-title">右侧买入</div>
+        <div class="rating-level">★★★ 高关注</div>
+        <div class="rating-reason">成交活跃 / 市值支撑较强 / 估值相对可控</div>
+    </div></div>
+            </div></div>
+        </div>
+
+        <!-- 板块涨跌统计 -->
+        <div class="companies-section">
+            <div class="section-title">各细分板块涨跌统计</div>
+            <div class="table-wrapper">
+                <table><thead><tr>
+                    <th>细分板块</th><th>标的数</th><th>平均涨跌幅</th><th>上涨</th><th>下跌</th><th>总成交额</th><th>总市值</th>
+                </tr></thead><tbody><tr>
+            <td style="text-align:left;font-weight:500">上游锂资源</td>
+            <td>9</td>
+            <td><span style="display:inline-block;width:18.84444444444445px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+4.71%</td>
+            <td style="color:#34d399">9</td>
+            <td style="color:#f87171">0</td>
+            <td>224.47亿</td>
+            <td>6168.89亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">稀土磁材</td>
+            <td>6</td>
+            <td><span style="display:inline-block;width:19.906666666666666px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+4.98%</td>
+            <td style="color:#34d399">6</td>
+            <td style="color:#f87171">0</td>
+            <td>205.52亿</td>
+            <td>4532.24亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">镍钴与前驱体</td>
+            <td>5</td>
+            <td><span style="display:inline-block;width:28.776px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+7.19%</td>
+            <td style="color:#34d399">5</td>
+            <td style="color:#f87171">0</td>
+            <td>76.94亿</td>
+            <td>2486.16亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">正极材料</td>
+            <td>5</td>
+            <td><span style="display:inline-block;width:20.304px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+5.08%</td>
+            <td style="color:#34d399">5</td>
+            <td style="color:#f87171">0</td>
+            <td>97.40亿</td>
+            <td>2124.62亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">负极材料</td>
+            <td>3</td>
+            <td><span style="display:inline-block;width:22.039999999999996px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+5.51%</td>
+            <td style="color:#34d399">3</td>
+            <td style="color:#f87171">0</td>
+            <td>20.16亿</td>
+            <td>1152.21亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">电解液/隔膜/辅材</td>
+            <td>6</td>
+            <td><span style="display:inline-block;width:13.446666666666667px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+3.36%</td>
+            <td style="color:#34d399">5</td>
+            <td style="color:#f87171">1</td>
+            <td>168.50亿</td>
+            <td>3183.31亿</td>
+        </tr><tr>
+            <td style="text-align:left;font-weight:500">电池龙头</td>
+            <td>4</td>
+            <td><span style="display:inline-block;width:18.2px;height:4px;border-radius:2px;background:#34d399;margin-right:6px;vertical-align:middle"></span>+4.55%</td>
+            <td style="color:#34d399">4</td>
+            <td style="color:#f87171">0</td>
+            <td>140.71亿</td>
+            <td>2.05万亿</td>
+        </tr><tr style="background:#111827;border-top:2px solid #374151">
+        <td style="text-align:left"><strong>全板块合计</strong></td>
+        <td><strong>38</strong></td>
+        <td><strong>+4.96%</strong></td>
+        <td style="color:#34d399"><strong>37</strong></td>
+        <td style="color:#f87171"><strong>1</strong></td>
+        <td><strong>933.69亿</strong></td>
+        <td><strong>4.01万亿</strong></td>
+    </tr></tbody></table>
+            </div>
+        </div>
+
+        <!-- 强势股/弱势股 -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px">
+            <div>
+                <div class="section-title">强势股 TOP5</div>
+                <div class="table-wrapper">
+                    <table><thead><tr><th>名称</th><th>代码</th><th>最新价</th><th>涨跌幅</th><th>成交额</th><th>板块</th></tr></thead>
+                    <tbody><tr>
+                <td style="text-align:left;font-weight:500">盛屯矿业</td>
+                <td style="color:#60a5fa">600711</td>
+                <td style="font-family:monospace">13.01</td>
+                <td><span style="color:#34d399;font-weight:600">+9.97%</span></td>
+                <td style="font-family:monospace">19.76亿</td>
+                <td>镍钴与前驱体</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">华友钴业</td>
+                <td style="color:#60a5fa">603799</td>
+                <td style="font-family:monospace">51.70</td>
+                <td><span style="color:#34d399;font-weight:600">+8.77%</span></td>
+                <td style="font-family:monospace">36.01亿</td>
+                <td>镍钴与前驱体</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">中国稀土</td>
+                <td style="color:#60a5fa">000831</td>
+                <td style="font-family:monospace">57.65</td>
+                <td><span style="color:#34d399;font-weight:600">+7.18%</span></td>
+                <td style="font-family:monospace">37.10亿</td>
+                <td>稀土磁材</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">德方纳米</td>
+                <td style="color:#60a5fa">300769</td>
+                <td style="font-family:monospace">65.38</td>
+                <td><span style="color:#34d399;font-weight:600">+7.15%</span></td>
+                <td style="font-family:monospace">15.37亿</td>
+                <td>正极材料</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">腾远钴业</td>
+                <td style="color:#60a5fa">301219</td>
+                <td style="font-family:monospace">57.72</td>
+                <td><span style="color:#34d399;font-weight:600">+7.15%</span></td>
+                <td style="font-family:monospace">5.93亿</td>
+                <td>镍钴与前驱体</td>
+            </tr></tbody></table>
+                </div>
+            </div>
+            <div>
+                <div class="section-title">弱势股 TOP5</div>
+                <div class="table-wrapper">
+                    <table><thead><tr><th>名称</th><th>代码</th><th>最新价</th><th>涨跌幅</th><th>成交额</th><th>板块</th></tr></thead>
+                    <tbody><tr>
+                <td style="text-align:left;font-weight:500">新宙邦</td>
+                <td style="color:#60a5fa">300037</td>
+                <td style="font-family:monospace">74.65</td>
+                <td><span style="color:#f87171;font-weight:600">-1.26%</span></td>
+                <td style="font-family:monospace">17.84亿</td>
+                <td>电解液/隔膜/辅材</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">厦门钨业</td>
+                <td style="color:#60a5fa">600549</td>
+                <td style="font-family:monospace">69.12</td>
+                <td><span style="color:#34d399;font-weight:600">+2.49%</span></td>
+                <td style="font-family:monospace">68.25亿</td>
+                <td>稀土磁材</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">容百科技</td>
+                <td style="color:#60a5fa">688005</td>
+                <td style="font-family:monospace">32.12</td>
+                <td><span style="color:#34d399;font-weight:600">+2.65%</span></td>
+                <td style="font-family:monospace">6.10亿</td>
+                <td>正极材料</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">赣锋锂业</td>
+                <td style="color:#60a5fa">002460</td>
+                <td style="font-family:monospace">72.02</td>
+                <td><span style="color:#34d399;font-weight:600">+2.97%</span></td>
+                <td style="font-family:monospace">38.88亿</td>
+                <td>上游锂资源</td>
+            </tr><tr>
+                <td style="text-align:left;font-weight:500">江特电机</td>
+                <td style="color:#60a5fa">002176</td>
+                <td style="font-family:monospace">11.47</td>
+                <td><span style="color:#34d399;font-weight:600">+3.15%</span></td>
+                <td style="font-family:monospace">10.88亿</td>
+                <td>上游锂资源</td>
+            </tr></tbody></table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 产业链关系图 -->
+        <div class="relation-section">
+        <div class="section-title">产业链上下游关系</div>
+        <div class="relation-diagram">
+            <div class="relation-row">
+                <div class="relation-label">锂资源</div>
+                <div class="relation-items">
+                    <div class="relation-node upstream">天齐锂业<span class="node-code">锂矿龙头</span></div>
+                    <div class="relation-node upstream">赣锋锂业<span class="node-code">全产业链</span></div>
+                    <div class="relation-node upstream">融捷股份<span class="node-code">高弹性标的</span></div>
+                    <div class="relation-node upstream">盐湖股份<span class="node-code">盐湖提锂</span></div>
+                    <div class="relation-node upstream">永兴材料<span class="node-code">云母提锂</span></div>
+                    <div class="relation-node upstream">盛新锂能<span class="node-code">锂盐加工</span></div>
+                </div>
+            </div>
+            <div class="relation-arrow">→ 锂盐 / 碳酸锂 / 氢氧化锂 →</div>
+            <div class="relation-row">
+                <div class="relation-label">正极材料</div>
+                <div class="relation-items">
+                    <div class="relation-node midstream">湖南裕能<span class="node-code">铁锂正极</span></div>
+                    <div class="relation-node midstream">德方纳米<span class="node-code">纳米铁锂</span></div>
+                    <div class="relation-node midstream">容百科技<span class="node-code">高镍三元</span></div>
+                    <div class="relation-node midstream">当升科技<span class="node-code">海外三元</span></div>
+                    <div class="relation-node midstream">天华新能<span class="node-code">氢氧化锂</span></div>
+                </div>
+            </div>
+            <div class="relation-arrow">→ 负极 / 电解液 / 隔膜 / 辅材 →</div>
+            <div class="relation-row">
+                <div class="relation-label">负极/电解液</div>
+                <div class="relation-items">
+                    <div class="relation-node midstream">璞泰来<span class="node-code">人造石墨</span></div>
+                    <div class="relation-node midstream">杉杉股份<span class="node-code">全品类负极</span></div>
+                    <div class="relation-node midstream">天赐材料<span class="node-code">电解液龙头</span></div>
+                    <div class="relation-node midstream">恩捷股份<span class="node-code">湿法隔膜</span></div>
+                    <div class="relation-node midstream">多氟多<span class="node-code">六氟磷酸锂</span></div>
+                </div>
+            </div>
+            <div class="relation-arrow">→ 钴镍 / 稀土 / 前驱体 →</div>
+            <div class="relation-row">
+                <div class="relation-label">钴镍/稀土</div>
+                <div class="relation-items">
+                    <div class="relation-node midstream">华友钴业<span class="node-code">钴+前驱体</span></div>
+                    <div class="relation-node midstream">格林美<span class="node-code">回收+前驱体</span></div>
+                    <div class="relation-node midstream">北方稀土<span class="node-code">轻稀土</span></div>
+                    <div class="relation-node midstream">中国稀土<span class="node-code">中重稀土</span></div>
+                    <div class="relation-node midstream">金力永磁<span class="node-code">永磁材料</span></div>
+                </div>
+            </div>
+            <div class="relation-arrow">→ 电池电芯 →</div>
+            <div class="relation-row">
+                <div class="relation-label">电池龙头</div>
+                <div class="relation-items">
+                    <div class="relation-node downstream">宁德时代<span class="node-code">动力+储能</span></div>
+                    <div class="relation-node downstream">亿纬锂能<span class="node-code">大圆柱+储能</span></div>
+                    <div class="relation-node downstream">国轩高科<span class="node-code">大众合作</span></div>
+                    <div class="relation-node downstream">欣旺达<span class="node-code">消费+动力</span></div>
+                </div>
+            </div>
+            <div class="relation-arrow">→ 终端应用 →</div>
+            <div class="relation-row">
+                <div class="relation-label">终端应用</div>
+                <div class="relation-items">
+                    <div class="relation-node end">新能源车</div>
+                    <div class="relation-node end">储能电站</div>
+                    <div class="relation-node end">AI数据中心</div>
+                    <div class="relation-node end">消费电子</div>
+                    <div class="relation-node end">机器人</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- 核心关注标的 -->
+        <div class="focus-section">
+        <div class="section-title">核心关注标的</div>
+        <div class="focus-cards">
+            <div class="focus-card">
+                <div class="focus-rank">01</div>
+                <div class="focus-name">天齐锂业</div>
+                <div class="focus-code">002466</div>
+                <div class="focus-reason">全球硬岩锂资源重要企业，控股澳洲格林布什锂矿，2026Q1净利+1699%。锂矿供给偏紧+锂价高位运行，资源禀赋突出，业绩弹性较高。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">02</div>
+                <div class="focus-name">宁德时代</div>
+                <div class="focus-code">300750</div>
+                <div class="focus-reason">全球动力+储能电池核心企业，市占率处于行业前列。技术迭代+规模效应双击，2026Q1业绩超预期，锂电产业链核心锚点。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">03</div>
+                <div class="focus-name">恩捷股份</div>
+                <div class="focus-code">002812</div>
+                <div class="focus-reason">湿法隔膜龙头企业，公开资料显示市占率较高、海外营收占比较高。配套全球一线电池厂，布局固态电解质隔膜，底部筑底后估值修复空间值得跟踪。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">04</div>
+                <div class="focus-name">天赐材料</div>
+                <div class="focus-code">002709</div>
+                <div class="focus-reason">电解液龙头企业，公开资料显示市占率与六氟磷酸锂自给率较高。2026Q1净利+1005%，LiFSI量产进展领先，是电解液涨价的重要受益方向。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">05</div>
+                <div class="focus-name">湖南裕能</div>
+                <div class="focus-code">301358</div>
+                <div class="focus-reason">磷酸铁锂正极龙头企业，公开资料显示市占率较高。2026Q1净利+1337%，磷矿一体化自供强化成本优势，储能放量+铁锂涨价形成双重催化。</div>
+            </div>
+            <div class="focus-card">
+                <div class="focus-rank">06</div>
+                <div class="focus-name">北方稀土</div>
+                <div class="focus-code">600111</div>
+                <div class="focus-reason">轻稀土核心企业，公开资料显示配额占比较高。2026Q1净利+113%，人形机器人+低空经济开辟第二增长曲线，战略价值持续重估。</div>
+            </div>
+        </div>
+    </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p style="text-align:center;color:#8892a8;font-size:0.8em;padding:30px 0 10px;border-top:1px solid #1e293b;margin-top:40px">行情数据来源：东方财富 | 静态行业数据参考：上市公司公告、公开研报与公开报道 | 生成时间：2026-06-12 12:57</p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em">静态描述为公开资料整理，部分市占率、需求预测、价格判断采用机构预测口径，仅供研究参考。</p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em;margin-top:6px">左侧/右侧买入评级仅基于当前行情、成交额、市值与估值的规则化排序，不构成具体买卖建议。</p>
+            <p style="text-align:center;color:#5a6478;font-size:0.85em;margin-top:6px">本报告仅为数据整理，不构成任何投资建议。股市有风险，投资需谨慎。</p>
+        </div>
+    </div>
+</body>
+</html>

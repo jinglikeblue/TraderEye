@@ -1,0 +1,3114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>社保基金 & 中央汇金 共同持仓分析</title>
+<style>
+:root {
+  --bg: #0f0f14;
+  --card-bg: #1a1a24;
+  --card-bg-hover: #222234;
+  --border: #2a2a3a;
+  --text: #e0e0e0;
+  --text-secondary: #999;
+  --accent-gold: #f0c060;
+  --accent-blue: #60a5fa;
+  --accent-green: #34d399;
+  --accent-red: #f87171;
+  --accent-orange: #fb923c;
+  --badge-new: #22c55e;
+  --badge-increase: #ef4444;
+  --badge-decrease: #3b82f6;
+  --badge-unchanged: #6b7280;
+  --badge-multi: #a78bfa;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  padding: 40px 0 30px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 30px;
+}
+.header h1 {
+  font-size: 2.2em;
+  font-weight: 700;
+  background: linear-gradient(135deg, #f0c060, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.header .subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95em;
+  margin-top: 8px;
+}
+
+/* Summary Cards */
+.summary-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 30px;
+}
+.summary-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.2s;
+}
+.summary-card:hover {
+  background: var(--card-bg-hover);
+  border-color: rgba(240, 192, 96, 0.3);
+}
+.summary-card .icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4em;
+  flex-shrink: 0;
+}
+.icon-sb { background: rgba(240, 192, 96, 0.15); }
+.icon-hj { background: rgba(96, 165, 250, 0.15); }
+.icon-common { background: rgba(52, 211, 153, 0.15); }
+.icon-total { background: rgba(168, 85, 247, 0.15); }
+
+.summary-card .info h3 {
+  font-size: 0.85em;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.summary-card .info .num {
+  font-size: 1.8em;
+  font-weight: 700;
+}
+.num-gold { color: var(--accent-gold); }
+.num-blue { color: var(--accent-blue); }
+.num-green { color: var(--accent-green); }
+.num-purple { color: #a78bfa; }
+
+/* Period Tabs */
+.period-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.period-tab {
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: all 0.2s;
+  user-select: none;
+}
+.period-tab:hover {
+  border-color: var(--accent-gold);
+  color: var(--text);
+}
+.period-tab.active {
+  background: linear-gradient(135deg, rgba(240,192,96,0.15), rgba(245,158,11,0.1));
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+  font-weight: 600;
+}
+
+/* Section Title */
+.section-title {
+  font-size: 1.3em;
+  font-weight: 600;
+  color: var(--accent-gold);
+  margin: 30px 0 16px;
+  padding-left: 12px;
+  border-left: 3px solid var(--accent-gold);
+}
+
+/* Stock Table */
+.stock-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 30px;
+}
+.stock-table thead th {
+  background: rgba(240,192,96,0.08);
+  color: var(--accent-gold);
+  font-weight: 600;
+  font-size: 0.82em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 2px solid rgba(240,192,96,0.3);
+  position: sticky;
+  top: 0;
+}
+.stock-table thead th:first-child { border-radius: 8px 0 0 0; }
+.stock-table thead th:last-child { border-radius: 0 8px 0 0; }
+.stock-table thead th.center { text-align: center; }
+.stock-table thead th.right { text-align: right; }
+
+.stock-table tbody tr {
+  transition: background 0.15s;
+}
+.stock-table tbody tr:hover {
+  background: rgba(240,192,96,0.03);
+}
+.stock-table tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9em;
+  vertical-align: middle;
+}
+
+.code-cell {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 0.85em;
+  color: var(--text-secondary);
+}
+.name-cell {
+  font-weight: 600;
+  color: var(--text);
+}
+.ratio-cell {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.88em;
+}
+.ratio-sb { color: var(--accent-gold); }
+.ratio-hj { color: var(--accent-blue); }
+.ratio-total { color: var(--accent-green); font-weight: 600; }
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.78em;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.badge-new { background: rgba(34,197,94,0.15); color: var(--badge-new); }
+.badge-increase { background: rgba(239,68,68,0.15); color: var(--badge-increase); }
+.badge-decrease { background: rgba(59,130,246,0.15); color: var(--badge-decrease); }
+.badge-unchanged { background: rgba(107,114,128,0.15); color: var(--badge-unchanged); }
+.badge-multi { background: rgba(167,139,250,0.15); color: var(--badge-multi); }
+.badge-no-data { background: rgba(255,255,255,0.05); color: var(--text-secondary); }
+
+/* History Tab Content */
+.stock-history-panel {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.stock-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.stock-history-header:hover {
+  background: rgba(240,192,96,0.03);
+}
+.stock-history-header .stock-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.stock-history-header .code-badge {
+  font-family: 'SF Mono', monospace;
+  font-size: 0.82em;
+  color: var(--text-secondary);
+  background: rgba(255,255,255,0.05);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.stock-history-header .expand-icon {
+  transition: transform 0.3s;
+  color: var(--text-secondary);
+  font-size: 0.8em;
+}
+.stock-history-header.expanded .expand-icon {
+  transform: rotate(180deg);
+}
+.stock-history-body {
+  display: none;
+  padding: 0 20px 16px;
+  border-top: 1px solid var(--border);
+}
+.stock-history-body.show {
+  display: block;
+}
+
+.history-mini-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+.history-mini-table th {
+  color: var(--text-secondary);
+  font-size: 0.78em;
+  font-weight: 500;
+  padding: 8px 10px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.history-mini-table td {
+  text-align: center;
+  padding: 8px 10px;
+  font-size: 0.85em;
+  border-bottom: 1px solid rgba(42,42,58,0.5);
+}
+
+/* Status Flow */
+.status-flow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot-common { background: var(--accent-green); box-shadow: 0 0 6px rgba(52,211,153,0.4); }
+.dot-separate { background: var(--text-secondary); opacity: 0.4; }
+.flow-arrow { color: var(--text-secondary); font-size: 0.7em; margin: 0 2px; }
+
+/* Legend */
+.legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+  font-size: 0.82em;
+  color: var(--text-secondary);
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.8em;
+  padding: 30px 0;
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}
+
+/* Period comparison grid */
+.period-comparison {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.period-mini-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  text-align: center;
+}
+.period-mini-card .period-label {
+  font-size: 0.8em;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+.period-mini-card .period-count {
+  font-size: 1.4em;
+  font-weight: 700;
+}
+.period-mini-card.active-period {
+  border-color: var(--accent-gold);
+}
+
+/* Highlight row for current common stocks */
+.stock-table tbody tr.row-common {
+  background: rgba(52,211,153,0.03);
+}
+.stock-table tbody tr.row-former {
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .container { padding: 15px 10px; }
+  .header h1 { font-size: 1.5em; }
+  .stock-table thead, .stock-table tbody td { font-size: 0.78em; padding: 8px 6px; }
+  .summary-row { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>社保基金 & 中央汇金 共同持仓分析</h1>
+  <p class="subtitle">数据来源：上市公司十大流通股东公告 | 东方财富数据中心</p>
+</div>
+
+<!-- Summary Cards -->
+<div class="summary-row">
+  <div class="summary-card">
+    <div class="icon icon-common">🔗</div>
+    <div class="info">
+      <h3>2026一季报 共同持股</h3>
+      <div class="num num-green">22</div>
+      <div style="font-size:0.75em;color:var(--text-secondary)">社保504 / 汇金137</div>
+    </div>
+  </div>
+  <div class="summary-card">
+    <div class="icon icon-common">🔗</div>
+    <div class="info">
+      <h3>2025年报 共同持股</h3>
+      <div class="num num-green">9</div>
+      <div style="font-size:0.75em;color:var(--text-secondary)">社保415 / 汇金88</div>
+    </div>
+  </div>
+  <div class="summary-card">
+    <div class="icon icon-common">🔗</div>
+    <div class="info">
+      <h3>2025三季报 共同持股</h3>
+      <div class="num num-green">23</div>
+      <div style="font-size:0.75em;color:var(--text-secondary)">社保517 / 汇金141</div>
+    </div>
+  </div>
+  <div class="summary-card">
+    <div class="icon icon-common">🔗</div>
+    <div class="info">
+      <h3>2025中报 共同持股</h3>
+      <div class="num num-green">23</div>
+      <div style="font-size:0.75em;color:var(--text-secondary)">社保486 / 汇金147</div>
+    </div>
+  </div>
+</div>
+
+<!-- Legend -->
+<div class="legend">
+  <div class="legend-item"><span class="badge badge-new">新进</span> 新进入</div>
+  <div class="legend-item"><span class="badge badge-increase">加仓</span> 加仓</div>
+  <div class="legend-item"><span class="badge badge-decrease">减仓</span> 减仓</div>
+  <div class="legend-item"><span class="badge badge-unchanged">不变</span> 持仓不变</div>
+  <div class="legend-item"><span class="badge badge-multi">多组合</span> 多组合增减不一</div>
+  <div class="legend-item"><span class="badge badge-no-data">-</span> 未进入前十</div>
+</div>
+
+<!-- Section: Current Common Holdings -->
+<div class="section-title">📊 最新报告期 (2026一季报) — 共同持仓明细</div>
+
+<table class="stock-table">
+<thead>
+<tr>
+  <th>代码</th>
+  <th>名称</th>
+  <th class="right">社保占流通股</th>
+  <th>社保变动</th>
+  <th class="right">汇金占流通股</th>
+  <th>汇金变动</th>
+  <th class="right">合计占比</th>
+  <th>各期状态</th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-common">
+  <td class="code-cell">601336</td>
+  <td class="name-cell">新华保险</td>
+  <td class="ratio-cell ratio-sb">0.32%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-hj">32.24%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-total">32.56%</td>
+  <td><div class="status-flow"><span class="status-dot dot-common" title="2026一季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025年报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025三季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025中报: 共同持仓"></span></div></td>
+</tr>
+<tr class="row-common">
+  <td class="code-cell">600325</td>
+  <td class="name-cell">华发股份</td>
+  <td class="ratio-cell ratio-sb">4.33%</td>
+  <td><span class="badge badge-multi">多组合</span></td>
+  <td class="ratio-cell ratio-hj">2.36%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-total">6.68%</td>
+  <td><div class="status-flow"><span class="status-dot dot-common" title="2026一季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025年报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025三季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025中报: 非共同持仓"></span></div></td>
+</tr>
+<tr class="row-common">
+  <td class="code-cell">002153</td>
+  <td class="name-cell">石基信息</td>
+  <td class="ratio-cell ratio-sb">2.13%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-hj">2.81%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-total">4.94%</td>
+  <td><div class="status-flow"><span class="status-dot dot-common" title="2026一季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025年报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025三季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025中报: 共同持仓"></span></div></td>
+</tr>
+<tr class="row-common">
+  <td class="code-cell">000726</td>
+  <td class="name-cell">鲁泰A</td>
+  <td class="ratio-cell ratio-sb">1.99%</td>
+  <td><span class="badge badge-increase">加仓</span></td>
+  <td class="ratio-cell ratio-hj">2.44%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-total">4.43%</td>
+  <td><div class="status-flow"><span class="status-dot dot-common" title="2026一季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025年报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025三季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025中报: 共同持仓"></span></div></td>
+</tr>
+<tr class="row-common">
+  <td class="code-cell">200726</td>
+  <td class="name-cell">鲁泰B</td>
+  <td class="ratio-cell ratio-sb">1.99%</td>
+  <td><span class="badge badge-increase">加仓</span></td>
+  <td class="ratio-cell ratio-hj">2.44%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-total">4.43%</td>
+  <td><div class="status-flow"><span class="status-dot dot-common" title="2026一季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025年报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025三季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025中报: 共同持仓"></span></div></td>
+</tr>
+<tr class="row-common">
+  <td class="code-cell">002073</td>
+  <td class="name-cell">软控股份</td>
+  <td class="ratio-cell ratio-sb">0.40%</td>
+  <td><span class="badge badge-new">新进</span></td>
+  <td class="ratio-cell ratio-hj">3.28%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-total">3.68%</td>
+  <td><div class="status-flow"><span class="status-dot dot-common" title="2026一季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025年报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025三季报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025中报: 非共同持仓"></span></div></td>
+</tr>
+<tr class="row-common">
+  <td class="code-cell">600031</td>
+  <td class="name-cell">三一重工</td>
+  <td class="ratio-cell ratio-sb">2.28%</td>
+  <td><span class="badge badge-increase">加仓</span></td>
+  <td class="ratio-cell ratio-hj">0.70%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-total">2.98%</td>
+  <td><div class="status-flow"><span class="status-dot dot-common" title="2026一季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025年报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025三季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025中报: 共同持仓"></span></div></td>
+</tr>
+<tr class="row-common">
+  <td class="code-cell">600435</td>
+  <td class="name-cell">北方导航</td>
+  <td class="ratio-cell ratio-sb">0.60%</td>
+  <td><span class="badge badge-new">新进</span></td>
+  <td class="ratio-cell ratio-hj">2.21%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-total">2.81%</td>
+  <td><div class="status-flow"><span class="status-dot dot-common" title="2026一季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025年报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025三季报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025中报: 非共同持仓"></span></div></td>
+</tr>
+<tr class="row-common">
+  <td class="code-cell">000061</td>
+  <td class="name-cell">农产品</td>
+  <td class="ratio-cell ratio-sb">1.77%</td>
+  <td><span class="badge badge-increase">加仓</span></td>
+  <td class="ratio-cell ratio-hj">1.03%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-total">2.80%</td>
+  <td><div class="status-flow"><span class="status-dot dot-common" title="2026一季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025年报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025三季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025中报: 非共同持仓"></span></div></td>
+</tr>
+<tr class="row-common">
+  <td class="code-cell">601901</td>
+  <td class="name-cell">方正证券</td>
+  <td class="ratio-cell ratio-sb">1.11%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-hj">1.65%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-total">2.76%</td>
+  <td><div class="status-flow"><span class="status-dot dot-common" title="2026一季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025年报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025三季报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025中报: 非共同持仓"></span></div></td>
+</tr>
+<tr class="row-common">
+  <td class="code-cell">600894</td>
+  <td class="name-cell">广日股份</td>
+  <td class="ratio-cell ratio-sb">0.65%</td>
+  <td><span class="badge badge-new">新进</span></td>
+  <td class="ratio-cell ratio-hj">1.93%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-total">2.58%</td>
+  <td><div class="status-flow"><span class="status-dot dot-common" title="2026一季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025年报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025三季报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025中报: 非共同持仓"></span></div></td>
+</tr>
+<tr class="row-common">
+  <td class="code-cell">000997</td>
+  <td class="name-cell">新大陆</td>
+  <td class="ratio-cell ratio-sb">0.71%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-hj">1.84%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-total">2.55%</td>
+  <td><div class="status-flow"><span class="status-dot dot-common" title="2026一季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025年报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025三季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025中报: 共同持仓"></span></div></td>
+</tr>
+<tr class="row-common">
+  <td class="code-cell">600048</td>
+  <td class="name-cell">保利发展</td>
+  <td class="ratio-cell ratio-sb">0.73%</td>
+  <td><span class="badge badge-new">新进</span></td>
+  <td class="ratio-cell ratio-hj">1.47%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-total">2.19%</td>
+  <td><div class="status-flow"><span class="status-dot dot-common" title="2026一季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025年报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025三季报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025中报: 共同持仓"></span></div></td>
+</tr>
+<tr class="row-common">
+  <td class="code-cell">002244</td>
+  <td class="name-cell">滨江集团</td>
+  <td class="ratio-cell ratio-sb">0.92%</td>
+  <td><span class="badge badge-new">新进</span></td>
+  <td class="ratio-cell ratio-hj">1.03%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-total">1.96%</td>
+  <td><div class="status-flow"><span class="status-dot dot-common" title="2026一季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025年报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025三季报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025中报: 非共同持仓"></span></div></td>
+</tr>
+<tr class="row-common">
+  <td class="code-cell">601139</td>
+  <td class="name-cell">深圳燃气</td>
+  <td class="ratio-cell ratio-sb">0.98%</td>
+  <td><span class="badge badge-increase">加仓</span></td>
+  <td class="ratio-cell ratio-hj">0.95%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-total">1.93%</td>
+  <td><div class="status-flow"><span class="status-dot dot-common" title="2026一季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025年报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025三季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025中报: 共同持仓"></span></div></td>
+</tr>
+<tr class="row-common">
+  <td class="code-cell">601012</td>
+  <td class="name-cell">隆基绿能</td>
+  <td class="ratio-cell ratio-sb">0.53%</td>
+  <td><span class="badge badge-new">新进</span></td>
+  <td class="ratio-cell ratio-hj">1.19%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-total">1.72%</td>
+  <td><div class="status-flow"><span class="status-dot dot-common" title="2026一季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025年报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025三季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025中报: 非共同持仓"></span></div></td>
+</tr>
+<tr class="row-common">
+  <td class="code-cell">600019</td>
+  <td class="name-cell">宝钢股份</td>
+  <td class="ratio-cell ratio-sb">0.76%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-hj">0.87%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-total">1.63%</td>
+  <td><div class="status-flow"><span class="status-dot dot-common" title="2026一季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025年报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025三季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025中报: 共同持仓"></span></div></td>
+</tr>
+<tr class="row-common">
+  <td class="code-cell">000062</td>
+  <td class="name-cell">深圳华强</td>
+  <td class="ratio-cell ratio-sb">0.17%</td>
+  <td><span class="badge badge-new">新进</span></td>
+  <td class="ratio-cell ratio-hj">1.25%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-total">1.42%</td>
+  <td><div class="status-flow"><span class="status-dot dot-common" title="2026一季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025年报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025三季报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025中报: 非共同持仓"></span></div></td>
+</tr>
+<tr class="row-common">
+  <td class="code-cell">000089</td>
+  <td class="name-cell">深圳机场</td>
+  <td class="ratio-cell ratio-sb">0.58%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-hj">0.63%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-total">1.20%</td>
+  <td><div class="status-flow"><span class="status-dot dot-common" title="2026一季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025年报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025三季报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025中报: 非共同持仓"></span></div></td>
+</tr>
+<tr class="row-common">
+  <td class="code-cell">601888</td>
+  <td class="name-cell">中国中免</td>
+  <td class="ratio-cell ratio-sb">0.46%</td>
+  <td><span class="badge badge-new">新进</span></td>
+  <td class="ratio-cell ratio-hj">0.57%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-total">1.03%</td>
+  <td><div class="status-flow"><span class="status-dot dot-common" title="2026一季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025年报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025三季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025中报: 共同持仓"></span></div></td>
+</tr>
+<tr class="row-common">
+  <td class="code-cell">601898</td>
+  <td class="name-cell">中煤能源</td>
+  <td class="ratio-cell ratio-sb">0.18%</td>
+  <td><span class="badge badge-new">新进</span></td>
+  <td class="ratio-cell ratio-hj">0.50%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-total">0.68%</td>
+  <td><div class="status-flow"><span class="status-dot dot-common" title="2026一季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025年报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025三季报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025中报: 非共同持仓"></span></div></td>
+</tr>
+<tr class="row-common">
+  <td class="code-cell">601628</td>
+  <td class="name-cell">中国人寿</td>
+  <td class="ratio-cell ratio-sb">0.04%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-hj">0.41%</td>
+  <td><span class="badge badge-unchanged">不变</span></td>
+  <td class="ratio-cell ratio-total">0.45%</td>
+  <td><div class="status-flow"><span class="status-dot dot-common" title="2026一季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-separate" title="2025年报: 非共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025三季报: 共同持仓"></span><span class="flow-arrow">◀</span><span class="status-dot dot-common" title="2025中报: 共同持仓"></span></div></td>
+</tr>
+</tbody>
+</table>
+
+<!-- Section: Period Comparison -->
+<div class="section-title">📅 各期共同持仓数量变化</div>
+
+<table class="stock-table" style="max-width:600px">
+<thead>
+<tr>
+  <th>报告期</th>
+  <th class="center">共同持仓数量</th>
+  <th class="center">vs 上期</th>
+</tr>
+</thead>
+<tbody>
+<tr class="active-period">
+  <td style="font-weight:600">2026一季报</td>
+  <td class="ratio-cell ratio-green" style="text-align:center">22</td>
+  <td style="text-align:center"></td>
+</tr>
+<tr>
+  <td style="font-weight:600">2025年报</td>
+  <td class="ratio-cell ratio-green" style="text-align:center">9</td>
+  <td style="text-align:center"><span style="color:var(--badge-increase)">-13</span></td>
+</tr>
+<tr>
+  <td style="font-weight:600">2025三季报</td>
+  <td class="ratio-cell ratio-green" style="text-align:center">23</td>
+  <td style="text-align:center"><span style="color:var(--badge-new)">+14</span></td>
+</tr>
+<tr>
+  <td style="font-weight:600">2025中报</td>
+  <td class="ratio-cell ratio-green" style="text-align:center">23</td>
+  <td style="text-align:center"><span style="color:var(--text-secondary)">持平</span></td>
+</tr>
+</tbody>
+</table>
+
+<!-- Section: All Stocks Historical -->
+<div class="section-title">📋 所有历史共同持仓股票 (按最新合计占比排序)</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--accent-green);font-size:0.82em">当前</span>
+      <span class="code-badge">601336</span>
+      <span style="font-weight:600">新华保险</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 32.56%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.32%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 32.24%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.32%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">32.24%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.51%</td>
+      <td><span class="badge badge-increase">加仓</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">32.24%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.49%</td>
+      <td><span class="badge badge-new">新进</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">32.24%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--accent-green);font-size:0.82em">当前</span>
+      <span class="code-badge">600325</span>
+      <span style="font-weight:600">华发股份</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 6.68%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 4.33%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 2.36%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">4.33%</td>
+      <td><span class="badge badge-multi">多组合</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.36%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">4.06%</td>
+      <td><span class="badge badge-multi">多组合</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.36%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">2.02%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.36%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--accent-green);font-size:0.82em">当前</span>
+      <span class="code-badge">002153</span>
+      <span style="font-weight:600">石基信息</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 4.94%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 2.13%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 2.81%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">2.13%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.81%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">2.13%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.81%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">2.13%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.81%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--accent-green);font-size:0.82em">当前</span>
+      <span class="code-badge">000726</span>
+      <span style="font-weight:600">鲁泰A</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 4.43%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 1.99%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 2.44%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">1.99%</td>
+      <td><span class="badge badge-increase">加仓</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.44%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">1.95%</td>
+      <td><span class="badge badge-increase">加仓</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.44%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">2.88%</td>
+      <td><span class="badge badge-multi">多组合</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.44%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">1.83%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.44%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--accent-green);font-size:0.82em">当前</span>
+      <span class="code-badge">200726</span>
+      <span style="font-weight:600">鲁泰B</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 4.43%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 1.99%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 2.44%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">1.99%</td>
+      <td><span class="badge badge-increase">加仓</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.44%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">1.95%</td>
+      <td><span class="badge badge-increase">加仓</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.44%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">2.88%</td>
+      <td><span class="badge badge-multi">多组合</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.44%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">1.83%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.44%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--accent-green);font-size:0.82em">当前</span>
+      <span class="code-badge">002073</span>
+      <span style="font-weight:600">软控股份</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 3.68%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.40%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 3.28%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.40%</td>
+      <td><span class="badge badge-new">新进</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">3.28%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">3.28%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">3.35%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--text-secondary);font-size:0.82em">历史</span>
+      <span class="code-badge">002756</span>
+      <span style="font-weight:600">永兴材料</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 3.56%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 3.56%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 0.00%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">3.56%</td>
+      <td><span class="badge badge-multi">多组合</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">3.28%</td>
+      <td><span class="badge badge-new">新进</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">1.09%</td>
+      <td><span class="badge badge-new">新进</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">2.09%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.72%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--accent-green);font-size:0.82em">当前</span>
+      <span class="code-badge">600031</span>
+      <span style="font-weight:600">三一重工</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 2.98%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 2.28%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 0.70%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">2.28%</td>
+      <td><span class="badge badge-increase">加仓</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.70%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">2.10%</td>
+      <td><span class="badge badge-multi">多组合</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.76%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">2.02%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.76%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--accent-green);font-size:0.82em">当前</span>
+      <span class="code-badge">600435</span>
+      <span style="font-weight:600">北方导航</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 2.81%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.60%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 2.21%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.60%</td>
+      <td><span class="badge badge-new">新进</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.21%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.21%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--accent-green);font-size:0.82em">当前</span>
+      <span class="code-badge">000061</span>
+      <span style="font-weight:600">农产品</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 2.80%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 1.77%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 1.03%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">1.77%</td>
+      <td><span class="badge badge-increase">加仓</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.03%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">1.10%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.09%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">1.10%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.09%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--accent-green);font-size:0.82em">当前</span>
+      <span class="code-badge">601901</span>
+      <span style="font-weight:600">方正证券</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 2.76%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 1.11%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 1.65%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">1.11%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.65%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.65%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.65%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--accent-green);font-size:0.82em">当前</span>
+      <span class="code-badge">600894</span>
+      <span style="font-weight:600">广日股份</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 2.58%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.65%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 1.93%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.65%</td>
+      <td><span class="badge badge-new">新进</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.93%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.93%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--accent-green);font-size:0.82em">当前</span>
+      <span class="code-badge">000997</span>
+      <span style="font-weight:600">新大陆</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 2.55%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.71%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 1.84%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.71%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.84%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">1.42%</td>
+      <td><span class="badge badge-increase">加仓</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.84%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">1.19%</td>
+      <td><span class="badge badge-increase">加仓</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.84%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.50%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.80%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--text-secondary);font-size:0.82em">历史</span>
+      <span class="code-badge">600750</span>
+      <span style="font-weight:600">华润江中</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 2.47%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.00%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 2.47%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.47%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">2.76%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.48%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--text-secondary);font-size:0.82em">历史</span>
+      <span class="code-badge">600757</span>
+      <span style="font-weight:600">长江传媒</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 2.40%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.00%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 2.40%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.40%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.40%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">1.07%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.40%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">1.12%</td>
+      <td><span class="badge badge-increase">加仓</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.40%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--accent-green);font-size:0.82em">当前</span>
+      <span class="code-badge">600048</span>
+      <span style="font-weight:600">保利发展</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 2.19%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.73%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 1.47%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.73%</td>
+      <td><span class="badge badge-new">新进</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.47%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.47%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.87%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.47%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--text-secondary);font-size:0.82em">历史</span>
+      <span class="code-badge">000600</span>
+      <span style="font-weight:600">建投能源</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 2.16%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.00%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 2.16%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.16%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.51%</td>
+      <td><span class="badge badge-new">新进</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.16%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.16%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--accent-green);font-size:0.82em">当前</span>
+      <span class="code-badge">002244</span>
+      <span style="font-weight:600">滨江集团</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 1.96%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.92%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 1.03%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.92%</td>
+      <td><span class="badge badge-new">新进</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.03%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.03%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.06%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.06%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--accent-green);font-size:0.82em">当前</span>
+      <span class="code-badge">601139</span>
+      <span style="font-weight:600">深圳燃气</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 1.93%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.98%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 0.95%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.98%</td>
+      <td><span class="badge badge-increase">加仓</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.95%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.94%</td>
+      <td><span class="badge badge-increase">加仓</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.95%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.91%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.95%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--text-secondary);font-size:0.82em">历史</span>
+      <span class="code-badge">000598</span>
+      <span style="font-weight:600">兴蓉环境</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 1.77%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.00%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 1.77%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.77%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.77%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.77%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.44%</td>
+      <td><span class="badge badge-new">新进</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.77%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--accent-green);font-size:0.82em">当前</span>
+      <span class="code-badge">601012</span>
+      <span style="font-weight:600">隆基绿能</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 1.72%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.53%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 1.19%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.53%</td>
+      <td><span class="badge badge-new">新进</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.19%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.19%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">1.04%</td>
+      <td><span class="badge badge-new">新进</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.19%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.19%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--accent-green);font-size:0.82em">当前</span>
+      <span class="code-badge">600019</span>
+      <span style="font-weight:600">宝钢股份</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 1.63%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.76%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 0.87%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.76%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.87%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.76%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.87%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.76%</td>
+      <td><span class="badge badge-increase">加仓</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.87%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.73%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.87%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--accent-green);font-size:0.82em">当前</span>
+      <span class="code-badge">000062</span>
+      <span style="font-weight:600">深圳华强</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 1.42%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.17%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 1.25%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.17%</td>
+      <td><span class="badge badge-new">新进</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.25%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.25%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.25%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--text-secondary);font-size:0.82em">历史</span>
+      <span class="code-badge">601668</span>
+      <span style="font-weight:600">中国建筑</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 1.41%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.00%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 1.41%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.41%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.41%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.50%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.41%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.50%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.41%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--text-secondary);font-size:0.82em">历史</span>
+      <span class="code-badge">600585</span>
+      <span style="font-weight:600">海螺水泥</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 1.30%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.00%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 1.30%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.30%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.49%</td>
+      <td><span class="badge badge-new">新进</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.30%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.30%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--accent-green);font-size:0.82em">当前</span>
+      <span class="code-badge">000089</span>
+      <span style="font-weight:600">深圳机场</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 1.20%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.58%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 0.63%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.58%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.63%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.58%</td>
+      <td><span class="badge badge-increase">加仓</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.63%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--text-secondary);font-size:0.82em">历史</span>
+      <span class="code-badge">600528</span>
+      <span style="font-weight:600">中铁工业</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 1.08%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 1.08%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 0.00%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">1.08%</td>
+      <td><span class="badge badge-increase">加仓</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">1.07%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.44%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">1.17%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.25%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--accent-green);font-size:0.82em">当前</span>
+      <span class="code-badge">601888</span>
+      <span style="font-weight:600">中国中免</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 1.03%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.46%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 0.57%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.46%</td>
+      <td><span class="badge badge-new">新进</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.57%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.56%</td>
+      <td><span class="badge badge-increase">加仓</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.57%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.45%</td>
+      <td><span class="badge badge-increase">加仓</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.57%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--text-secondary);font-size:0.82em">历史</span>
+      <span class="code-badge">600642</span>
+      <span style="font-weight:600">申能股份</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 1.02%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.00%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 1.02%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.02%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.02%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.62%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.02%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.80%</td>
+      <td><span class="badge badge-increase">加仓</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.03%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--text-secondary);font-size:0.82em">历史</span>
+      <span class="code-badge">000898</span>
+      <span style="font-weight:600">鞍钢股份</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 0.89%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.00%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 0.89%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.89%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.35%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.89%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.56%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.89%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--accent-green);font-size:0.82em">当前</span>
+      <span class="code-badge">601898</span>
+      <span style="font-weight:600">中煤能源</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 0.68%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.18%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 0.50%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.18%</td>
+      <td><span class="badge badge-new">新进</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.50%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.50%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.50%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--accent-green);font-size:0.82em">当前</span>
+      <span class="code-badge">601628</span>
+      <span style="font-weight:600">中国人寿</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 0.45%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.04%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 0.41%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.04%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.41%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.05%</td>
+      <td><span class="badge badge-increase">加仓</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.41%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.05%</td>
+      <td><span class="badge badge-increase">加仓</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.41%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--text-secondary);font-size:0.82em">历史</span>
+      <span class="code-badge">002246</span>
+      <span style="font-weight:600">北化股份</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 0.00%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.00%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 0.00%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">1.46%</td>
+      <td><span class="badge badge-increase">加仓</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">1.09%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">1.64%</td>
+      <td><span class="badge badge-new">新进</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.93%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--text-secondary);font-size:0.82em">历史</span>
+      <span class="code-badge">002294</span>
+      <span style="font-weight:600">信立泰</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 0.00%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.00%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 0.00%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.89%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.26%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.89%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">1.26%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--text-secondary);font-size:0.82em">历史</span>
+      <span class="code-badge">600425</span>
+      <span style="font-weight:600">青松建化</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 0.00%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.00%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 0.00%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">2.61%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.44%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">3.19%</td>
+      <td><span class="badge badge-increase">加仓</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">2.47%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--text-secondary);font-size:0.82em">历史</span>
+      <span class="code-badge">600563</span>
+      <span style="font-weight:600">法拉电子</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 0.00%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.00%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 0.00%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">2.00%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.58%</td>
+      <td><span class="badge badge-new">新进</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--text-secondary);font-size:0.82em">历史</span>
+      <span class="code-badge">600694</span>
+      <span style="font-weight:600">大商股份</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 0.00%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.00%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 0.00%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">3.00%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.43%</td>
+      <td><span class="badge badge-new">新进</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">3.00%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.69%</td>
+      <td><span class="badge badge-new">新进</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">3.00%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<div class="stock-history-panel">
+  <div class="stock-history-header" onclick="this.classList.toggle('expanded'); this.nextElementSibling.classList.toggle('show')">
+    <div class="stock-name">
+      <span style="color:var(--text-secondary);font-size:0.82em">历史</span>
+      <span class="code-badge">600863</span>
+      <span style="font-weight:600">华能蒙电</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span style="color:var(--accent-green);font-size:0.9em;font-weight:600">合计 0.00%</span>
+      <span style="color:var(--accent-gold);font-size:0.85em">社保 0.00%</span>
+      <span style="color:var(--accent-blue);font-size:0.85em">汇金 0.00%</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="stock-history-body">
+    <table class="history-mini-table">
+    <thead>
+    <tr>
+      <th>报告期</th>
+      <th>社保占流通股</th>
+      <th>社保变动</th>
+      <th>汇金占流通股</th>
+      <th>汇金变动</th>
+      <th>是否共同</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="font-weight:500;text-align:left">2026一季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025年报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">-</td>
+      <td> - </td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025三季报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">-</td>
+      <td> - </td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.64%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--text-secondary)">—</span></td>
+    </tr>
+    <tr>
+      <td style="font-weight:500;text-align:left">2025中报</td>
+      <td style="color:var(--accent-gold);font-family:monospace">0.74%</td>
+      <td><span class="badge badge-new">新进</span></td>
+      <td style="color:var(--accent-blue);font-family:monospace">0.64%</td>
+      <td><span class="badge badge-unchanged">不变</span></td>
+      <td><span style="color:var(--accent-green);font-weight:600">✅ 共同</span></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="footer">
+  <p>数据来源：东方财富数据中心 · 上市公司十大流通股东公告</p>
+  <p>报告期覆盖：2026一季报, 2025年报, 2025三季报, 2025中报 · 生成时间：2026年6月15日</p>
+  <p style="margin-top:8px;font-size:0.75em">⚠️ 仅统计进入十大流通股东的持仓，低于第十大股东的持仓可能未被计入</p>
+</div>
+
+</div>
+</body>
+</html>

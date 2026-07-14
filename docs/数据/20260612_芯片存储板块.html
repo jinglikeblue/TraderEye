@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>芯片存储板块 - A股公司清单与产业链关系</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #0a0e17;
+            color: #e0e6f0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+        .header .subtitle {
+            font-size: 16px;
+            color: #8892a8;
+        }
+        .header .update-time {
+            font-size: 13px;
+            color: #5a6478;
+            margin-top: 8px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #c8d0e0;
+            margin-bottom: 24px;
+            padding-left: 14px;
+            border-left: 3px solid #60a5fa;
+        }
+
+        /* 行业概览卡片 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 56px;
+        }
+        .stat-card {
+            background: #111827;
+            border: 1px solid #1e293b;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .stat-card .stat-label {
+            font-size: 13px;
+            color: #5a6478;
+            margin-bottom: 6px;
+        }
+        .stat-card .stat-value {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .stat-card .stat-note {
+            font-size: 12px;
+            color: #5a6478;
+        }
+        .stat-green .stat-value { color: #34d399; }
+        .stat-blue .stat-value { color: #60a5fa; }
+        .stat-pink .stat-value { color: #f472b6; }
+        .stat-yellow .stat-value { color: #fbbf24; }
+        .stat-purple .stat-value { color: #a78bfa; }
+        .stat-red .stat-value { color: #f87171; }
+
+        /* 产业链全景流程图 */
+        .flow-section { margin-bottom: 56px; }
+        .flow-diagram {
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+            background: #111827;
+            border-radius: 16px;
+            border: 1px solid #1e293b;
+            overflow: hidden;
+        }
+        .flow-stage {
+            flex: 1;
+            padding: 28px 20px;
+            position: relative;
+        }
+        .flow-stage:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            right: -14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 28px;
+            color: #4b5563;
+            z-index: 2;
+        }
+        .flow-stage:not(:last-child) {
+            border-right: 1px solid #1e293b;
+        }
+        .flow-stage .stage-label {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        .flow-upstream .stage-label { background: rgba(16,185,129,0.15); color: #34d399; }
+        .flow-midstream .stage-label { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .flow-downstream .stage-label { background: rgba(244,114,182,0.15); color: #f472b6; }
+        .flow-end .stage-label { background: rgba(251,191,36,0.15); color: #fbbf24; }
+        .flow-stage .stage-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #e0e6f0;
+            margin-bottom: 8px;
+        }
+        .flow-stage .stage-desc {
+            font-size: 13px;
+            color: #8892a8;
+        }
+        .flow-stage .stage-products {
+            margin-top: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .flow-stage .product-tag {
+            font-size: 12px;
+            padding: 3px 10px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.06);
+            color: #a0aec0;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        /* 公司卡片 */
+        .companies-section { margin-bottom: 48px; }
+        .company-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 20px;
+        }
+        .company-card {
+            background: #111827;
+            border: 1px solid #1e293b;
+            border-radius: 14px;
+            padding: 24px;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+        .company-card:hover {
+            border-color: #374151;
+            transform: translateY(-2px);
+        }
+        .company-card .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 14px;
+        }
+        .company-card .card-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #e0e6f0;
+        }
+        .company-card .card-code {
+            font-size: 13px;
+            font-weight: 500;
+            padding: 3px 10px;
+            border-radius: 8px;
+            background: rgba(96,165,250,0.12);
+            color: #60a5fa;
+            white-space: nowrap;
+        }
+        .company-card .card-position {
+            font-size: 13px;
+            padding: 3px 10px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .position-upstream { background: rgba(16,185,129,0.12); color: #34d399; }
+        .position-midstream { background: rgba(96,165,250,0.12); color: #60a5fa; }
+        .position-downstream { background: rgba(244,114,182,0.12); color: #f472b6; }
+        .position-end { background: rgba(251,191,36,0.12); color: #fbbf24; }
+        .position-multi { background: rgba(167,139,250,0.12); color: #a78bfa; }
+        .company-card .card-desc {
+            font-size: 14px;
+            color: #8892a8;
+            line-height: 1.7;
+        }
+        .company-card .card-highlight {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #c8d0e0;
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            border-left: 3px solid #374151;
+        }
+        .company-card .card-performance {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #34d399;
+            padding: 8px 12px;
+            background: rgba(16,185,129,0.06);
+            border-radius: 8px;
+            border-left: 3px solid #34d399;
+        }
+        .company-card .star-badge {
+            display: inline-block;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 6px;
+            background: linear-gradient(135deg, rgba(251,191,36,0.2), rgba(245,158,11,0.2));
+            color: #fbbf24;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        /* 产业链关系图 */
+        .relation-section { margin-bottom: 56px; }
+        .relation-diagram {
+            background: #111827;
+            border: 1px solid #1e293b;
+            border-radius: 16px;
+            padding: 32px;
+            overflow-x: auto;
+        }
+        .relation-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .relation-row:last-child { margin-bottom: 0; }
+        .relation-label {
+            min-width: 110px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #8892a8;
+            flex-shrink: 0;
+        }
+        .relation-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .relation-node {
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            border: 1px solid;
+        }
+        .relation-node.upstream {
+            background: rgba(16,185,129,0.08);
+            border-color: rgba(16,185,129,0.25);
+            color: #34d399;
+        }
+        .relation-node.midstream {
+            background: rgba(96,165,250,0.08);
+            border-color: rgba(96,165,250,0.25);
+            color: #60a5fa;
+        }
+        .relation-node.downstream {
+            background: rgba(244,114,182,0.08);
+            border-color: rgba(244,114,182,0.25);
+            color: #f472b6;
+        }
+        .relation-node.end {
+            background: rgba(251,191,36,0.08);
+            border-color: rgba(251,191,36,0.25);
+            color: #fbbf24;
+        }
+        .relation-arrow {
+            text-align: center;
+            color: #4b5563;
+            font-size: 20px;
+            padding: 4px 0;
+        }
+        .relation-node .node-code {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-left: 6px;
+        }
+
+        /* 核心关注 */
+        .focus-section { margin-bottom: 40px; }
+        .focus-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .focus-card {
+            background: linear-gradient(135deg, #111827, #1a2332);
+            border: 1px solid #1e293b;
+            border-radius: 14px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .focus-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+        .focus-card:nth-child(1)::before { background: linear-gradient(90deg, #34d399, #10b981); }
+        .focus-card:nth-child(2)::before { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+        .focus-card:nth-child(3)::before { background: linear-gradient(90deg, #a78bfa, #8b5cf6); }
+        .focus-card:nth-child(4)::before { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+        .focus-card:nth-child(5)::before { background: linear-gradient(90deg, #f472b6, #ec4899); }
+        .focus-card:nth-child(6)::before { background: linear-gradient(90deg, #f87171, #ef4444); }
+        .focus-card .focus-rank {
+            font-size: 48px;
+            font-weight: 800;
+            color: rgba(255,255,255,0.04);
+            position: absolute;
+            top: 8px;
+            right: 16px;
+        }
+        .focus-card .focus-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #e0e6f0;
+            margin-bottom: 4px;
+        }
+        .focus-card .focus-code {
+            font-size: 13px;
+            color: #60a5fa;
+            margin-bottom: 10px;
+        }
+        .focus-card .focus-reason {
+            font-size: 14px;
+            color: #8892a8;
+            line-height: 1.7;
+        }
+
+        /* 三大驱动逻辑 */
+        .logic-section { margin-bottom: 56px; }
+        .logic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+        }
+        .logic-card {
+            background: #111827;
+            border: 1px solid #1e293b;
+            border-radius: 14px;
+            padding: 24px;
+        }
+        .logic-card .logic-icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+        .logic-card .logic-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: #e0e6f0;
+            margin-bottom: 8px;
+        }
+        .logic-card .logic-desc {
+            font-size: 14px;
+            color: #8892a8;
+            line-height: 1.7;
+        }
+        .logic-card .logic-tag {
+            display: inline-block;
+            font-size: 12px;
+            padding: 2px 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            margin-right: 6px;
+        }
+        .tag-green { background: rgba(16,185,129,0.12); color: #34d399; }
+        .tag-blue { background: rgba(96,165,250,0.12); color: #60a5fa; }
+        .tag-pink { background: rgba(244,114,182,0.12); color: #f472b6; }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            .header h1 { font-size: 26px; }
+            .flow-diagram { flex-direction: column; }
+            .flow-stage:not(:last-child)::after { content: '↓'; right: auto; bottom: -16px; top: auto; left: 50%; transform: translateX(-50%); }
+            .flow-stage:not(:last-child) { border-right: none; border-bottom: 1px solid #1e293b; }
+            .company-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .focus-cards { grid-template-columns: 1fr; }
+            .logic-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 标题 -->
+        <div class="header">
+            <h1>芯片存储板块</h1>
+            <div class="subtitle">A股相关公司清单与产业链关系</div>
+            <div class="update-time">整理时间：2026年6月12日</div>
+        </div>
+
+        <!-- 行业概览 -->
+        <div class="overview-section">
+            <div class="section-title">行业供需概览</div>
+            <div class="stats-grid">
+                <div class="stat-card stat-green">
+                    <div class="stat-label">A股存储概念股Q1合计净利润</div>
+                    <div class="stat-value">283.5亿</div>
+                    <div class="stat-note">同比+196.78%，74股正增长</div>
+                </div>
+                <div class="stat-card stat-blue">
+                    <div class="stat-label">Q1 DRAM合约价涨幅</div>
+                    <div class="stat-value">+80~95%</div>
+                    <div class="stat-note">Q2预计再涨58%~63%</div>
+                </div>
+                <div class="stat-card stat-pink">
+                    <div class="stat-label">Q1 NAND合约价涨幅</div>
+                    <div class="stat-value">+55~70%</div>
+                    <div class="stat-note">Q2预计再涨70%~75%</div>
+                </div>
+                <div class="stat-card stat-yellow">
+                    <div class="stat-label">三大原厂库存周数</div>
+                    <div class="stat-value">~4周</div>
+                    <div class="stat-note">安全线8-12周，历史极低</div>
+                </div>
+                <div class="stat-card stat-purple">
+                    <div class="stat-label">供需缺口判断</div>
+                    <div class="stat-value">至2027年</div>
+                    <div class="stat-note">中信证券：供不应求至少持续至2027年底</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 三大驱动逻辑 -->
+        <div class="logic-section">
+            <div class="section-title">核心驱动逻辑</div>
+            <div class="logic-grid">
+                <div class="logic-card">
+                    <div class="logic-icon">🚀</div>
+                    <div class="logic-title">需求端：AI驱动存储需求重构</div>
+                    <div class="logic-desc">
+                        单台AI服务器DRAM用量是传统服务器的6-10倍，NAND用量是3倍。2026年AI服务器HBM需求同比+110%，AI推理驱动2025-2031年数据中心NAND位元需求CAGR达56%。高盛称之为过去15年最严重存储芯片供应短缺。
+                    </div>
+                    <span class="logic-tag tag-green">DRAM</span>
+                    <span class="logic-tag tag-blue">HBM</span>
+                    <span class="logic-tag tag-pink">NAND</span>
+                </div>
+                <div class="logic-card">
+                    <div class="logic-icon">⚙️</div>
+                    <div class="logic-title">供给端：HBM虹吸产能刚性收缩</div>
+                    <div class="logic-desc">
+                        三星、SK海力士将80%-90%先进产能转向HBM，通用存储产能被系统性压缩。新产线主要用于HBM，NAND几乎无实际增量。铠侠宣布2028年停产2D NAND，利基市场供给持续收缩。
+                    </div>
+                    <span class="logic-tag tag-green">产能收缩</span>
+                    <span class="logic-tag tag-blue">HBM挤占</span>
+                    <span class="logic-tag tag-pink">利基紧缺</span>
+                </div>
+                <div class="logic-card">
+                    <div class="logic-icon">📈</div>
+                    <div class="logic-title">商业模式：从周期走向成长</div>
+                    <div class="logic-desc">
+                        存储原厂通过3-5年超长期协议(LTA)锁定利润，长约覆盖60%-70%服务器DDR5出货。招商证券指出行业周期波动有望显著减弱，摩根士丹利认为估值正切换为AI基础设施资产溢价。
+                    </div>
+                    <span class="logic-tag tag-green">长协锁利</span>
+                    <span class="logic-tag tag-blue">估值重塑</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 产业链全景流程图 -->
+        <div class="flow-section">
+            <div class="section-title">产业链全景</div>
+            <div class="flow-diagram">
+                <div class="flow-stage flow-upstream">
+                    <span class="stage-label">上游</span>
+                    <div class="stage-title">设备与材料</div>
+                    <div class="stage-desc">存储晶圆制造的基石，国产替代渗透率最低、政策扶持力度最大的环节。</div>
+                    <div class="stage-products">
+                        <span class="product-tag">刻蚀设备</span>
+                        <span class="product-tag">薄膜沉积</span>
+                        <span class="product-tag">CMP抛光</span>
+                        <span class="product-tag">前驱体</span>
+                        <span class="product-tag">特种气体</span>
+                        <span class="product-tag">大硅片</span>
+                    </div>
+                </div>
+                <div class="flow-stage flow-midstream">
+                    <span class="stage-label">中游</span>
+                    <div class="stage-title">芯片设计与制造</div>
+                    <div class="stage-desc">存储芯片设计、晶圆制造、封装测试，产业核心环节，技术壁垒最高。</div>
+                    <div class="stage-products">
+                        <span class="product-tag">NOR Flash</span>
+                        <span class="product-tag">DRAM</span>
+                        <span class="product-tag">NAND Flash</span>
+                        <span class="product-tag">HBM</span>
+                        <span class="product-tag">DDR5接口</span>
+                        <span class="product-tag">晶圆代工</span>
+                        <span class="product-tag">封测</span>
+                    </div>
+                </div>
+                <div class="flow-stage flow-downstream">
+                    <span class="stage-label">下游</span>
+                    <div class="stage-title">存储模组与分销</div>
+                    <div class="stage-desc">存储模组集成、主控芯片设计、产品分销，业绩弹性最大的环节。</div>
+                    <div class="stage-products">
+                        <span class="product-tag">eSSD模组</span>
+                        <span class="product-tag">eMMC模组</span>
+                        <span class="product-tag">主控芯片</span>
+                        <span class="product-tag">HBM分销</span>
+                        <span class="product-tag">企业级存储</span>
+                    </div>
+                </div>
+                <div class="flow-stage flow-end">
+                    <span class="stage-label">终端</span>
+                    <div class="stage-title">应用场景</div>
+                    <div class="stage-desc">AI服务器、数据中心、车载、消费电子、物联网等终端需求。</div>
+                    <div class="stage-products">
+                        <span class="product-tag">AI服务器</span>
+                        <span class="product-tag">数据中心</span>
+                        <span class="product-tag">车规存储</span>
+                        <span class="product-tag">消费电子</span>
+                        <span class="product-tag">AIoT</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 存储模组龙头 -->
+        <div class="companies-section">
+            <div class="section-title">存储模组龙头（业绩弹性最大）</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">江波龙<span class="star-badge">核心标的</span></div>
+                        <div class="card-code">301308</div>
+                    </div>
+                    <span class="card-position position-downstream">存储模组</span>
+                    <div class="card-desc">存储模组绝对龙头，A股Q1净利润冠军。从"存储模组"向"主控芯片+小容量存储设计"平台升级，深度受益AI服务器eSSD需求爆发。</div>
+                    <div class="card-performance">Q1营收99.09亿（+133%），净利38.62亿（+2644%），毛利率55.53%</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">佰维存储<span class="star-badge">核心标的</span></div>
+                        <div class="card-code">688525</div>
+                    </div>
+                    <span class="card-position position-multi">模组+封测+主控</span>
+                    <div class="card-desc">存储+封测一体化，自主品牌主控eMMC已量产，预计2026年自研主控出货量超2500万颗。与Meta等AI巨头深化合作，晶圆级先进封测2026年底贡献收入。</div>
+                    <div class="card-performance">Q1营收68.14亿（+342%），净利28.99亿（扭亏），为去年全年3.4倍</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">德明利<span class="star-badge">核心标的</span></div>
+                        <div class="card-code">001309</div>
+                    </div>
+                    <span class="card-position position-downstream">存储模组</span>
+                    <div class="card-desc">自研闪存主控芯片+模组全链路，核心技术壁垒最高，一季度盈利达去年全年近5倍。</div>
+                    <div class="card-performance">Q1营收75.38亿（+502%），净利33.46亿（+4943%），环比增速82.5%领跑模组板块</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">香农芯创</div>
+                        <div class="card-code">300475</div>
+                    </div>
+                    <span class="card-position position-downstream">HBM分销</span>
+                    <div class="card-desc">SK海力士HBM核心分销商，分销环节直接享受HBM涨价溢价，企业级存储需求旺盛。</div>
+                    <div class="card-performance">Q1净利11.4-14.8亿（+6715%~8747%），单季盈利超越去年全年</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">协创数据</div>
+                        <div class="card-code">300857</div>
+                    </div>
+                    <span class="card-position position-downstream">存储+算力</span>
+                    <div class="card-desc">智能算力+存储综合服务商，Q1业绩放量，年内涨幅居前。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 存储芯片设计 -->
+        <div class="companies-section">
+            <div class="section-title">存储芯片设计（高毛利率+业绩修复）</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">兆易创新<span class="star-badge">核心标的</span></div>
+                        <div class="card-code">603986</div>
+                    </div>
+                    <span class="card-position position-midstream">芯片设计</span>
+                    <div class="card-desc">A股全品类存储设计龙头。NOR Flash全球第二（市占约20%），深度绑定长鑫存储，利基DRAM与NOR双轮驱动，同时受益利基涨价与长鑫IPO。车规级供货特斯拉/比亚迪。</div>
+                    <div class="card-performance">Q1营收41.88亿（+119%），净利14.61亿（+523%），毛利率57.08%</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">澜起科技<span class="star-badge">核心标的</span></div>
+                        <div class="card-code">688008</div>
+                    </div>
+                    <span class="card-position position-midstream">内存接口芯片</span>
+                    <div class="card-desc">DDR5内存接口芯片全球霸主，市占>40%。CXL内存池有望打开增量空间，HBM接口已获大厂认证，AI服务器放量直接受益。</div>
+                    <div class="card-performance">Q1营收14.61亿，净利8.47亿，毛利率69.79%行业第一</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">北京君正</div>
+                        <div class="card-code">300223</div>
+                    </div>
+                    <span class="card-position position-midstream">芯片设计</span>
+                    <div class="card-desc">车规级存储龙头。车规SRAM全球第一（市占29%），车规DRAM全球第二（15%）。收购ISSI，"计算+存储+模拟"，存储占比61.56%。</div>
+                    <div class="card-performance">Q1净利+332%，存储芯片收入10.18亿（+53.6%）</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">普冉股份</div>
+                        <div class="card-code">688766</div>
+                    </div>
+                    <span class="card-position position-midstream">芯片设计</span>
+                    <div class="card-desc">利基NOR Flash设计领军，全球前六，受益AI端侧需求爆发，毛利率大幅修复。</div>
+                    <div class="card-performance">Q1营收环比+63.3%，毛利率环比+18.9pct，净利+1260%</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">东芯股份</div>
+                        <div class="card-code">688110</div>
+                    </div>
+                    <span class="card-position position-midstream">芯片设计</span>
+                    <div class="card-desc">SLC NAND国内前三，受铠侠退出2D NAND推动，毛利率飙升至超50%，扭亏为盈拐点确立。</div>
+                    <div class="card-performance">Q1净利同比+333%，毛利率53.17%</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">恒烁股份</div>
+                        <div class="card-code">688400</div>
+                    </div>
+                    <span class="card-position position-midstream">芯片设计</span>
+                    <div class="card-desc">利基NOR Flash设计，Q1营收环比+30.1%，毛利率环比+18.5pct。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 晶圆制造与封测 -->
+        <div class="companies-section">
+            <div class="section-title">晶圆制造与封测（扩产周期受益）</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">中芯国际</div>
+                        <div class="card-code">688981</div>
+                    </div>
+                    <span class="card-position position-midstream">晶圆代工</span>
+                    <div class="card-desc">国产晶圆代工绝对龙头，量产DRAM/NOR Flash，承接国产设计订单，先进制程突破，受益国内存储产能扩张。</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">华虹公司</div>
+                        <div class="card-code">688347</div>
+                    </div>
+                    <span class="card-position position-midstream">晶圆代工</span>
+                    <div class="card-desc">特色工艺代工龙头，NOR Flash代工核心，55nm进入量产。</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">长电科技</div>
+                        <div class="card-code">600584</div>
+                    </div>
+                    <span class="card-position position-midstream">封测</span>
+                    <div class="card-desc">全球封测第三，存储封测核心供应商。具备承接HBM封装订单的实力（XDFOI™技术），受益存储出货量激增。</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">通富微电</div>
+                        <div class="card-code">002156</div>
+                    </div>
+                    <span class="card-position position-midstream">封测</span>
+                    <div class="card-desc">存储封测重要参与者，AMD深度合作，计划投资8.88亿元提升存储芯片封测产能，预计年新增产能84.96万片。</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">华天科技</div>
+                        <div class="card-code">002185</div>
+                    </div>
+                    <span class="card-position position-midstream">封测</span>
+                    <div class="card-desc">存储封测龙头之一，一季度扭亏为盈，业绩拐点确认。</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">深南电路</div>
+                        <div class="card-code">002916</div>
+                    </div>
+                    <span class="card-position position-midstream">封装基板</span>
+                    <div class="card-desc">封装基板龙头，存储芯片封装基板核心供应商，市值超2000亿。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 半导体设备 -->
+        <div class="companies-section">
+            <div class="section-title">半导体设备（存储扩产确定性最强）</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">北方华创<span class="star-badge">核心标的</span></div>
+                        <div class="card-code">002371</div>
+                    </div>
+                    <span class="card-position position-upstream">设备</span>
+                    <div class="card-desc">国内最全品类半导体设备龙头，覆盖存储产线刻蚀、薄膜、热处理、清洗等核心设备，全面适配长江存储、长鑫存储国产产线，大基金三期核心受益标的。</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">中微公司</div>
+                        <div class="card-code">688012</div>
+                    </div>
+                    <span class="card-position position-upstream">设备</span>
+                    <div class="card-desc">刻蚀设备绝对龙头，存储领域超高深宽比刻蚀技术全球领先，90:1高深宽比刻蚀设备已实现量产验证，3D NAND堆叠层数提升驱动设备需求刚性增长。</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">拓荆科技</div>
+                        <div class="card-code">688072</div>
+                    </div>
+                    <span class="card-position position-upstream">设备</span>
+                    <div class="card-desc">PECVD/ALD薄膜沉积设备龙头，长鑫核心设备供应商，存储芯片薄膜工艺核心设备供应商，设备订单持续高增。</div>
+                    <div class="card-performance">Q1净利+471%</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">华海清科</div>
+                        <div class="card-code">688120</div>
+                    </div>
+                    <span class="card-position position-upstream">设备</span>
+                    <div class="card-desc">国内CMP（晶圆抛光）设备唯一龙头，覆盖率行业第一，全面覆盖3D NAND、DRAM、HBM先进制程，累计出机超800台。</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">盛美上海</div>
+                        <div class="card-code">688082</div>
+                    </div>
+                    <span class="card-position position-upstream">设备</span>
+                    <div class="card-desc">半导体清洗设备龙头，主打无应力清洗技术，在3D NAND、DRAM制程中渗透率持续提升。</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">长川科技</div>
+                        <div class="card-code">300604</div>
+                    </div>
+                    <span class="card-position position-upstream">设备</span>
+                    <div class="card-desc">存储测试设备龙头，覆盖NOR/NAND/DRAM全品类存储芯片成品测试、晶圆测试，国产化核心标的。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 核心材料 -->
+        <div class="companies-section">
+            <div class="section-title">核心材料（国产替代核心短板）</div>
+            <div class="company-grid">
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">雅克科技<span class="star-badge">核心标的</span></div>
+                        <div class="card-code">002409</div>
+                    </div>
+                    <span class="card-position position-upstream">材料</span>
+                    <div class="card-desc">半导体前驱体材料龙头，长鑫份额最大材料供应商。布局HBM封装配套材料，适配高端AI存储制造需求。</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">安集科技</div>
+                        <div class="card-code">688019</div>
+                    </div>
+                    <span class="card-position position-upstream">材料</span>
+                    <div class="card-desc">CMP抛光液龙头，全球市占率约10%，3D NAND堆叠层数提升直接带动抛光液用量增长。</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">鼎龙股份</div>
+                        <div class="card-code">300054</div>
+                    </div>
+                    <span class="card-position position-upstream">材料</span>
+                    <div class="card-desc">CMP抛光垫龙头，存储晶圆厂扩产需求→抛光垫刚需放量逻辑清晰。</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">联瑞新材</div>
+                        <div class="card-code">688300</div>
+                    </div>
+                    <span class="card-position position-upstream">材料</span>
+                    <div class="card-desc">HBM封装材料GMC核心材料供应商，Lowα球硅+球铝同步放量，深度受益HBM产能扩张。</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">沪硅产业</div>
+                        <div class="card-code">688126</div>
+                    </div>
+                    <span class="card-position position-upstream">材料</span>
+                    <div class="card-desc">国产12英寸大硅片龙头，存储晶圆制造核心基材，直接受益长江存储、长鑫存储大规模扩产。</div>
+                </div>
+                <div class="company-card">
+                    <div class="card-header">
+                        <div class="card-name">华特气体</div>
+                        <div class="card-code">688268</div>
+                    </div>
+                    <span class="card-position position-upstream">材料</span>
+                    <div class="card-desc">半导体特种气体龙头，存储芯片刻蚀、沉积环节刚需气体供应商，产品通过国内外主流存储厂商认证。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 产业链关系图 -->
+        <div class="relation-section">
+            <div class="section-title">产业链上下游关系</div>
+            <div class="relation-diagram">
+                <div class="relation-row">
+                    <div class="relation-label">设备</div>
+                    <div class="relation-items">
+                        <div class="relation-node upstream">北方华创<span class="node-code">002371</span></div>
+                        <div class="relation-node upstream">中微公司<span class="node-code">688012</span></div>
+                        <div class="relation-node upstream">拓荆科技<span class="node-code">688072</span></div>
+                        <div class="relation-node upstream">华海清科<span class="node-code">688120</span></div>
+                        <div class="relation-node upstream">盛美上海<span class="node-code">688082</span></div>
+                        <div class="relation-node upstream">长川科技<span class="node-code">300604</span></div>
+                    </div>
+                </div>
+                <div class="relation-arrow">↓ 刻蚀/薄膜/CMP/清洗/测试设备 ↓</div>
+                <div class="relation-row">
+                    <div class="relation-label">材料</div>
+                    <div class="relation-items">
+                        <div class="relation-node upstream">雅克科技<span class="node-code">前驱体/特气</span></div>
+                        <div class="relation-node upstream">安集科技<span class="node-code">抛光液</span></div>
+                        <div class="relation-node upstream">鼎龙股份<span class="node-code">抛光垫</span></div>
+                        <div class="relation-node upstream">联瑞新材<span class="node-code">HBM封装材</span></div>
+                        <div class="relation-node upstream">沪硅产业<span class="node-code">大硅片</span></div>
+                        <div class="relation-node upstream">华特气体<span class="node-code">特种气体</span></div>
+                    </div>
+                </div>
+                <div class="relation-arrow">↓ 前驱体/抛光液/硅片/气体 ↓</div>
+                <div class="relation-row">
+                    <div class="relation-label">芯片设计</div>
+                    <div class="relation-items">
+                        <div class="relation-node midstream">兆易创新<span class="node-code">NOR/DRAM/NAND</span></div>
+                        <div class="relation-node midstream">澜起科技<span class="node-code">DDR5接口</span></div>
+                        <div class="relation-node midstream">北京君正<span class="node-code">车规存储</span></div>
+                        <div class="relation-node midstream">普冉股份<span class="node-code">NOR Flash</span></div>
+                        <div class="relation-node midstream">东芯股份<span class="node-code">SLC NAND</span></div>
+                    </div>
+                </div>
+                <div class="relation-arrow">↓ 设计方案 ↓</div>
+                <div class="relation-row">
+                    <div class="relation-label">制造/封测</div>
+                    <div class="relation-items">
+                        <div class="relation-node midstream">中芯国际<span class="node-code">晶圆代工</span></div>
+                        <div class="relation-node midstream">华虹公司<span class="node-code">特色代工</span></div>
+                        <div class="relation-node midstream">长电科技<span class="node-code">封测/HBM</span></div>
+                        <div class="relation-node midstream">通富微电<span class="node-code">封测</span></div>
+                        <div class="relation-node midstream">华天科技<span class="node-code">封测</span></div>
+                        <div class="relation-node midstream">深南电路<span class="node-code">封装基板</span></div>
+                    </div>
+                </div>
+                <div class="relation-arrow">↓ 存储晶圆/芯片 ↓</div>
+                <div class="relation-row">
+                    <div class="relation-label">模组/分销</div>
+                    <div class="relation-items">
+                        <div class="relation-node downstream">江波龙<span class="node-code">eSSD模组</span></div>
+                        <div class="relation-node downstream">佰维存储<span class="node-code">模组+主控</span></div>
+                        <div class="relation-node downstream">德明利<span class="node-code">模组+主控</span></div>
+                        <div class="relation-node downstream">香农芯创<span class="node-code">HBM分销</span></div>
+                        <div class="relation-node downstream">协创数据<span class="node-code">存储+算力</span></div>
+                    </div>
+                </div>
+                <div class="relation-arrow">↓ 存储产品 ↓</div>
+                <div class="relation-row">
+                    <div class="relation-label">终端应用</div>
+                    <div class="relation-items">
+                        <div class="relation-node end">AI服务器</div>
+                        <div class="relation-node end">数据中心</div>
+                        <div class="relation-node end">车规存储</div>
+                        <div class="relation-node end">消费电子</div>
+                        <div class="relation-node end">AIoT</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 核心关注标的 -->
+        <div class="focus-section">
+            <div class="section-title">核心关注标的</div>
+            <div class="focus-cards">
+                <div class="focus-card">
+                    <div class="focus-rank">01</div>
+                    <div class="focus-name">江波龙</div>
+                    <div class="focus-code">301308</div>
+                    <div class="focus-reason">
+                        存储模组绝对龙头，A股Q1净利润冠军（38.62亿，+2644%）。从模组向主控芯片+设计平台升级，AI服务器eSSD核心供应商，业绩爆发力最强。
+                    </div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">02</div>
+                    <div class="focus-name">兆易创新</div>
+                    <div class="focus-code">603986</div>
+                    <div class="focus-reason">
+                        A股全品类存储设计龙头，NOR Flash全球第二，深度绑定长鑫存储，利基DRAM+NOR双轮驱动。参股长鑫享受IPO催化，毛利率57%+高盈利质量。
+                    </div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">03</div>
+                    <div class="focus-name">澜起科技</div>
+                    <div class="focus-code">688008</div>
+                    <div class="focus-reason">
+                        DDR5内存接口芯片全球霸主（市占>40%），毛利率70%+行业第一。AI服务器渗透率提升直接受益，CXL+HBM接口打开增量空间。
+                    </div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">04</div>
+                    <div class="focus-name">北方华创</div>
+                    <div class="focus-code">002371</div>
+                    <div class="focus-reason">
+                        国内最全品类半导体设备龙头，深度绑定长江存储+长鑫存储扩产，大基金三期核心标的。存储扩产确定性最强，设备订单持续饱满。
+                    </div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">05</div>
+                    <div class="focus-name">德明利</div>
+                    <div class="focus-code">001309</div>
+                    <div class="focus-reason">
+                        自研闪存主控芯片+模组全链路，技术壁垒最高。Q1净利+4943%环比增速82.5%领跑模组板块，涨价弹性最大。
+                    </div>
+                </div>
+                <div class="focus-card">
+                    <div class="focus-rank">06</div>
+                    <div class="focus-name">佰维存储</div>
+                    <div class="focus-code">688525</div>
+                    <div class="focus-reason">
+                        模组+自研主控+封测一体化，2026年自研主控出货目标2500万颗。Q1营收+342%，净利28.99亿扭亏，为去年全年3.4倍，AI巨头合作深化。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
